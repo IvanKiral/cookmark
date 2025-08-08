@@ -3,6 +3,7 @@ import Drawer from "@corvu/drawer";
 import type { RecipeData } from "~/types/Recipe";
 import RecipeDetail from "~/components/RecipeDetail/RecipeDetail";
 import { getRecipeDataById } from "~/utils/loadRecipes";
+import createMediaQuery from "~/utils/createMediaQuery";
 import styles from "./RecipeDrawer.module.css";
 
 type RecipeDrawerProps = {
@@ -13,12 +14,14 @@ type RecipeDrawerProps = {
 };
 
 const RecipeDrawer: Component<RecipeDrawerProps> = (props) => {
+  const isMobile = createMediaQuery("(max-width: 768px)");
+  
   const selectedRecipeData = createMemo((): RecipeData | undefined => {
     return props.recipeId ? getRecipeDataById(props.recipeId) : undefined;
   });
 
   return (
-    <Drawer open={props.open} onOpenChange={props.onOpenChange} side="right">
+    <Drawer open={props.open} onOpenChange={props.onOpenChange} side={isMobile() ? "bottom" : "right"}>
       <Drawer.Portal>
         <Drawer.Overlay
           class={styles.overlay}
