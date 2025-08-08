@@ -84,8 +84,11 @@
     }
 
     .filterOptions {
+        display: flex;
+        flex-wrap: wrap;
         gap: var(--space-2);
     }
+    
 
     .filterOption {
         font-size: var(--text-xs);
