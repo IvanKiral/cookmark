@@ -16,6 +16,7 @@ export type RecipeData = {
   tags: string[];
   difficulty: "easy" | "medium" | "hard";
   cuisine: string | null;
+  "source-url": string | null;
 };
 
 export type Recipe = {
