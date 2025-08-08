@@ -1,14 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from "@solidjs/testing-library";
 import RecipeListItem from "./RecipeListItem";
 
 describe("<RecipeListItem />", () => {
   it("renders recipe item with all props", () => {
+    const mockOnSelect = vi.fn();
     const { getByText } = render(() => 
       <RecipeListItem 
+        id="1"
         name="Pasta Carbonara" 
         difficulty="Medium" 
         time="30 min" 
+        onSelect={mockOnSelect}
       />
     );
     
@@ -18,11 +21,14 @@ describe("<RecipeListItem />", () => {
   });
 
   it("renders with different difficulty levels", () => {
+    const mockOnSelect = vi.fn();
     const { getByText } = render(() => 
       <RecipeListItem 
+        id="2"
         name="Simple Salad" 
         difficulty="Easy" 
         time="10 min" 
+        onSelect={mockOnSelect}
       />
     );
     
