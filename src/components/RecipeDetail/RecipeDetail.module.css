@@ -98,6 +98,36 @@
   font-weight: 500;
 }
 
+.sourceUrl {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--color-neutral-200);
+}
+
+.sourceUrl a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-50);
+  transition: all 0.2s ease;
+}
+
+.sourceUrl a:hover {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  transform: translateY(-1px);
+}
+
+.sourceUrl a:active {
+  transform: translateY(0);
+}
+
 .section {
   margin-bottom: var(--space-8);
 }
