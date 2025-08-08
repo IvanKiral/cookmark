@@ -1,7 +1,7 @@
 .searchContainer {
   width: 100%;
   max-width: 28rem;
-  margin: 0 auto var(--space-8);
+  margin: 0 auto;
 }
 
 .inputWrapper {
@@ -11,9 +11,9 @@
 .searchInput {
   width: 100%;
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   color: var(--color-neutral-900);
-  background-color: white;
+  background-color: var(--color-neutral-100);
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
