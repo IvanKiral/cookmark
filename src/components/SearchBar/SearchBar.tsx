@@ -1,6 +1,7 @@
 import { createSignal, createMemo } from "solid-js";
 import Fuse from "fuse.js";
 import type { Recipe } from "~/types/Recipe";
+import styles from "./SearchBar.module.css";
 
 type SearchBarProps = {
   recipes: Recipe[];
@@ -37,18 +38,17 @@ export default function SearchBar(props: SearchBarProps) {
   };
 
   return (
-    <div class="w-full max-w-md mx-auto mb-8">
-      <div class="relative">
+    <div class={styles.searchContainer}>
+      <div class={styles.inputWrapper}>
         <input
           type="search"
           placeholder="Search recipes..."
           value={searchQuery()}
           onInput={(e) => handleInput(e.currentTarget.value)}
-          class="w-full px-4 py-3 pl-12 text-gray-900 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          class={styles.searchInput}
         />
-        <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+        <div class={styles.searchIcon}>
           <svg
-            class="w-5 h-5 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -64,9 +64,9 @@ export default function SearchBar(props: SearchBarProps) {
         {searchQuery() && (
           <button
             onClick={() => handleInput("")}
-            class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600"
+            class={styles.clearButton}
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -78,7 +78,7 @@ export default function SearchBar(props: SearchBarProps) {
         )}
       </div>
       {searchQuery() && (
-        <div class="mt-2 text-sm text-gray-600">
+        <div class={styles.results}>
           {searchResults().length === 0 
             ? "No recipes found" 
             : `${searchResults().length} recipe${searchResults().length === 1 ? "" : "s"} found`

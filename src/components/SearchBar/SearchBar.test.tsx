@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@solidjs/testing-library";
-import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent, cleanup } from "@solidjs/testing-library";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import SearchBar from "./SearchBar";
 import type { Recipe } from "~/types/Recipe";
 
@@ -10,6 +10,10 @@ const mockRecipes: Recipe[] = [
 ];
 
 describe("SearchBar", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("renders search input with placeholder", () => {
     const mockOnSearchResults = vi.fn();
     render(() => <SearchBar recipes={mockRecipes} onSearchResults={mockOnSearchResults} />);
