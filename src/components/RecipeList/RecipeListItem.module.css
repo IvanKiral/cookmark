@@ -1,0 +1,28 @@
+.listItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-8);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.title {
+  font-size: var(--text-lg);
+  color: var(--color-neutral-900);
+  font-weight: normal;
+  flex: 1;
+}
+
+.difficulty {
+  font-size: var(--text-md);
+  color: var(--color-neutral-700);
+  margin-right: var(--space-20);
+}
+
+.time {
+  font-size: var(--text-md);
+  color: var(--color-neutral-700);
+  min-width: 80px;
+  text-align: right;
+}

@@ -3,6 +3,7 @@ import type { Recipe } from "~/types/Recipe";
 import RecipeList from "~/components/RecipeList/RecipeList";
 import SearchBar from "~/components/SearchBar/SearchBar";
 import { loadRecipes } from "~/utils/loadRecipes";
+import styles from "./index.module.css";
 
 export default function Home() {
   const recipes: Recipe[] = loadRecipes();
@@ -10,14 +11,14 @@ export default function Home() {
   const [filteredRecipes, setFilteredRecipes] = createSignal<Recipe[]>(recipes);
 
   return (
-    <main class="mx-auto font-[Gordita,Roboto,Oxygen,Ubuntu,Cantarell,'Open_Sans','Helvetica_Neue',sans-serif] bg-neutral-100 min-h-screen">
-      <header class="w-full text-center py-16 bg-primary-300">
-        <h1 class="text-neutral-900 uppercase text-[4rem]  leading-tight">
+    <main class={styles.main}>
+      <header class={styles.header}>
+        <h1 class={styles.title}>
           Recipe Book
         </h1>
       </header>
-      <div class="container mx-auto px-40">
-        <div class="w-full flex flex-col items-center">
+      <div class={styles.container}>
+        <div class={styles.content}>
           <SearchBar recipes={recipes} onSearchResults={setFilteredRecipes} />
           <RecipeList recipes={filteredRecipes()} />
         </div>

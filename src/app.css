@@ -1,36 +1,59 @@
-@import "tailwindcss";
+@import "./styles/variables.css";
 
-@theme {
-    /* Primary: Drizzle */
-    --color-primary-100: #f4fff2;
-    --color-primary-200: #f0feed;
-    --color-primary-300: #e6f5e2;
-    --color-primary-400: #cfdec9;
-    --color-primary-500: #a3b09d;
-    --color-primary-600: #7b8e6e;
-    --color-primary-700: #5b6b4d;
-    --color-primary-800: #3e4932;
-    --color-primary-900: #21261a;
+/* CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-    /* Accent: Galactic Highway */
-    --color-accent-100: #f7f2ff;
-    --color-accent-200: #d1bcfe;
-    --color-accent-300: #a283f8;
-    --color-accent-400: #6a4ae6;
-    --color-accent-500: #3016c4;
-    --color-accent-600: #15079d;
-    --color-accent-700: #050275;
-    --color-accent-800: #00024e;
-    --color-accent-900: #000326;
+* {
+  margin: 0;
+  padding: 0;
+}
 
-    /* Neutral */
-    --color-neutral-100: #fafcfa;
-    --color-neutral-200: #e6ebe5;
-    --color-neutral-300: #d3dad1;
-    --color-neutral-400: #c0c9be;
-    --color-neutral-500: #afb8ab;
-    --color-neutral-600: #8c9388;
-    --color-neutral-700: #696f65;
-    --color-neutral-800: #474b44;
-    --color-neutral-900: #242622;
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-100);
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
