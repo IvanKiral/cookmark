@@ -27,3 +27,9 @@ export const loadRecipes = (): Recipe[] => {
     transformRecipeData(data, index),
   );
 };
+
+export const getRecipeDataById = (id: string): RecipeData | undefined => {
+  const recipeArray = Object.values(recipeModules);
+  const index = parseInt(id) - 1;
+  return recipeArray[index];
+};

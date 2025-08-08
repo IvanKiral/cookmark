@@ -5,6 +5,7 @@ import styles from "./RecipeList.module.css";
 
 type RecipeListProps = {
   recipes: Recipe[];
+  onRecipeSelect: (id: string) => void;
 };
 
 const RecipeList: Component<RecipeListProps> = (props) => {
@@ -13,9 +14,11 @@ const RecipeList: Component<RecipeListProps> = (props) => {
       <For each={props.recipes}>
         {(recipe) => (
           <RecipeListItem
+            id={recipe.id}
             name={recipe.name}
             difficulty={recipe.difficulty}
             time={recipe.time}
+            onSelect={props.onRecipeSelect}
           />
         )}
       </For>

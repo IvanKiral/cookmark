@@ -1,0 +1,89 @@
+/* Drawer overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.overlay[data-transitioning] {
+    transition: opacity 250ms cubic-bezier(0.32, 0.72, 0, 1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+/* Drawer content */
+.content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 100vh;
+    background: white;
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    transform: translateX(100%);
+    overflow: hidden;
+}
+
+.content[data-transitioning] {
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.content[data-opening] {
+    transform: translateX(0);
+}
+
+.content[data-closing] {
+    transform: translateX(100%);
+}
+
+/* Close button */
+.closeButton {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    width: 2.5rem;
+    height: 2.5rem;
+    text-align: center;
+    background: var(--color-neutral-200);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: var(--text-xl);
+    font-weight: 300;
+    color: var(--color-neutral-700);
+    z-index: 10;
+    transition: all 0.15s ease-in-out;
+}
+
+.closeButton:hover {
+    background: var(--color-neutral-300);
+    color: var(--color-neutral-900);
+    transform: scale(1.05);
+}
+
+.closeButton:focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .content {
+        width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        width: 100vw;
+        right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        width: 100vw;
+    }
+}
