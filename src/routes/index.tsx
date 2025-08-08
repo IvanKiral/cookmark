@@ -4,7 +4,9 @@ import RecipeList from "~/components/RecipeList/RecipeList";
 import SearchBar from "~/components/SearchBar/SearchBar";
 import RecipeDrawer from "~/components/RecipeDrawer/RecipeDrawer";
 import FilterSidebar from "~/components/FilterSidebar/FilterSidebar";
+import SortDropdown from "~/components/SortDropdown/SortDropdown";
 import { loadRecipes } from "~/utils/loadRecipes";
+import { type SortValue } from "~/constants/sortOptions";
 import styles from "./index.module.css";
 
 export default function Home() {
@@ -17,6 +19,7 @@ export default function Home() {
     null,
   );
   const [timeFilter, setTimeFilter] = createSignal<string | null>(null);
+  const [sortBy, setSortBy] = createSignal<SortValue>("name-asc");
   const [selectedRecipeId, setSelectedRecipeId] = createSignal<string | null>(
     null,
   );
@@ -34,23 +37,77 @@ export default function Home() {
 
   const handleSearchResults = (results: ReadonlyArray<Recipe>) => {
     setSearchFilteredRecipes(results);
-    applyFilters(results, difficultyFilter(), timeFilter());
+    applyFiltersAndSort(results, difficultyFilter(), timeFilter(), sortBy());
   };
 
   const handleDifficultyFilter = (difficulty: string | null) => {
     setDifficultyFilter(difficulty);
-    applyFilters(searchFilteredRecipes(), difficulty, timeFilter());
+    applyFiltersAndSort(
+      searchFilteredRecipes(),
+      difficulty,
+      timeFilter(),
+      sortBy(),
+    );
   };
 
   const handleTimeFilter = (time: string | null) => {
     setTimeFilter(time);
-    applyFilters(searchFilteredRecipes(), difficultyFilter(), time);
+    applyFiltersAndSort(
+      searchFilteredRecipes(),
+      difficultyFilter(),
+      time,
+      sortBy(),
+    );
   };
 
-  const applyFilters = (
+  const handleSortChange = (sort: SortValue) => {
+    setSortBy(sort);
+    applyFiltersAndSort(
+      searchFilteredRecipes(),
+      difficultyFilter(),
+      timeFilter(),
+      sort,
+    );
+  };
+
+  const sortRecipes = (
+    recipes: ReadonlyArray<Recipe>,
+    sortBy: SortValue,
+  ): ReadonlyArray<Recipe> => {
+    const sorted = [...recipes];
+
+    switch (sortBy) {
+      case "name-asc":
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      case "name-desc":
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      case "time-asc":
+        return sorted.sort((a, b) => a.total_time - b.total_time);
+      case "time-desc":
+        return sorted.sort((a, b) => b.total_time - a.total_time);
+      case "difficulty-easy":
+        const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2 };
+        return sorted.sort(
+          (a, b) =>
+            difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty],
+        );
+      case "difficulty-hard":
+        const difficultyOrderReverse = { Hard: 0, Medium: 1, Easy: 2 };
+        return sorted.sort(
+          (a, b) =>
+            difficultyOrderReverse[a.difficulty] -
+            difficultyOrderReverse[b.difficulty],
+        );
+      default:
+        return sorted;
+    }
+  };
+
+  const applyFiltersAndSort = (
     searchResults: ReadonlyArray<Recipe>,
     difficulty: string | null,
     time: string | null,
+    sort: SortValue,
   ) => {
     const createTimePredicate = (recipe: Recipe, time: string | null) => {
       switch (time) {
@@ -65,14 +122,15 @@ export default function Home() {
       }
     };
 
-    setFilteredRecipes(
-      searchResults.filter((recipe) => {
-        return (
-          (!difficulty || recipe.difficulty === difficulty) &&
-          createTimePredicate(recipe, time)
-        );
-      }),
-    );
+    const filtered = searchResults.filter((recipe) => {
+      return (
+        (!difficulty || recipe.difficulty === difficulty) &&
+        createTimePredicate(recipe, time)
+      );
+    });
+
+    const sorted = sortRecipes(Array.from(filtered), sort);
+    setFilteredRecipes(sorted);
   };
 
   return (
@@ -87,10 +145,13 @@ export default function Home() {
             onTimeFilterChange={handleTimeFilter}
           />
           <div class={styles.mainContent}>
-            <SearchBar
-              recipes={recipes}
-              onSearchResults={handleSearchResults}
-            />
+            <div class={styles.searchAndSort}>
+              <SearchBar
+                recipes={recipes}
+                onSearchResults={handleSearchResults}
+              />
+              <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
+            </div>
             <RecipeList
               recipes={filteredRecipes()}
               onRecipeSelect={handleRecipeSelect}
