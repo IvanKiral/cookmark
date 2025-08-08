@@ -7,6 +7,7 @@ import FilterSidebar from "~/components/FilterSidebar/FilterSidebar";
 import SortDropdown from "~/components/SortDropdown/SortDropdown";
 import { loadRecipes } from "~/utils/loadRecipes";
 import { type SortValue } from "~/constants/sortOptions";
+import { type TagFilter } from "~/constants/tagOptions";
 import styles from "./index.module.css";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
     null,
   );
   const [timeFilter, setTimeFilter] = createSignal<string | null>(null);
+  const [tagFilter, setTagFilter] = createSignal<TagFilter>(null);
   const [sortBy, setSortBy] = createSignal<SortValue>("name-asc");
   const [selectedRecipeId, setSelectedRecipeId] = createSignal<string | null>(
     null,
@@ -38,7 +40,7 @@ export default function Home() {
 
   const handleSearchResults = (results: ReadonlyArray<Recipe>) => {
     setSearchFilteredRecipes(results);
-    applyFiltersAndSort(results, difficultyFilter(), timeFilter(), sortBy());
+    applyFiltersAndSort(results, difficultyFilter(), timeFilter(), tagFilter(), sortBy());
   };
 
   const handleDifficultyFilter = (difficulty: string | null) => {
@@ -47,6 +49,7 @@ export default function Home() {
       searchFilteredRecipes(),
       difficulty,
       timeFilter(),
+      tagFilter(),
       sortBy(),
     );
   };
@@ -57,6 +60,18 @@ export default function Home() {
       searchFilteredRecipes(),
       difficultyFilter(),
       time,
+      tagFilter(),
+      sortBy(),
+    );
+  };
+
+  const handleTagFilter = (tag: TagFilter) => {
+    setTagFilter(tag);
+    applyFiltersAndSort(
+      searchFilteredRecipes(),
+      difficultyFilter(),
+      timeFilter(),
+      tag,
       sortBy(),
     );
   };
@@ -67,6 +82,7 @@ export default function Home() {
       searchFilteredRecipes(),
       difficultyFilter(),
       timeFilter(),
+      tagFilter(),
       sort,
     );
   };
@@ -108,6 +124,7 @@ export default function Home() {
     searchResults: ReadonlyArray<Recipe>,
     difficulty: string | null,
     time: string | null,
+    tag: TagFilter,
     sort: SortValue,
   ) => {
     const createTimePredicate = (recipe: Recipe, time: string | null) => {
@@ -126,7 +143,8 @@ export default function Home() {
     const filtered = searchResults.filter((recipe) => {
       return (
         (!difficulty || recipe.difficulty === difficulty) &&
-        createTimePredicate(recipe, time)
+        createTimePredicate(recipe, time) &&
+        (!tag || recipe.tags.includes(tag))
       );
     });
 
@@ -144,6 +162,7 @@ export default function Home() {
           <FilterSidebar
             onFilterChange={handleDifficultyFilter}
             onTimeFilterChange={handleTimeFilter}
+            onTagFilterChange={handleTagFilter}
           />
           <div class={styles.mainContent}>
             <div class={styles.searchAndSort}>

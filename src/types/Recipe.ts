@@ -25,4 +25,5 @@ export type Recipe = {
   difficulty: "Easy" | "Medium" | "Hard";
   time: string;
   total_time: number;
+  tags: ReadonlyArray<string>;
 };
