@@ -4,7 +4,7 @@ import RecipeListItem from "./RecipeListItem";
 import styles from "./RecipeList.module.css";
 
 type RecipeListProps = {
-  recipes: Recipe[];
+  recipes: ReadonlyArray<Recipe>;
   onRecipeSelect: (id: string) => void;
 };
 

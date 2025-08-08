@@ -12,7 +12,8 @@ import styles from "./index.module.css";
 export default function Home() {
   const recipes: Recipe[] = loadRecipes();
 
-  const [filteredRecipes, setFilteredRecipes] = createSignal<Recipe[]>(recipes);
+  const [filteredRecipes, setFilteredRecipes] =
+    createSignal<ReadonlyArray<Recipe>>(recipes);
   const [searchFilteredRecipes, setSearchFilteredRecipes] =
     createSignal<ReadonlyArray<Recipe>>(recipes);
   const [difficultyFilter, setDifficultyFilter] = createSignal<string | null>(

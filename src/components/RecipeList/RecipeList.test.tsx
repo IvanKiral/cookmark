@@ -1,26 +1,34 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 import { render } from "@solidjs/testing-library";
 import RecipeList from "./RecipeList";
 import type { Recipe } from "~/types/Recipe";
 
 describe("<RecipeList />", () => {
   it("renders multiple recipes", () => {
-    const mockRecipes: Recipe[] = [
-      { id: "1", name: "Pasta Carbonara", difficulty: "Medium", time: "30 min" },
-      { id: "2", name: "Caesar Salad", difficulty: "Easy", time: "15 min" },
-      { id: "3", name: "Beef Wellington", difficulty: "Hard", time: "2 hours" }
+    const mockRecipes: ReadonlyArray<Recipe> = [
+      {
+        id: "1",
+        name: "Pasta Carbonara",
+        difficulty: "Medium",
+        time: "30 min",
+        total_time: 30,
+      },
+      { id: "2", name: "Caesar Salad", difficulty: "Easy", time: "15 min", total_time: 15 },
+      { id: "3", name: "Beef Wellington", difficulty: "Hard", time: "2 hours", total_time: 120 },
     ];
 
-    const { getByText } = render(() => <RecipeList recipes={mockRecipes} />);
-    
+    const mockOnRecipeSelect = vi.fn();
+    const { getByText } = render(() => <RecipeList recipes={mockRecipes} onRecipeSelect={mockOnRecipeSelect} />);
+
     expect(getByText("Pasta Carbonara")).toBeInTheDocument();
     expect(getByText("Caesar Salad")).toBeInTheDocument();
     expect(getByText("Beef Wellington")).toBeInTheDocument();
   });
 
   it("renders empty list when no recipes provided", () => {
-    const { container } = render(() => <RecipeList recipes={[]} />);
-    
+    const mockOnRecipeSelect = vi.fn();
+    const { container } = render(() => <RecipeList recipes={[]} onRecipeSelect={mockOnRecipeSelect} />);
+
     expect(container.firstChild).toBeInTheDocument();
     expect(container.firstChild?.childNodes).toHaveLength(0);
   });
