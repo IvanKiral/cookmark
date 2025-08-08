@@ -7,9 +7,9 @@ export type Ingredient = {
 export type RecipeData = {
   title: string;
   description: string;
-  prep_time: string | null;
-  cook_time: string | null;
-  total_time: string | null;
+  prep_time: number | null;
+  cook_time: number | null;
+  total_time: number | null;
   servings: number | null;
   ingredients: Ingredient[];
   instructions: string[];
@@ -23,4 +23,5 @@ export type Recipe = {
   name: string;
   difficulty: "Easy" | "Medium" | "Hard";
   time: string;
+  total_time: number;
 };
