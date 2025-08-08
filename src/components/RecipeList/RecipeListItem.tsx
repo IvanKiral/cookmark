@@ -11,7 +11,7 @@ const RecipeListItem: Component<RecipeListItemProps> = (props) => {
   return (
     <div class={styles.listItem}>
       <h3 class={styles.title}>{props.name}</h3>
-      <span class={styles.difficulty}>{props.difficulty}</span>
+      <span class={styles.difficulty} data-level={props.difficulty}>{props.difficulty}</span>
       <span class={styles.time}>
         {props.time}
       </span>

@@ -3,26 +3,58 @@
   align-items: center;
   width: 100%;
   justify-content: space-between;
-  padding: var(--space-5) var(--space-8);
+  padding: var(--space-6) var(--space-8);
   border-bottom: var(--border-width) solid var(--border-color);
+  transition: background-color 0.15s ease-in-out, padding 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.listItem:hover {
+  background-color: var(--color-neutral-100);
+  padding-left: var(--space-10);
+}
+
+.listItem:last-child {
+  border-bottom: none;
 }
 
 .title {
   font-size: var(--text-lg);
   color: var(--color-neutral-900);
-  font-weight: normal;
+  font-weight: 500;
   flex: 1;
+  margin: 0;
 }
 
 .difficulty {
-  font-size: var(--text-md);
-  color: var(--color-neutral-700);
-  margin-right: var(--space-20);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-right: var(--space-8);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.difficulty[data-level="Easy"] {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-800);
+}
+
+.difficulty[data-level="Medium"] {
+  background-color: #fef3cd;
+  color: #856404;
+}
+
+.difficulty[data-level="Hard"] {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .time {
   font-size: var(--text-md);
   color: var(--color-neutral-700);
+  font-weight: 500;
   min-width: 80px;
   text-align: right;
 }
