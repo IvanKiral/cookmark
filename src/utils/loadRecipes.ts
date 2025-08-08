@@ -18,7 +18,8 @@ const transformRecipeData = (data: RecipeData, index: number): Recipe => {
       | "Easy"
       | "Medium"
       | "Hard",
-    time: data.total_time || "N/A",
+    time: data.total_time ? `${data.total_time} min` : "N/A",
+    total_time: data.total_time || 0,
   };
 };
 

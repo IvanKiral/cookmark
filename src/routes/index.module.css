@@ -45,8 +45,16 @@
   padding: var(--space-12) var(--space-8);
 }
 
-.content {
-  width: 100%;
+.layout {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  min-height: 600px;
+}
+
+.mainContent {
+  flex: 1;
+  padding-left: var(--space-6);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,6 +71,18 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--space-12) var(--space-8);
+  }
+  
+  .layout {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    min-height: auto;
+  }
+  
+  .mainContent {
+    padding-left: 0;
+    padding-top: var(--space-4);
   }
   
   .title {
