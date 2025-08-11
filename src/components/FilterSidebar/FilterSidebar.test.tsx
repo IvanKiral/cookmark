@@ -6,10 +6,12 @@ describe("<FilterSidebar />", () => {
 	it("renders all filter sections", () => {
 		const mockOnFilterChange = vi.fn();
 		const mockOnTimeFilterChange = vi.fn();
+		const mockOnTagFilterChange = vi.fn();
 		const { getByText } = render(() => (
 			<FilterSidebar
 				onFilterChange={mockOnFilterChange}
 				onTimeFilterChange={mockOnTimeFilterChange}
+				onTagFilterChange={mockOnTagFilterChange}
 			/>
 		));
 
@@ -20,10 +22,12 @@ describe("<FilterSidebar />", () => {
 	it("renders all difficulty options", () => {
 		const mockOnFilterChange = vi.fn();
 		const mockOnTimeFilterChange = vi.fn();
+		const mockOnTagFilterChange = vi.fn();
 		const { getAllByText, getByText } = render(() => (
 			<FilterSidebar
 				onFilterChange={mockOnFilterChange}
 				onTimeFilterChange={mockOnTimeFilterChange}
+				onTagFilterChange={mockOnTagFilterChange}
 			/>
 		));
 
@@ -37,10 +41,12 @@ describe("<FilterSidebar />", () => {
 	it("calls onFilterChange when difficulty filter changes", () => {
 		const mockOnFilterChange = vi.fn();
 		const mockOnTimeFilterChange = vi.fn();
+		const mockOnTagFilterChange = vi.fn();
 		const { getByLabelText } = render(() => (
 			<FilterSidebar
 				onFilterChange={mockOnFilterChange}
 				onTimeFilterChange={mockOnTimeFilterChange}
+				onTagFilterChange={mockOnTagFilterChange}
 			/>
 		));
 
@@ -53,10 +59,12 @@ describe("<FilterSidebar />", () => {
 	it("renders all time options", () => {
 		const mockOnFilterChange = vi.fn();
 		const mockOnTimeFilterChange = vi.fn();
+		const mockOnTagFilterChange = vi.fn();
 		const { getByText } = render(() => (
 			<FilterSidebar
 				onFilterChange={mockOnFilterChange}
 				onTimeFilterChange={mockOnTimeFilterChange}
+				onTagFilterChange={mockOnTagFilterChange}
 			/>
 		));
 

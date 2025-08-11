@@ -4,9 +4,30 @@ import type { Recipe } from "~/types/Recipe";
 import SearchBar from "./SearchBar";
 
 const mockRecipes: Recipe[] = [
-	{ id: "1", name: "Lemon Herb Chicken", difficulty: "Medium", time: "35 min" },
-	{ id: "2", name: "Quinoa Salad", difficulty: "Easy", time: "20 min" },
-	{ id: "3", name: "Chicken Caesar Salad", difficulty: "Easy", time: "15 min" },
+	{
+		id: "1",
+		name: "Lemon Herb Chicken",
+		difficulty: "Medium",
+		time: "35 min",
+		total_time: 35,
+		tags: ["chicken", "herbs"],
+	},
+	{
+		id: "2",
+		name: "Quinoa Salad",
+		difficulty: "Easy",
+		time: "20 min",
+		total_time: 20,
+		tags: ["quinoa", "salad"],
+	},
+	{
+		id: "3",
+		name: "Chicken Caesar Salad",
+		difficulty: "Easy",
+		time: "15 min",
+		total_time: 15,
+		tags: ["chicken", "salad"],
+	},
 ];
 
 describe("SearchBar", () => {
@@ -61,6 +82,6 @@ describe("SearchBar", () => {
 		const clearButton = screen.getByRole("button");
 		fireEvent.click(clearButton);
 
-		expect(searchInput.value).toBe("");
+		expect((searchInput as HTMLInputElement).value).toBe("");
 	});
 });
