@@ -12,6 +12,7 @@ describe("<RecipeList />", () => {
 				difficulty: "Medium",
 				time: "30 min",
 				total_time: 30,
+				tags: ["pasta", "italian"],
 			},
 			{
 				id: "2",
@@ -19,6 +20,7 @@ describe("<RecipeList />", () => {
 				difficulty: "Easy",
 				time: "15 min",
 				total_time: 15,
+				tags: ["salad", "quick"],
 			},
 			{
 				id: "3",
@@ -26,6 +28,7 @@ describe("<RecipeList />", () => {
 				difficulty: "Hard",
 				time: "2 hours",
 				total_time: 120,
+				tags: ["beef", "complex"],
 			},
 		];
 

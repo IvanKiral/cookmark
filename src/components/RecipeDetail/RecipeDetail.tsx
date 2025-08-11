@@ -9,8 +9,8 @@ type RecipeDetailProps = {
 
 const RecipeDetail: Component<RecipeDetailProps> = (props) => {
 	const t = useT();
-	const formatTime = (time: string | null): string => {
-		return time || "N/A";
+	const formatTime = (time: number | null): string => {
+		return time ? `${time} min` : "N/A";
 	};
 
 	const formatServings = (servings: number | null): string => {
