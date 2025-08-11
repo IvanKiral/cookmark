@@ -1,0 +1,14 @@
+{
+	"extends": ["../../biome.json"],
+	"files": {
+		"ignoreUnknown": true,
+		"includes": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx"]
+	},
+	"linter": {
+		"rules": {
+			"a11y": {
+				"useSemanticElements": "off"
+			}
+		}
+	}
+}
