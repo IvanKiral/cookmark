@@ -1,102 +1,101 @@
 .sidebar {
-    width: 280px;
-    padding: var(--space-6);
-    background-color: var(--color-neutral-50);
-    height: 100%;
-    position: relative;
+	width: 280px;
+	padding: var(--space-6);
+	background-color: var(--color-neutral-50);
+	height: 100%;
+	position: relative;
 }
 
 .filterSection {
-    margin-bottom: var(--space-6);
+	margin-bottom: var(--space-6);
 }
 
 .filterTitle {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    color: var(--color-neutral-900);
-    margin: 0 0 var(--space-4) 0;
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: var(--color-neutral-900);
+	margin: 0 0 var(--space-4) 0;
 }
 
 .filterOptions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
 }
 
 .filterOption {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    cursor: pointer;
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-full);
-    background-color: var(--color-neutral-100);
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-    font-size: var(--text-sm);
-    white-space: nowrap;
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	cursor: pointer;
+	padding: var(--space-2) var(--space-3);
+	border-radius: var(--radius-full);
+	background-color: var(--color-neutral-100);
+	border: 2px solid transparent;
+	transition: all 0.2s ease;
+	font-size: var(--text-sm);
+	white-space: nowrap;
 }
 
 .filterOption:hover {
-    background-color: var(--color-neutral-200);
-    transform: translateY(-1px);
+	background-color: var(--color-neutral-200);
+	transform: translateY(-1px);
 }
 
 .filterInput {
-    margin: 0;
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
+	margin: 0;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
 }
 
 .filterLabel {
-    color: var(--color-neutral-700);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    cursor: pointer;
-    user-select: none;
+	color: var(--color-neutral-700);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	cursor: pointer;
+	user-select: none;
 }
 
 .filterOption:has(.filterInput:checked) {
-    background-color: var(--color-primary-100);
-    border-color: var(--color-primary-300);
+	background-color: var(--color-primary-100);
+	border-color: var(--color-primary-300);
 }
 
 .filterOption:has(.filterInput:checked) .filterLabel {
-    color: var(--color-primary-700);
-    font-weight: 600;
+	color: var(--color-primary-700);
+	font-weight: 600;
 }
 
 /* Mobile responsive */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: var(--space-4);
-        border-right: none;
-        border-bottom: 1px solid var(--color-neutral-200);
-        background-color: var(--color-neutral-50);
-    }
+	.sidebar {
+		width: 100%;
+		height: auto;
+		padding: var(--space-4);
+		border-right: none;
+		border-bottom: 1px solid var(--color-neutral-200);
+		background-color: var(--color-neutral-50);
+	}
 
-    .filterTitle {
-        font-size: var(--text-base);
-        margin-bottom: var(--space-3);
-    }
+	.filterTitle {
+		font-size: var(--text-base);
+		margin-bottom: var(--space-3);
+	}
 
-    .filterOptions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-2);
-    }
-    
+	.filterOptions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+	}
 
-    .filterOption {
-        font-size: var(--text-xs);
-        padding: var(--space-1) var(--space-2);
-    }
+	.filterOption {
+		font-size: var(--text-xs);
+		padding: var(--space-1) var(--space-2);
+	}
 
-    .filterInput {
-        width: 14px;
-        height: 14px;
-    }
+	.filterInput {
+		width: 14px;
+		height: 14px;
+	}
 }
