@@ -1,7 +1,7 @@
 import type { Recipe, RecipeData } from "~/types/Recipe";
 
 // Import all recipe JSON files using Vite's glob import
-const recipeModules = import.meta.glob<RecipeData>("../../data/*.json", {
+const recipeModules = import.meta.glob<RecipeData>("../../data/sk/*.json", {
 	eager: true,
 	import: "default",
 });
