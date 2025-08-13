@@ -1,124 +1,124 @@
 .dropdown {
-	position: relative;
-	display: inline-block;
-	min-width: 220px;
+  position: relative;
+  display: inline-block;
+  min-width: 220px;
 }
 
 .dropdownButton {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: var(--space-3) var(--space-4);
-	background-color: var(--color-neutral-100);
-	border: var(--border-width) solid var(--border-color);
-	border-radius: var(--radius-lg);
-	font-size: var(--text-base);
-	color: var(--color-neutral-900);
-	cursor: pointer;
-	transition: all 0.2s ease;
-	box-shadow: var(--shadow-sm);
-	min-height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-neutral-100);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  color: var(--color-neutral-900);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  min-height: 48px;
 }
 
 .dropdownButton:hover {
-	background-color: var(--color-neutral-200);
-	border-color: var(--border-color);
+  background-color: var(--color-neutral-200);
+  border-color: var(--border-color);
 }
 
 .dropdownButton:focus {
-	outline: none;
-	border-color: transparent;
-	box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
 }
 
 .label {
-	position: absolute;
-	top: -9px;
-	left: 16px;
-	background: var(--color-neutral-100);
-	padding: 0 var(--space-2);
-	font-size: var(--text-xs);
-	font-weight: 600;
-	color: var(--color-neutral-500);
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
+  position: absolute;
+  top: -9px;
+  left: 16px;
+  background: var(--color-neutral-100);
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .dropdownButton:hover .label {
-	background-color: var(--color-neutral-200);
+  background-color: var(--color-neutral-200);
 }
 
 .dropdownButton:focus .label {
-	background-color: var(--color-neutral-100);
+  background-color: var(--color-neutral-100);
 }
 
 .selectedValue {
-	color: var(--color-neutral-900);
-	font-weight: 500;
-	font-size: var(--text-base);
-	flex: 1;
-	text-align: left;
+  color: var(--color-neutral-900);
+  font-weight: 500;
+  font-size: var(--text-base);
+  flex: 1;
+  text-align: left;
 }
 
 .chevron {
-	width: 20px;
-	height: 20px;
-	color: var(--color-neutral-600);
-	transition: transform 0.2s ease;
-	flex-shrink: 0;
-	margin-left: var(--space-2);
+  width: 20px;
+  height: 20px;
+  color: var(--color-neutral-600);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: var(--space-2);
 }
 
 .chevronUp {
-	transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .dropdownMenu {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	right: 0;
-	margin-top: var(--space-2);
-	background: white;
-	border: var(--border-width) solid var(--border-color);
-	border-radius: var(--radius-lg);
-	box-shadow: var(--shadow-lg);
-	z-index: 50;
-	overflow: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--space-2);
+  background: white;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  overflow: hidden;
 }
 
 .dropdownItem {
-	display: block;
-	width: 100%;
-	padding: var(--space-3) var(--space-4);
-	text-align: left;
-	font-size: var(--text-base);
-	color: var(--color-neutral-900);
-	background: none;
-	border: none;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	font-weight: 400;
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--text-base);
+  color: var(--color-neutral-900);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
 }
 
 .dropdownItem:hover {
-	background-color: var(--color-neutral-100);
-	color: var(--color-neutral-900);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
 }
 
 .dropdownItem:focus {
-	outline: none;
-	background-color: var(--color-neutral-100);
+  outline: none;
+  background-color: var(--color-neutral-100);
 }
 
 .dropdownItemActive {
-	background-color: var(--color-primary-50);
-	color: var(--color-primary-700);
-	font-weight: 600;
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-700);
+  font-weight: 600;
 }
 
 .dropdownItemActive:hover {
-	background-color: var(--color-primary-100);
+  background-color: var(--color-primary-100);
 }

@@ -3,7 +3,7 @@ import { mount, StartClient } from "@solidjs/start/client";
 
 const appElement = document.getElementById("app");
 if (appElement) {
-	mount(() => <StartClient />, appElement);
+  mount(() => <StartClient />, appElement);
 }
 
 export default () => {};

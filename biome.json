@@ -1,14 +1,16 @@
 {
-	"extends": ["../../biome.json"],
-	"files": {
-		"ignoreUnknown": true,
-		"includes": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx"]
-	},
-	"linter": {
-		"rules": {
-			"a11y": {
-				"useSemanticElements": "off"
-			}
-		}
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@kontent-ai/biome-config/base"],
+  "root": true,
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["src/**/*", "!.output", "!.vinxi", "!.claude", "!data", "!bundle-report.html"]
+  },
+  "linter": {
+    "rules": {
+      "a11y": {
+        "useSemanticElements": "off"
+      }
+    }
+  }
 }
