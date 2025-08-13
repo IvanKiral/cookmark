@@ -11,8 +11,8 @@
     "biome:lint": "biome lint",
     "start": "vinxi start",
     "test": "vitest run",
-    "test-watch": "vitest",
-    "test-ui": "vitest --ui",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
     "typecheck": "tsc --noEmit"
   },
   "type": "module",
