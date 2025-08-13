@@ -1,0 +1,1 @@
+Using git log check the the changes and also explore given files. Give me a git command to to commit with brief message. Do not commit by yourself. Additional Information $ARGUMENT.
