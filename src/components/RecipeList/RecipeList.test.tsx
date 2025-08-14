@@ -8,6 +8,7 @@ describe("<RecipeList />", () => {
     const mockRecipes: ReadonlyArray<Recipe> = [
       {
         id: "1",
+        url_slug: "pasta_carbonara",
         name: "Pasta Carbonara",
         difficulty: "Medium",
         time: "30 min",
@@ -16,6 +17,7 @@ describe("<RecipeList />", () => {
       },
       {
         id: "2",
+        url_slug: "caesar_salad",
         name: "Caesar Salad",
         difficulty: "Easy",
         time: "15 min",
@@ -24,6 +26,7 @@ describe("<RecipeList />", () => {
       },
       {
         id: "3",
+        url_slug: "beef_wellington",
         name: "Beef Wellington",
         difficulty: "Hard",
         time: "2 hours",

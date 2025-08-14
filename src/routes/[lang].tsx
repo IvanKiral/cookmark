@@ -1,5 +1,5 @@
-import { useParams } from "@solidjs/router";
-import { createSignal } from "solid-js";
+import { useParams, useSearchParams } from "@solidjs/router";
+import { createMemo, createSignal } from "solid-js";
 import FilterSidebar from "~/components/FilterSidebar/FilterSidebar";
 import RecipeDrawer from "~/components/RecipeDrawer/RecipeDrawer";
 import RecipeList from "~/components/RecipeList/RecipeList";
@@ -16,6 +16,7 @@ import styles from "./index.module.css";
 function Home() {
   const t = useT();
   const recipes: Recipe[] = loadRecipes();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [filteredRecipes, setFilteredRecipes] = createSignal<ReadonlyArray<Recipe>>(recipes);
   const [searchFilteredRecipes, setSearchFilteredRecipes] =
@@ -24,17 +25,29 @@ function Home() {
   const [timeFilter, setTimeFilter] = createSignal<string | null>(null);
   const [tagFilter, setTagFilter] = createSignal<TagFilter>(null);
   const [sortBy, setSortBy] = createSignal<SortValue>("name-asc");
-  const [selectedRecipeId, setSelectedRecipeId] = createSignal<string | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = createSignal(false);
+
+  // Derive selected recipe from URL
+  const selectedRecipeId = createMemo(() => {
+    const slug = searchParams.recipe;
+    if (!slug) {
+      return null;
+    }
+    const recipe = recipes.find((r) => r.url_slug === slug);
+    return recipe?.id ?? null;
+  });
+
+  // Drawer is open when recipe is selected
+  const isDrawerOpen = createMemo(() => selectedRecipeId() !== null);
 
   const handleRecipeSelect = (id: string) => {
-    setSelectedRecipeId(id);
-    setIsDrawerOpen(true);
+    const recipe = recipes.find((r) => r.id === id);
+    if (recipe) {
+      setSearchParams({ recipe: recipe.url_slug });
+    }
   };
 
   const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
-    setSelectedRecipeId(null);
+    setSearchParams({ recipe: undefined });
   };
 
   const handleSearchResults = (results: ReadonlyArray<Recipe>) => {
@@ -154,7 +167,11 @@ function Home() {
 
       <RecipeDrawer
         open={isDrawerOpen()}
-        onOpenChange={setIsDrawerOpen}
+        onOpenChange={(open: boolean) => {
+          if (!open) {
+            handleDrawerClose();
+          }
+        }}
         recipeId={selectedRecipeId()}
         onClose={handleDrawerClose}
       />
