@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar.jsx";
 const mockRecipes: Recipe[] = [
   {
     id: "1",
+    url_slug: "lemon_herb_chicken",
     name: "Lemon Herb Chicken",
     difficulty: "Medium",
     time: "35 min",
@@ -14,6 +15,7 @@ const mockRecipes: Recipe[] = [
   },
   {
     id: "2",
+    url_slug: "quinoa_salad",
     name: "Quinoa Salad",
     difficulty: "Easy",
     time: "20 min",
@@ -22,6 +24,7 @@ const mockRecipes: Recipe[] = [
   },
   {
     id: "3",
+    url_slug: "chicken_caesar_salad",
     name: "Chicken Caesar Salad",
     difficulty: "Easy",
     time: "15 min",

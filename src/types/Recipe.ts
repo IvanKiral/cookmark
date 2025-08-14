@@ -21,6 +21,7 @@ export type RecipeData = {
 
 export type Recipe = {
   id: string;
+  url_slug: string;
   name: string;
   difficulty: "Easy" | "Medium" | "Hard";
   time: string;
