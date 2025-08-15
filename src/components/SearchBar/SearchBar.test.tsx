@@ -40,7 +40,9 @@ describe("SearchBar", () => {
 
   it("renders search input with placeholder", () => {
     const mockOnSearchResults = vi.fn();
-    render(() => <SearchBar recipes={mockRecipes} onSearchResults={mockOnSearchResults} />);
+    render(() => (
+      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+    ));
 
     const searchInput = screen.getByPlaceholderText("Search recipes...");
     expect(searchInput).toBeInTheDocument();
@@ -48,7 +50,9 @@ describe("SearchBar", () => {
 
   it("calls onSearchResults with filtered results when searching", () => {
     const mockOnSearchResults = vi.fn();
-    render(() => <SearchBar recipes={mockRecipes} onSearchResults={mockOnSearchResults} />);
+    render(() => (
+      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+    ));
 
     const searchInput = screen.getByPlaceholderText("Search recipes...");
     fireEvent.input(searchInput, { target: { value: "chicken" } });
@@ -58,7 +62,9 @@ describe("SearchBar", () => {
 
   it("shows clear button when there is search text", () => {
     const mockOnSearchResults = vi.fn();
-    render(() => <SearchBar recipes={mockRecipes} onSearchResults={mockOnSearchResults} />);
+    render(() => (
+      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+    ));
 
     const searchInput = screen.getByPlaceholderText("Search recipes...");
     fireEvent.input(searchInput, { target: { value: "chicken" } });
@@ -69,7 +75,9 @@ describe("SearchBar", () => {
 
   it("clears search when clear button is clicked", () => {
     const mockOnSearchResults = vi.fn();
-    render(() => <SearchBar recipes={mockRecipes} onSearchResults={mockOnSearchResults} />);
+    render(() => (
+      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+    ));
 
     const searchInput = screen.getByPlaceholderText("Search recipes...");
     fireEvent.input(searchInput, { target: { value: "chicken" } });
