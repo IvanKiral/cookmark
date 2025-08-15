@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from "@solidjs/router";
 import Fuse from "fuse.js";
 import { createMemo } from "solid-js";
 import FilterSidebar from "~/components/FilterSidebar/FilterSidebar";
+import LanguageSwitcher from "~/components/LanguageSwitcher/LanguageSwitcher";
 import RecipeDrawer from "~/components/RecipeDrawer/RecipeDrawer";
 import RecipeList from "~/components/RecipeList/RecipeList";
 import SearchBar from "~/components/SearchBar/SearchBar";
@@ -179,7 +180,10 @@ function Home() {
   return (
     <main class={styles.main}>
       <header class={styles.header}>
-        <h1 class={styles.title}>{t.app.title}</h1>
+        <div class={styles.headerContent}>
+          <h1 class={styles.title}>{t.app.title}</h1>
+          <LanguageSwitcher />
+        </div>
       </header>
       <div class={styles.container}>
         <div class={styles.layout}>

@@ -7,12 +7,20 @@
 
 .header {
   width: 100%;
-  text-align: center;
-  padding: var(--space-12) 0 var(--space-10);
+  padding: var(--space-12) var(--space-8) var(--space-10);
   background: linear-gradient(135deg, var(--color-primary-300) 0%, var(--color-primary-400) 100%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .header::before {
@@ -36,6 +44,14 @@
   margin: 0;
   position: relative;
   z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+
+.headerContent > :last-child {
+  position: absolute;
+  right: 0;
+  z-index: 2;
 }
 
 .container {
@@ -117,7 +133,11 @@
   }
 
   .header {
-    padding: var(--space-12) 0;
+    padding: var(--space-12) var(--space-6) var(--space-10);
+  }
+
+  .headerContent {
+    padding: 0;
   }
 }
 
@@ -131,6 +151,6 @@
   }
 
   .header {
-    padding: var(--space-8) 0;
+    padding: var(--space-8) var(--space-4);
   }
 }

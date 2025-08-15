@@ -44,4 +44,8 @@ export type TypedTranslations = {
     viewSource: string;
   };
   tags: TagTranslations;
+  languageSwitcher: {
+    switchToEnglish: string;
+    switchToSlovak: string;
+  };
 };
