@@ -14,6 +14,9 @@ export default defineConfig({
   },
   server: {
     preset: "github-pages",
+    baseURL: process.env.GITHUB_REPOSITORY
+      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+      : "/",
     prerender: {
       routes: ["/", "/en", "/sk"],
     },

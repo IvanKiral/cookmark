@@ -7,6 +7,7 @@ import "./app.css";
 export default function App() {
   return (
     <Router
+      base="/cookmark"
       root={(props) => (
         <MetaProvider>
           <Title>SolidStart - with Vitest</Title>
