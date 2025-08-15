@@ -38,7 +38,7 @@ describe("<FilterSidebar />", () => {
     ));
 
     const allOptions = getAllByText("All");
-    expect(allOptions).toHaveLength(2); // One for difficulty, one for time
+    expect(allOptions).toHaveLength(3); // One for difficulty, time, and tags
     expect(getByText("Easy")).toBeInTheDocument();
     expect(getByText("Medium")).toBeInTheDocument();
     expect(getByText("Hard")).toBeInTheDocument();
