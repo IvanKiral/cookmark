@@ -1,9 +1,12 @@
-import { createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import type { TagFilter } from "~/constants/tagOptions";
 import { useT } from "~/lib/i18nContext";
 import styles from "./FilterSidebar.module.css";
 
 type FilterSidebarProps = {
+  difficultyFilter: string | null;
+  timeFilter: string | null;
+  tagFilter: TagFilter;
   onFilterChange: (difficulty: string | null) => void;
   onTimeFilterChange: (timeFilter: string | null) => void;
   onTagFilterChange: (tag: TagFilter) => void;
@@ -38,22 +41,15 @@ export default function FilterSidebar(props: FilterSidebarProps) {
     { value: "Low-Sugar", label: t.tags.lowSugar },
     { value: "Cake", label: t.tags.cake },
   ] as const;
-  const [selectedDifficulty, setSelectedDifficulty] = createSignal<string | null>(null);
-  const [selectedTimeFilter, setSelectedTimeFilter] = createSignal<string | null>(null);
-  const [selectedTag, setSelectedTag] = createSignal<TagFilter>(null);
-
   const handleDifficultyChange = (difficulty: string | null) => {
-    setSelectedDifficulty(difficulty);
     props.onFilterChange(difficulty);
   };
 
   const handleTimeFilterChange = (timeFilter: string | null) => {
-    setSelectedTimeFilter(timeFilter);
     props.onTimeFilterChange(timeFilter);
   };
 
   const handleTagChange = (tag: TagFilter) => {
-    setSelectedTag(tag);
     props.onTagFilterChange(tag);
   };
 
@@ -68,7 +64,7 @@ export default function FilterSidebar(props: FilterSidebarProps) {
                 <input
                   type="radio"
                   name="difficulty"
-                  checked={selectedDifficulty() === option.value}
+                  checked={props.difficultyFilter === option.value}
                   onChange={() => handleDifficultyChange(option.value)}
                   class={styles.filterInput}
                 />
@@ -88,7 +84,7 @@ export default function FilterSidebar(props: FilterSidebarProps) {
                 <input
                   type="radio"
                   name="timeFilter"
-                  checked={selectedTimeFilter() === option.value}
+                  checked={props.timeFilter === option.value}
                   onChange={() => handleTimeFilterChange(option.value)}
                   class={styles.filterInput}
                 />
@@ -108,7 +104,7 @@ export default function FilterSidebar(props: FilterSidebarProps) {
                 <input
                   type="radio"
                   name="tagFilter"
-                  checked={selectedTag() === option.value}
+                  checked={props.tagFilter === option.value}
                   onChange={() => handleTagChange(option.value)}
                   class={styles.filterInput}
                 />

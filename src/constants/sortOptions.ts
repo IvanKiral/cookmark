@@ -3,7 +3,7 @@ export type SortOption = {
   label: string;
 };
 
-const sortValues = [
+export const sortValues = [
   "name-asc",
   "name-desc",
   "time-asc",
