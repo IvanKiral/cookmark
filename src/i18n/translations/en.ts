@@ -52,4 +52,8 @@ export const enTranslations: TypedTranslations = {
     lowSugar: "Low-Sugar",
     cake: "Cake",
   },
+  languageSwitcher: {
+    switchToEnglish: "Switch to English",
+    switchToSlovak: "Switch to Slovak",
+  },
 };

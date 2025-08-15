@@ -60,4 +60,8 @@ export const skTranslations: TypedTranslations = {
     lowSugar: "Málo cukru",
     cake: "Koláč",
   },
+  languageSwitcher: {
+    switchToEnglish: "Prepnúť na angličtinu",
+    switchToSlovak: "Prepnúť na slovenčinu",
+  },
 };
