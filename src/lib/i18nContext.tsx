@@ -1,8 +1,9 @@
 import type { JSX } from "solid-js";
 import { createContext, useContext } from "solid-js";
-import { type Locale, type TranslationStructure, translations } from "~/i18n";
+import type { TypedTranslations } from "~/constants/translationTypes.js";
+import { type Locale, translations } from "~/i18n";
 
-const I18nContext = createContext<TranslationStructure>(translations.en);
+const I18nContext = createContext<TypedTranslations>(translations.en);
 
 export function I18nProvider(props: { locale: Locale; children: JSX.Element }) {
   return (
@@ -10,7 +11,7 @@ export function I18nProvider(props: { locale: Locale; children: JSX.Element }) {
   );
 }
 
-export function useT(): TranslationStructure {
+export function useT(): TypedTranslations {
   const context = useContext(I18nContext);
   if (!context) {
     throw new Error("useT must be used within I18nProvider");

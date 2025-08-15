@@ -1,4 +1,6 @@
-export const enTranslations = {
+import type { TypedTranslations } from "~/constants/translationTypes";
+
+export const enTranslations: TypedTranslations = {
   app: {
     title: "Recipe Book",
   },
@@ -50,4 +52,4 @@ export const enTranslations = {
     lowSugar: "Low-Sugar",
     cake: "Cake",
   },
-} as const;
+};

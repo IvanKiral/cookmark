@@ -1,4 +1,6 @@
-export const skTranslations = {
+import type { TypedTranslations } from "~/constants/translationTypes";
+
+export const skTranslations: TypedTranslations = {
   app: {
     title: "Kniha receptov",
   },
@@ -58,4 +60,4 @@ export const skTranslations = {
     lowSugar: "Málo cukru",
     cake: "Koláč",
   },
-} as const;
+};

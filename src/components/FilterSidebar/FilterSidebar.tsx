@@ -1,51 +1,36 @@
 import { For } from "solid-js";
+import type { DifficultyFilter } from "~/constants/difficultyOptions";
+import {
+  createDifficultyOptions,
+  createTagOptions,
+  createTimeOptions,
+} from "~/constants/filterOptions";
 import type { TagFilter } from "~/constants/tagOptions";
+import type { TimeFilter } from "~/constants/timeOptions";
 import { useT } from "~/lib/i18nContext";
 import styles from "./FilterSidebar.module.css";
 
 type FilterSidebarProps = {
-  difficultyFilter: string | null;
-  timeFilter: string | null;
+  difficultyFilter: DifficultyFilter;
+  timeFilter: TimeFilter;
   tagFilter: TagFilter;
-  onFilterChange: (difficulty: string | null) => void;
-  onTimeFilterChange: (timeFilter: string | null) => void;
+  onFilterChange: (difficulty: DifficultyFilter) => void;
+  onTimeFilterChange: (timeFilter: TimeFilter) => void;
   onTagFilterChange: (tag: TagFilter) => void;
 };
 
 export default function FilterSidebar(props: FilterSidebarProps) {
   const t = useT();
 
-  const difficultyOptions = [
-    { value: null, label: t.filters.all },
-    { value: "Easy", label: t.filters.easy },
-    { value: "Medium", label: t.filters.medium },
-    { value: "Hard", label: t.filters.hard },
-  ] as const;
+  const difficultyOptions = createDifficultyOptions(t);
+  const timeOptions = createTimeOptions(t);
+  const tagOptions = createTagOptions(t);
 
-  const timeOptions = [
-    { value: null, label: t.filters.all },
-    { value: "under30", label: t.filters.under30 },
-    { value: "under60", label: t.filters.under60 },
-    { value: "over60", label: t.filters.over60 },
-  ] as const;
-
-  const tagOptions = [
-    { value: null, label: t.tags.all },
-    { value: "Chicken", label: t.tags.chicken },
-    { value: "Pork", label: t.tags.pork },
-    { value: "Beef", label: t.tags.beef },
-    { value: "Fish", label: t.tags.fish },
-    { value: "Vegan", label: t.tags.vegan },
-    { value: "Dessert", label: t.tags.dessert },
-    { value: "Lactose-free", label: t.tags.lactoseFree },
-    { value: "Low-Sugar", label: t.tags.lowSugar },
-    { value: "Cake", label: t.tags.cake },
-  ] as const;
-  const handleDifficultyChange = (difficulty: string | null) => {
+  const handleDifficultyChange = (difficulty: DifficultyFilter) => {
     props.onFilterChange(difficulty);
   };
 
-  const handleTimeFilterChange = (timeFilter: string | null) => {
+  const handleTimeFilterChange = (timeFilter: TimeFilter) => {
     props.onTimeFilterChange(timeFilter);
   };
 

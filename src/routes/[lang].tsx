@@ -6,8 +6,10 @@ import RecipeDrawer from "~/components/RecipeDrawer/RecipeDrawer";
 import RecipeList from "~/components/RecipeList/RecipeList";
 import SearchBar from "~/components/SearchBar/SearchBar";
 import SortDropdown from "~/components/SortDropdown/SortDropdown";
+import { type DifficultyFilter, difficultyValues } from "~/constants/difficultyOptions";
 import { type SortValue, sortValues } from "~/constants/sortOptions";
 import { type TagFilter, tagValues } from "~/constants/tagOptions";
+import { type TimeFilter, timeValues } from "~/constants/timeOptions";
 import type { Locale } from "~/i18n";
 import { I18nProvider, useT } from "~/lib/i18nContext";
 import type { Recipe } from "~/types/Recipe";
@@ -20,29 +22,27 @@ function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Derive all filters from URL params
-  const difficultyFilter = createMemo(() => {
+  const difficultyFilter = createMemo((): DifficultyFilter => {
     if (!searchParams.difficulty || Array.isArray(searchParams.difficulty)) {
       return null;
     }
-    return ["Easy", "Medium", "Hard"].includes(searchParams.difficulty)
-      ? searchParams.difficulty
+    return difficultyValues.includes(searchParams.difficulty)
+      ? (searchParams.difficulty as DifficultyFilter)
       : null;
   });
 
-  const timeFilter = createMemo(() => {
+  const timeFilter = createMemo((): TimeFilter => {
     if (!searchParams.time || Array.isArray(searchParams.time)) {
       return null;
     }
-    return ["under30", "under60", "over60"].includes(searchParams.time) ? searchParams.time : null;
+    return timeValues.includes(searchParams.time) ? (searchParams.time as TimeFilter) : null;
   });
 
   const tagFilter = createMemo(() => {
     if (!searchParams.tag || Array.isArray(searchParams.tag)) {
       return null;
     }
-    return tagValues.includes(searchParams.tag as TagFilter)
-      ? (searchParams.tag as TagFilter)
-      : null;
+    return tagValues.includes(searchParams.tag) ? (searchParams.tag as TagFilter) : null;
   });
 
   const sortBy = createMemo(() => {
@@ -153,11 +153,11 @@ function Home() {
     setSearchParams({ ...searchParams, recipe: undefined });
   };
 
-  const handleDifficultyFilter = (difficulty: string | null) => {
+  const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
     setSearchParams({ ...searchParams, difficulty: difficulty ?? undefined });
   };
 
-  const handleTimeFilter = (time: string | null) => {
+  const handleTimeFilter = (time: TimeFilter) => {
     setSearchParams({ ...searchParams, time: time ?? undefined });
   };
 
@@ -184,8 +184,8 @@ function Home() {
       <div class={styles.container}>
         <div class={styles.layout}>
           <FilterSidebar
-            difficultyFilter={difficultyFilter() as string | null}
-            timeFilter={timeFilter() as string | null}
+            difficultyFilter={difficultyFilter()}
+            timeFilter={timeFilter()}
             tagFilter={tagFilter()}
             onFilterChange={handleDifficultyFilter}
             onTimeFilterChange={handleTimeFilter}
