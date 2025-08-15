@@ -3,11 +3,13 @@ import { createContext, useContext } from "solid-js";
 import type { TypedTranslations } from "~/constants/translationTypes.js";
 import { type Locale, translations } from "~/i18n";
 
-const I18nContext = createContext<TypedTranslations>(translations.en);
+const I18nContext = createContext<TypedTranslations>(translations.en[0]);
 
 export function I18nProvider(props: { locale: Locale; children: JSX.Element }) {
   return (
-    <I18nContext.Provider value={translations[props.locale]}>{props.children}</I18nContext.Provider>
+    <I18nContext.Provider value={translations[props.locale][0]}>
+      {props.children}
+    </I18nContext.Provider>
   );
 }
 

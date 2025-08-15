@@ -1,6 +1,7 @@
+import { createStore } from "solid-js/store";
 import type { TypedTranslations } from "~/constants/translationTypes";
 
-export const enTranslations: TypedTranslations = {
+export const enTranslations = createStore<TypedTranslations>({
   app: {
     title: "Recipe Book",
   },
@@ -56,4 +57,4 @@ export const enTranslations: TypedTranslations = {
     switchToEnglish: "Switch to English",
     switchToSlovak: "Switch to Slovak",
   },
-};
+});

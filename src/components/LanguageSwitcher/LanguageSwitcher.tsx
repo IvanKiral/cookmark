@@ -12,7 +12,7 @@ const LanguageSwitcher = () => {
   const otherLang = createMemo(() => (currentLang === "en" ? "sk" : "en"));
 
   const handleLanguageSwitch = () => {
-    window.location.replace(`/${otherLang()}`);
+    window.location.replace(`/cookmark/${otherLang()}`);
   };
 
   const switchToLang = createMemo(() => (currentLang === "en" ? "Slovak" : "English"));
