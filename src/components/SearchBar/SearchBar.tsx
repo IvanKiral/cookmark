@@ -50,7 +50,6 @@ export default function SearchBar(props: SearchBarProps) {
           </button>
         )}
       </div>
-      {props.searchQuery && <div class={styles.results}>Search active</div>}
     </div>
   );
 }
