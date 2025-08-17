@@ -57,4 +57,10 @@ export const enTranslations = createStore<TypedTranslations>({
     switchToEnglish: "Switch to English",
     switchToSlovak: "Switch to Slovak",
   },
+  pagination: {
+    previous: "Previous",
+    next: "Next",
+    goToPage: (page: number) => `Go to page ${page}`,
+    pageInfo: (current: number, total: number) => `Page ${current} of ${total}`,
+  },
 });
