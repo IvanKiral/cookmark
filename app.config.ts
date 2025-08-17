@@ -55,13 +55,13 @@ export default defineConfig({
           categories: ["food", "lifestyle"],
           icons: [
             {
-              src: "/web-app-manifest-192x192.png",
+              src: "/cookmark/web-app-manifest-192x192.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "maskable any",
             },
             {
-              src: "/web-app-manifest-512x512.png",
+              src: "/cookmark/web-app-manifest-512x512.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable any",
@@ -73,7 +73,7 @@ export default defineConfig({
               short_name: "Search",
               description: "Search for recipes",
               url: "/cookmark/",
-              icons: [{ src: "/favicon-96x96.png", sizes: "96x96" }],
+              icons: [{ src: "/cookmark/favicon-96x96.png", sizes: "96x96" }],
             },
           ],
         },
