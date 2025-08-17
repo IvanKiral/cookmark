@@ -10,7 +10,7 @@ export default function App() {
       base="/cookmark"
       root={(props) => (
         <MetaProvider>
-          <Title>SolidStart - with Vitest</Title>
+          <Title>Cookmark</Title>
           <Suspense>{props.children}</Suspense>
         </MetaProvider>
       )}
