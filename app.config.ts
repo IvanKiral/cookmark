@@ -13,6 +13,9 @@ export default defineConfig({
       }) as unknown as import("vite").PluginOption,
       VitePWA({
         registerType: "autoUpdate",
+        devOptions: {
+          enabled: false,
+        },
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
           runtimeCaching: [

@@ -7,8 +7,9 @@ if (appElement) {
   mount(() => <StartClient />, appElement);
 }
 
-if ("serviceWorker" in navigator) {
-  const wb = new Workbox("/sw.js");
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  const base = import.meta.env.VITE_BASE_URL ?? "/";
+  const wb = new Workbox(`${base}_build/sw.js`);
 
   wb.addEventListener("controlling", () => {
     window.location.reload();
@@ -21,4 +22,4 @@ if ("serviceWorker" in navigator) {
   wb.register();
 }
 
-export default () => {};
+export default () => { };
