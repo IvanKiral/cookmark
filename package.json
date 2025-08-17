@@ -3,9 +3,6 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "build:en": "LOCALE=en vinxi build",
-    "build:sk": "LOCALE=sk vinxi build",
-    "build:all": "npm run build:en && npm run build:sk",
     "biome:check": "biome check",
     "biome:check:fix": "biome check --write",
     "biome:lint": "biome lint",
