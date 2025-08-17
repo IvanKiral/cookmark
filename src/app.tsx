@@ -14,10 +14,11 @@ export default function App() {
           <Title>Cookmark</Title>
           <InstallPrompt />
           <Suspense>{props.children}</Suspense>
-          <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="icon" href="/cookmark/favicon.ico" />
+          <link rel="icon" type="image/png" href="/cookmark/favicon-96x96.png" sizes="96x96" />
+          <link rel="icon" type="image/svg+xml" href="/cookmark/favicon.svg" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/cookmark/apple-touch-icon.png" />
+          <link rel="manifest" href="/cookmark/site.webmanifest" />
         </MetaProvider>
       )}
     >
