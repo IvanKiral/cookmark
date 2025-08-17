@@ -3,7 +3,7 @@ import type { TypedTranslations } from "~/constants/translationTypes";
 
 export const skTranslations = createStore<TypedTranslations>({
   app: {
-    title: "Kniha receptov",
+    title: "Cookmark",
   },
   search: {
     placeholder: "Hľadať recepty...",
