@@ -63,11 +63,8 @@ describe("SearchBar", () => {
   it("shows clear button when there is search text", () => {
     const mockOnSearchResults = vi.fn();
     render(() => (
-      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+      <SearchBar recipes={mockRecipes} searchQuery="chicken" onSearchChange={mockOnSearchResults} />
     ));
-
-    const searchInput = screen.getByPlaceholderText("Search recipes...");
-    fireEvent.input(searchInput, { target: { value: "chicken" } });
 
     const clearButton = screen.getByRole("button");
     expect(clearButton).toBeInTheDocument();
@@ -76,15 +73,12 @@ describe("SearchBar", () => {
   it("clears search when clear button is clicked", () => {
     const mockOnSearchResults = vi.fn();
     render(() => (
-      <SearchBar recipes={mockRecipes} searchQuery="" onSearchChange={mockOnSearchResults} />
+      <SearchBar recipes={mockRecipes} searchQuery="chicken" onSearchChange={mockOnSearchResults} />
     ));
-
-    const searchInput = screen.getByPlaceholderText("Search recipes...");
-    fireEvent.input(searchInput, { target: { value: "chicken" } });
 
     const clearButton = screen.getByRole("button");
     fireEvent.click(clearButton);
 
-    expect((searchInput as HTMLInputElement).value).toBe("");
+    expect(mockOnSearchResults).toHaveBeenCalledWith("");
   });
 });
