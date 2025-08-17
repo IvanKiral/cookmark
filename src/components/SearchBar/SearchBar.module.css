@@ -9,7 +9,7 @@
 
 .searchInput {
   width: 100%;
-  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
+  padding: var(--space-3) var(--space-12) var(--space-3) var(--space-12);
   font-size: var(--text-lg);
   color: var(--color-neutral-900);
   background-color: var(--color-neutral-100);
@@ -18,6 +18,13 @@
   box-shadow: var(--shadow-sm);
   outline: none;
   transition: all 0.2s ease;
+}
+
+/* Remove default search input clear button */
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .searchInput:focus {
@@ -44,23 +51,35 @@
 
 .clearButton {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  padding-right: var(--space-4);
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
   color: #9ca3af;
-  transition: color 0.2s ease;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .clearButton:hover {
   color: #6b7280;
+  background-color: rgba(156, 163, 175, 0.1);
+}
+
+.clearButton:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .clearButton svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .results {
