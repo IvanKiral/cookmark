@@ -3,6 +3,7 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "./app.css";
+import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt.jsx";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       root={(props) => (
         <MetaProvider>
           <Title>Cookmark</Title>
+          <InstallPrompt />
           <Suspense>{props.children}</Suspense>
           <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
