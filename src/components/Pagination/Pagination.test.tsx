@@ -1,9 +1,12 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
+import type { JSX } from "solid-js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "~/lib/i18nContext";
-import { Pagination } from "./Pagination";
+import { Pagination } from "./Pagination.jsx";
 
-const TestWrapper = (props: { children: any }) => <I18nProvider locale="en">{props.children}</I18nProvider>;
+const TestWrapper = (props: { children: JSX.Element }) => (
+  <I18nProvider locale="en">{props.children}</I18nProvider>
+);
 
 describe("Pagination", () => {
   afterEach(() => {
