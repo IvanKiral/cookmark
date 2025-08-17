@@ -1,42 +1,87 @@
-# SolidStart
+# Cookmark 🍳
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+A modern, responsive recipe book web application built with SolidJS/SolidStart.
 
-## Creating a project
+<p align="center">
+  <img src="./images/cookmark.gif" alt="A GIF showcasing the Cookmark app" width="100%" />
+</p>
+
+## ✨ Features
+
+- **Fuzzy Search** - Find recipes quickly with intelligent search across titles, ingredients, and tags
+- **Advanced Filtering** - Filter by difficulty level, cooking time, and tags
+- **Static Site Generation** - Optimized for deployment on GitHub Pages
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 22+ and npm installed on your system
+
+### Development
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/cookmark.git
+cd cookmark
+```
+
+2. Install dependencies:
+```bash
+npm ci
+```
+
+3. Start the development server:
+```bash
+npm run dev 
+```
+
+4. Open your browser and navigate to `http://localhost:3000/cookmark`
+
+### Building for Production
+
+Build the static site for GitHub Pages deployment:
 
 ```bash
-# create a new project in the current directory
-npm init solid@latest
-
-# create a new project in my-app
-npm init solid@latest my-app
+npm run build
 ```
 
-## Developing
+The built files will be in the `.output` directory, ready for deployment.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 📦 Use as Template
+
+Want to create your own recipe book? Use degit to scaffold a new project from this template:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+npx degit yourusername/cookmark my-recipe-book
+cd my-recipe-book
+npm install
 ```
 
-## Building
+## 📝 Adding Recipes
 
-Solid apps are built with _presets_, which optimise your project for deployment to different environments.
+Recipes are stored in `src/data/recipes/` as TypeScript files. Each recipe follows a structured format:
 
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different preset, add it to the `devDependencies` in `package.json` and specify in your `app.config.js`.
-
-## Testing
-
-Tests are written with `vitest`, `@solidjs/testing-library` and `@testing-library/jest-dom` to extend expect with some helpful custom matchers.
-
-To run them, simply start:
-
-```sh
-npm test
+```typescript
+export const myRecipe: Recipe = {
+  slug: "my-recipe",
+  difficulty: "easy",
+  prepTime: 15,
+  cookTime: 30,
+  servings: 4,
+  tags: ["vegetarian", "quick"],
+  // Additional fields defined per locale
+}
 ```
 
-## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)
+## 🚢 Deployment
+
+This project is designed to be deployed as a static site on GitHub Pages. Check [deploy script](./.github/workflows//deploy.yml) to see how it can be deployed.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to submit issues and pull requests.
+
+## 📄 License
+
+MIT License - feel free to use this project for your own recipe collection!
