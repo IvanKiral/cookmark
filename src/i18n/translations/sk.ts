@@ -65,4 +65,10 @@ export const skTranslations = createStore<TypedTranslations>({
     switchToEnglish: "Prepnúť na angličtinu",
     switchToSlovak: "Prepnúť na slovenčinu",
   },
+  pagination: {
+    previous: "Predchádzajúca",
+    next: "Ďalšia",
+    goToPage: (page: number) => `Prejsť na stranu ${page}`,
+    pageInfo: (current: number, total: number) => `Strana ${current} z ${total}`,
+  },
 });

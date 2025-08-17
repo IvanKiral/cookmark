@@ -54,6 +54,16 @@ function Home() {
 
   const searchQuery = createMemo(() => searchParams.q || "");
 
+  // Simple page state from URL
+  const currentPage = createMemo(() => {
+    const pageParam = searchParams.page;
+    if (!pageParam || Array.isArray(pageParam)) {
+      return 1;
+    }
+    const page = parseInt(pageParam, 10);
+    return Number.isNaN(page) || page < 1 ? 1 : page;
+  });
+
   // Create Fuse instance for search
   const fuse = createMemo(() => {
     return new Fuse(recipes, {
@@ -155,26 +165,35 @@ function Home() {
   };
 
   const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
-    setSearchParams({ ...searchParams, difficulty: difficulty ?? undefined });
+    setSearchParams({ ...searchParams, difficulty: difficulty ?? undefined, page: undefined });
   };
 
   const handleTimeFilter = (time: TimeFilter) => {
-    setSearchParams({ ...searchParams, time: time ?? undefined });
+    setSearchParams({ ...searchParams, time: time ?? undefined, page: undefined });
   };
 
   const handleTagFilter = (tag: TagFilter) => {
-    setSearchParams({ ...searchParams, tag: tag ?? undefined });
+    setSearchParams({ ...searchParams, tag: tag ?? undefined, page: undefined });
   };
 
   const handleSortChange = (sort: SortValue) => {
     setSearchParams({
       ...searchParams,
       sort: sort !== "name-asc" ? sort : undefined,
+      page: undefined,
     });
   };
 
   const handleSearchChange = (query: string) => {
-    setSearchParams({ ...searchParams, q: query ?? undefined });
+    setSearchParams({ ...searchParams, q: query ?? undefined, page: undefined });
+  };
+
+  const handlePageChange = (details: { page: number }) => {
+    if (details.page === 1) {
+      setSearchParams({ ...searchParams, page: undefined });
+    } else {
+      setSearchParams({ ...searchParams, page: details.page.toString() });
+    }
   };
 
   return (
@@ -204,7 +223,12 @@ function Home() {
               />
               <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
             </div>
-            <RecipeList recipes={filteredRecipes()} onRecipeSelect={handleRecipeSelect} />
+            <RecipeList
+              recipes={filteredRecipes()}
+              onRecipeSelect={handleRecipeSelect}
+              currentPage={currentPage()}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

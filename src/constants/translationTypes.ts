@@ -48,4 +48,10 @@ export type TypedTranslations = {
     switchToEnglish: string;
     switchToSlovak: string;
   };
+  pagination: {
+    previous: string;
+    next: string;
+    goToPage: (page: number) => string;
+    pageInfo: (current: number, total: number) => string;
+  };
 };
