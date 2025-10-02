@@ -1,0 +1,70 @@
+{
+  "title": "Tuniakové nugetky",
+  "description": "Chrumkavé a vláčne tuniakové nugetky, lepšie ako z McDonaldu. Ideálne na obed alebo večeru.",
+  "prep_time": null,
+  "cook_time": 30,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "Tuniak vo vlastnej šťave",
+      "amount": 2,
+      "unit": "plechovky"
+    },
+    {
+      "name": "Vajce",
+      "amount": 1,
+      "unit": null
+    },
+    {
+      "name": "Strúhaný syr (napr. ementál)",
+      "amount": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Sladká paprika",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Oregano",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Soľ",
+      "amount": 1,
+      "unit": "štipka"
+    },
+    {
+      "name": "Light majonéza (na dressing)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Ketchup (jimbimu)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Datľový sirup (na dressing)",
+      "amount": "trošku",
+      "unit": null
+    }
+  ],
+  "instructions": [
+    "Dobre vyžmýkajte tuniaka a zbavte ho prebytočnej vody, aby bol suchý.",
+    "Nastúhajte akýkoľvek tvrdý syr.",
+    "Pridajte vajce (dávajte pozor, aby nespadla škrupina).",
+    "Pridajte koreniny (sladkú papriku, oregano a štipku soli) a poriadne všetko premiešajte, kým nevznikne hmota.",
+    "Z hmoty vytvarujte medailónky, alebo nugetky.",
+    "Pečte 20 - 30 minút pri teplote 200 stupňov Celzia, kým nebudú chrumkavé.",
+    "Pripravte si dressing: zmiešajte light majonézu, ketchup (jimbimu) a trošku datľového sirupu."
+  ],
+  "tags": [
+    "Fish"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DOBoW5ACGn0/"
+}
