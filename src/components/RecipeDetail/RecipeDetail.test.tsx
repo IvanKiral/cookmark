@@ -19,7 +19,7 @@ describe("<RecipeDetail />", () => {
       { name: "Tomato sauce", amount: "400", unit: "ml" },
     ],
     instructions: ["Boil water", "Cook pasta"],
-    "source-url": null,
+    source_url: null,
   };
 
   it("renders recipe with all details", () => {

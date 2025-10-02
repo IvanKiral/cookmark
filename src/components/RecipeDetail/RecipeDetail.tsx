@@ -17,6 +17,8 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
     return servings ? `${servings} servings` : "N/A";
   };
 
+  console.log(props.recipe);
+
   return (
     <div class={styles.container} id="recipe-detail-content">
       <header class={styles.header}>
@@ -64,9 +66,9 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
           </div>
         )}
 
-        {props.recipe["source-url"] && (
+        {props.recipe.source_url && (
           <div class={styles.sourceUrl}>
-            <a href={props.recipe["source-url"]} target="_blank" rel="noopener noreferrer">
+            <a href={props.recipe.source_url} target="_blank" rel="noopener noreferrer">
               <svg
                 width="16"
                 height="16"
