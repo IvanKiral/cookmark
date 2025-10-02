@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, data ]
   workflow_dispatch:
 
 permissions:
@@ -21,8 +21,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout main branch code
         uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Checkout data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          sparse-checkout: |
+            data
+          path: temp-data
+
+      - name: Copy data folder from data branch
+        run: |
+          if [ -d temp-data/data ]; then
+            cp -r temp-data/data ./data
+            echo "✅ Data folder copied successfully"
+            ls -la ./data
+          else
+            echo "⚠️ No data folder found in data branch"
+            exit 1
+          fi
+
+      - name: Clean up temporary files
+        run: rm -rf temp-data
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
