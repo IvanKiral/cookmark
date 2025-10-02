@@ -22,4 +22,4 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   wb.register();
 }
 
-export default () => { };
+export default () => {};
