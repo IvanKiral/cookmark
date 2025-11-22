@@ -90,12 +90,12 @@ function Home() {
       case "time-desc":
         return (a: Recipe, b: Recipe) => b.total_time - a.total_time;
       case "difficulty-easy": {
-        const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2 };
+        const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2, Unknown: 3 };
         return (a: Recipe, b: Recipe) =>
           difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
       }
       case "difficulty-hard": {
-        const difficultyOrderReverse = { Hard: 0, Medium: 1, Easy: 2 };
+        const difficultyOrderReverse = { Hard: 0, Medium: 1, Easy: 2, Unknown: 3 };
         return (a: Recipe, b: Recipe) =>
           difficultyOrderReverse[a.difficulty] - difficultyOrderReverse[b.difficulty];
       }

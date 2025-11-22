@@ -4,7 +4,7 @@ import styles from "./RecipeListItem.module.css";
 type RecipeListItemProps = {
   id: string;
   name: string;
-  difficulty: "Easy" | "Medium" | "Hard";
+  difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
   onSelect: (id: string) => void;
 };

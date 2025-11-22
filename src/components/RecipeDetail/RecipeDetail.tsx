@@ -29,7 +29,9 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
 
         <div class={styles.metadata}>
           <span class={styles.difficulty} data-level={props.recipe.difficulty}>
-            {props.recipe.difficulty.charAt(0).toUpperCase() + props.recipe.difficulty.slice(1)}
+            {props.recipe.difficulty
+              ? props.recipe.difficulty.charAt(0).toUpperCase() + props.recipe.difficulty.slice(1)
+              : "Unknown"}
           </span>
 
           <div class={styles.timeInfo}>

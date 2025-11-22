@@ -7,7 +7,10 @@ const recipeModules = import.meta.glob<RecipeData>("../../data/sk/*.json", {
   import: "default",
 });
 
-const capitalizeFirstLetter = (str: string): string => {
+const capitalizeFirstLetter = (str: string | null): string => {
+  if (!str) {
+    return "Unknown";
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -16,7 +19,7 @@ const transformRecipeData = (data: RecipeData, index: number): Recipe => {
     id: (index + 1).toString(),
     url_slug: generateSlug(data.title),
     name: data.title,
-    difficulty: capitalizeFirstLetter(data.difficulty) as "Easy" | "Medium" | "Hard",
+    difficulty: capitalizeFirstLetter(data.difficulty) as "Easy" | "Medium" | "Hard" | "Unknown",
     time: data.total_time ? `${data.total_time} min` : "N/A",
     total_time: data.total_time || 0,
     tags: data.tags || [],

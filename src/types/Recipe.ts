@@ -14,7 +14,7 @@ export type RecipeData = {
   ingredients: Ingredient[];
   instructions: string[];
   tags: string[];
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: "easy" | "medium" | "hard" | null;
   cuisine: string | null;
   source_url: string | null;
 };
@@ -23,7 +23,7 @@ export type Recipe = {
   id: string;
   url_slug: string;
   name: string;
-  difficulty: "Easy" | "Medium" | "Hard";
+  difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
   total_time: number;
   tags: ReadonlyArray<string>;
