@@ -1,0 +1,78 @@
+{
+  "title": "Burger šneci",
+  "description": "Tito burger šneci tě budou bavit. Recept na 3-4 porce.",
+  "prep_time": null,
+  "cook_time": 16,
+  "total_time": null,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "Tortilly",
+      "amount": 2,
+      "unit": "ks"
+    },
+    {
+      "name": "Mleté hovězí maso",
+      "amount": 400,
+      "unit": "g"
+    },
+    {
+      "name": "Sůl",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Pepř",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Papričky Jalapeňo",
+      "unit": "nasekané"
+    },
+    {
+      "name": "Anglická slanina",
+      "unit": "opečená"
+    },
+    {
+      "name": "Karamelizovaná cibulka",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Cheddar",
+      "unit": "strouhaný"
+    },
+    {
+      "name": "Barbecue omáčka",
+      "unit": "na potření"
+    },
+    {
+      "name": "Brambory (pro přílohu)",
+      "unit": "dle potřeby"
+    },
+    {
+      "name": "Olej (pro přílohu)",
+      "unit": "na pokapání"
+    },
+    {
+      "name": "Koření na brambory (pro přílohu)",
+      "unit": "dle chuti"
+    }
+  ],
+  "instructions": [
+    "Maso osol, opepři a pořádně promíchej.",
+    "Připrav si tortillu a na bocích ji ohni.",
+    "Rozmačkej po ní ochucené maso.",
+    "Posypej nasekanými papričkami jalapeňo, opečenou slaninou, nastrouhaným cheddarem a karamelizovanou cibulkou.",
+    "Sroluj tortillu.",
+    "Nakrájej srolovanou tortillu na plátky.",
+    "Jednotlivé plátky napíchej na špejli.",
+    "Pomaž šneky barbecue omáčkou a dej péct do horkovzdušné fritézy (HF) na 180 stupňů na 16 minut (8 minut z jedné strany).",
+    "Šneky otoč, znovu pomaž barbecue omáčkou a dopeč dalších 8 minut.",
+    "Případně připrav americké brambory: brambory nakrájej na čtvrtinky, pokapej olejem, posypej kořením, promíchej a dej péct do fritézy na 200 stupňů na 15 minut, nebo upeč na plechu v klasické troubě."
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": null,
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DLiFPjKoKit/"
+}

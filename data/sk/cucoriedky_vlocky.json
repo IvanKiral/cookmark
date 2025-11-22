@@ -1,0 +1,57 @@
+{
+  "title": "Overnight Oats (Ovsená kaša cez noc)",
+  "description": "Rýchle a zdravé raňajky. Ideálne na mealprep.",
+  "prep_time": 5,
+  "cook_time": 0,
+  "total_time": 5,
+  "servings": 1,
+  "ingredients": [
+    {
+      "name": "Vločky",
+      "amount": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Chia semienka",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "Skyr",
+      "amount": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Proteín",
+      "amount": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Čučoriedky",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Horká čokoláda",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Voda alebo mlieko",
+      "amount": null,
+      "unit": "podľa potreby"
+    }
+  ],
+  "instructions": [
+    "Vločky, chia semienka, skyr a proteín spolu zamiešame.",
+    "Pridáme trochu vody alebo mlieka pre požadovanú konzistenciu.",
+    "Na vrch pridáme čučoriedky a roztopenú horkú čokoládu.",
+    "Dáme cez noc do chladničky."
+  ],
+  "tags": [
+    "ranajky"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DKovH0wIrCS/"
+}

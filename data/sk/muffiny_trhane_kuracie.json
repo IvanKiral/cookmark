@@ -1,0 +1,54 @@
+{
+  "title": "Muffiny s trhaným kuřecím, slaninou a mozzarellou",
+  "description": "Muffiny s trhaným kuřecím, slaninou a sýrem 🥓🧀",
+  "prep_time": null,
+  "cook_time": 30,
+  "total_time": null,
+  "servings": 6,
+  "ingredients": [
+    {
+      "name": "Muffiny (Toustís)",
+      "amount": 6,
+      "unit": "ks"
+    },
+    {
+      "name": "Kuřecí prsa",
+      "amount": 240,
+      "unit": "g"
+    },
+    {
+      "name": "Anglická slanina",
+      "amount": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Strouhaná mozzarella",
+      "amount": 60,
+      "unit": "g"
+    },
+    {
+      "name": "BBQ omáčka",
+      "amount": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Česnek",
+      "amount": "1-2",
+      "unit": "stroužky"
+    }
+  ],
+  "instructions": [
+    "Kuřecí maso osolte a ochuťte kořením, přidejte nakrájený česnek a BBQ omáčku.",
+    "Maso zabalte do alobalu a pečte v troubě na 180 stupňů po dobu 30 minut.",
+    "Mezitím opečte muffiny v toustovači a osmahněte slaninu.",
+    "Hotové maso natrhejte vidličkou a přesuňte na muffiny.",
+    "Na maso přidejte plátek osmažené slaniny a posypejte mozzarellou.",
+    "Muffiny dejte ještě na pár minut do trouby, aby se sýr roztekl a máte hotovo."
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": null,
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/C7tx2B1sie7/"
+}

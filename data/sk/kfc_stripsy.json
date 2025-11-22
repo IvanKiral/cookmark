@@ -1,0 +1,65 @@
+{
+  "title": "Zdravější verze KFC (Kuřecí)",
+  "description": "Chutná přesně jako KFC, ale má o polovinu méně kalorií. Hotové za 15 minut.",
+  "prep_time": null,
+  "cook_time": 10,
+  "total_time": 15,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "Kuřecí prsa",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Česnek (sušený)",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Červená paprika",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Cibule (sušená)",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Sůl",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Pepř",
+      "unit": "dle chuti"
+    },
+    {
+      "name": "Kukuřičný škrob",
+      "unit": "dle potřeby"
+    },
+    {
+      "name": "Vejce",
+      "unit": "dle potřeby"
+    },
+    {
+      "name": "Cornflakes (nadrcené)",
+      "unit": "dle potřeby"
+    },
+    {
+      "name": "Olej",
+      "unit": "na postříkání"
+    }
+  ],
+  "instructions": [
+    "Smíchejte koření: česnek, červenou papriku, sušenou cibuli, sůl a pepř. Promíchejte.",
+    "Připravte si tři obalovací směsi: kukuřičný škrob, vejce a nadrcené cornflakesy.",
+    "Obalte kuře postupně: nejprve ve škrobu, poté ve vejci a nakonec v cornflakesech.",
+    "Postříkejte obalené kousky olejem.",
+    "Vložte do horkovzdušné fritézy nebo trouby.",
+    "Pečte při 200 stupních po dobu 10 minut."
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DNTPZ_nKRyc/"
+}

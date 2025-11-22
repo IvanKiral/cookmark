@@ -1,0 +1,71 @@
+{
+  "title": "Tiramisu chia puding",
+  "description": "Vysokoproteínové raňajky / snack, ktoré chutí ako dezert. Vyžaduje si 7 ingrediencií.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "chia semienka",
+      "amount": 0.5,
+      "unit": "šálka"
+    },
+    {
+      "name": "chia semienka",
+      "amount": 86,
+      "unit": "g"
+    },
+    {
+      "name": "javorový sirup",
+      "amount": 2,
+      "unit": "polievkové lyžice"
+    },
+    {
+      "name": "vanilkový extrakt",
+      "amount": 0.5,
+      "unit": "čajová lyžička"
+    },
+    {
+      "name": "mlieko",
+      "amount": 1.5,
+      "unit": "šálka"
+    },
+    {
+      "name": "mlieko",
+      "amount": 325,
+      "unit": "ml"
+    },
+    {
+      "name": "espresso (kávový shot)",
+      "amount": 1,
+      "unit": "shot"
+    },
+    {
+      "name": "jogurt",
+      "amount": 1.5,
+      "unit": "šálka"
+    },
+    {
+      "name": "jogurt",
+      "amount": 310,
+      "unit": "g"
+    },
+    {
+      "name": "kakao",
+      "amount": 1,
+      "unit": "čajová lyžička"
+    }
+  ],
+  "instructions": [
+    "V miske zmiešajte chia semienka, mlieko, espresso, javorový sirup, vanilku a 1 šálku (230g) jogurtu.",
+    "Zmes rozlejte do pohárov/pohárov a nechajte stuhnúť minimálne 2 hodiny, alebo cez noc.",
+    "Pred konzumáciou ozdobte zvyšným jogurtom a kakaovým práškom. Dobrú chuť!"
+  ],
+  "tags": [
+    "Dessert"
+  ],
+  "difficulty": null,
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/C6rQl91ouon/"
+}

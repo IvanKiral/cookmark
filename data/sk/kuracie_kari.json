@@ -1,0 +1,97 @@
+{
+  "title": "Korejské kuřecí prsa",
+  "description": "Lepší recept na kuřecí prsa nenajdete! 😀 Tohle je fakt totálně jednoduchý a až to ochutnáte, tak nebude chtít nic jiného. Máte to úpone všechno. Kvalitní sacharidy, kvalitní tuky a je to plné bílkovin! 😀 Vyzkoušíte ? 🤩",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "kuřecí prsa",
+      "amount": 600,
+      "unit": "gramů"
+    },
+    {
+      "name": "červený kari",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sojová omáčka",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "voda",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sezamový olej",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sušený česnek",
+      "amount": 1,
+      "unit": "lžička"
+    },
+    {
+      "name": "olivový olej",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "červené kari (na dresink)",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "olivový olej (na dresink)",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "jablečný ocet",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sojová omáčka (na dresink)",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "voda (na dresink)",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "rýže",
+      "unit": "na podávání"
+    },
+    {
+      "name": "zelenina",
+      "unit": "následující"
+    },
+    {
+      "name": "sezamová semínka",
+      "unit": "na posypání"
+    }
+  ],
+  "instructions": [
+    "Smíchejte kuřecí prsa s 1 lžící červeného kari, 1 lžící sojovky, 1 lžící vody, 1 lžící sezamového oleje, 1 lžičkou sušeného česneku a 1 lžící olivového oleje. Pořádně promíchejte.",
+    "Orestujte maso na pánvi.",
+    "Mezitím si připravte dresink smícháním 2 lžic červeného kari, 1 lžíce olivového oleje, 2 lžic jablečného octa, 2 lžic sojovky a 1 lžíce vody. Vše promíchejte.",
+    "Orestované maso nakrájejte na plátky.",
+    "Maso dejte na talíř s rýží a s následující zeleninou.",
+    "Zakápněte maso připravenou omáčkou (dresinkem).",
+    "Posypte sezamovými semínky a podávejte."
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Korejská",
+  "source_url": "https://www.instagram.com/p/DB9SliEKZVl/"
+}
