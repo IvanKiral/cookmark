@@ -10,13 +10,11 @@
       "name": "Rýže",
       "amount": 350,
       "unit": "g",
-      "note": "Propláchnout a uvařit."
     },
     {
       "name": "Kuřecí prsa",
       "amount": 600,
-      "unit": "- 750 g",
-      "note": "Nakrájet na plátky."
+      "unit": "g",
     },
     {
       "name": "Sůl",
