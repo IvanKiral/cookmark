@@ -1,84 +1,89 @@
 import { useParams, useSearchParams } from "@solidjs/router";
 import Fuse from "fuse.js";
-import { createMemo } from "solid-js";
-import FilterSidebar from "~/components/FilterSidebar/FilterSidebar";
+import { createMemo, createSignal } from "solid-js";
+import FilterDrawer from "~/components/FilterDrawer/FilterDrawer";
 import LanguageSwitcher from "~/components/LanguageSwitcher/LanguageSwitcher";
 import RecipeDrawer from "~/components/RecipeDrawer/RecipeDrawer";
 import RecipeList from "~/components/RecipeList/RecipeList";
 import SearchBar from "~/components/SearchBar/SearchBar";
 import SortDropdown from "~/components/SortDropdown/SortDropdown";
-import { type DifficultyFilter, difficultyValues } from "~/constants/difficultyOptions";
+import {
+  type DifficultyFilter,
+  type DifficultyValue,
+  difficultyValues,
+} from "~/constants/difficultyOptions";
 import { type SortValue, sortValues } from "~/constants/sortOptions";
-import { type TagFilter, tagValues } from "~/constants/tagOptions";
-import { type TimeFilter, timeValues } from "~/constants/timeOptions";
+import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions";
+import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions";
 import type { Locale } from "~/i18n";
 import { I18nProvider, useT } from "~/lib/i18nContext";
 import type { Recipe } from "~/types/Recipe";
 import { loadRecipes } from "~/utils/loadRecipes";
 import styles from "./index.module.css";
 
-function Home() {
+const parseArrayParam = <T extends string>(
+  param: string | string[] | undefined,
+  validValues: ReadonlyArray<T>,
+): ReadonlyArray<T> => {
+  if (!param) {
+    return [];
+  }
+  const values = Array.isArray(param) ? param : param.split(",");
+  return values.filter((v): v is T => validValues.includes(v as T));
+};
+
+const serializeArrayParam = <T extends string>(values: ReadonlyArray<T>): string | undefined =>
+  values.length > 0 ? values.join(",") : undefined;
+
+const Home = () => {
   const t = useT();
   const recipes: Recipe[] = loadRecipes();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
 
-  // Derive all filters from URL params
-  const difficultyFilter = createMemo((): DifficultyFilter => {
-    if (!searchParams.difficulty || Array.isArray(searchParams.difficulty)) {
-      return null;
-    }
-    return difficultyValues.includes(searchParams.difficulty)
-      ? (searchParams.difficulty as DifficultyFilter)
-      : null;
-  });
+  const difficultyFilter = createMemo(
+    (): DifficultyFilter =>
+      parseArrayParam(searchParams.difficulty, difficultyValues as ReadonlyArray<DifficultyValue>),
+  );
 
-  const timeFilter = createMemo((): TimeFilter => {
-    if (!searchParams.time || Array.isArray(searchParams.time)) {
-      return null;
-    }
-    return timeValues.includes(searchParams.time) ? (searchParams.time as TimeFilter) : null;
-  });
+  const timeFilter = createMemo(
+    (): TimeFilter => parseArrayParam(searchParams.time, timeValues as ReadonlyArray<TimeValue>),
+  );
 
-  const tagFilter = createMemo(() => {
-    if (!searchParams.tag || Array.isArray(searchParams.tag)) {
-      return null;
-    }
-    return tagValues.includes(searchParams.tag) ? (searchParams.tag as TagFilter) : null;
-  });
+  const tagFilter = createMemo(
+    (): TagFilter => parseArrayParam(searchParams.tag, tagValues as ReadonlyArray<TagValue>),
+  );
 
   const sortBy = createMemo(() => {
     const value = searchParams.sort as SortValue;
-
     return sortValues.includes(value) ? value : "name-asc";
   });
 
   const searchQuery = createMemo(() => searchParams.q || "");
 
-  // Simple page state from URL
   const currentPage = createMemo(() => {
     const pageParam = searchParams.page;
     if (!pageParam || Array.isArray(pageParam)) {
       return 1;
     }
-    const page = parseInt(pageParam, 10);
+    const page = Number.parseInt(pageParam, 10);
     return Number.isNaN(page) || page < 1 ? 1 : page;
   });
 
-  // Create Fuse instance for search
-  const fuse = createMemo(() => {
-    return new Fuse(recipes, {
-      keys: [
-        { name: "name", weight: 0.7 },
-        { name: "difficulty", weight: 0.2 },
-        { name: "time", weight: 0.1 },
-      ],
-      threshold: 0.3,
-      includeScore: true,
-      minMatchCharLength: 2,
-    });
-  });
+  const fuse = createMemo(
+    () =>
+      new Fuse(recipes, {
+        keys: [
+          { name: "name", weight: 0.7 },
+          { name: "difficulty", weight: 0.2 },
+          { name: "time", weight: 0.1 },
+        ],
+        threshold: 0.3,
+        includeScore: true,
+        minMatchCharLength: 2,
+      }),
+  );
 
-  // Create sort comparator function
   const getSortComparator = (sortBy: SortValue) => {
     switch (sortBy) {
       case "name-asc":
@@ -104,12 +109,11 @@ function Home() {
     }
   };
 
-  // Filtered recipes using functional chaining
   const filteredRecipes = createMemo(() => {
     const query = searchQuery();
-    const difficulty = difficultyFilter();
-    const time = timeFilter();
-    const tag = tagFilter();
+    const difficulties = difficultyFilter();
+    const times = timeFilter();
+    const tags = tagFilter();
     const sort = sortBy();
 
     const baseRecipes =
@@ -120,27 +124,31 @@ function Home() {
         : recipes;
 
     return baseRecipes
-      .filter((recipe) => !difficulty || recipe.difficulty === difficulty)
+      .filter(
+        (recipe) =>
+          difficulties.length === 0 || difficulties.includes(recipe.difficulty as DifficultyValue),
+      )
       .filter((recipe) => {
-        if (!time) {
+        if (times.length === 0) {
           return true;
         }
-        switch (time) {
-          case "under30":
-            return recipe.total_time < 30;
-          case "under60":
-            return recipe.total_time < 60;
-          case "over60":
-            return recipe.total_time >= 60;
-          default:
-            return true;
-        }
+        return times.some((time) => {
+          switch (time) {
+            case "under30":
+              return recipe.total_time < 30;
+            case "under60":
+              return recipe.total_time < 60;
+            case "over60":
+              return recipe.total_time >= 60;
+            default:
+              return true;
+          }
+        });
       })
-      .filter((recipe) => !tag || recipe.tags.includes(tag))
+      .filter((recipe) => tags.length === 0 || tags.some((tag) => recipe.tags.includes(tag)))
       .sort(getSortComparator(sort));
   });
 
-  // Derive selected recipe from URL
   const selectedRecipeId = createMemo(() => {
     const slug = searchParams.recipe;
     if (!slug) {
@@ -150,8 +158,11 @@ function Home() {
     return recipe?.id ?? null;
   });
 
-  // Drawer is open when recipe is selected
   const isDrawerOpen = createMemo(() => selectedRecipeId() !== null);
+
+  const activeFilterCount = createMemo(
+    () => difficultyFilter().length + timeFilter().length + tagFilter().length,
+  );
 
   const handleRecipeSelect = (id: string) => {
     const recipe = recipes.find((r) => r.id === id);
@@ -165,15 +176,29 @@ function Home() {
   };
 
   const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
-    setSearchParams({ ...searchParams, difficulty: difficulty ?? undefined, page: undefined });
+    setSearchParams({
+      ...searchParams,
+      difficulty: serializeArrayParam(difficulty),
+      page: undefined,
+    });
   };
 
   const handleTimeFilter = (time: TimeFilter) => {
-    setSearchParams({ ...searchParams, time: time ?? undefined, page: undefined });
+    setSearchParams({ ...searchParams, time: serializeArrayParam(time), page: undefined });
   };
 
   const handleTagFilter = (tag: TagFilter) => {
-    setSearchParams({ ...searchParams, tag: tag ?? undefined, page: undefined });
+    setSearchParams({ ...searchParams, tag: serializeArrayParam(tag), page: undefined });
+  };
+
+  const handleClearAllFilters = () => {
+    setSearchParams({
+      ...searchParams,
+      difficulty: undefined,
+      time: undefined,
+      tag: undefined,
+      page: undefined,
+    });
   };
 
   const handleSortChange = (sort: SortValue) => {
@@ -185,7 +210,7 @@ function Home() {
   };
 
   const handleSearchChange = (query: string) => {
-    setSearchParams({ ...searchParams, q: query ?? undefined, page: undefined });
+    setSearchParams({ ...searchParams, q: query || undefined, page: undefined });
   };
 
   const handlePageChange = (details: { page: number }) => {
@@ -201,28 +226,34 @@ function Home() {
       <header class={styles.header}>
         <div class={styles.headerContent}>
           <h1 class={styles.title}>{t.app.title}</h1>
+          <p class={styles.subtitle}>The minimalist kitchen collection</p>
           <LanguageSwitcher />
         </div>
       </header>
       <div class={styles.container}>
         <div class={styles.layout}>
-          <FilterSidebar
-            difficultyFilter={difficultyFilter()}
-            timeFilter={timeFilter()}
-            tagFilter={tagFilter()}
-            onFilterChange={handleDifficultyFilter}
-            onTimeFilterChange={handleTimeFilter}
-            onTagFilterChange={handleTagFilter}
-          />
-          <div class={styles.mainContent}>
-            <div class={styles.searchAndSort}>
+          <div class={styles.controls}>
+            <button
+              type="button"
+              class={`${styles.filtersButton} ${activeFilterCount() > 0 ? styles.filtersButtonActive : ""}`}
+              onClick={() => setIsFilterDrawerOpen(true)}
+            >
+              <span class="material-symbols-outlined">tune</span>
+              {t.filterDrawer.filtersButton}
+              {activeFilterCount() > 0 && (
+                <span class={styles.filterCount}>{activeFilterCount()}</span>
+              )}
+            </button>
+            <div class={styles.searchWrapper}>
               <SearchBar
                 recipes={recipes}
                 searchQuery={(searchQuery() as string) || ""}
                 onSearchChange={handleSearchChange}
               />
-              <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
             </div>
+            <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
+          </div>
+          <div class={styles.mainContent}>
             <RecipeList
               recipes={filteredRecipes()}
               onRecipeSelect={handleRecipeSelect}
@@ -232,6 +263,18 @@ function Home() {
           </div>
         </div>
       </div>
+
+      <FilterDrawer
+        open={isFilterDrawerOpen()}
+        onOpenChange={setIsFilterDrawerOpen}
+        difficultyFilter={difficultyFilter()}
+        timeFilter={timeFilter()}
+        tagFilter={tagFilter()}
+        onDifficultyChange={handleDifficultyFilter}
+        onTimeChange={handleTimeFilter}
+        onTagChange={handleTagFilter}
+        onClearAll={handleClearAllFilters}
+      />
 
       <RecipeDrawer
         open={isDrawerOpen()}
@@ -245,13 +288,15 @@ function Home() {
       />
     </main>
   );
-}
+};
 
-export default function LangLayout() {
+const LangLayout = () => {
   const params = useParams<{ lang: Locale }>();
   return (
     <I18nProvider locale={params.lang}>
       <Home />
     </I18nProvider>
   );
-}
+};
+
+export default LangLayout;

@@ -28,7 +28,7 @@ const LanguageSwitcher = () => {
       aria-label={switchToLabel()}
       title={switchToLabel()}
     >
-      <span class={styles.icon}>🌐</span>
+      <span class="material-symbols-outlined">language</span>
       <span class={styles.language}>{switchToLang()}</span>
     </button>
   );

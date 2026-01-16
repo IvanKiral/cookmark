@@ -14,7 +14,6 @@ export const enTranslations = createStore<TypedTranslations>({
     difficulty: "Difficulty",
     time: "Time",
     tags: "Tags",
-    all: "All",
     easy: "Easy",
     medium: "Medium",
     hard: "Hard",
@@ -42,7 +41,6 @@ export const enTranslations = createStore<TypedTranslations>({
     viewSource: "View Recipe Source",
   },
   tags: {
-    all: "All",
     chicken: "Chicken",
     pork: "Pork",
     beef: "Beef",
@@ -52,6 +50,16 @@ export const enTranslations = createStore<TypedTranslations>({
     lactoseFree: "Lactose-free",
     lowSugar: "Low-Sugar",
     cake: "Cake",
+  },
+  filterDrawer: {
+    title: "Filters",
+    clearAll: "Clear all",
+    filtersButton: "Filters",
+  },
+  recipeList: {
+    name: "Recipe Name",
+    difficulty: "Difficulty",
+    time: "Time",
   },
   languageSwitcher: {
     switchToEnglish: "Switch to English",

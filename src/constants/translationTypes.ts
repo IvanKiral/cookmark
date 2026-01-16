@@ -1,16 +1,13 @@
-// Translation type definitions for compile-time validation
 import type { DifficultyTranslationKey } from "./difficultyOptions.js";
 import type { TagTranslationKey } from "./tagOptions.js";
 import type { TimeTranslationKey } from "./timeOptions.js";
 
-// Required filter translation keys
 export type FilterTranslations = Record<DifficultyTranslationKey | TimeTranslationKey, string> & {
   difficulty: string;
   time: string;
   tags: string;
 };
 
-// Required tag translation keys
 export type TagTranslations = Record<TagTranslationKey, string>;
 
 // Complete translation structure with typed filter sections
@@ -44,6 +41,16 @@ export type TypedTranslations = {
     viewSource: string;
   };
   tags: TagTranslations;
+  filterDrawer: {
+    title: string;
+    clearAll: string;
+    filtersButton: string;
+  };
+  recipeList: {
+    name: string;
+    difficulty: string;
+    time: string;
+  };
   languageSwitcher: {
     switchToEnglish: string;
     switchToSlovak: string;

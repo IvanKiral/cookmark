@@ -1,29 +1,25 @@
-// Unified filter options with helper functions
 import {
-  type DifficultyFilter,
   type DifficultyTranslationKey,
+  type DifficultyValue,
   difficultyDefinitions,
 } from "./difficultyOptions.js";
-import { type TagFilter, type TagTranslationKey, tagDefinitions } from "./tagOptions.js";
-import { type TimeFilter, type TimeTranslationKey, timeDefinitions } from "./timeOptions.js";
+import { type TagTranslationKey, type TagValue, tagDefinitions } from "./tagOptions.js";
+import { type TimeTranslationKey, type TimeValue, timeDefinitions } from "./timeOptions.js";
 
-export const createTagOptions = <T>(t: { tags: Record<TagTranslationKey, T> }) => {
-  return Object.entries(tagDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.tags[key],
-  })) as Array<{ value: TagFilter; label: T }>;
-};
+export const createTagOptions = <T>(t: { tags: Record<TagTranslationKey, T> }) =>
+  Object.entries(tagDefinitions).map(([value, key]) => ({
+    value: value as TagValue,
+    label: t.tags[key as TagTranslationKey],
+  }));
 
-export const createDifficultyOptions = <T>(t: { filters: Record<DifficultyTranslationKey, T> }) => {
-  return Object.entries(difficultyDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.filters[key],
-  })) as Array<{ value: DifficultyFilter; label: T }>;
-};
+export const createDifficultyOptions = <T>(t: { filters: Record<DifficultyTranslationKey, T> }) =>
+  Object.entries(difficultyDefinitions).map(([value, key]) => ({
+    value: value as DifficultyValue,
+    label: t.filters[key as DifficultyTranslationKey],
+  }));
 
-export const createTimeOptions = <T>(t: { filters: Record<TimeTranslationKey, T> }) => {
-  return Object.entries(timeDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.filters[key],
-  })) as Array<{ value: TimeFilter; label: T }>;
-};
+export const createTimeOptions = <T>(t: { filters: Record<TimeTranslationKey, T> }) =>
+  Object.entries(timeDefinitions).map(([value, key]) => ({
+    value: value as TimeValue,
+    label: t.filters[key as TimeTranslationKey],
+  }));

@@ -8,7 +8,7 @@ type SortDropdownProps = {
   onSortChange: (value: SortValue) => void;
 };
 
-export default function SortDropdown(props: SortDropdownProps) {
+const SortDropdown = (props: SortDropdownProps) => {
   const t = useT();
   const [isOpen, setIsOpen] = createSignal(false);
 
@@ -20,9 +20,6 @@ export default function SortDropdown(props: SortDropdownProps) {
     { value: "difficulty-easy", label: t.sort.difficultyEasy },
     { value: "difficulty-hard", label: t.sort.difficultyHard },
   ] as const;
-
-  const selectedOption = () =>
-    sortOptions.find((option) => option.value === props.value) || sortOptions[0];
 
   const handleOptionClick = (value: SortValue) => {
     props.onSortChange(value);
@@ -43,21 +40,11 @@ export default function SortDropdown(props: SortDropdownProps) {
         aria-expanded={isOpen()}
       >
         <span class={styles.label}>{t.sort.label}</span>
-        <span class={styles.selectedValue}>{selectedOption().label}</span>
-        <svg
-          class={`${styles.chevron} ${isOpen() ? styles.chevronUp : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+        <span
+          class={`material-symbols-outlined ${styles.icon} ${isOpen() ? styles.iconRotated : ""}`}
         >
-          <title>Sort icon</title>
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+          expand_more
+        </span>
       </button>
 
       {isOpen() && (
@@ -75,4 +62,6 @@ export default function SortDropdown(props: SortDropdownProps) {
       )}
     </div>
   );
-}
+};
+
+export default SortDropdown;

@@ -3,24 +3,25 @@ import { describe, expect, it, vi } from "vitest";
 import SortDropdown from "./SortDropdown.jsx";
 
 describe("<SortDropdown />", () => {
-  it("renders with current value", () => {
+  it("renders with sort by label", () => {
     const mockOnSortChange = vi.fn();
     const { getByText } = render(() => (
       <SortDropdown value="name-asc" onSortChange={mockOnSortChange} />
     ));
 
-    expect(getByText("Name (A-Z)")).toBeInTheDocument();
+    expect(getByText("Sort by")).toBeInTheDocument();
   });
 
   it("shows all sort options when clicked", () => {
     const mockOnSortChange = vi.fn();
-    const { getByText } = render(() => (
+    const { getByText, getByRole } = render(() => (
       <SortDropdown value="name-asc" onSortChange={mockOnSortChange} />
     ));
 
-    const button = getByText("Name (A-Z)");
+    const button = getByRole("button");
     fireEvent.click(button);
 
+    expect(getByText("Name (A-Z)")).toBeInTheDocument();
     expect(getByText("Name (Z-A)")).toBeInTheDocument();
     expect(getByText("Time (shortest first)")).toBeInTheDocument();
     expect(getByText("Time (longest first)")).toBeInTheDocument();
@@ -30,11 +31,11 @@ describe("<SortDropdown />", () => {
 
   it("calls onSortChange when option is selected", () => {
     const mockOnSortChange = vi.fn();
-    const { getByText } = render(() => (
+    const { getByText, getByRole } = render(() => (
       <SortDropdown value="name-asc" onSortChange={mockOnSortChange} />
     ));
 
-    const button = getByText("Name (A-Z)");
+    const button = getByRole("button");
     fireEvent.click(button);
 
     const option = getByText("Time (shortest first)");
@@ -43,12 +44,17 @@ describe("<SortDropdown />", () => {
     expect(mockOnSortChange).toHaveBeenCalledWith("time-asc");
   });
 
-  it("renders with different initial values", () => {
+  it("highlights the active option", () => {
     const mockOnSortChange = vi.fn();
-    const { getByText } = render(() => (
+    const { getByRole, getAllByRole } = render(() => (
       <SortDropdown value="difficulty-hard" onSortChange={mockOnSortChange} />
     ));
 
-    expect(getByText("Difficulty (hard first)")).toBeInTheDocument();
+    const button = getByRole("button");
+    fireEvent.click(button);
+
+    const options = getAllByRole("button");
+    const activeOption = options.find((opt) => opt.textContent === "Difficulty (hard first)");
+    expect(activeOption).toHaveClass(/_dropdownItemActive/);
   });
 });

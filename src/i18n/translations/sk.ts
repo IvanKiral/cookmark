@@ -22,7 +22,6 @@ export const skTranslations = createStore<TypedTranslations>({
     difficulty: "Obtiažnosť",
     time: "Čas",
     tags: "Štítky",
-    all: "Všetko",
     easy: "Ľahké",
     medium: "Stredné",
     hard: "Ťažké",
@@ -50,7 +49,6 @@ export const skTranslations = createStore<TypedTranslations>({
     viewSource: "Zobraziť zdroj receptu",
   },
   tags: {
-    all: "Všetko",
     chicken: "Kura",
     pork: "Bravčové",
     beef: "Hovädzie",
@@ -60,6 +58,16 @@ export const skTranslations = createStore<TypedTranslations>({
     lactoseFree: "Bez laktózy",
     lowSugar: "Málo cukru",
     cake: "Koláč",
+  },
+  filterDrawer: {
+    title: "Filtre",
+    clearAll: "Vymazať všetko",
+    filtersButton: "Filtre",
+  },
+  recipeList: {
+    name: "Názov receptu",
+    difficulty: "Obtiažnosť",
+    time: "Čas",
   },
   languageSwitcher: {
     switchToEnglish: "Prepnúť na angličtinu",
