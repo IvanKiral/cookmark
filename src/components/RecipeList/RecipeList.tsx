@@ -7,7 +7,6 @@ import RecipeListItem from "./RecipeListItem.jsx";
 
 type RecipeListProps = {
   recipes: ReadonlyArray<Recipe>;
-  onRecipeSelect: (id: string) => void;
   currentPage: number;
   onPageChange: (details: { page: number }) => void;
 };
@@ -42,11 +41,10 @@ const RecipeList: Component<RecipeListProps> = (props) => {
         <For each={paginatedRecipes()}>
           {(recipe) => (
             <RecipeListItem
-              id={recipe.id}
+              urlSlug={recipe.url_slug}
               name={recipe.name}
               difficulty={recipe.difficulty}
               time={recipe.time}
-              onSelect={props.onRecipeSelect}
             />
           )}
         </For>

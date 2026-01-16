@@ -39,6 +39,9 @@ export type TypedTranslations = {
     ingredients: string;
     instructions: string;
     viewSource: string;
+    difficultyLabel: string;
+    notFound: string;
+    backToList: string;
   };
   tags: TagTranslations;
   filterDrawer: {

@@ -5,6 +5,15 @@ import { I18nProvider } from "~/lib/i18nContext";
 import type { Recipe } from "~/types/Recipe";
 import RecipeList from "./RecipeList.jsx";
 
+vi.mock("@solidjs/router", () => ({
+  A: (props: { href: string; class: string; children: JSX.Element }) => (
+    <a href={props.href} class={props.class}>
+      {props.children}
+    </a>
+  ),
+  useParams: () => ({ lang: "en" }),
+}));
+
 const TestWrapper = (props: { children: JSX.Element }) => (
   <I18nProvider locale="en">{props.children}</I18nProvider>
 );
@@ -35,19 +44,16 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     const { getByText, queryByText } = render(() => (
       <TestWrapper>
-        <RecipeList recipes={mockRecipes} onRecipeSelect={mockOnRecipeSelect} {...defaultProps} />
+        <RecipeList recipes={mockRecipes} {...defaultProps} />
       </TestWrapper>
     ));
 
-    // First 10 recipes should be visible on page 1
     expect(getByText("Recipe 1")).toBeInTheDocument();
     expect(getByText("Recipe 5")).toBeInTheDocument();
     expect(getByText("Recipe 10")).toBeInTheDocument();
 
-    // Recipe 11+ should not be visible on page 1
     expect(queryByText("Recipe 11")).not.toBeInTheDocument();
     expect(queryByText("Recipe 15")).not.toBeInTheDocument();
   });
@@ -63,23 +69,16 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     const mockOnPageChange = vi.fn();
     render(() => (
       <TestWrapper>
-        <RecipeList
-          recipes={mockRecipes}
-          onRecipeSelect={mockOnRecipeSelect}
-          currentPage={1}
-          onPageChange={mockOnPageChange}
-        />
+        <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
       </TestWrapper>
     ));
 
     const nextButton = screen.getByLabelText("Next");
     fireEvent.click(nextButton);
 
-    // Verify onPageChange was called with page 2
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }));
   });
 
@@ -94,16 +93,10 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     const mockOnPageChange = vi.fn();
     render(() => (
       <TestWrapper>
-        <RecipeList
-          recipes={mockRecipes}
-          onRecipeSelect={mockOnRecipeSelect}
-          currentPage={2}
-          onPageChange={mockOnPageChange}
-        />
+        <RecipeList recipes={mockRecipes} currentPage={2} onPageChange={mockOnPageChange} />
       </TestWrapper>
     ));
 
@@ -123,10 +116,9 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     render(() => (
       <TestWrapper>
-        <RecipeList recipes={mockRecipes} onRecipeSelect={mockOnRecipeSelect} {...defaultProps} />
+        <RecipeList recipes={mockRecipes} {...defaultProps} />
       </TestWrapper>
     ));
 
@@ -146,16 +138,10 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     const mockOnPageChange = vi.fn();
     const { unmount } = render(() => (
       <TestWrapper>
-        <RecipeList
-          recipes={mockRecipes1}
-          onRecipeSelect={mockOnRecipeSelect}
-          currentPage={1}
-          onPageChange={mockOnPageChange}
-        />
+        <RecipeList recipes={mockRecipes1} currentPage={1} onPageChange={mockOnPageChange} />
       </TestWrapper>
     ));
 
@@ -177,12 +163,7 @@ describe("<RecipeList />", () => {
 
     render(() => (
       <TestWrapper>
-        <RecipeList
-          recipes={mockRecipes2}
-          onRecipeSelect={mockOnRecipeSelect}
-          currentPage={1}
-          onPageChange={mockOnPageChange}
-        />
+        <RecipeList recipes={mockRecipes2} currentPage={1} onPageChange={mockOnPageChange} />
       </TestWrapper>
     ));
 
@@ -192,10 +173,9 @@ describe("<RecipeList />", () => {
   });
 
   it("renders empty list when no recipes provided", () => {
-    const mockOnRecipeSelect = vi.fn();
     const { container } = render(() => (
       <TestWrapper>
-        <RecipeList recipes={[]} onRecipeSelect={mockOnRecipeSelect} {...defaultProps} />
+        <RecipeList recipes={[]} {...defaultProps} />
       </TestWrapper>
     ));
 
@@ -216,16 +196,10 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    const mockOnRecipeSelect = vi.fn();
     const mockOnPageChange = vi.fn();
     render(() => (
       <TestWrapper>
-        <RecipeList
-          recipes={mockRecipes}
-          onRecipeSelect={mockOnRecipeSelect}
-          currentPage={1}
-          onPageChange={mockOnPageChange}
-        />
+        <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
       </TestWrapper>
     ));
 

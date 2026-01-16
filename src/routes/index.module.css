@@ -98,28 +98,51 @@
 }
 
 .filtersButtonActive {
-  background: var(--color-primary-50);
-  border-color: var(--color-primary-300);
-  color: var(--color-primary-700);
+  background: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+  color: white;
 }
 
 .filtersButtonActive:hover {
-  background: var(--color-primary-100);
-  border-color: var(--color-primary-400);
+  background: var(--color-neutral-800);
+  border-color: var(--color-neutral-800);
 }
 
 .filterCount {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
+  min-width: 18px;
+  height: 18px;
   padding: 0 var(--space-1);
-  background: var(--color-primary-500);
-  color: white;
-  font-size: var(--text-xs);
+  background: white;
+  color: var(--color-neutral-900);
+  font-size: 11px;
   font-weight: 600;
   border-radius: var(--radius-full);
+}
+
+.clearFiltersButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.clearFiltersButton:hover {
+  color: var(--color-neutral-900);
+}
+
+.clearFiltersButton .material-symbols-outlined {
+  font-size: 18px;
 }
 
 .searchWrapper {

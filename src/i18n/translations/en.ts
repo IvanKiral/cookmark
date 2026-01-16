@@ -39,6 +39,9 @@ export const enTranslations = createStore<TypedTranslations>({
     ingredients: "Ingredients",
     instructions: "Instructions",
     viewSource: "View Recipe Source",
+    difficultyLabel: "Difficulty",
+    notFound: "Recipe not found",
+    backToList: "Back to recipes",
   },
   tags: {
     chicken: "Chicken",

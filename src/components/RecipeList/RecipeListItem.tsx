@@ -1,41 +1,26 @@
+import { A, useParams } from "@solidjs/router";
 import type { Component } from "solid-js";
+import type { Locale } from "~/i18n";
 import styles from "./RecipeListItem.module.css";
 
 type RecipeListItemProps = {
-  id: string;
+  urlSlug: string;
   name: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
-  onSelect: (id: string) => void;
 };
 
 const RecipeListItem: Component<RecipeListItemProps> = (props) => {
-  const handleClick = () => {
-    props.onSelect(props.id);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      props.onSelect(props.id);
-    }
-  };
+  const params = useParams<{ lang: Locale }>();
 
   return (
-    <div
-      class={styles.listItem}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-      aria-label={`Select recipe: ${props.name}`}
-    >
+    <A href={`/${params.lang}/recipe/${props.urlSlug}`} class={styles.listItem}>
       <h3 class={styles.title}>{props.name}</h3>
       <span class={styles.difficulty} data-level={props.difficulty}>
         {props.difficulty}
       </span>
       <span class={styles.time}>{props.time}</span>
-    </div>
+    </A>
   );
 };
 

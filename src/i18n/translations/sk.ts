@@ -47,6 +47,9 @@ export const skTranslations = createStore<TypedTranslations>({
     ingredients: "Prísady",
     instructions: "Postup",
     viewSource: "Zobraziť zdroj receptu",
+    difficultyLabel: "Obtiažnosť",
+    notFound: "Recept nenájdený",
+    backToList: "Späť na recepty",
   },
   tags: {
     chicken: "Kura",
