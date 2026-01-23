@@ -22,6 +22,7 @@ export type RecipeData = {
   difficulty: "easy" | "medium" | "hard" | null;
   cuisine: string | null;
   source_url: string | null;
+  video_url?: string;
 };
 
 export type Recipe = {

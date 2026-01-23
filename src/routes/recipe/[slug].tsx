@@ -1,5 +1,6 @@
 import { A, useParams } from "@solidjs/router";
 import { type Component, For, Show } from "solid-js";
+import RecipeVideo from "~/components/RecipeVideo/RecipeVideo";
 import { strings } from "~/constants/strings";
 import { getRecipeDataBySlug } from "~/utils/loadRecipes";
 import styles from "./[slug].module.css";
@@ -170,6 +171,10 @@ const RecipePage: Component = () => {
                 </For>
               </section>
             </div>
+
+            <Show when={recipeData().video_url}>
+              {(videoUrl) => <RecipeVideo src={videoUrl()} title={recipeData().title} />}
+            </Show>
           </main>
         </div>
       )}
