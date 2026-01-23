@@ -1,0 +1,94 @@
+{
+  "title": "Hovädzí šalát s taco korením",
+  "description": "Rýchla a zdravá nízkosacharidová večera hotová za 10 minút. Ideálna v kombinácii s karfiolovou ryžou.",
+  "prep_time": null,
+  "cook_time": 10,
+  "total_time": 10,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "Hovädzí steak",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Paprika",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Cibuľa",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Olej",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Rasca",
+      "amount": 1,
+      "unit": "pl"
+    },
+    {
+      "name": "Čili prášok",
+      "amount": 1,
+      "unit": "pl"
+    },
+    {
+      "name": "Mletá paprika",
+      "amount": 1,
+      "unit": "čl"
+    },
+    {
+      "name": "Sušený cesnak",
+      "amount": 1,
+      "unit": "čl"
+    },
+    {
+      "name": "Sušená cibuľa",
+      "amount": 1,
+      "unit": "čl"
+    },
+    {
+      "name": "Oregano",
+      "amount": 0.5,
+      "unit": "čl"
+    },
+    {
+      "name": "Soľ",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Čierne korenie",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Hlavné jedlo",
+      "steps": [
+        "Nakrájajte hovädzí steak na kúsky veľkosti sústa a nakrájajte papriku a cibuľu na plátky.",
+        "Mäso a zeleninu zmiešajte v miske s olejom a taco korením. Dôkladne premiešajte, aby bolo všetko rovnomerne obalené.",
+        "Vložte do teplovzdušnej fritézy a pripravujte pri 200 °C (400 °F) po dobu 8–12 minút. V polovici času vnútro pretrepte.",
+        "Podávajte napríklad s karfiolovou ryžou na španielsky spôsob."
+      ]
+    },
+    {
+      "name": "Domáce taco korenie",
+      "steps": [
+        "V malej nádobe zmiešajte rascu, čili prášok, mletú papriku, sušený cesnak, sušenú cibuľu a oregano.",
+        "Podľa chuti pridajte soľ a čierne korenie."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Mexická",
+  "source_url": "https://www.instagram.com/p/CrYecndpjkj/"
+}

@@ -1,0 +1,59 @@
+{
+  "title": "Skyr donuty",
+  "description": "Rýchly a zdravý fitness dezert s vysokým obsahom bielkovín, ktorý pripravíš za pár minút v mikrovlnke.",
+  "prep_time": 5,
+  "cook_time": 3,
+  "total_time": 8,
+  "servings": 3,
+  "ingredients": [
+    {
+      "name": "vajce",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "ryžová múka",
+      "amount": 50,
+      "unit": "g"
+    },
+    {
+      "name": "kypriaci prášok",
+      "amount": 5,
+      "unit": "g"
+    },
+    {
+      "name": "skyr",
+      "amount": 140,
+      "unit": "g"
+    },
+    {
+      "name": "sladidlo (stévia)",
+      "amount": 5,
+      "unit": "g"
+    },
+    {
+      "name": "85% horká čokoláda",
+      "amount": 60,
+      "unit": "g"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Príprava donutov",
+      "steps": [
+        "V miske zmiešaj vajce, skyr, ryžovú múku, kypriaci prášok a sladidlo.",
+        "Zmes dôkladne premiešaj, kým sa všetky ingrediencie nespoja do hladkého cesta.",
+        "Pripravené cesto nalej do formy na donuty.",
+        "Daj piecť do mikrovlnky na 3 minúty.",
+        "Po upečení nechaj donuty mierne vychladnúť a následne ich namoč do roztopenej horkej čokolády."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert",
+    "Low-Sugar"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/C8H5FxPIUDv/"
+}

@@ -1,0 +1,99 @@
+{
+  "title": "Burger šneci",
+  "description": "Šťavnatí šneci z tortilly plnění hovězím masem, sýrem cheddar a slaninou, připravovaní v horkovzdušné fritéze.",
+  "prep_time": null,
+  "cook_time": 16,
+  "total_time": null,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "tortilly",
+      "amount": 2,
+      "unit": "ks"
+    },
+    {
+      "name": "mleté hovězí maso",
+      "amount": 400,
+      "unit": "g"
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "papričky jalapeňo",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "opečená anglická slanina",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "karamelizovaná cibulka",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "strouhaný cheddar",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "barbecue omáčka",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "brambory",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "olej",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "koření na brambory",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Burger šneci",
+      "steps": [
+        "Mleté hovězí maso osolte, opepřete a důkladně promíchejte.",
+        "Tortillu si připravte tak, že ji na protilehlých bocích mírně zahnete dovnitř.",
+        "Na tortillu rovnoměrně rozprostřete a přimáčkněte ochucené maso.",
+        "Maso posypejte nasekanými jalapeňo papričkami, opečenou slaninou, strouhaným cheddarem a karamelizovanou cibulkou.",
+        "Tortillu pevně srolujte, nakrájejte na plátky a jednotlivé šneky napíchejte na špejle.",
+        "Povrch šneků potřete barbecue omáčkou.",
+        "Pečte v horkovzdušné fritéze na 180 °C celkem 16 minut. Po 8 minutách šneky otočte, znovu potřete omáčkou a dopečte zbývajících 8 minut.",
+        "Případně můžete vše upéct na plechu v klasické troubě."
+      ]
+    },
+    {
+      "name": "Americké brambory",
+      "steps": [
+        "Brambory nakrájejte na čtvrtky a dejte do mísy.",
+        "Pokapejte je olejem, posypejte kořením na brambory a dobře promíchejte.",
+        "Pečte v horkovzdušné fritéze na 200 °C po dobu 15 minut."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Americká",
+  "source_url": "https://www.instagram.com/p/DLiFPjKoKit/"
+}

@@ -1,0 +1,78 @@
+{
+  "title": "Zdravé domácí KFC stripsy",
+  "description": "Chutnají jako z KFC, ale mají polovinu kalorií. Rychlá a zdravější verze kuřecích stripsů připravená v horkovzdušné fritéze.",
+  "prep_time": 5,
+  "cook_time": 10,
+  "total_time": 15,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "kuřecí prsa",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "mletá červená paprika",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "sušený česnek",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "sušená cibule",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kukuřičný škrob",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "vejce",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kukuřičné lupínky (cornflakes)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "olej",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava a pečení",
+      "steps": [
+        "Kuřecí prsa nakrájejte na kousky a okořeňte směsí soli, pepře, mleté papriky, sušeného česneku a cibule. Pořádně promíchejte.",
+        "Připravte si tři misky pro obalování: v první kukuřičný škrob, ve druhé rozšlehané vejce a ve třetí nadrcené kukuřičné lupínky.",
+        "Kousky masa postupně obalte nejdříve v kukuřičném škrobu, poté ve vejci a nakonec v drcených kukuřičných lupíncích.",
+        "Obalené stripsy postříkejte nebo potřete trochou oleje.",
+        "Vložte do horkovzdušné fritézy nebo do trouby a pečte při 200 °C po dobu 10 minut."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DNTPZ_nKRyc/"
+}
