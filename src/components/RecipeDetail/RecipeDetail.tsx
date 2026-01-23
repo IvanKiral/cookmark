@@ -1,4 +1,4 @@
-import type { Component } from "solid-js";
+import { type Component, For, Show } from "solid-js";
 import { strings } from "~/constants/strings";
 import type { RecipeData } from "~/types/Recipe";
 import styles from "./RecipeDetail.module.css";
@@ -107,14 +107,23 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
 
       <section class={styles.section}>
         <h3 class={styles.sectionTitle}>{strings.recipe.instructions}</h3>
-        <ol class={styles.instructionsList}>
-          {props.recipe.instructions.map((instruction, index) => (
-            <li class={styles.instruction}>
-              <span class={styles.instructionNumber}>{index + 1}</span>
-              <span class={styles.instructionText}>{instruction}</span>
-            </li>
-          ))}
-        </ol>
+        <For each={props.recipe.instructions}>
+          {(section) => (
+            <div class={styles.instructionGroup}>
+              <Show when={props.recipe.instructions.length > 1}>
+                <h4 class={styles.instructionGroupTitle}>{section.name}</h4>
+              </Show>
+              <ol class={styles.instructionsList}>
+                {section.steps.map((step, index) => (
+                  <li class={styles.instruction}>
+                    <span class={styles.instructionNumber}>{index + 1}</span>
+                    <span class={styles.instructionText}>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </For>
       </section>
     </div>
   );

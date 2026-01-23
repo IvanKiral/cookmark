@@ -4,6 +4,11 @@ export type Ingredient = {
   unit: string | null;
 };
 
+export type InstructionSection = {
+  name: string;
+  steps: ReadonlyArray<string>;
+};
+
 export type RecipeData = {
   title: string;
   description: string;
@@ -12,7 +17,7 @@ export type RecipeData = {
   total_time: number | null;
   servings: number | null;
   ingredients: Ingredient[];
-  instructions: string[];
+  instructions: ReadonlyArray<InstructionSection>;
   tags: string[];
   difficulty: "easy" | "medium" | "hard" | null;
   cuisine: string | null;

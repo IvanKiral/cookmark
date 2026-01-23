@@ -1,5 +1,5 @@
 import { A, useParams } from "@solidjs/router";
-import { type Component, Show } from "solid-js";
+import { type Component, For, Show } from "solid-js";
 import { strings } from "~/constants/strings";
 import { getRecipeDataBySlug } from "~/utils/loadRecipes";
 import styles from "./[slug].module.css";
@@ -149,16 +149,25 @@ const RecipePage: Component = () => {
 
               <section class={styles.instructionsSection}>
                 <h2 class={styles.sectionTitle}>{strings.recipe.instructions}</h2>
-                <ol class={styles.instructionsList}>
-                  {recipeData().instructions.map((instruction, index) => (
-                    <li class={styles.instructionItem}>
-                      <span class={styles.stepNumber}>{index + 1}</span>
-                      <div class={styles.stepContent}>
-                        <p class={styles.stepText}>{instruction}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
+                <For each={recipeData().instructions}>
+                  {(section) => (
+                    <div class={styles.instructionGroup}>
+                      <Show when={recipeData().instructions.length > 1}>
+                        <h3 class={styles.instructionGroupTitle}>{section.name}</h3>
+                      </Show>
+                      <ol class={styles.instructionsList}>
+                        {section.steps.map((step, index) => (
+                          <li class={styles.instructionItem}>
+                            <span class={styles.stepNumber}>{index + 1}</span>
+                            <div class={styles.stepContent}>
+                              <p class={styles.stepText}>{step}</p>
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+                </For>
               </section>
             </div>
           </main>

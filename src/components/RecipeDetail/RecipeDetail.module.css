@@ -159,6 +159,21 @@
   border-bottom: none;
 }
 
+.instructionGroup {
+  margin-bottom: var(--space-6);
+}
+
+.instructionGroup:last-child {
+  margin-bottom: 0;
+}
+
+.instructionGroupTitle {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--space-3) 0;
+}
+
 .instructionsList {
   list-style: none;
   padding: 0;
