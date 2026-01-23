@@ -1,25 +1,45 @@
-import {
-  type DifficultyTranslationKey,
-  type DifficultyValue,
-  difficultyDefinitions,
-} from "./difficultyOptions.js";
-import { type TagTranslationKey, type TagValue, tagDefinitions } from "./tagOptions.js";
-import { type TimeTranslationKey, type TimeValue, timeDefinitions } from "./timeOptions.js";
+import { type DifficultyValue, difficultyValues } from "./difficultyOptions.js";
+import { strings } from "./strings.js";
+import { type TagValue, tagValues } from "./tagOptions.js";
+import { type TimeValue, timeValues } from "./timeOptions.js";
 
-export const createTagOptions = <T>(t: { tags: Record<TagTranslationKey, T> }) =>
-  Object.entries(tagDefinitions).map(([value, key]) => ({
-    value: value as TagValue,
-    label: t.tags[key as TagTranslationKey],
-  }));
+const difficultyLabels: Record<DifficultyValue, string> = {
+  Easy: strings.filters.easy,
+  Medium: strings.filters.medium,
+  Hard: strings.filters.hard,
+};
 
-export const createDifficultyOptions = <T>(t: { filters: Record<DifficultyTranslationKey, T> }) =>
-  Object.entries(difficultyDefinitions).map(([value, key]) => ({
-    value: value as DifficultyValue,
-    label: t.filters[key as DifficultyTranslationKey],
-  }));
+const timeLabels: Record<TimeValue, string> = {
+  under30: strings.filters.under30,
+  under60: strings.filters.under60,
+  over60: strings.filters.over60,
+};
 
-export const createTimeOptions = <T>(t: { filters: Record<TimeTranslationKey, T> }) =>
-  Object.entries(timeDefinitions).map(([value, key]) => ({
-    value: value as TimeValue,
-    label: t.filters[key as TimeTranslationKey],
-  }));
+const tagLabels: Record<TagValue, string> = {
+  Chicken: strings.tags.chicken,
+  Pork: strings.tags.pork,
+  Beef: strings.tags.beef,
+  Fish: strings.tags.fish,
+  Vegan: strings.tags.vegan,
+  Dessert: strings.tags.dessert,
+  "Lactose-free": strings.tags.lactoseFree,
+  "Low-Sugar": strings.tags.lowSugar,
+  Cake: strings.tags.cake,
+  Vegetarian: strings.tags.vegetarian,
+  Eggs: strings.tags.eggs,
+};
+
+export const difficultyOptions = difficultyValues.map((value) => ({
+  value,
+  label: difficultyLabels[value],
+}));
+
+export const timeOptions = timeValues.map((value) => ({
+  value,
+  label: timeLabels[value],
+}));
+
+export const tagOptions = tagValues.map((value) => ({
+  value,
+  label: tagLabels[value],
+}));

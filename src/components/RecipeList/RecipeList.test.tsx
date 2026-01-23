@@ -1,7 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import type { JSX } from "solid-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { I18nProvider } from "~/lib/i18nContext";
 import type { Recipe } from "~/types/Recipe";
 import RecipeList from "./RecipeList.jsx";
 
@@ -11,12 +10,8 @@ vi.mock("@solidjs/router", () => ({
       {props.children}
     </a>
   ),
-  useParams: () => ({ lang: "en" }),
+  useParams: () => ({}),
 }));
-
-const TestWrapper = (props: { children: JSX.Element }) => (
-  <I18nProvider locale="en">{props.children}</I18nProvider>
-);
 
 describe("<RecipeList />", () => {
   beforeEach(() => {
@@ -45,9 +40,7 @@ describe("<RecipeList />", () => {
     }));
 
     const { getByText, queryByText } = render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes} {...defaultProps} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes} {...defaultProps} />
     ));
 
     expect(getByText("Recipe 1")).toBeInTheDocument();
@@ -71,9 +64,7 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
     ));
 
     const nextButton = screen.getByLabelText("Next");
@@ -95,9 +86,7 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes} currentPage={2} onPageChange={mockOnPageChange} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes} currentPage={2} onPageChange={mockOnPageChange} />
     ));
 
     expect(screen.queryByText("Recipe 1")).not.toBeInTheDocument();
@@ -116,11 +105,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
     }));
 
-    render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes} {...defaultProps} />
-      </TestWrapper>
-    ));
+    render(() => <RecipeList recipes={mockRecipes} {...defaultProps} />);
 
     expect(screen.getByText("Recipe 1")).toBeInTheDocument();
     expect(screen.getByText("Recipe 10")).toBeInTheDocument();
@@ -140,9 +125,7 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     const { unmount } = render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes1} currentPage={1} onPageChange={mockOnPageChange} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes1} currentPage={1} onPageChange={mockOnPageChange} />
     ));
 
     expect(screen.getByText("Recipe 1")).toBeInTheDocument();
@@ -162,9 +145,7 @@ describe("<RecipeList />", () => {
     }));
 
     render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes2} currentPage={1} onPageChange={mockOnPageChange} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes2} currentPage={1} onPageChange={mockOnPageChange} />
     ));
 
     expect(screen.getByText("New Recipe 10")).toBeInTheDocument();
@@ -173,11 +154,7 @@ describe("<RecipeList />", () => {
   });
 
   it("renders empty list when no recipes provided", () => {
-    const { container } = render(() => (
-      <TestWrapper>
-        <RecipeList recipes={[]} {...defaultProps} />
-      </TestWrapper>
-    ));
+    const { container } = render(() => <RecipeList recipes={[]} {...defaultProps} />);
 
     const wrapper = container.querySelector("div");
     expect(wrapper).toBeTruthy();
@@ -198,9 +175,7 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <TestWrapper>
-        <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
-      </TestWrapper>
+      <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
     ));
 
     const nextButton = screen.getByLabelText("Next");

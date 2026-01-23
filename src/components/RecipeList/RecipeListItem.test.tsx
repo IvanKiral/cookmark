@@ -9,7 +9,6 @@ vi.mock("@solidjs/router", () => ({
       {props.children}
     </a>
   ),
-  useParams: () => ({ lang: "en" }),
 }));
 
 describe("<RecipeListItem />", () => {
@@ -43,6 +42,6 @@ describe("<RecipeListItem />", () => {
 
     const link = container.querySelector("a");
     expect(link).toBeTruthy();
-    expect(link?.getAttribute("href")).toBe("/en/recipe/test-recipe");
+    expect(link?.getAttribute("href")).toBe("/recipe/test-recipe");
   });
 });

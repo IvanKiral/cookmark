@@ -1,5 +1,5 @@
 import { type Component, createMemo, For, Show } from "solid-js";
-import { useT } from "~/lib/i18nContext";
+import { strings } from "~/constants/strings";
 import type { Recipe } from "~/types/Recipe";
 import { Pagination } from "../Pagination/Pagination.jsx";
 import styles from "./RecipeList.module.css";
@@ -14,8 +14,6 @@ type RecipeListProps = {
 const ITEMS_PER_PAGE = 10;
 
 const RecipeList: Component<RecipeListProps> = (props) => {
-  const t = useT();
-
   const paginatedRecipes = createMemo(() => {
     const page = props.currentPage;
     const start = (page - 1) * ITEMS_PER_PAGE;
@@ -32,9 +30,9 @@ const RecipeList: Component<RecipeListProps> = (props) => {
     <div class={styles.wrapper}>
       <Show when={props.recipes.length > 0}>
         <div class={styles.header}>
-          <span class={styles.headerName}>{t.recipeList.name}</span>
-          <span class={styles.headerDifficulty}>{t.recipeList.difficulty}</span>
-          <span class={styles.headerTime}>{t.recipeList.time}</span>
+          <span class={styles.headerName}>{strings.recipeList.name}</span>
+          <span class={styles.headerDifficulty}>{strings.recipeList.difficulty}</span>
+          <span class={styles.headerTime}>{strings.recipeList.time}</span>
         </div>
       </Show>
       <div class={styles.container}>

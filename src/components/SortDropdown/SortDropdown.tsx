@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import type { SortValue } from "~/constants/sortOptions";
-import { useT } from "~/lib/i18nContext";
+import { strings } from "~/constants/strings";
 import styles from "./SortDropdown.module.css";
 
 type SortDropdownProps = {
@@ -9,16 +9,15 @@ type SortDropdownProps = {
 };
 
 const SortDropdown = (props: SortDropdownProps) => {
-  const t = useT();
   const [isOpen, setIsOpen] = createSignal(false);
 
   const sortOptions = [
-    { value: "name-asc", label: t.sort.nameAsc },
-    { value: "name-desc", label: t.sort.nameDesc },
-    { value: "time-asc", label: t.sort.timeAsc },
-    { value: "time-desc", label: t.sort.timeDesc },
-    { value: "difficulty-easy", label: t.sort.difficultyEasy },
-    { value: "difficulty-hard", label: t.sort.difficultyHard },
+    { value: "name-asc", label: strings.sort.nameAsc },
+    { value: "name-desc", label: strings.sort.nameDesc },
+    { value: "time-asc", label: strings.sort.timeAsc },
+    { value: "time-desc", label: strings.sort.timeDesc },
+    { value: "difficulty-easy", label: strings.sort.difficultyEasy },
+    { value: "difficulty-hard", label: strings.sort.difficultyHard },
   ] as const;
 
   const handleOptionClick = (value: SortValue) => {
@@ -39,7 +38,7 @@ const SortDropdown = (props: SortDropdownProps) => {
         aria-haspopup="true"
         aria-expanded={isOpen()}
       >
-        <span class={styles.label}>{t.sort.label}</span>
+        <span class={styles.label}>{strings.sort.label}</span>
         <span
           class={`material-symbols-outlined ${styles.icon} ${isOpen() ? styles.iconRotated : ""}`}
         >

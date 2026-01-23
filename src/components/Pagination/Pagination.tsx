@@ -1,7 +1,7 @@
 import { Pagination as ArkPagination } from "@ark-ui/solid/pagination";
 import type { Component } from "solid-js";
 import { For, Show } from "solid-js";
-import { useT } from "~/lib/i18nContext";
+import { strings } from "~/constants/strings";
 import styles from "./Pagination.module.css";
 
 type PaginationProps = {
@@ -13,8 +13,6 @@ type PaginationProps = {
 };
 
 export const Pagination: Component<PaginationProps> = (props) => {
-  const t = useT();
-
   return (
     <Show when={props.count > props.pageSize}>
       <ArkPagination.Root
@@ -25,7 +23,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
         siblingCount={1}
         class={`${styles.pagination} ${props.class || ""}`}
       >
-        <ArkPagination.PrevTrigger class={styles.trigger} aria-label={t.pagination.previous}>
+        <ArkPagination.PrevTrigger class={styles.trigger} aria-label={strings.pagination.previous}>
           <svg
             width="16"
             height="16"
@@ -42,7 +40,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
               stroke-linejoin="round"
             />
           </svg>
-          <span class={styles.triggerText}>{t.pagination.previous}</span>
+          <span class={styles.triggerText}>{strings.pagination.previous}</span>
         </ArkPagination.PrevTrigger>
 
         <ArkPagination.Context>
@@ -54,7 +52,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
                     <ArkPagination.Item
                       {...page}
                       class={styles.pageItem}
-                      aria-label={t.pagination.goToPage(page.value)}
+                      aria-label={strings.pagination.goToPage(page.value)}
                     >
                       {page.value}
                     </ArkPagination.Item>
@@ -69,8 +67,8 @@ export const Pagination: Component<PaginationProps> = (props) => {
           )}
         </ArkPagination.Context>
 
-        <ArkPagination.NextTrigger class={styles.trigger} aria-label={t.pagination.next}>
-          <span class={styles.triggerText}>{t.pagination.next}</span>
+        <ArkPagination.NextTrigger class={styles.trigger} aria-label={strings.pagination.next}>
+          <span class={styles.triggerText}>{strings.pagination.next}</span>
           <svg
             width="16"
             height="16"

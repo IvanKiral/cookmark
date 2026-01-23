@@ -1,7 +1,4 @@
-import { createStore } from "solid-js/store";
-import type { TypedTranslations } from "~/constants/translationTypes";
-
-export const enTranslations = createStore<TypedTranslations>({
+export const strings = {
   app: {
     title: "Cookmark",
   },
@@ -53,6 +50,8 @@ export const enTranslations = createStore<TypedTranslations>({
     lactoseFree: "Lactose-free",
     lowSugar: "Low-Sugar",
     cake: "Cake",
+    vegetarian: "Vegetarian",
+    eggs: "Eggs",
   },
   filterDrawer: {
     title: "Filters",
@@ -64,14 +63,10 @@ export const enTranslations = createStore<TypedTranslations>({
     difficulty: "Difficulty",
     time: "Time",
   },
-  languageSwitcher: {
-    switchToEnglish: "Switch to English",
-    switchToSlovak: "Switch to Slovak",
-  },
   pagination: {
     previous: "Previous",
     next: "Next",
     goToPage: (page: number) => `Go to page ${page}`,
     pageInfo: (current: number, total: number) => `Page ${current} of ${total}`,
   },
-});
+} as const;

@@ -1,14 +1,10 @@
 import Drawer from "@corvu/drawer";
 import { type Component, For } from "solid-js";
 import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOptions";
-import {
-  createDifficultyOptions,
-  createTagOptions,
-  createTimeOptions,
-} from "~/constants/filterOptions";
+import { difficultyOptions, tagOptions, timeOptions } from "~/constants/filterOptions";
+import { strings } from "~/constants/strings";
 import type { TagFilter, TagValue } from "~/constants/tagOptions";
 import type { TimeFilter, TimeValue } from "~/constants/timeOptions";
-import { useT } from "~/lib/i18nContext";
 import styles from "./FilterDrawer.module.css";
 
 type FilterDrawerProps = {
@@ -24,12 +20,6 @@ type FilterDrawerProps = {
 };
 
 const FilterDrawer: Component<FilterDrawerProps> = (props) => {
-  const t = useT();
-
-  const difficultyOptions = createDifficultyOptions(t);
-  const timeOptions = createTimeOptions(t);
-  const tagOptions = createTagOptions(t);
-
   const handleDifficultyToggle = (value: DifficultyValue) => {
     const current = props.difficultyFilter;
     const newFilter = current.includes(value)
@@ -69,7 +59,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
         >
           <div class={styles.header}>
             <h2 id="filter-drawer-title" class={styles.title}>
-              {t.filterDrawer.title}
+              {strings.filterDrawer.title}
             </h2>
             <Drawer.Close class={styles.closeButton} aria-label="Close filters">
               <span class="material-symbols-outlined">close</span>
@@ -78,7 +68,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
 
           <div class={styles.sections}>
             <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{t.filters.difficulty}</h3>
+              <h3 class={styles.sectionTitle}>{strings.filters.difficulty}</h3>
               <div class={styles.checkboxGroup}>
                 <For each={difficultyOptions}>
                   {(option) => (
@@ -97,7 +87,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
             </div>
 
             <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{t.filters.time}</h3>
+              <h3 class={styles.sectionTitle}>{strings.filters.time}</h3>
               <div class={styles.checkboxGroup}>
                 <For each={timeOptions}>
                   {(option) => (
@@ -116,7 +106,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
             </div>
 
             <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{t.filters.tags}</h3>
+              <h3 class={styles.sectionTitle}>{strings.filters.tags}</h3>
               <div class={styles.checkboxGroup}>
                 <For each={tagOptions}>
                   {(option) => (
@@ -138,7 +128,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
           {hasAnyFilter() && (
             <div class={styles.footer}>
               <button type="button" class={styles.clearButton} onClick={props.onClearAll}>
-                {t.filterDrawer.clearAll}
+                {strings.filterDrawer.clearAll}
               </button>
             </div>
           )}

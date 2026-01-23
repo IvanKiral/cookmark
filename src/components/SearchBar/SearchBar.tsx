@@ -1,4 +1,4 @@
-import { useT } from "~/lib/i18nContext";
+import { strings } from "~/constants/strings";
 import type { Recipe } from "~/types/Recipe";
 import styles from "./SearchBar.module.css";
 
@@ -9,8 +9,6 @@ type SearchBarProps = {
 };
 
 const SearchBar = (props: SearchBarProps) => {
-  const t = useT();
-
   const handleInput = (value: string) => {
     props.onSearchChange(value);
   };
@@ -21,7 +19,7 @@ const SearchBar = (props: SearchBarProps) => {
         <span class={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
         <input
           type="search"
-          placeholder={t.search.placeholder}
+          placeholder={strings.search.placeholder}
           value={props.searchQuery}
           onInput={(e) => handleInput(e.currentTarget.value)}
           class={styles.searchInput}
