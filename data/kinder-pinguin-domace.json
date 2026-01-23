@@ -1,0 +1,93 @@
+{
+  "title": "Kinder Pingui do krabičky",
+  "description": "Domáca a zdravšia verzia obľúbenej sladkej dobroty plná bielkovín, ideálna ako snack do krabičky.",
+  "prep_time": 15,
+  "cook_time": 30,
+  "total_time": 45,
+  "servings": 1,
+  "ingredients": [
+    {
+      "name": "Vajce",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "Proteín",
+      "amount": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Kakao",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "Kypriaci prášok do pečiva",
+      "amount": 2,
+      "unit": "ČL"
+    },
+    {
+      "name": "Múka",
+      "amount": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Mlieko",
+      "amount": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Tvaroh (napr. modrý Lidl)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Čakankový sirup",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "Flavdrops",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Grécky jogurt",
+      "amount": 1,
+      "unit": "lyžička"
+    },
+    {
+      "name": "Horká čokoláda",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Korpus",
+      "steps": [
+        "V miske spolu poriadne vymiešajte vajce, proteín, kakao, múku, kypriaci prášok a mlieko.",
+        "Pripravené cesto dajte piecť do rúry vyhriatej na 180 °C na približne 25-30 minút.",
+        "Po upečení nechajte korpus vychladnúť a potom ho rozrežte pozdĺžne na dve časti."
+      ]
+    },
+    {
+      "name": "Plnka a dokončenie",
+      "steps": [
+        "V samostatnej miske pripravte plnku zmiešaním tvarohu, čakankového sirupu a flavdrops. Pre krémovejšiu konzistenciu môžete pridať lyžičku gréckeho jogurtu.",
+        "Jednu časť korpusu položte na spodok formy.",
+        "Na korpus navrstvite časť tvarohovej plnky a pridajte vrstvu rozpustenej čokolády.",
+        "Dajte na pár minút do chladničky, aby čokoláda stuhla.",
+        "Potom pridajte ďalšiu vrstvu tvarohovej plnky a prikryte druhou polovicou korpusu.",
+        "Vrch polejte rozpustenou horkou čokoládou a dajte celé poriadne stuhnúť do chladničky."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert",
+    "Cake"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DKaPNAxKdRT/"
+}

@@ -1,0 +1,103 @@
+{
+  "title": "Vysokoproteínové Smash Burger Tacos",
+  "description": "Vynikajúce a chrumkavé smash burger tacos, ktoré sú plné bielkovín a ideálne pri redukcii tuku alebo budovaní svalov.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "mini tortilla (ideálne nízkosacharidová)",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "chudé mleté hovädzie mäso (95/5)",
+      "amount": 90,
+      "unit": "g"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "čierne korenie",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "mletá údená paprika",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "plátkový nízkotučný syr",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "nasekaný šalát",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "nadrobno nakrájaná červená alebo biela cibuľa",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "nadrobno nakrájané kyslé uhorky",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kečup so zníženým obsahom cukru",
+      "amount": 80,
+      "unit": "g"
+    },
+    {
+      "name": "nízkotučná majonéza (light)",
+      "amount": 60,
+      "unit": "g"
+    },
+    {
+      "name": "americká horčica",
+      "amount": 8,
+      "unit": "g"
+    },
+    {
+      "name": "voda (na úpravu konzistencie)",
+      "amount": "20-30",
+      "unit": "ml"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Burger omáčka",
+      "steps": [
+        "V miske zmiešajte kečup, majonézu a horčicu.",
+        "Postupne pridávajte vodu (20 – 30 ml), kým nedosiahnete požadovanú konzistenciu omáčky."
+      ]
+    },
+    {
+      "name": "Smash burger tacos",
+      "steps": [
+        "Pripravte si mini tortilly a na každú položte guľôčku mletého hovädzieho mäsa.",
+        "Mäso na tortille roztlačte úplne naplocho pomocou lisu alebo obracačky.",
+        "Mäso dôkladne ochuťte soľou, čiernym korením a údenou paprikou.",
+        "Položte tortilly na rozpálenú panvicu mäsovou stranou nadol a opekajte, kým mäso nebude mať chrumkavú kôrku.",
+        "Tortilly otočte, aby sa opiekli aj zospodu, na každú položte plátok syra a nechajte ho roztopiť.",
+        "Tacos naplňte nasekaným šalátom, cibuľou a kyslými uhorkami.",
+        "Nakoniec bohato polejte pripravenou burger omáčkou, preložte na polovicu a podávajte čerstvé."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef",
+    "Low-Sugar"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DPT6ZEKja0P/"
+}

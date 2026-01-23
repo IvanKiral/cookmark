@@ -1,0 +1,61 @@
+{
+  "title": "Tiramisu chia puding",
+  "description": "Vynikajúce raňajky alebo snack s vysokým obsahom bielkovín, ktoré chutia ako obľúbený taliansky dezert.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "chia semienka",
+      "amount": 86,
+      "unit": "g"
+    },
+    {
+      "name": "javorový sirup",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "vanilkový extrakt",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "mlieko",
+      "amount": 325,
+      "unit": "ml"
+    },
+    {
+      "name": "espresso káva",
+      "amount": 1,
+      "unit": "dávka"
+    },
+    {
+      "name": "biely jogurt",
+      "amount": 310,
+      "unit": "g"
+    },
+    {
+      "name": "kakaový prášok",
+      "amount": 1,
+      "unit": "ČL"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Tiramisu chia puding",
+      "steps": [
+        "V miske dôkladne premiešajte chia semienka, mlieko, espresso, javorový sirup, vanilkový extrakt a 1 hrnček (cca 230 g) jogurtu.",
+        "Zmes rozdeľte do pohárov alebo uzatvárateľných nádob a dajte do chladničky stuhnúť aspoň na 2 hodiny, ideálne na celú noc.",
+        "Pred podávaním puding dozdobte zvyšným jogurtom a posypte kakaovým práškom."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Italian",
+  "source_url": "https://www.instagram.com/p/C6rQl91ouon/"
+}

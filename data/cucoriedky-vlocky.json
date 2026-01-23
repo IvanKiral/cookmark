@@ -1,0 +1,67 @@
+{
+  "title": "Čučoriedkové overnight oats",
+  "description": "Rýchly a výživný recept na ovsené vločky pripravené cez noc, doplnené o skyr, proteín a čučoriedky s čokoládou.",
+  "prep_time": 5,
+  "cook_time": 0,
+  "total_time": 5,
+  "servings": 1,
+  "ingredients": [
+    {
+      "name": "ovsené vločky",
+      "amount": 40,
+      "unit": "g"
+    },
+    {
+      "name": "chia semená",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "skyr",
+      "amount": 180,
+      "unit": "g"
+    },
+    {
+      "name": "proteín",
+      "amount": 25,
+      "unit": "g"
+    },
+    {
+      "name": "čučoriedky",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "horká čokoláda",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "voda alebo mlieko",
+      "amount": null,
+      "unit": "podľa potreby"
+    },
+    {
+      "name": "med",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Príprava",
+      "steps": [
+        "V miske alebo v pohári spolu zmiešame ovsené vločky, chia semená, skyr a proteín. Môžeme pridať med na osladenie.",
+        "Do zmesi prilejeme trochu vody alebo mlieka, aby sme dosiahli správnu konzistenciu, a poriadne premiešame.",
+        "Na vrch pridáme čučoriedky a zalejeme ich roztopenou horkou čokoládou.",
+        "Pripravené vločky dáme na noc do chladničky, aby zmäkli a chute sa prepojili."
+      ]
+    }
+  ],
+  "tags": [
+    "Low-Sugar"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Medzinárodná",
+  "source_url": "https://www.instagram.com/p/DKovH0wIrCS/"
+}
