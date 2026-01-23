@@ -14,6 +14,16 @@ export default function App() {
       root={(props) => (
         <MetaProvider>
           <Title>Cookmark</Title>
+          <Link rel="preconnect" href="https://fonts.googleapis.com" />
+          <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+          <Link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap"
+          />
+          <Link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+          />
           <InstallPrompt />
           <Suspense>{props.children}</Suspense>
           <Link rel="icon" href={`${base}favicon.ico`} />

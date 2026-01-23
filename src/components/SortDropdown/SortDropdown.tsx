@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import type { SortValue } from "~/constants/sortOptions";
-import { useT } from "~/lib/i18nContext";
+import { strings } from "~/constants/strings";
 import styles from "./SortDropdown.module.css";
 
 type SortDropdownProps = {
@@ -8,21 +8,17 @@ type SortDropdownProps = {
   onSortChange: (value: SortValue) => void;
 };
 
-export default function SortDropdown(props: SortDropdownProps) {
-  const t = useT();
+const SortDropdown = (props: SortDropdownProps) => {
   const [isOpen, setIsOpen] = createSignal(false);
 
   const sortOptions = [
-    { value: "name-asc", label: t.sort.nameAsc },
-    { value: "name-desc", label: t.sort.nameDesc },
-    { value: "time-asc", label: t.sort.timeAsc },
-    { value: "time-desc", label: t.sort.timeDesc },
-    { value: "difficulty-easy", label: t.sort.difficultyEasy },
-    { value: "difficulty-hard", label: t.sort.difficultyHard },
+    { value: "name-asc", label: strings.sort.nameAsc },
+    { value: "name-desc", label: strings.sort.nameDesc },
+    { value: "time-asc", label: strings.sort.timeAsc },
+    { value: "time-desc", label: strings.sort.timeDesc },
+    { value: "difficulty-easy", label: strings.sort.difficultyEasy },
+    { value: "difficulty-hard", label: strings.sort.difficultyHard },
   ] as const;
-
-  const selectedOption = () =>
-    sortOptions.find((option) => option.value === props.value) || sortOptions[0];
 
   const handleOptionClick = (value: SortValue) => {
     props.onSortChange(value);
@@ -42,22 +38,12 @@ export default function SortDropdown(props: SortDropdownProps) {
         aria-haspopup="true"
         aria-expanded={isOpen()}
       >
-        <span class={styles.label}>{t.sort.label}</span>
-        <span class={styles.selectedValue}>{selectedOption().label}</span>
-        <svg
-          class={`${styles.chevron} ${isOpen() ? styles.chevronUp : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+        <span class={styles.label}>{strings.sort.label}</span>
+        <span
+          class={`material-symbols-outlined ${styles.icon} ${isOpen() ? styles.iconRotated : ""}`}
         >
-          <title>Sort icon</title>
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+          expand_more
+        </span>
       </button>
 
       {isOpen() && (
@@ -75,4 +61,6 @@ export default function SortDropdown(props: SortDropdownProps) {
       )}
     </div>
   );
-}
+};
+
+export default SortDropdown;

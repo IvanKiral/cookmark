@@ -1,7 +1,4 @@
-import { createStore } from "solid-js/store";
-import type { TypedTranslations } from "~/constants/translationTypes";
-
-export const enTranslations = createStore<TypedTranslations>({
+export const strings = {
   app: {
     title: "Cookmark",
   },
@@ -14,7 +11,6 @@ export const enTranslations = createStore<TypedTranslations>({
     difficulty: "Difficulty",
     time: "Time",
     tags: "Tags",
-    all: "All",
     easy: "Easy",
     medium: "Medium",
     hard: "Hard",
@@ -40,9 +36,11 @@ export const enTranslations = createStore<TypedTranslations>({
     ingredients: "Ingredients",
     instructions: "Instructions",
     viewSource: "View Recipe Source",
+    difficultyLabel: "Difficulty",
+    notFound: "Recipe not found",
+    backToList: "Back to recipes",
   },
   tags: {
-    all: "All",
     chicken: "Chicken",
     pork: "Pork",
     beef: "Beef",
@@ -52,10 +50,18 @@ export const enTranslations = createStore<TypedTranslations>({
     lactoseFree: "Lactose-free",
     lowSugar: "Low-Sugar",
     cake: "Cake",
+    vegetarian: "Vegetarian",
+    eggs: "Eggs",
   },
-  languageSwitcher: {
-    switchToEnglish: "Switch to English",
-    switchToSlovak: "Switch to Slovak",
+  filterDrawer: {
+    title: "Filters",
+    clearAll: "Clear all",
+    filtersButton: "Filters",
+  },
+  recipeList: {
+    name: "Recipe Name",
+    difficulty: "Difficulty",
+    time: "Time",
   },
   pagination: {
     previous: "Previous",
@@ -63,4 +69,4 @@ export const enTranslations = createStore<TypedTranslations>({
     goToPage: (page: number) => `Go to page ${page}`,
     pageInfo: (current: number, total: number) => `Page ${current} of ${total}`,
   },
-});
+} as const;

@@ -1,56 +1,53 @@
 .main {
   margin: 0 auto;
   font-family: var(--font-family-base);
-  background-color: var(--color-neutral-100);
+  background-color: white;
   min-height: 100vh;
 }
 
 .header {
   width: 100%;
-  padding: var(--space-12) var(--space-8) var(--space-10);
-  background: linear-gradient(135deg, var(--color-primary-300) 0%, var(--color-primary-400) 100%);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: var(--space-8) var(--space-8) var(--space-6);
+  background: white;
+  border-bottom: 1px solid var(--color-neutral-200);
   position: relative;
-  overflow: hidden;
 }
 
 .headerContent {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   position: relative;
 }
 
-.header::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 50%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  transform: rotate(45deg);
-}
-
 .title {
+  font-family: var(--font-family-display);
   color: var(--color-neutral-900);
   text-transform: uppercase;
-  font-size: var(--text-6xl);
+  font-size: var(--text-5xl);
   line-height: 1;
-  font-weight: 300;
-  letter-spacing: 0.05em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   margin: 0;
-  position: relative;
-  z-index: 1;
-  flex: 1;
   text-align: center;
 }
 
-.headerContent > :last-child {
+.subtitle {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--color-neutral-500);
+  margin: var(--space-2) 0 0 0;
+  font-weight: 400;
+}
+
+.headerContent > :last-child:not(.subtitle) {
   position: absolute;
   right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 2;
 }
 
@@ -58,99 +55,167 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-12) var(--space-8);
+  padding: var(--space-8) var(--space-8);
 }
 
 .layout {
   display: flex;
-  gap: 0;
-  align-items: stretch;
-  min-height: 600px;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.controls {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  width: 100%;
+}
+
+.filtersButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: white;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  white-space: nowrap;
+}
+
+.filtersButton:hover {
+  background: var(--color-neutral-50);
+  border-color: var(--color-neutral-400);
+}
+
+.filtersButton:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.filtersButtonActive {
+  background: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+  color: white;
+}
+
+.filtersButtonActive:hover {
+  background: var(--color-neutral-800);
+  border-color: var(--color-neutral-800);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--space-1);
+  background: white;
+  color: var(--color-neutral-900);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+.clearFiltersButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.clearFiltersButton:hover {
+  color: var(--color-neutral-900);
+}
+
+.clearFiltersButton .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.searchWrapper {
+  flex: 1;
 }
 
 .mainContent {
   flex: 1;
-  padding-left: var(--space-6);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-.searchAndSort {
-  width: 100%;
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  justify-content: space-between;
-}
-
-.searchAndSort > *:first-child {
-  flex: 1;
-  max-width: 70%;
-}
-
-.searchAndSort > *:last-child {
-  flex-shrink: 0;
-}
-
-/* Responsive design */
-@media (max-width: 1024px) {
-  .container {
-    padding: var(--space-12) var(--space-20);
-  }
+  gap: var(--space-6);
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: var(--space-12) var(--space-8);
-  }
-
-  .layout {
-    flex-direction: column;
-    gap: 0;
-    align-items: stretch;
-    min-height: auto;
-  }
-
-  .mainContent {
-    padding-left: 0;
-    padding-top: var(--space-4);
-  }
-
-  .searchAndSort {
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .searchAndSort > *:first-child,
-  .searchAndSort > *:last-child {
-    flex: none;
-  }
-
-  .title {
-    font-size: var(--text-5xl);
-  }
-
-  .header {
-    padding: var(--space-12) var(--space-6) var(--space-10);
-  }
-
-  .headerContent {
-    padding: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: var(--space-8) var(--space-6);
+    padding: var(--space-6) var(--space-4);
   }
 
   .title {
     font-size: var(--text-4xl);
   }
 
+  .subtitle {
+    font-size: var(--text-md);
+  }
+
   .header {
-    padding: var(--space-8) var(--space-4);
+    padding: var(--space-6) var(--space-4) var(--space-4);
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+
+  .searchWrapper {
+    order: 1;
+    flex: 1 1 100%;
+  }
+
+  .filtersButton {
+    order: 2;
+  }
+
+  .controls > :last-child {
+    order: 3;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .subtitle {
+    font-size: var(--text-sm);
+  }
+
+  .header {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .headerContent > :last-child:not(.subtitle) {
+    position: relative;
+    transform: none;
+    margin-top: var(--space-4);
+  }
+
+  .controls {
+    gap: var(--space-3);
   }
 }

@@ -1,0 +1,222 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 40;
+}
+
+.overlay[data-transitioning] {
+  transition: opacity 250ms cubic-bezier(0.32, 0.72, 0, 1);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 90vw;
+  height: 100vh;
+  background: white;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  transform: translateX(-100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.content[data-transitioning] {
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.content[data-opening] {
+  transform: translateX(0);
+}
+
+.content[data-closing] {
+  transform: translateX(-100%);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.title {
+  font-family: var(--font-family-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--color-neutral-600);
+  transition: all 0.15s ease-in-out;
+}
+
+.closeButton:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+.closeButton:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.sections {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+}
+
+.section {
+  margin-bottom: var(--space-6);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-neutral-400);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  padding: var(--space-2) var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s;
+}
+
+.checkboxLabel:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  background-color: white;
+}
+
+.checkbox:hover {
+  border-color: var(--color-neutral-400);
+}
+
+.checkbox:checked {
+  background-color: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+}
+
+.checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-neutral-200);
+}
+
+.checkboxText {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.checkboxLabel:hover .checkboxText {
+  color: var(--color-neutral-900);
+}
+
+.footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.clearButton {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.clearButton:hover {
+  background: var(--color-neutral-100);
+  border-color: var(--color-neutral-400);
+  color: var(--color-neutral-800);
+}
+
+.clearButton:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (max-width: 480px) {
+  .content {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .header {
+    padding: var(--space-4);
+  }
+
+  .sections {
+    padding: var(--space-4);
+  }
+
+  .footer {
+    padding: var(--space-4);
+  }
+}

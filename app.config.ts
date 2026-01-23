@@ -89,7 +89,7 @@ export default defineConfig({
       ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
       : "/",
     prerender: {
-      routes: ["/cookmark", "/cookmark/en", "/cookmark/sk"],
+      routes: ["/cookmark"],
     },
   },
 });

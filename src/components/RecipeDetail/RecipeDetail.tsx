@@ -1,5 +1,5 @@
-import type { Component } from "solid-js";
-import { useT } from "~/lib/i18nContext";
+import { type Component, For, Show } from "solid-js";
+import { strings } from "~/constants/strings";
 import type { RecipeData } from "~/types/Recipe";
 import styles from "./RecipeDetail.module.css";
 
@@ -8,7 +8,6 @@ type RecipeDetailProps = {
 };
 
 const RecipeDetail: Component<RecipeDetailProps> = (props) => {
-  const t = useT();
   const formatTime = (time: number | null): string => {
     return time ? `${time} min` : "N/A";
   };
@@ -16,8 +15,6 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
   const formatServings = (servings: number | null): string => {
     return servings ? `${servings} servings` : "N/A";
   };
-
-  console.log(props.recipe);
 
   return (
     <div class={styles.container} id="recipe-detail-content">
@@ -37,26 +34,26 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
           <div class={styles.timeInfo}>
             {props.recipe.prep_time && (
               <span class={styles.time}>
-                <strong>{t.recipe.prep}</strong> {formatTime(props.recipe.prep_time)}
+                <strong>{strings.recipe.prep}</strong> {formatTime(props.recipe.prep_time)}
               </span>
             )}
             {props.recipe.cook_time && (
               <span class={styles.time}>
-                <strong>{t.recipe.cook}</strong> {formatTime(props.recipe.cook_time)}
+                <strong>{strings.recipe.cook}</strong> {formatTime(props.recipe.cook_time)}
               </span>
             )}
             <span class={styles.time}>
-              <strong>{t.recipe.total}</strong> {formatTime(props.recipe.total_time)}
+              <strong>{strings.recipe.total}</strong> {formatTime(props.recipe.total_time)}
             </span>
             <span class={styles.time}>
-              <strong>{t.recipe.servings}</strong> {formatServings(props.recipe.servings)}
+              <strong>{strings.recipe.servings}</strong> {formatServings(props.recipe.servings)}
             </span>
           </div>
         </div>
 
         {props.recipe.cuisine && (
           <div class={styles.cuisine}>
-            <strong>{t.recipe.cuisine}</strong> {props.recipe.cuisine}
+            <strong>{strings.recipe.cuisine}</strong> {props.recipe.cuisine}
           </div>
         )}
 
@@ -83,18 +80,18 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
                 aria-label="External link"
               >
                 <title>External link</title>
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              {t.recipe.viewSource}
+              {strings.recipe.viewSource}
             </a>
           </div>
         )}
       </header>
 
       <section class={styles.section}>
-        <h3 class={styles.sectionTitle}>{t.recipe.ingredients}</h3>
+        <h3 class={styles.sectionTitle}>{strings.recipe.ingredients}</h3>
         <ul class={styles.ingredientsList}>
           {props.recipe.ingredients.map((ingredient) => (
             <li class={styles.ingredient}>
@@ -109,15 +106,24 @@ const RecipeDetail: Component<RecipeDetailProps> = (props) => {
       </section>
 
       <section class={styles.section}>
-        <h3 class={styles.sectionTitle}>{t.recipe.instructions}</h3>
-        <ol class={styles.instructionsList}>
-          {props.recipe.instructions.map((instruction, index) => (
-            <li class={styles.instruction}>
-              <span class={styles.instructionNumber}>{index + 1}</span>
-              <span class={styles.instructionText}>{instruction}</span>
-            </li>
-          ))}
-        </ol>
+        <h3 class={styles.sectionTitle}>{strings.recipe.instructions}</h3>
+        <For each={props.recipe.instructions}>
+          {(section) => (
+            <div class={styles.instructionGroup}>
+              <Show when={props.recipe.instructions.length > 1}>
+                <h4 class={styles.instructionGroupTitle}>{section.name}</h4>
+              </Show>
+              <ol class={styles.instructionsList}>
+                {section.steps.map((step, index) => (
+                  <li class={styles.instruction}>
+                    <span class={styles.instructionNumber}>{index + 1}</span>
+                    <span class={styles.instructionText}>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </For>
       </section>
     </div>
   );

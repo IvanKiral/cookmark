@@ -1,29 +1,45 @@
-// Unified filter options with helper functions
-import {
-  type DifficultyFilter,
-  type DifficultyTranslationKey,
-  difficultyDefinitions,
-} from "./difficultyOptions.js";
-import { type TagFilter, type TagTranslationKey, tagDefinitions } from "./tagOptions.js";
-import { type TimeFilter, type TimeTranslationKey, timeDefinitions } from "./timeOptions.js";
+import { type DifficultyValue, difficultyValues } from "./difficultyOptions.js";
+import { strings } from "./strings.js";
+import { type TagValue, tagValues } from "./tagOptions.js";
+import { type TimeValue, timeValues } from "./timeOptions.js";
 
-export const createTagOptions = <T>(t: { tags: Record<TagTranslationKey, T> }) => {
-  return Object.entries(tagDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.tags[key],
-  })) as Array<{ value: TagFilter; label: T }>;
+const difficultyLabels: Record<DifficultyValue, string> = {
+  Easy: strings.filters.easy,
+  Medium: strings.filters.medium,
+  Hard: strings.filters.hard,
 };
 
-export const createDifficultyOptions = <T>(t: { filters: Record<DifficultyTranslationKey, T> }) => {
-  return Object.entries(difficultyDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.filters[key],
-  })) as Array<{ value: DifficultyFilter; label: T }>;
+const timeLabels: Record<TimeValue, string> = {
+  under30: strings.filters.under30,
+  under60: strings.filters.under60,
+  over60: strings.filters.over60,
 };
 
-export const createTimeOptions = <T>(t: { filters: Record<TimeTranslationKey, T> }) => {
-  return Object.entries(timeDefinitions).map(([value, key]) => ({
-    value: value === "null" ? null : value,
-    label: t.filters[key],
-  })) as Array<{ value: TimeFilter; label: T }>;
+const tagLabels: Record<TagValue, string> = {
+  Chicken: strings.tags.chicken,
+  Pork: strings.tags.pork,
+  Beef: strings.tags.beef,
+  Fish: strings.tags.fish,
+  Vegan: strings.tags.vegan,
+  Dessert: strings.tags.dessert,
+  "Lactose-free": strings.tags.lactoseFree,
+  "Low-Sugar": strings.tags.lowSugar,
+  Cake: strings.tags.cake,
+  Vegetarian: strings.tags.vegetarian,
+  Eggs: strings.tags.eggs,
 };
+
+export const difficultyOptions = difficultyValues.map((value) => ({
+  value,
+  label: difficultyLabels[value],
+}));
+
+export const timeOptions = timeValues.map((value) => ({
+  value,
+  label: timeLabels[value],
+}));
+
+export const tagOptions = tagValues.map((value) => ({
+  value,
+  label: tagLabels[value],
+}));

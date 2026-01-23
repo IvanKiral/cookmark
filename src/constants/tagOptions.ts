@@ -1,22 +1,16 @@
-import type { HandleNullString } from "~/utils/types";
+export const tagValues = [
+  "Chicken",
+  "Pork",
+  "Beef",
+  "Fish",
+  "Vegan",
+  "Dessert",
+  "Lactose-free",
+  "Low-Sugar",
+  "Cake",
+  "Vegetarian",
+  "Eggs",
+] as const;
 
-// Tag definitions with translation key mappings
-export const tagDefinitions = {
-  null: "all",
-  Chicken: "chicken",
-  Pork: "pork",
-  Beef: "beef",
-  Fish: "fish",
-  Vegan: "vegan",
-  Dessert: "dessert",
-  "Lactose-free": "lactoseFree",
-  "Low-Sugar": "lowSugar",
-  Cake: "cake",
-} as const;
-
-export const tagValues = Object.keys(tagDefinitions).map((key) =>
-  key === "null" ? null : key,
-) as ReadonlyArray<string | null>;
-
-export type TagFilter = HandleNullString<keyof typeof tagDefinitions>;
-export type TagTranslationKey = (typeof tagDefinitions)[keyof typeof tagDefinitions];
+export type TagValue = (typeof tagValues)[number];
+export type TagFilter = ReadonlyArray<TagValue>;

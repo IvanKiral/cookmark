@@ -18,8 +18,17 @@ describe("<RecipeDetail />", () => {
       { name: "Pasta", amount: "500", unit: "g" },
       { name: "Tomato sauce", amount: "400", unit: "ml" },
     ],
-    instructions: ["Boil water", "Cook pasta"],
+    instructions: [{ name: "Príprava", steps: ["Boil water", "Cook pasta"] }],
     source_url: null,
+  };
+
+  const mockRecipeWithMultipleSections: RecipeData = {
+    ...mockRecipe,
+    title: "Multi-Section Recipe",
+    instructions: [
+      { name: "Marinade", steps: ["Mix spices", "Coat meat"] },
+      { name: "Cooking", steps: ["Heat pan", "Cook until done"] },
+    ],
   };
 
   it("renders recipe with all details", () => {
@@ -61,5 +70,27 @@ describe("<RecipeDetail />", () => {
 
     expect(getByText("pasta")).toBeInTheDocument();
     expect(getByText("quick")).toBeInTheDocument();
+  });
+
+  it("hides section title when only one instruction section", () => {
+    const { queryByText } = render(() => <RecipeDetail recipe={mockRecipe} />);
+
+    expect(queryByText("Príprava")).not.toBeInTheDocument();
+  });
+
+  it("shows section titles when multiple instruction sections", () => {
+    const { getByText } = render(() => <RecipeDetail recipe={mockRecipeWithMultipleSections} />);
+
+    expect(getByText("Marinade")).toBeInTheDocument();
+    expect(getByText("Cooking")).toBeInTheDocument();
+  });
+
+  it("renders steps from multiple sections", () => {
+    const { getByText } = render(() => <RecipeDetail recipe={mockRecipeWithMultipleSections} />);
+
+    expect(getByText("Mix spices")).toBeInTheDocument();
+    expect(getByText("Coat meat")).toBeInTheDocument();
+    expect(getByText("Heat pan")).toBeInTheDocument();
+    expect(getByText("Cook until done")).toBeInTheDocument();
   });
 });

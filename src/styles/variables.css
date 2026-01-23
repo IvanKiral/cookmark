@@ -1,40 +1,31 @@
 :root {
-  /* Primary: Drizzle */
-  --color-primary-100: #f4fff2;
-  --color-primary-200: #f0feed;
-  --color-primary-300: #e6f5e2;
-  --color-primary-400: #cfdec9;
-  --color-primary-500: #a3b09d;
-  --color-primary-600: #7b8e6e;
-  --color-primary-700: #5b6b4d;
-  --color-primary-800: #3e4932;
-  --color-primary-900: #21261a;
+  /* Primary: Neutral (minimalist dark) */
+  --color-primary-50: #fafafa;
+  --color-primary-100: #f5f5f5;
+  --color-primary-200: #e5e5e5;
+  --color-primary-300: #d4d4d4;
+  --color-primary-400: #a3a3a3;
+  --color-primary-500: #525252;
+  --color-primary-600: #404040;
+  --color-primary-700: #262626;
+  --color-primary-800: #171717;
+  --color-primary-900: #0a0a0a;
 
-  /* Accent: Galactic Highway */
-  --color-accent-100: #f7f2ff;
-  --color-accent-200: #d1bcfe;
-  --color-accent-300: #a283f8;
-  --color-accent-400: #6a4ae6;
-  --color-accent-500: #3016c4;
-  --color-accent-600: #15079d;
-  --color-accent-700: #050275;
-  --color-accent-800: #00024e;
-  --color-accent-900: #000326;
-
-  /* Neutral */
-  --color-neutral-100: #fafcfa;
-  --color-neutral-200: #e6ebe5;
-  --color-neutral-300: #d3dad1;
-  --color-neutral-400: #c0c9be;
-  --color-neutral-500: #afb8ab;
-  --color-neutral-600: #8c9388;
-  --color-neutral-700: #696f65;
-  --color-neutral-800: #474b44;
-  --color-neutral-900: #242622;
+  /* Neutral: Gray */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
 
   /* Typography */
-  --font-family-base:
-    Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-family-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-family-base: "Inter", system-ui, -apple-system, sans-serif;
 
   /* Font sizes */
   --text-xs: 0.75rem;
