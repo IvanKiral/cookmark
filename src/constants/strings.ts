@@ -52,6 +52,7 @@ export const strings = {
     cake: "Cake",
     vegetarian: "Vegetarian",
     eggs: "Eggs",
+    mealPrep: "Meal-prep",
   },
   filterDrawer: {
     title: "Filters",

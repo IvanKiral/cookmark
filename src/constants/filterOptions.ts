@@ -27,6 +27,7 @@ const tagLabels: Record<TagValue, string> = {
   Cake: strings.tags.cake,
   Vegetarian: strings.tags.vegetarian,
   Eggs: strings.tags.eggs,
+  "Meal-prep": strings.tags.mealPrep,
 };
 
 export const difficultyOptions = difficultyValues.map((value) => ({
