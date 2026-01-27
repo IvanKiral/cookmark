@@ -1,6 +1,7 @@
 import { defineConfig } from "@solidjs/start/config";
 import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
+import { getPrerenderRoutes } from "./scripts/getPrerenderRoutes.ts";
 
 export default defineConfig({
   vite: {
@@ -89,7 +90,7 @@ export default defineConfig({
       ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
       : "/",
     prerender: {
-      routes: ["/cookmark"],
+      routes: getPrerenderRoutes() as string[],
     },
   },
 });
