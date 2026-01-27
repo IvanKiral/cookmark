@@ -1,0 +1,113 @@
+{
+  "title": "High Protein Chicken Pasta Salad Bowl",
+  "description": "A high-protein, high-fiber, low-calorie pasta salad ideal for meal prep. Each serving is around 500 calories and 43-46 grams of protein.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "Cucumbers",
+      "amount": 2,
+      "unit": "medium"
+    },
+    {
+      "name": "Tomatoes",
+      "amount": 4,
+      "unit": "medium (240g)"
+    },
+    {
+      "name": "Chickpeas",
+      "amount": 1,
+      "unit": "tin"
+    },
+    {
+      "name": "Pasta",
+      "amount": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Chicken breast",
+      "amount": 400,
+      "unit": "g (or 280g cooked)"
+    },
+    {
+      "name": "Chorizo",
+      "amount": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Avocado",
+      "amount": 1,
+      "unit": "medium (100g)"
+    },
+    {
+      "name": "Lettuce",
+      "amount": "Handful"
+    },
+    {
+      "name": "Lemon juice",
+      "amount": 2,
+      "unit": "lemons (juiced)"
+    },
+    {
+      "name": "Greek Yogurt (0% fat)",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Mustard (Dijon)",
+      "amount": 4,
+      "unit": "tsp (20g)"
+    },
+    {
+      "name": "Honey",
+      "amount": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Garlic",
+      "amount": 2,
+      "unit": "cloves"
+    },
+    {
+      "name": "Salt and pepper",
+      "unit": "to taste"
+    },
+    {
+      "name": "Hot sauce",
+      "unit": "Optional"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Dressing Preparation",
+      "steps": [
+        "Squeeze one lemon (or use two as per ingredient list).",
+        "Combine the lemon juice, Greek yogurt, a dash of Dijon mustard, a touch of honey, a touch of garlic, and salt and pepper to taste.",
+        "Optionally, add a small amount of hot sauce."
+      ]
+    },
+    {
+      "name": "Mixing it all together",
+      "steps": [
+        "Divide all ingredients into 4 portions.",
+        "Layer the components in the following order: dressing, cucumber, tomato, chickpeas, pasta, chicken, chorizo, avocado, and finally lettuce for crunch."
+      ]
+    },
+    {
+      "name": "Serving",
+      "steps": [
+        "Give the salad a shake and eat immediately, or store for later use as a meal prep option."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken",
+    "High-protein",
+    "Meal-prep"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DLiFPjKoKit/"
+}
