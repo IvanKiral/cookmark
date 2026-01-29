@@ -1,0 +1,95 @@
+{
+  "title": "Kuře na korejský způsob",
+  "description": "Totálně jednoduchý recept na kuřecí prsa v korejském stylu, který je plný bílkovin a zdravých tuků.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "kuřecí prsa",
+      "amount": 600,
+      "unit": "g"
+    },
+    {
+      "name": "červené kari",
+      "amount": 4,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sójová omáčka",
+      "amount": 4,
+      "unit": "lžíce"
+    },
+    {
+      "name": "voda",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sezamový olej",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sušený česnek",
+      "amount": 1,
+      "unit": "lžička"
+    },
+    {
+      "name": "olivový olej",
+      "amount": 3,
+      "unit": "lžíce"
+    },
+    {
+      "name": "jablečný ocet",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "rýže",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "zelenina",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "sezamová semínka",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava kuřete",
+      "steps": [
+        "Kuřecí prsa nakrájejte na kousky.",
+        "V míse smíchejte maso se 2 lžícemi červeného kari, 2 lžícemi sójové omáčky, 1 lžící vody, 1 lžící sezamového oleje, 1 lžičkou sušeného česneku a 2 lžícemi olivového oleje.",
+        "Vše pořádně promíchejte a orestujte na pánvi dozlatova."
+      ]
+    },
+    {
+      "name": "Příprava dresinku",
+      "steps": [
+        "V menší misce si připravte dresing smícháním 2 lžic červeného kari, 1 lžíce olivového oleje, 2 lžic jablečného octa, 2 lžic sójové omáčky a 1 lžíce vody."
+      ]
+    },
+    {
+      "name": "Servírování",
+      "steps": [
+        "Orestované maso nakrájejte na plátky.",
+        "Na talíř naservírujte rýži a čerstvou zeleninu.",
+        "Přidejte maso, vše zakápněte připravenou omáčkou a posypejte sezamovými semínky."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Korejská",
+  "source_url": "https://www.instagram.com/p/DB9SliEKZVl/"
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Hermelín v županu",
+  "description": "Extrémně jednoduchý a chutný recept na hermelín zapečený v šunce a slanině s brusinkami, podávaný s čerstvým salátem.",
+  "prep_time": null,
+  "cook_time": 15,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "Hermelín",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "Švartsvalská šunka",
+      "amount": null,
+      "unit": "plátky"
+    },
+    {
+      "name": "Slanina",
+      "amount": null,
+      "unit": "plátky"
+    },
+    {
+      "name": "Brusinky",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Čerstvý salát",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Hermelín v županu",
+      "steps": [
+        "Vyskládejte si vedle sebe plátky švartsvalské šunky a slaniny.",
+        "Doprostřed dejte trochu brusinek, na ně položte hermelín a navrch přidejte další brusinky.",
+        "Sýr do uzeniny pořádně zamotejte tak, aby nikde nezůstaly mezery.",
+        "Plech vyložte pečicím papírem. Pokud papír nedrží, nejdříve ho v rukou zmuchlejte a pak znovu rozložte.",
+        "Vložte do trouby vyhřáté na 200 °C a pečte po dobu 15 minut."
+      ]
+    },
+    {
+      "name": "Příloha a servírování",
+      "steps": [
+        "Zatímco se sýr peče, připravte si salát z čerstvé zeleniny, kterou máte doma.",
+        "Hotový hermelín nechte chvíli zchladnout, aby sýr příliš nevytekl, a podávejte se salátem."
+      ]
+    }
+  ],
+  "tags": [
+    "Pork"
+  ],
+  "difficulty": "easy",
+  "cuisine": "česká",
+  "source_url": "https://www.instagram.com/p/DNqt0ZOM4us/"
+}

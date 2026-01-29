@@ -1,0 +1,107 @@
+{
+  "title": "Kuracie mäso na broskyniach",
+  "description": "Rýchly a jednoduchý recept na kuracie mäso v sladkej omáčke s broskyňami pripravený v jednej panvici.",
+  "prep_time": null,
+  "cook_time": 30,
+  "total_time": 30,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "broskyne",
+      "amount": 500,
+      "unit": "g"
+    },
+    {
+      "name": "kuracie stehná",
+      "amount": 850,
+      "unit": "g"
+    },
+    {
+      "name": "maslo",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "čili papričky",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "sójová omáčka",
+      "amount": 5,
+      "unit": "PL"
+    },
+    {
+      "name": "olej",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "broskyňový džús",
+      "amount": 300,
+      "unit": "ml"
+    },
+    {
+      "name": "med",
+      "amount": 5,
+      "unit": "kopcovitých PL"
+    },
+    {
+      "name": "ryžový ocot (alebo obyčajný ocot)",
+      "amount": 0.5,
+      "unit": "PL"
+    },
+    {
+      "name": "kukuričný škrob",
+      "amount": 10,
+      "unit": "g"
+    },
+    {
+      "name": "studená voda",
+      "amount": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "čierne korenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "mäta a sezam na ozdobu",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "ryža ako príloha",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Kuracie mäso na broskyniach",
+      "steps": [
+        "Broskyne nakrájajte na mesiačiky a osmažte na masle spolu s čili papričkami dozlatista. Potom ich vyberte z panvice.",
+        "Kuracie stehná osoľte, okoreňte a polejte 1 PL sójovej omáčky.",
+        "Mäso opečte na panvici na oleji z oboch strán 10-15 minút dozlatista.",
+        "Mäso v panvici polejte 300 ml broskyňového džúsu, pridajte osmažené ovocie a spoločne povarte 5 minút.",
+        "Kúsky mäsa a ovocia opäť vyberte z panvice.",
+        "Do výpeku s džúsom pridajte 4 PL sójovej omáčky, 5 kopcovitých PL medu a 1/2 PL ryžového octu. Priveďte k varu a varte 4 minúty.",
+        "V malej miske rozmiešajte 10 g kukuričného škrobu v 30 ml studenej vody. Zmes vmiešajte do omáčky a varte do zhustnutia.",
+        "Kuracie mäso a broskyne vráťte späť do panvice, dôkladne ich obaľte v omáčke a ešte 5 minút povarte.",
+        "Podávajte s ryžou, ozdobené lístkami mäty a sezamom."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Slovenská / Fusion",
+  "source_url": "https://www.instagram.com/p/DMIkapXq-QF/"
+}

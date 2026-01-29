@@ -1,0 +1,123 @@
+{
+  "title": "Masové kuličky IKEA",
+  "description": "Recept na legendární švédské masové kuličky podle IKEA, které jsou díky kombinaci hovězího a vepřového masa a smetanové omáčky ještě lepší než originál.",
+  "prep_time": 60,
+  "cook_time": 20,
+  "total_time": 80,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "mleté hovězí maso",
+      "amount": 500,
+      "unit": "g"
+    },
+    {
+      "name": "mleté vepřové maso",
+      "amount": 250,
+      "unit": "g"
+    },
+    {
+      "name": "cibule",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "česnek",
+      "amount": 1,
+      "unit": "stroužek"
+    },
+    {
+      "name": "strouhanka",
+      "amount": 100,
+      "unit": "g"
+    },
+    {
+      "name": "vejce",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "plnotučné mléko",
+      "amount": 5,
+      "unit": "lžic"
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "máslo (na omáčku)",
+      "amount": 40,
+      "unit": "g"
+    },
+    {
+      "name": "pšeničná mouka",
+      "amount": 40,
+      "unit": "g"
+    },
+    {
+      "name": "zeleninový vývar",
+      "amount": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "hovězí vývar",
+      "amount": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "smetana ke šlehání",
+      "amount": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "sójová omáčka",
+      "amount": 2,
+      "unit": "lžičky"
+    },
+    {
+      "name": "dijonská hořčice",
+      "amount": 1,
+      "unit": "lžička"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Masové kuličky",
+      "steps": [
+        "V míse smíchejte mleté hovězí a vepřové maso s velmi jemně nakrájenou cibulí, nasekaným česnekem, vajíčkem, strouhankou a mlékem.",
+        "Směs dochuťte solí a pepřem a nechte ji v lednici odpočívat přibližně jednu hodinu.",
+        "Z odpočinuté směsi vytvarujte kuličky stejné velikosti.",
+        "Kuličky zprudka orestujte na pánvi dozlatova.",
+        "Následně kuličky buď dopečte v troubě na 20 minut, nebo je podlijte trochou vody a nechte dusit do měkka."
+      ]
+    },
+    {
+      "name": "Omáčka",
+      "steps": [
+        "V rendlíku rozpusťte máslo, přisypte mouku a vytvořte světlou jíšku.",
+        "Postupně přilévejte zeleninový i hovězí vývar a smetanu. Omáčku nechte alespoň chvíli provařit, aby mouka ztratila svou syrovou chuť a omáčka zhoustla.",
+        "Ke konci přidejte hořčici a sójovou omáčku, čímž omáčka získá tu správnou barvu a chuť."
+      ]
+    },
+    {
+      "name": "Servírování",
+      "steps": [
+        "Masové kuličky s omáčkou podávejte nejlépe s bramborovou kaší a nezapomeňte na brusinky."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef",
+    "Pork"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Švédská",
+  "source_url": "https://www.instagram.com/p/DO1DpiEjH-z/"
+}

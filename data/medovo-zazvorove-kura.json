@@ -1,0 +1,117 @@
+{
+  "title": "Medovo-zázvorové kura",
+  "description": "Šťavnaté a chrumkavé kuracie kúsky v sladko-slanej medovo-zázvorovej omáčke, podávané s jazmínovou ryžou.",
+  "prep_time": 35,
+  "cook_time": 15,
+  "total_time": 50,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "kuracie prsia alebo stehná",
+      "amount": 500,
+      "unit": "g"
+    },
+    {
+      "name": "vajce",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "cesnak",
+      "amount": 2,
+      "unit": "strúčiky"
+    },
+    {
+      "name": "zemiakový škrob",
+      "amount": 3,
+      "unit": "PL"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "mleté čierne korenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "tuk na vyprážanie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "maslo",
+      "amount": 4,
+      "unit": "PL"
+    },
+    {
+      "name": "med",
+      "amount": 4,
+      "unit": "PL"
+    },
+    {
+      "name": "sójová omáčka",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "čerstvý zázvor",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "chili",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "jazmínová ryža",
+      "amount": 1,
+      "unit": "hrnček"
+    },
+    {
+      "name": "voda",
+      "amount": "1,5 - 2",
+      "unit": "hrnčeky"
+    },
+    {
+      "name": "sezam",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "jarná cibuľka alebo koriander",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Príprava mäsa a ryže",
+      "steps": [
+        "Kuracie mäso nakrájame na kocky a vložíme do misky.",
+        "K mäsu pridáme vajce, soľ, korenie, jeden prelisovaný strúčik cesnaku a zemiakový škrob. Poriadne premiešame.",
+        "Zmes dáme do chladničky odpočívať aspoň na 30 minút, aby sa chute prepojili.",
+        "Jazmínovú ryžu krátko opražíme na olivovom oleji, zalejeme vodou (v pomere približne 1 diel ryže na 2 diely vody), osolíme a varíme prikryté asi 10 minút do zmäknutia."
+      ]
+    },
+    {
+      "name": "Omáčka a dokončenie",
+      "steps": [
+        "Pripravíme si omáčku: v panvici roztopíme maslo, pridáme med, druhý prelisovaný strúčik cesnaku, nastrúhaný čerstvý zázvor, sójovú omáčku a chili podľa chuti.",
+        "Omáčku necháme chvíľu prehriať, kým nezačne jemne karamelizovať.",
+        "Odležané kuracie kúsky postupne opražíme na tuku v druhej panvici tak, aby boli poriadne chrumkavé.",
+        "Hotové mäso vložíme priamo do skaramelizovanej omáčky a dobre premiešame.",
+        "Na záver posypeme sezamom a servírujeme s ryžou, dozdobené nakrájanou jarnou cibuľkou alebo koriandrom."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Ázijská",
+  "source_url": "https://www.instagram.com/p/DQJMirqDCNJ/"
+}

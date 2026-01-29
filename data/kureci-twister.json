@@ -1,0 +1,131 @@
+{
+  "title": "Kuřecí twister",
+  "description": "Domácí kuřecí wrap, který je skvělou a zdravější alternativou k fastfoodu. Ideální jako lehký oběd nebo rychlá večeře.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "kuřecí maso",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "olivový olej",
+      "amount": 3,
+      "unit": "lžíce"
+    },
+    {
+      "name": "citronová šťáva",
+      "amount": "1/2",
+      "unit": "ks"
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "sušený česnek",
+      "amount": 0.5,
+      "unit": "lžičky"
+    },
+    {
+      "name": "oregano",
+      "amount": 0.5,
+      "unit": "lžičky"
+    },
+    {
+      "name": "med",
+      "amount": 2,
+      "unit": "lžičky"
+    },
+    {
+      "name": "sladká paprika",
+      "amount": 0.5,
+      "unit": "lžičky"
+    },
+    {
+      "name": "chilli",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "řecký jogurt",
+      "amount": 3,
+      "unit": "lžíce"
+    },
+    {
+      "name": "majonéza",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sekaná petrželka",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kečup",
+      "amount": 1,
+      "unit": "lžička"
+    },
+    {
+      "name": "tortila",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "čedar",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "salát",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "rajče",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava masa",
+      "steps": [
+        "Kuřecí maso nakrájejte na kousky.",
+        "Připravte si marinádu smícháním olivového oleje, šťávy z půlky citronu, soli, pepře, půl lžičky sušeného česneku, oregana, medu, sladké papriky a chilli.",
+        "Maso zalijte marinádou a nechte alespoň 30 minut marinovat. Pokud spěcháte, můžete ho začít připravovat hned.",
+        "Maso orestujte na pánvi dozlatova."
+      ]
+    },
+    {
+      "name": "Příprava dresinku",
+      "steps": [
+        "V misce smíchejte řecký jogurt, majonézu, sůl, pepř, půl lžičky sušeného česneku, sekanou petrželku, lžičku citronové šťávy a lžičku kečupu."
+      ]
+    },
+    {
+      "name": "Kompletace twisteru",
+      "steps": [
+        "Vezměte tortilu a postupně na ni pokládejte čedar, salát, nakrájené rajče a orestované maso.",
+        "Vše zakápněte připraveným dresinkem.",
+        "Tortilu zabalte a dejte na pánev krátce zapéct, aby sýr povolil a tortilla byla křupavá."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DIy7X3vM-3v/"
+}

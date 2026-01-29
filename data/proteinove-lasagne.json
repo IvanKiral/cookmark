@@ -1,0 +1,114 @@
+{
+  "title": "Proteínové lasagne",
+  "description": "Chutné fit lasagne s vysokým obsahom bielkovín a nízkym počtom kalórií, kde sú klasické cestoviny nahradené tortillou.",
+  "prep_time": null,
+  "cook_time": 35,
+  "total_time": null,
+  "servings": 6,
+  "ingredients": [
+    {
+      "name": "mleté kuracie mäso (alebo chudé hovädzie)",
+      "amount": 800,
+      "unit": "g"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "čierne korenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "pizza korenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "paradajkový pretlak",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "pasírované paradajky",
+      "amount": 400,
+      "unit": "g"
+    },
+    {
+      "name": "voda",
+      "amount": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "jemný odtučnený tvaroh",
+      "amount": 500,
+      "unit": "g"
+    },
+    {
+      "name": "vajíčka",
+      "amount": 2,
+      "unit": "ks"
+    },
+    {
+      "name": "muškátový oriešok",
+      "amount": "štipka",
+      "unit": null
+    },
+    {
+      "name": "tortilly",
+      "amount": 3,
+      "unit": "ks"
+    },
+    {
+      "name": "nastrúhaný 30% syr",
+      "amount": 300,
+      "unit": "g"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Mäsová zmes",
+      "steps": [
+        "Mäso opražíme na panvici, osolíme a okoreníme (použijeme aj pizza korenie).",
+        "Pridáme paradajkový pretlak, pasírované paradajky a vodu.",
+        "Zmes chvíľku spolu povaríme."
+      ]
+    },
+    {
+      "name": "Tvarohový bešamel",
+      "steps": [
+        "V miske rozmiešame tvaroh s vajíčkami.",
+        "Ochutíme soľou, korením a štipkou muškátového orieška."
+      ]
+    },
+    {
+      "name": "Príprava tortilly a vrstvenie",
+      "steps": [
+        "Tortilly orežeme podľa tvaru zapekacej formy, odrezky si odložíme na strednú vrstvu.",
+        "Na dno formy dáme 1/3 mäsovej zmesi.",
+        "Položíme prvú tortillu.",
+        "Rozotrieme 1/2 tvarohového bešamelu.",
+        "Pridáme 1/3 mäsovej zmesi.",
+        "Navrstvíme odložené odrezky z tortilly.",
+        "Pridáme zvyšnú 1/3 mäsovej zmesi.",
+        "Položíme poslednú tortillu.",
+        "Rozotrieme zvyšnú 1/2 bešamelu.",
+        "Navrch dáme bohatú vrstvu nastrúhaného syra."
+      ]
+    },
+    {
+      "name": "Pečenie",
+      "steps": [
+        "Pečieme v rúre vyhriatej na 220 °C približne 30-40 minút, kým syr nezhnedne."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Talianska",
+  "source_url": "https://www.instagram.com/p/DJ4OXxktrJP/"
+}

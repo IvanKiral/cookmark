@@ -1,0 +1,79 @@
+{
+  "title": "Tuniakové nugetky",
+  "description": "Chrumkavé a vláčne tuniakové nugetky s vysokým obsahom bielkovín, ktoré sú zdravou a chutnou alternatívou k rýchlemu občerstveniu.",
+  "prep_time": 10,
+  "cook_time": 30,
+  "total_time": 40,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "tuniak vo vlastnej šťave",
+      "amount": 2,
+      "unit": "plechovky"
+    },
+    {
+      "name": "vajce",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "strúhaný syr (napr. ementál)",
+      "amount": 80,
+      "unit": "g"
+    },
+    {
+      "name": "mletá sladká paprika",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "oregano",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "soľ",
+      "amount": 1,
+      "unit": "štipka"
+    },
+    {
+      "name": "light majonéza",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kečup",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "ďatlový sirup",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Tuniakové nugetky",
+      "steps": [
+        "Z tuniaka poriadne vyžmýkajte a odstráňte všetku prebytočnú vodu, aby bol základ suchý.",
+        "Nastrúhajte tvrdý syr (v recepte je použitý ementál).",
+        "V miske zmiešajte tuniaka, nastrúhaný syr, vajce a koreniny (sladkú papriku, oregano a soľ).",
+        "Z vypracovanej hmoty vytvarujte malé medailónky alebo nugetky.",
+        "Dajte piecť do rúry vyhriatej na 200 °C po dobu 20 až 30 minút."
+      ]
+    },
+    {
+      "name": "Dressing",
+      "steps": [
+        "V menšej miske zmiešajte light majonézu, kečup a trochu ďatlového sirupu."
+      ]
+    }
+  ],
+  "tags": [
+    "Fish"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Moderná kuchyňa",
+  "source_url": "https://www.instagram.com/p/DOBoW5ACGn0/"
+}

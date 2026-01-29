@@ -1,0 +1,124 @@
+{
+  "title": "Double cheese smash burger so slaninovým džemom",
+  "description": "Šťavnatý smash burger z hovädzieho mäsa s lojom, doplnený o domáci slaninový džem s červenou cibuľou a pikantnú pepřovú majonézu.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "žemle na burger",
+      "amount": 2,
+      "unit": "ks"
+    },
+    {
+      "name": "hovädzie mäso s lojom",
+      "amount": 390,
+      "unit": "g"
+    },
+    {
+      "name": "čedar (plátky)",
+      "amount": "4-6",
+      "unit": "ks"
+    },
+    {
+      "name": "slanina (mix klasickej a anglickej)",
+      "amount": 150,
+      "unit": "g"
+    },
+    {
+      "name": "červená cibuľa",
+      "amount": 1.5,
+      "unit": "ks"
+    },
+    {
+      "name": "trstinový cukor",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "javorový sirup",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "balsamico",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "horčica",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "chipotle omáčka",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "voda",
+      "amount": null,
+      "unit": "podľa potreby"
+    },
+    {
+      "name": "mleté čierne korenie",
+      "amount": null,
+      "unit": "štipka"
+    },
+    {
+      "name": "majonéza",
+      "amount": 4,
+      "unit": "PL"
+    },
+    {
+      "name": "worchestrová omáčka",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "čerstvo mleté čierne korenie",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "maslo",
+      "amount": null,
+      "unit": "na opekanie"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Slaninový džem",
+      "steps": [
+        "Slaninu nakrájame na malé kúsky a pomalým tempom ju vypražíme dochrumkava.",
+        "Na uvoľnenom tuku orestujeme nadrobno nakrájanú červenú cibuľu.",
+        "Pridáme trstinový cukor, javorový sirup, balsamico, horčicu, chipotle omáčku a štipku korenia.",
+        "Podľa potreby prilejeme trochu vody na úpravu hustoty a necháme chvíľu pobublať, kým zmes nezhustne do konzistencie džemu."
+      ]
+    },
+    {
+      "name": "Pepřová majonéza",
+      "steps": [
+        "V miske zmiešame majonézu s worchestrovou omáčkou.",
+        "Pridáme veľké množstvo čerstvo mletého čierneho korenia a poriadne premiešame."
+      ]
+    },
+    {
+      "name": "Smash burger",
+      "steps": [
+        "Z hovädzieho mäsa vytvarujeme štyri rovnaké guľôčky.",
+        "Rozkrojené žemle opečieme na masle dozlatista.",
+        "Mäsové guľôčky položíme na rozpálenú panvicu, prekryjeme ich papierom na pečenie a pomocou niečoho ťažkého (napr. menšej rajnice) ich silno stlačíme na tenké placky.",
+        "Mäso otočíme a na každú placku položíme plátok čedaru, aby sa roztopil.",
+        "Na spodnú časť opečenej žemle nanesieme pepřovú majonézu, pridáme dve mäsové placky so syrom, poriadnu vrstvu slaninového džemu a prikryjeme vrchnou časťou žemle."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": "easy",
+  "cuisine": "American",
+  "source_url": "https://www.instagram.com/p/DQ_MQHRiHE2/"
+}

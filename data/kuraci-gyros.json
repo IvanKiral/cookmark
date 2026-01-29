@@ -1,0 +1,139 @@
+{
+  "title": "Domácí kuřecí gyros s tzatziki",
+  "description": "Šťavnatý kuřecí gyros z horních stehen, marinovaný v jogurtu a směsi koření, pečený pod závažím pro docílení autentické textury.",
+  "prep_time": 30,
+  "cook_time": 60,
+  "total_time": 90,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "vykoštěná kuřecí horní stehna",
+      "amount": 1,
+      "unit": "kg"
+    },
+    {
+      "name": "bílý jogurt",
+      "amount": 150,
+      "unit": "g"
+    },
+    {
+      "name": "olivový olej",
+      "amount": 3,
+      "unit": "lžíce"
+    },
+    {
+      "name": "citronová šťáva",
+      "amount": 0.5,
+      "unit": "ks"
+    },
+    {
+      "name": "sušený česnek",
+      "amount": 1.5,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sušené oregano",
+      "amount": 1.5,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sušený tymián",
+      "amount": 0.5,
+      "unit": "lžíce"
+    },
+    {
+      "name": "lahůdková paprika",
+      "amount": 1.5,
+      "unit": "lžíce"
+    },
+    {
+      "name": "drcené chilli",
+      "amount": "dle chuti"
+    },
+    {
+      "name": "mletý pepř",
+      "amount": "špetka"
+    },
+    {
+      "name": "sůl",
+      "amount": "špetka"
+    },
+    {
+      "name": "salátová okurka",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "řecký jogurt",
+      "amount": 150,
+      "unit": "g"
+    },
+    {
+      "name": "česnek",
+      "amount": 1,
+      "unit": "stroužek"
+    },
+    {
+      "name": "nasekaný kopr",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "olivový olej (do tzatziki)",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "citronová šťáva (do tzatziki)",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sůl a pepř (do tzatziki)",
+      "amount": "dle chuti"
+    },
+    {
+      "name": "hranolky k podávání",
+      "amount": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava a marinování masa",
+      "steps": [
+        "Maso očistíme a odřízneme případné zbytky chrupavek.",
+        "V míse smícháme jogurt, olivový olej, citronovou šťávu a všechno koření (česnek, oregano, tymián, papriku, chilli, pepř a sůl) na marinádu.",
+        "Maso v marinádě důkladně obalíme ze všech stran.",
+        "Obalené maso skládáme ve dvou vrstvách do pekáče (nejlépe do formy na biskupský chlebíček).",
+        "Maso přikryjeme potravinářskou fólií a pevně ji na něj přitlačíme.",
+        "Na fólii položíme kus kartonu odpovídající velikosti a maso zatížíme (např. konzervami).",
+        "Takto zatížené maso necháme v lednici marinovat přes noc."
+      ]
+    },
+    {
+      "name": "Pečení masa",
+      "steps": [
+        "Druhý den vyndáme maso z lednice alespoň hodinu před pečením.",
+        "Sundáme závaží, karton i fólii a maso vložíme do trouby vyhřáté na 180 °C.",
+        "Pečeme přibližně 1 hodinu.",
+        "Po upečení slijeme veškerý výpek do mističky a maso necháme 15 minut odpočívat.",
+        "Odpočinuté maso nakrájíme ostrým nožem na tenké plátky a přelijeme ho odloženým výpekem."
+      ]
+    },
+    {
+      "name": "Tzatziki a servírování",
+      "steps": [
+        "Okurku nastrouháme najemno a smícháme ji s řeckým jogurtem, prolisovaným česnekem, koprem, olivovým olejem a citronovou šťávou.",
+        "Tzatziki dochutíme solí a pepřem.",
+        "Hotové maso servírujeme s hranolky a připravenými tzatziki."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken",
+    "Low-Sugar"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Řecká",
+  "source_url": "https://www.instagram.com/p/DQJfx_SjAv9/"
+}

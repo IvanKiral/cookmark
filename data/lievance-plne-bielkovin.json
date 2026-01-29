@@ -1,0 +1,67 @@
+{
+  "title": "Lievance plné bielkovín",
+  "description": "Výživné a sýte lievance s vysokým obsahom bielkovín, pripravené z jogurtu, banánu a čerstvého ovocia.",
+  "prep_time": null,
+  "cook_time": 10,
+  "total_time": null,
+  "servings": 1,
+  "ingredients": [
+    {
+      "name": "grécky jogurt 0% tuku alebo skyr",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "banán",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "horká čokoláda",
+      "amount": 10,
+      "unit": "g"
+    },
+    {
+      "name": "čučoriedky",
+      "amount": 50,
+      "unit": "g"
+    },
+    {
+      "name": "lyofilizované maliny",
+      "amount": 10,
+      "unit": "g"
+    },
+    {
+      "name": "polohrubá múka",
+      "amount": 55,
+      "unit": "g"
+    },
+    {
+      "name": "vanilková aróma",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "vajce",
+      "amount": 1,
+      "unit": "ks"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Lievance",
+      "steps": [
+        "V miske si z banánu roztlačením pripravte hladké pyré.",
+        "K banánu pridajte vajce, jogurt, múku, čokoládu a celú zmes poriadne premiešajte.",
+        "Do pripraveného cesta nakoniec jemne vmiešajte ovocie.",
+        "Lievance opekajte na menšom ohni z každej strany približne 4-5 minút, aby sa rovnomerne prepiekli."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DG3MrJrsrJw/"
+}

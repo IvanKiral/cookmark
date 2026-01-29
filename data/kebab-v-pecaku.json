@@ -1,0 +1,122 @@
+{
+  "title": "Kebab v pekáči",
+  "description": "Domácí verze oblíbeného streetfoodu z mletého hovězího masa s pečeným česnekem, rajčaty a osvěžujícím jogurtovým dresinkem podávaná v mini pizza plackách.",
+  "prep_time": 20,
+  "cook_time": 40,
+  "total_time": 60,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "mleté hovězí maso",
+      "amount": 600,
+      "unit": "g"
+    },
+    {
+      "name": "sladká paprika",
+      "amount": 2,
+      "unit": "lžičky"
+    },
+    {
+      "name": "cayenská paprika",
+      "amount": 0.5,
+      "unit": "lžičky"
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": "dle chuti"
+    },
+    {
+      "name": "rajčata",
+      "amount": null,
+      "unit": "pár kusů"
+    },
+    {
+      "name": "česnek",
+      "amount": 1,
+      "unit": "celá palice"
+    },
+    {
+      "name": "okurka",
+      "amount": null,
+      "unit": "kus"
+    },
+    {
+      "name": "bílý jogurt",
+      "amount": null,
+      "unit": "dle potřeby"
+    },
+    {
+      "name": "citrón (kůra i šťáva)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "olivový olej",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "bylinky (kopr, máta, plocholistá petržel)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "červená cibule",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "salát",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "Vilgain Mini Pizza Base",
+      "amount": null,
+      "unit": "balení"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava masa a pečení",
+      "steps": [
+        "Troubu předehřejte na 200 °C. Do pekáče vložte celou palici česneku a rajčata a dejte péct dříve než maso.",
+        "Mleté hovězí maso v míse osolte, opepřete a důkladně promíchejte se sladkou a cayenskou paprikou.",
+        "Okořeněné maso přesuňte na pečicí papír, zakápněte olivovým olejem a přikryjte druhým plátem pečicího papíru.",
+        "Maso přes papír rozválejte válečkem úplně dotenka.",
+        "Stáhněte vrchní papír a maso s pomocí spodního papíru složte a srolujte do ruličky.",
+        "Po 20 minutách pečení vyndejte z trouby měkká rajčata. Do pekáče k česneku přidejte připravenou masovou roli a pečte dalších 20 minut na 200 °C."
+      ]
+    },
+    {
+      "name": "Příprava dresinku",
+      "steps": [
+        "Okurku nastrouhejte najemno, osolte ji a nechte v sítku vykapat přebytečnou vodu.",
+        "V misce smíchejte jogurt, olivový olej, citronovou kůru a šťávu.",
+        "Z upečené palice česneku vytlačte změklé stroužky a vmíchejte je do jogurtu.",
+        "Přidejte nasekané bylinky (kopr, mátu, petrželku), sůl, pepř a vše promíchejte."
+      ]
+    },
+    {
+      "name": "Dokončení a servírování",
+      "steps": [
+        "Upečené maso vyndejte z trouby, vybalte z papíru a natrhejte na menší kousky.",
+        "Natrhané maso pořádně promíchejte přímo v pekáči s výpekem, aby nasálo všechnu chuť.",
+        "Prohřejte mini pizza placky podle návodu.",
+        "Do placek naskládejte maso, nakrájený salát, cibuli a bohatě polijte připraveným dresinkem."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Middle Eastern Fusion",
+  "source_url": "https://www.instagram.com/p/DTmzheBjGlD/"
+}

@@ -1,0 +1,65 @@
+{
+  "title": "Kurací tortilla wrap",
+  "description": "Zdravý a jednoduchý recept na tortillu s kuracím mäsom a pečenou zeleninou, ideálny pri diéte a chudnutí.",
+  "prep_time": 10,
+  "cook_time": 25,
+  "total_time": 35,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "žltá paprika"
+    },
+    {
+      "name": "červená paprika"
+    },
+    {
+      "name": "cuketa"
+    },
+    {
+      "name": "mrkva"
+    },
+    {
+      "name": "kuracie mäso"
+    },
+    {
+      "name": "olej"
+    },
+    {
+      "name": "korenie"
+    },
+    {
+      "name": "sweet chilli omáčka"
+    },
+    {
+      "name": "tortilla"
+    },
+    {
+      "name": "grécky jogurt",
+      "amount": 1,
+      "unit": "čajová lyžička"
+    },
+    {
+      "name": "strúhaný syr",
+      "amount": 15,
+      "unit": "g"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Kurací wrap",
+      "steps": [
+        "Nakrájanú zeleninu a mäso si rozložte na plech.",
+        "Pokvapkajte olejom, okoreňte, premiešajte a dajte piecť do rúry na 20 minút pri teplote približne 200 °C.",
+        "Po upečení zmes polejte sweet chilli omáčkou a znovu premiešajte.",
+        "Na tortillu dajte pripravenú zmes (také množstvo, aby sa dala pohodlne zabaliť), pridajte čajovú lyžičku gréckeho jogurtu a zhruba 15 g strúhaného syra.",
+        "Tortillu zabalte do tvaru wrapu (burrita) a na panvici opečte z oboch strán do zlatista."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DFVhrKetta_/"
+}

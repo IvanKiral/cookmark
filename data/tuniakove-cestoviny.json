@@ -1,0 +1,84 @@
+{
+  "title": "Tuniakové cestoviny",
+  "description": "Rýchly a jednoduchý recept na cestoviny s tuniakom a paradajkovým pretlakom, ktorý si vďaka jemnej chuti obľúbia aj deti.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "špagety",
+      "amount": 350,
+      "unit": "g"
+    },
+    {
+      "name": "tuniak v oleji",
+      "amount": 140,
+      "unit": "g"
+    },
+    {
+      "name": "paradajkový pretlak",
+      "amount": 5,
+      "unit": "lyžíc"
+    },
+    {
+      "name": "smotana na šľahanie (alebo kyslá/vegánska)",
+      "amount": 120,
+      "unit": "ml"
+    },
+    {
+      "name": "voda na zriedenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "cibuľa",
+      "amount": 0.5,
+      "unit": "veľkej"
+    },
+    {
+      "name": "eidam 40%",
+      "amount": 1,
+      "unit": "hrsť"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "korenie",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "majorán",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "oregano",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Tuniakové cestoviny",
+      "steps": [
+        "Špagety uvaríme v osolenej vode podľa návodu na obale.",
+        "Cibuľu nakrájame nadrobno a speníme ju na troche oleja (môžeme použiť olej z tuniaka).",
+        "K cibuli pridáme tuniaka a paradajkový pretlak.",
+        "Zmes zjemníme smotanou a podľa potreby zriedime trochou vody, aby sme dosiahli požadovanú konzistenciu omáčky.",
+        "Omáčku dochutíme soľou, korením, majoránom a oreganom.",
+        "Uvarené špagety zmiešame s omáčkou a na záver posypeme nastrúhaným eidamom."
+      ]
+    }
+  ],
+  "tags": [
+    "Fish"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/CssnMmmNxMn/"
+}

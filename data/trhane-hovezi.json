@@ -1,0 +1,69 @@
+{
+  "title": "Nejlepší trhané hovězí",
+  "description": "Šťavnaté a křehké hovězí maso pomalu pečené 10 hodin, které se po upečení krásně rozpadá. Ideální náplň do tortilly nebo burgeru.",
+  "prep_time": null,
+  "cook_time": 600,
+  "total_time": 600,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "hovězí zadní",
+      "amount": 1.5,
+      "unit": "kg"
+    },
+    {
+      "name": "sójová omáčka",
+      "amount": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "teriyaki omáčka",
+      "amount": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "sweet chilli omáčka",
+      "amount": 40,
+      "unit": "ml"
+    },
+    {
+      "name": "olivový olej",
+      "amount": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "sezam",
+      "amount": 2,
+      "unit": "lžičky"
+    },
+    {
+      "name": "česnek",
+      "amount": 1,
+      "unit": "lžička"
+    },
+    {
+      "name": "voda",
+      "amount": 700,
+      "unit": "ml"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Příprava trhaného hovězího",
+      "steps": [
+        "Maso důkladně naložte do marinády připravené ze sójové omáčky, teriyaki, sweet chilli omáčky, olivového oleje, sezamu a česneku.",
+        "Namarinované maso vložte do pekáče.",
+        "Zalijte zbytkem marinády a přidejte 700 ml vody.",
+        "Pečte v troubě vyhřáté na 100 °C po dobu 10 hodin (ideálně přes noc).",
+        "Hotové maso vytáhněte z trouby a pomocí vidliček ho natrhejte na vlákna.",
+        "Podávejte v tortille nebo v burgeru."
+      ]
+    }
+  ],
+  "tags": [
+    "Beef"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/p/DFPwAvfM23j/"
+}

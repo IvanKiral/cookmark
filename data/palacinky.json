@@ -1,0 +1,91 @@
+{
+  "title": "Palacinky, ktoré sa vždy podaria",
+  "description": "Tenké, jemné a jednoduché palacinky, ktoré sa netrhajú a panvicu pred pečením netreba potierať žiadnym tukom. Sú vhodné na sladkú aj slanú náplň.",
+  "prep_time": 15,
+  "cook_time": null,
+  "total_time": null,
+  "servings": 8,
+  "ingredients": [
+    {
+      "name": "vajcia",
+      "amount": 2,
+      "unit": "ks"
+    },
+    {
+      "name": "plnotučné mlieko",
+      "amount": 350,
+      "unit": "ml"
+    },
+    {
+      "name": "hladká pšeničná múka",
+      "amount": 150,
+      "unit": "g"
+    },
+    {
+      "name": "soľ",
+      "amount": "štipka",
+      "unit": null
+    },
+    {
+      "name": "maslo",
+      "amount": 30,
+      "unit": "g"
+    },
+    {
+      "name": "repkový olej",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "jemný tvaroh",
+      "amount": 250,
+      "unit": "g"
+    },
+    {
+      "name": "smotana na šľahanie",
+      "amount": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "trstinový cukor",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "čerstvé maliny",
+      "amount": "1",
+      "unit": "hrsť"
+    },
+    {
+      "name": "med",
+      "amount": null,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Cesto na palacinky",
+      "steps": [
+        "V miske vyšľaháme vajíčka s mliekom pomocou metličky.",
+        "Pridáme preosiatu hladkú múku a štipku soli. Dobre prešľaháme metličkou, aby v ceste nezostali žiadne hrudky (v prípade potreby môžeme použiť stolný mixér).",
+        "Do cesta vmiešame roztopené a vychladnuté maslo spolu s repkovým olejom a premiešame.",
+        "Pripravené riedke cesto necháme odležať na kuchynskej linke približne 15 minút.",
+        "Rozohrejeme panvicu. Na horúcu panvicu nalejeme cesto a ihneď ňou zakrúžime, aby sa rovnomerne rozprestrelo po celej ploche. Panvicu nie je potrebné potierať tukom.",
+        "Pečieme na stredne silnom plameni do zlatista. Keď sú okraje sfarbené do zlatohneda, palacinku otočíme a dopečieme z druhej strany."
+      ]
+    },
+    {
+      "name": "Tvarohová náplň a servírovanie",
+      "steps": [
+        "V miske zmiešame jemný tvaroh so smotanou na šľahanie a trstinovým cukrom.",
+        "Upečené palacinky potrieme pripravenou tvarohovou náplňou, pridáme čerstvé maliny a podľa chuti polejeme medom."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Slovenská",
+  "source_url": "https://www.instagram.com/p/DNi2PYFsZzO/"
+}

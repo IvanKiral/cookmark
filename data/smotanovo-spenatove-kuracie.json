@@ -1,0 +1,158 @@
+{
+  "title": "Smotanovo-špenátové kuracie cestoviny",
+  "description": "Lahodné kuracie prsia v krémovej omáčke so špenátom a sušenými paradajkami, podávané s cestovinami.",
+  "prep_time": 15,
+  "cook_time": 25,
+  "total_time": 40,
+  "servings": 3,
+  "ingredients": [
+    {
+      "name": "kuracie prsia",
+      "amount": 3,
+      "unit": "ks"
+    },
+    {
+      "name": "cesnakový prášok",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "kajenské korenie",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "korenie na kura (Montreal chicken)",
+      "amount": 1,
+      "unit": "ČL"
+    },
+    {
+      "name": "sušená petržlenová vňať",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "soľ",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "čierne korenie",
+      "amount": null,
+      "unit": "podľa chuti"
+    },
+    {
+      "name": "avokádový olej",
+      "amount": 1,
+      "unit": "PL"
+    },
+    {
+      "name": "maslo",
+      "amount": 2,
+      "unit": "PL"
+    },
+    {
+      "name": "malá žltá cibuľa",
+      "amount": 1,
+      "unit": "ks"
+    },
+    {
+      "name": "strúčiky cesnaku",
+      "amount": "2-3",
+      "unit": "ks"
+    },
+    {
+      "name": "sušené paradajky",
+      "amount": "1-2",
+      "unit": "ks"
+    },
+    {
+      "name": "cesnakový prášok (do omáčky)",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "oregano",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "sušená petržlenová vňať (do omáčky)",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "kajenské korenie (do omáčky)",
+      "amount": 0.5,
+      "unit": "ČL"
+    },
+    {
+      "name": "múka",
+      "amount": 2,
+      "unit": "ČL"
+    },
+    {
+      "name": "smotana (half & half)",
+      "amount": 1.5,
+      "unit": "hrnčeka"
+    },
+    {
+      "name": "čerstvý špenát",
+      "amount": 1,
+      "unit": "balenie"
+    },
+    {
+      "name": "voda z cestovín",
+      "amount": 1,
+      "unit": "naberačka"
+    },
+    {
+      "name": "syr pecorino",
+      "amount": "3-4",
+      "unit": "PL"
+    },
+    {
+      "name": "citrónová šťava",
+      "amount": 0.5,
+      "unit": "ks"
+    },
+    {
+      "name": "cestoviny",
+      "amount": null,
+      "unit": "na podávanie"
+    },
+    {
+      "name": "čerstvá bazalka alebo petržlenová vňať",
+      "amount": null,
+      "unit": "na ozdobu"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Príprava kuraťa",
+      "steps": [
+        "Kuracie prsia naklepeme pomocou panvice alebo valčeka, aby bola ich hrúbka rovnomerná.",
+        "Mäso ochutíme cesnakovým práškom, kajenským korením, korením na kura, sušenou petržlenovou vňaťou, soľou a čiernym korením.",
+        "Na panvici s vysokou teplotou a trochou oleja opekáme kurča z každej strany približne 2-3 minúty, kým nie je zvonku zlatohnedé. Mäso by nemalo byť úplne prepečené (vnútorná teplota cca 50 °C), pretože sa dovarí v omáčke.",
+        "Kura vyberieme z panvice a odložíme bokom."
+      ]
+    },
+    {
+      "name": "Omáčka a dokončenie",
+      "steps": [
+        "V tej istej panvici rozpustíme maslo a 2-3 minúty opekáme nadrobno nakrájanú cibuľu, cesnak a sušené paradajky.",
+        "Pridáme koreniny určené do omáčky a múku, a restujeme ďalšie 1-2 minúty.",
+        "Prilejeme smotanu a pridáme špenát. Zmes privedieme k varu, potom znížime teplotu na strednú a necháme 5-6 minút jemne vrieť, kým omáčka nezhustne.",
+        "Primiešame vodu z cestovín, nastrúhaný syr pecorino a citrónovú šťavu podľa chuti.",
+        "Omáčku opäť privedieme k varu, vrátime do nej opečené kuracie prsia a na miernom ohni varíme ešte približne 5 minút, aby sa mäso úplne prepieklo.",
+        "Hotové kura s omáčkou podávame s cestovinami a ozdobíme čerstvou bazalkou alebo petržlenovou vňaťou."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "International",
+  "source_url": "https://www.instagram.com/tv/CeTBpt5j2go/"
+}

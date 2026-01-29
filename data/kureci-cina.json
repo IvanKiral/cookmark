@@ -1,0 +1,102 @@
+{
+  "title": "Nejlepší zdravá kuřecí čína",
+  "description": "Rychlá a zdravá verze kuřecí číny, kterou lze snadno zařadit do zdravého jídelníčku.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": null,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "rýže",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "kuřecí prsa",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "škrob (bramborový)",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "sůl",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "pepř",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "paprika",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "cibule",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "pórek",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "tmavá sójová omáčka",
+      "amount": 3,
+      "unit": "lžíce"
+    },
+    {
+      "name": "normální sójová omáčka",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "sweet-chilli omáčka (nebo kečup)",
+      "amount": 2,
+      "unit": "lžíce"
+    },
+    {
+      "name": "škrob (do omáčky)",
+      "amount": 1,
+      "unit": "lžíce"
+    },
+    {
+      "name": "voda",
+      "amount": null,
+      "unit": null
+    },
+    {
+      "name": "med (nebo 2 lžíce cukru)",
+      "amount": 1,
+      "unit": "lžíce"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Kuřecí čína",
+      "steps": [
+        "Jako první dejte vařit rýži do rýžovaru nebo do hrnce. Nezapomeňte ji předem pořádně propláchnout.",
+        "Kuřecí prsa nakrájejte na plátky.",
+        "V misce smíchejte škrob (např. bramborový), sůl a pepř. Přidejte maso, misku uzavřete a pořádně protřepejte, aby se maso rovnoměrně obalilo.",
+        "Nakrájejte si zeleninu – papriku, cibuli a pórek (můžete použít jakoukoliv zeleninu, co máte v lednici).",
+        "Na rozpálené pánvi opečte obalené maso dozlatova.",
+        "K masu přidejte nakrájenou zeleninu a ještě chvíli společně opékejte.",
+        "Přidejte zhruba 3 lžíce tmavé sójovky, 2 lžíce normální sójovky a 2 lžíce sweet-chilli omáčky nebo kečupu. Pořádně promíchejte.",
+        "V troše vody rozmíchejte jednu lžíci škrobu, vlijte do pánve a nechte omáčku zhoustnout.",
+        "Nakonec dochuťte solí, pepřem a přidejte lžíci medu (nebo dvě lžíce cukru). Vše naposledy promíchejte a podávejte s uvařenou rýží."
+      ]
+    }
+  ],
+  "tags": [
+    "Chicken"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Asijská",
+  "source_url": "https://www.instagram.com/p/DEqC30Fiy3L/"
+}

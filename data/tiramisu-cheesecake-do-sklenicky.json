@@ -1,0 +1,60 @@
+{
+  "title": "Tiramisu cheesecake do skleničky",
+  "description": "Rychlý fit dezert nebo snídaně s vysokým obsahem bílkovin (30 g na porci), hotový za 5 minut.",
+  "prep_time": 5,
+  "cook_time": null,
+  "total_time": 5,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "piškoty",
+      "amount": 50,
+      "unit": "g"
+    },
+    {
+      "name": "espresso nebo lungo",
+      "amount": 1,
+      "unit": "porce"
+    },
+    {
+      "name": "nízkotučný tvaroh",
+      "amount": 1,
+      "unit": "vanička"
+    },
+    {
+      "name": "řecký jogurt 0%",
+      "amount": 2,
+      "unit": "kelímek"
+    },
+    {
+      "name": "čekankový sirup",
+      "amount": 10,
+      "unit": "g"
+    },
+    {
+      "name": "kakao",
+      "amount": null,
+      "unit": "na posypání"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Tiramisu cheesecake",
+      "steps": [
+        "V misce smíchejte jeden nízkotučný tvaroh s řeckým jogurtem.",
+        "Směs oslaďte čekankovým sirupem a dejte stranou.",
+        "Uvařte si kávu (instantní nebo zrnkovou).",
+        "Na dno skleniček rozdrobte piškoty a lžící je polévejte uvařenou kávou tak, aby se všechny piškoty dostatečně namočily.",
+        "Piškoty ve skleničce lehce utlačte a navrstvěte na ně připravený tvarohový krém.",
+        "Povrch posypejte kakaem, dejte na chvíli do lednice a poté podávejte."
+      ]
+    }
+  ],
+  "tags": [
+    "Dessert",
+    "Low-Sugar"
+  ],
+  "difficulty": "easy",
+  "cuisine": "Italian",
+  "source_url": "https://www.instagram.com/p/DBb0ALrscr_/"
+}
