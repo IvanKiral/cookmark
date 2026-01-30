@@ -12,6 +12,8 @@ const SortDropdown = (props: SortDropdownProps) => {
   const [isOpen, setIsOpen] = createSignal(false);
 
   const sortOptions = [
+    { value: "date-desc", label: strings.sort.dateDesc },
+    { value: "date-asc", label: strings.sort.dateAsc },
     { value: "name-asc", label: strings.sort.nameAsc },
     { value: "name-desc", label: strings.sort.nameDesc },
     { value: "time-asc", label: strings.sort.timeAsc },

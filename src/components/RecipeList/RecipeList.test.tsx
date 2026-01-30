@@ -37,6 +37,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     const { getByText, queryByText } = render(() => (
@@ -60,6 +61,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     const mockOnPageChange = vi.fn();
@@ -82,6 +84,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     const mockOnPageChange = vi.fn();
@@ -103,6 +106,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     render(() => <RecipeList recipes={mockRecipes} {...defaultProps} />);
@@ -121,6 +125,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     const mockOnPageChange = vi.fn();
@@ -142,6 +147,7 @@ describe("<RecipeList />", () => {
       time: "45 min",
       total_time: 45,
       tags: ["new"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     render(() => (
@@ -171,6 +177,7 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      created_at: "2024-01-01T00:00:00.000Z",
     }));
 
     const mockOnPageChange = vi.fn();

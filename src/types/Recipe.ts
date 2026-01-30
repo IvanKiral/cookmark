@@ -23,6 +23,7 @@ export type RecipeData = {
   cuisine: string | null;
   source_url: string | null;
   video_url?: string;
+  created_at?: string;
 };
 
 export type Recipe = {
@@ -33,4 +34,5 @@ export type Recipe = {
   time: string;
   total_time: number;
   tags: ReadonlyArray<string>;
+  created_at: string;
 };

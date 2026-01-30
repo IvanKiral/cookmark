@@ -10,7 +10,7 @@ import {
   type DifficultyValue,
   difficultyValues,
 } from "~/constants/difficultyOptions";
-import { type SortValue, sortValues } from "~/constants/sortOptions";
+import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions";
 import { strings } from "~/constants/strings";
 import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions";
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions";
@@ -52,7 +52,7 @@ const Home = () => {
 
   const sortBy = createMemo(() => {
     const value = searchParams.sort as SortValue;
-    return sortValues.includes(value) ? value : "name-asc";
+    return sortValues.includes(value) ? value : DEFAULT_SORT;
   });
 
   const searchQuery = createMemo(() => searchParams.q || "");
@@ -82,6 +82,10 @@ const Home = () => {
 
   const getSortComparator = (sortBy: SortValue) => {
     switch (sortBy) {
+      case "date-desc":
+        return (a: Recipe, b: Recipe) => b.created_at.localeCompare(a.created_at);
+      case "date-asc":
+        return (a: Recipe, b: Recipe) => a.created_at.localeCompare(b.created_at);
       case "name-asc":
         return (a: Recipe, b: Recipe) => a.name.localeCompare(b.name);
       case "name-desc":
@@ -101,7 +105,7 @@ const Home = () => {
           difficultyOrderReverse[a.difficulty] - difficultyOrderReverse[b.difficulty];
       }
       default:
-        return (a: Recipe, b: Recipe) => a.name.localeCompare(b.name);
+        return (a: Recipe, b: Recipe) => b.created_at.localeCompare(a.created_at);
     }
   };
 
@@ -178,7 +182,7 @@ const Home = () => {
   const handleSortChange = (sort: SortValue) => {
     setSearchParams({
       ...searchParams,
-      sort: sort !== "name-asc" ? sort : undefined,
+      sort: sort !== DEFAULT_SORT ? sort : undefined,
       page: undefined,
     });
   };
