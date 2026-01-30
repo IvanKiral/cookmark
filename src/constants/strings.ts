@@ -20,6 +20,8 @@ export const strings = {
   },
   sort: {
     label: "Sort by",
+    dateDesc: "Date (newest first)",
+    dateAsc: "Date (oldest first)",
     nameAsc: "Name (A-Z)",
     nameDesc: "Name (Z-A)",
     timeAsc: "Time (shortest first)",

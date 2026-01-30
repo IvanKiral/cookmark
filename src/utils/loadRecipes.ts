@@ -1,5 +1,7 @@
 import type { Recipe, RecipeData } from "~/types/Recipe";
 
+const FALLBACK_CREATED_AT = "1970-01-01T00:00:00.000Z";
+
 const recipeModules = import.meta.glob<RecipeData>("../../data/*.json", {
   eager: true,
   import: "default",
@@ -25,6 +27,7 @@ const transformRecipeData = (data: RecipeData, filePath: string, index: number):
   time: data.total_time ? `${data.total_time} min` : "N/A",
   total_time: data.total_time || 0,
   tags: data.tags || [],
+  created_at: data.created_at || FALLBACK_CREATED_AT,
 });
 
 export const loadRecipes = (): Recipe[] =>

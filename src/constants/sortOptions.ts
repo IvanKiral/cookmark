@@ -4,6 +4,8 @@ export type SortOption = {
 };
 
 export const sortValues = [
+  "date-desc",
+  "date-asc",
   "name-asc",
   "name-desc",
   "time-asc",
@@ -13,3 +15,5 @@ export const sortValues = [
 ] as const;
 
 export type SortValue = (typeof sortValues)[number];
+
+export const DEFAULT_SORT: SortValue = "date-desc";
