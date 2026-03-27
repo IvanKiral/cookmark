@@ -1,0 +1,74 @@
+{
+  "created_at": "2026-03-27T14:30:00+01:00",
+  "title": "Ivka's Pastry Snails",
+  "description": "Delicious and easy party snack made with puff pastry filled with ham, bacon, and cheese.",
+  "prep_time": 20,
+  "cook_time": 15,
+  "total_time": 35,
+  "servings": 8,
+  "ingredients": [
+    {
+      "name": "puff pastry (chilled)",
+      "amount": 2,
+      "unit": "sheets"
+    },
+    {
+      "name": "processed cheese spread (tube)"
+    },
+    {
+      "name": "ketchup"
+    },
+    {
+      "name": "pizza seasoning"
+    },
+    {
+      "name": "ham",
+      "amount": 300,
+      "unit": "g"
+    },
+    {
+      "name": "bacon (slices)"
+    },
+    {
+      "name": "corn (optional)"
+    },
+    {
+      "name": "shredded mozzarella"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Preparation",
+      "steps": [
+        "Unroll and spread out the puff pastry.",
+        "Spread processed cheese over the puff pastry.",
+        "Spread ketchup, leaving about 2 cm from the edges."
+      ]
+    },
+    {
+      "name": "Filling",
+      "steps": [
+        "Sprinkle with pizza seasoning.",
+        "Layer ham in 3 rows, leaving 5 cm from the edges. Slices can overlap slightly.",
+        "Add bacon slices and corn (if using)."
+      ]
+    },
+    {
+      "name": "Shaping and baking",
+      "steps": [
+        "Roll into 1 large roll and refrigerate for at least 15 minutes. The longer it chills, the easier it will be to cut.",
+        "Cut into 1.5-2 cm wide slices. If corn falls out, just push it back in.",
+        "Sprinkle more mozzarella on top so the whole slice is covered.",
+        "Bake at 180°C. When the mozzarella starts to turn yellow/brown, remove from oven (approximately 10-15 minutes)."
+      ]
+    }
+  ],
+  "tags": [
+    "Appetizer",
+    "Party-Food",
+    "Savory"
+  ],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": null
+}
