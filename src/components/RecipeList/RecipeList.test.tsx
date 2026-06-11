@@ -1,7 +1,8 @@
-import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
+import { cleanup, render, screen } from "@solidjs/testing-library";
+import userEvent from "@testing-library/user-event";
 import type { JSX } from "solid-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Recipe } from "~/types/Recipe";
+import type { Recipe } from "~/types/Recipe.ts";
 import RecipeList from "./RecipeList.jsx";
 
 vi.mock("@solidjs/router", () => ({
@@ -52,7 +53,7 @@ describe("<RecipeList />", () => {
     expect(queryByText("Recipe 15")).not.toBeInTheDocument();
   });
 
-  it("calls onPageChange when next is clicked", () => {
+  it("calls onPageChange when next is clicked", async () => {
     const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
@@ -70,7 +71,7 @@ describe("<RecipeList />", () => {
     ));
 
     const nextButton = screen.getByLabelText("Next");
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     expect(mockOnPageChange).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }));
   });
@@ -168,7 +169,24 @@ describe("<RecipeList />", () => {
     expect(recipeContainer?.children).toHaveLength(0);
   });
 
-  it("scrolls to top when page changes", () => {
+  it("shows empty state message when no recipes match", () => {
+    render(() => <RecipeList recipes={[]} {...defaultProps} />);
+
+    expect(screen.getByText("No recipes found")).toBeInTheDocument();
+    expect(screen.getByText("Try adjusting your search or filters.")).toBeInTheDocument();
+  });
+
+  it("calls onResetAll when clear button in empty state is clicked", async () => {
+    const mockOnResetAll = vi.fn();
+    render(() => <RecipeList recipes={[]} {...defaultProps} onResetAll={mockOnResetAll} />);
+
+    const clearButton = screen.getByText("Clear search and filters");
+    await userEvent.click(clearButton);
+
+    expect(mockOnResetAll).toHaveBeenCalled();
+  });
+
+  it("scrolls to top when page changes", async () => {
     const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
@@ -186,7 +204,7 @@ describe("<RecipeList />", () => {
     ));
 
     const nextButton = screen.getByLabelText("Next");
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });

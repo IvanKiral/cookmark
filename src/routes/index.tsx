@@ -1,21 +1,22 @@
 import { useSearchParams } from "@solidjs/router";
 import Fuse from "fuse.js";
 import { createMemo, createSignal, Show } from "solid-js";
-import FilterDrawer from "~/components/FilterDrawer/FilterDrawer";
-import RecipeList from "~/components/RecipeList/RecipeList";
-import SearchBar from "~/components/SearchBar/SearchBar";
-import SortDropdown from "~/components/SortDropdown/SortDropdown";
+import FilterDrawer from "~/components/FilterDrawer/FilterDrawer.tsx";
+import FilterPanel from "~/components/FilterPanel/FilterPanel.tsx";
+import RecipeList from "~/components/RecipeList/RecipeList.tsx";
+import SearchBar from "~/components/SearchBar/SearchBar.tsx";
+import SortDropdown from "~/components/SortDropdown/SortDropdown.tsx";
 import {
   type DifficultyFilter,
   type DifficultyValue,
   difficultyValues,
-} from "~/constants/difficultyOptions";
-import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions";
-import { strings } from "~/constants/strings";
-import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions";
-import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions";
-import type { Recipe } from "~/types/Recipe";
-import { loadRecipes } from "~/utils/loadRecipes";
+} from "~/constants/difficultyOptions.ts";
+import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions.ts";
+import { strings } from "~/constants/strings.ts";
+import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
+import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
+import type { Recipe } from "~/types/Recipe.ts";
+import { loadRecipes } from "~/utils/loadRecipes.ts";
 import styles from "./index.module.css";
 
 const parseArrayParam = <T extends string>(
@@ -179,6 +180,17 @@ const Home = () => {
     });
   };
 
+  const handleResetAll = () => {
+    setSearchParams({
+      ...searchParams,
+      q: undefined,
+      difficulty: undefined,
+      time: undefined,
+      tag: undefined,
+      page: undefined,
+    });
+  };
+
   const handleSortChange = (sort: SortValue) => {
     setSearchParams({
       ...searchParams,
@@ -209,6 +221,28 @@ const Home = () => {
       </header>
       <div class={styles.container}>
         <div class={styles.layout}>
+          <aside class={styles.sidebar} aria-label="Recipe filters">
+            <div class={styles.sidebarHeader}>
+              <span class={styles.sidebarTitle}>{strings.filterDrawer.title}</span>
+              <Show when={activeFilterCount() > 0}>
+                <button
+                  type="button"
+                  class={styles.sidebarClearButton}
+                  onClick={handleClearAllFilters}
+                >
+                  {strings.filterDrawer.clearAll}
+                </button>
+              </Show>
+            </div>
+            <FilterPanel
+              difficultyFilter={difficultyFilter()}
+              timeFilter={timeFilter()}
+              tagFilter={tagFilter()}
+              onDifficultyChange={handleDifficultyFilter}
+              onTimeChange={handleTimeFilter}
+              onTagChange={handleTagFilter}
+            />
+          </aside>
           <div class={styles.controls}>
             <button
               type="button"
@@ -245,6 +279,7 @@ const Home = () => {
               recipes={filteredRecipes()}
               currentPage={currentPage()}
               onPageChange={handlePageChange}
+              onResetAll={handleResetAll}
             />
           </div>
         </div>

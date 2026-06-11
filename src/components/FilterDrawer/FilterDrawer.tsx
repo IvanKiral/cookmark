@@ -1,10 +1,10 @@
 import Drawer from "@corvu/drawer";
-import { type Component, For } from "solid-js";
-import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOptions";
-import { difficultyOptions, tagOptions, timeOptions } from "~/constants/filterOptions";
-import { strings } from "~/constants/strings";
-import type { TagFilter, TagValue } from "~/constants/tagOptions";
-import type { TimeFilter, TimeValue } from "~/constants/timeOptions";
+import type { Component } from "solid-js";
+import type { DifficultyFilter } from "~/constants/difficultyOptions.ts";
+import { strings } from "~/constants/strings.ts";
+import type { TagFilter } from "~/constants/tagOptions.ts";
+import type { TimeFilter } from "~/constants/timeOptions.ts";
+import FilterPanel from "../FilterPanel/FilterPanel.jsx";
 import styles from "./FilterDrawer.module.css";
 
 type FilterDrawerProps = {
@@ -20,30 +20,6 @@ type FilterDrawerProps = {
 };
 
 const FilterDrawer: Component<FilterDrawerProps> = (props) => {
-  const handleDifficultyToggle = (value: DifficultyValue) => {
-    const current = props.difficultyFilter;
-    const newFilter = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-    props.onDifficultyChange(newFilter as DifficultyFilter);
-  };
-
-  const handleTimeToggle = (value: TimeValue) => {
-    const current = props.timeFilter;
-    const newFilter = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-    props.onTimeChange(newFilter as TimeFilter);
-  };
-
-  const handleTagToggle = (value: TagValue) => {
-    const current = props.tagFilter;
-    const newFilter = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-    props.onTagChange(newFilter as TagFilter);
-  };
-
   const hasAnyFilter = () =>
     props.difficultyFilter.length > 0 || props.timeFilter.length > 0 || props.tagFilter.length > 0;
 
@@ -67,62 +43,14 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
           </div>
 
           <div class={styles.sections}>
-            <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{strings.filters.difficulty}</h3>
-              <div class={styles.checkboxGroup}>
-                <For each={difficultyOptions}>
-                  {(option) => (
-                    <label class={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        checked={props.difficultyFilter.includes(option.value)}
-                        onChange={() => handleDifficultyToggle(option.value)}
-                        class={styles.checkbox}
-                      />
-                      <span class={styles.checkboxText}>{option.label}</span>
-                    </label>
-                  )}
-                </For>
-              </div>
-            </div>
-
-            <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{strings.filters.time}</h3>
-              <div class={styles.checkboxGroup}>
-                <For each={timeOptions}>
-                  {(option) => (
-                    <label class={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        checked={props.timeFilter.includes(option.value)}
-                        onChange={() => handleTimeToggle(option.value)}
-                        class={styles.checkbox}
-                      />
-                      <span class={styles.checkboxText}>{option.label}</span>
-                    </label>
-                  )}
-                </For>
-              </div>
-            </div>
-
-            <div class={styles.section}>
-              <h3 class={styles.sectionTitle}>{strings.filters.tags}</h3>
-              <div class={styles.checkboxGroup}>
-                <For each={tagOptions}>
-                  {(option) => (
-                    <label class={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        checked={props.tagFilter.includes(option.value)}
-                        onChange={() => handleTagToggle(option.value)}
-                        class={styles.checkbox}
-                      />
-                      <span class={styles.checkboxText}>{option.label}</span>
-                    </label>
-                  )}
-                </For>
-              </div>
-            </div>
+            <FilterPanel
+              difficultyFilter={props.difficultyFilter}
+              timeFilter={props.timeFilter}
+              tagFilter={props.tagFilter}
+              onDifficultyChange={props.onDifficultyChange}
+              onTimeChange={props.onTimeChange}
+              onTagChange={props.onTagChange}
+            />
           </div>
 
           {hasAnyFilter() && (

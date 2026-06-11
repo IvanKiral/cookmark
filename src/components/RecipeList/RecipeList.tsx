@@ -1,6 +1,6 @@
 import { type Component, createMemo, For, Show } from "solid-js";
-import { strings } from "~/constants/strings";
-import type { Recipe } from "~/types/Recipe";
+import { strings } from "~/constants/strings.ts";
+import type { Recipe } from "~/types/Recipe.ts";
 import { Pagination } from "../Pagination/Pagination.jsx";
 import styles from "./RecipeList.module.css";
 import RecipeListItem from "./RecipeListItem.jsx";
@@ -9,6 +9,7 @@ type RecipeListProps = {
   recipes: ReadonlyArray<Recipe>;
   currentPage: number;
   onPageChange: (details: { page: number }) => void;
+  onResetAll?: () => void;
 };
 
 const ITEMS_PER_PAGE = 10;
@@ -33,6 +34,17 @@ const RecipeList: Component<RecipeListProps> = (props) => {
           <span class={styles.headerName}>{strings.recipeList.name}</span>
           <span class={styles.headerDifficulty}>{strings.recipeList.difficulty}</span>
           <span class={styles.headerTime}>{strings.recipeList.time}</span>
+        </div>
+      </Show>
+      <Show when={props.recipes.length === 0}>
+        <div class={styles.emptyState}>
+          <p class={styles.emptyTitle}>{strings.search.noResults}</p>
+          <p class={styles.emptyHint}>{strings.search.noResultsHint}</p>
+          <Show when={props.onResetAll}>
+            <button type="button" class={styles.emptyClearButton} onClick={props.onResetAll}>
+              {strings.search.clearSearchAndFilters}
+            </button>
+          </Show>
         </div>
       </Show>
       <div class={styles.container}>
