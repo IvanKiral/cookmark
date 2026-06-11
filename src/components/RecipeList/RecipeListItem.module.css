@@ -40,8 +40,8 @@
 }
 
 .difficulty[data-level="Easy"] {
-  background-color: var(--color-primary-100);
-  color: var(--color-primary-700);
+  background-color: #dcfce7;
+  color: #166534;
 }
 
 .difficulty[data-level="Medium"] {
