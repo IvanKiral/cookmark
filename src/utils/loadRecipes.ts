@@ -1,4 +1,4 @@
-import type { Recipe, RecipeData } from "~/types/Recipe";
+import type { Recipe, RecipeData } from "~/types/Recipe.ts";
 
 const FALLBACK_CREATED_AT = "1970-01-01T00:00:00.000Z";
 

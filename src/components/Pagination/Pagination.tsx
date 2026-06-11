@@ -1,7 +1,7 @@
 import { Pagination as ArkPagination } from "@ark-ui/solid/pagination";
 import type { Component } from "solid-js";
 import { For, Show } from "solid-js";
-import { strings } from "~/constants/strings";
+import { strings } from "~/constants/strings.ts";
 import styles from "./Pagination.module.css";
 
 type PaginationProps = {

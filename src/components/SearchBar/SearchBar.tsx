@@ -1,5 +1,5 @@
-import { strings } from "~/constants/strings";
-import type { Recipe } from "~/types/Recipe";
+import { strings } from "~/constants/strings.ts";
+import type { Recipe } from "~/types/Recipe.ts";
 import styles from "./SearchBar.module.css";
 
 type SearchBarProps = {
