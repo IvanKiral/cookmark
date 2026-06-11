@@ -3,13 +3,22 @@ import { describe, expect, it, vi } from "vitest";
 import SortDropdown from "./SortDropdown.jsx";
 
 describe("<SortDropdown />", () => {
-  it("renders with sort by label", () => {
+  it("renders with sort by label for the default sort", () => {
+    const mockOnSortChange = vi.fn();
+    const { getByText } = render(() => (
+      <SortDropdown value="date-desc" onSortChange={mockOnSortChange} />
+    ));
+
+    expect(getByText("Sort by")).toBeInTheDocument();
+  });
+
+  it("shows the active sort in the button for a non-default sort", () => {
     const mockOnSortChange = vi.fn();
     const { getByText } = render(() => (
       <SortDropdown value="name-asc" onSortChange={mockOnSortChange} />
     ));
 
-    expect(getByText("Sort by")).toBeInTheDocument();
+    expect(getByText("Sort: Name A-Z")).toBeInTheDocument();
   });
 
   it("shows all sort options when clicked", () => {

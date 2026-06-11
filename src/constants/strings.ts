@@ -5,6 +5,8 @@ export const strings = {
   search: {
     placeholder: "Search recipes...",
     noResults: "No recipes found",
+    noResultsHint: "Try adjusting your search or filters.",
+    clearSearchAndFilters: "Clear search and filters",
     resultsCount: (count: number) => `${count} recipe${count === 1 ? "" : "s"} found`,
   },
   filters: {
@@ -20,6 +22,7 @@ export const strings = {
   },
   sort: {
     label: "Sort by",
+    activeLabel: (sort: string) => `Sort: ${sort}`,
     dateDesc: "Date (newest first)",
     dateAsc: "Date (oldest first)",
     nameAsc: "Name (A-Z)",
@@ -28,6 +31,14 @@ export const strings = {
     timeDesc: "Time (longest first)",
     difficultyEasy: "Difficulty (easy first)",
     difficultyHard: "Difficulty (hard first)",
+    shortDateDesc: "Newest",
+    shortDateAsc: "Oldest",
+    shortNameAsc: "Name A-Z",
+    shortNameDesc: "Name Z-A",
+    shortTimeAsc: "Shortest",
+    shortTimeDesc: "Longest",
+    shortDifficultyEasy: "Easiest",
+    shortDifficultyHard: "Hardest",
   },
   recipe: {
     prep: "Prep:",

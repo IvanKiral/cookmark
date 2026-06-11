@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
-import type { SortValue } from "~/constants/sortOptions";
-import { strings } from "~/constants/strings";
+import { DEFAULT_SORT, type SortValue } from "~/constants/sortOptions.ts";
+import { strings } from "~/constants/strings.ts";
 import styles from "./SortDropdown.module.css";
 
 type SortDropdownProps = {
@@ -12,15 +12,31 @@ const SortDropdown = (props: SortDropdownProps) => {
   const [isOpen, setIsOpen] = createSignal(false);
 
   const sortOptions = [
-    { value: "date-desc", label: strings.sort.dateDesc },
-    { value: "date-asc", label: strings.sort.dateAsc },
-    { value: "name-asc", label: strings.sort.nameAsc },
-    { value: "name-desc", label: strings.sort.nameDesc },
-    { value: "time-asc", label: strings.sort.timeAsc },
-    { value: "time-desc", label: strings.sort.timeDesc },
-    { value: "difficulty-easy", label: strings.sort.difficultyEasy },
-    { value: "difficulty-hard", label: strings.sort.difficultyHard },
+    { value: "date-desc", label: strings.sort.dateDesc, shortLabel: strings.sort.shortDateDesc },
+    { value: "date-asc", label: strings.sort.dateAsc, shortLabel: strings.sort.shortDateAsc },
+    { value: "name-asc", label: strings.sort.nameAsc, shortLabel: strings.sort.shortNameAsc },
+    { value: "name-desc", label: strings.sort.nameDesc, shortLabel: strings.sort.shortNameDesc },
+    { value: "time-asc", label: strings.sort.timeAsc, shortLabel: strings.sort.shortTimeAsc },
+    { value: "time-desc", label: strings.sort.timeDesc, shortLabel: strings.sort.shortTimeDesc },
+    {
+      value: "difficulty-easy",
+      label: strings.sort.difficultyEasy,
+      shortLabel: strings.sort.shortDifficultyEasy,
+    },
+    {
+      value: "difficulty-hard",
+      label: strings.sort.difficultyHard,
+      shortLabel: strings.sort.shortDifficultyHard,
+    },
   ] as const;
+
+  const buttonLabel = () => {
+    if (props.value === DEFAULT_SORT) {
+      return strings.sort.label;
+    }
+    const activeOption = sortOptions.find((option) => option.value === props.value);
+    return activeOption ? strings.sort.activeLabel(activeOption.shortLabel) : strings.sort.label;
+  };
 
   const handleOptionClick = (value: SortValue) => {
     props.onSortChange(value);
@@ -40,7 +56,7 @@ const SortDropdown = (props: SortDropdownProps) => {
         aria-haspopup="true"
         aria-expanded={isOpen()}
       >
-        <span class={styles.label}>{strings.sort.label}</span>
+        <span class={styles.label}>{buttonLabel()}</span>
         <span
           class={`material-symbols-outlined ${styles.icon} ${isOpen() ? styles.iconRotated : ""}`}
         >
