@@ -1,6 +1,6 @@
 import { render } from "@solidjs/testing-library";
 import { describe, expect, it } from "vitest";
-import type { RecipeData } from "~/types/Recipe";
+import type { RecipeData } from "~/types/Recipe.ts";
 import RecipeDetail from "./RecipeDetail.jsx";
 
 describe("<RecipeDetail />", () => {

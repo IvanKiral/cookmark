@@ -1,8 +1,8 @@
 import { A, useParams } from "@solidjs/router";
 import { type Component, For, Show } from "solid-js";
-import RecipeVideo from "~/components/RecipeVideo/RecipeVideo";
-import { strings } from "~/constants/strings";
-import { getRecipeDataBySlug } from "~/utils/loadRecipes";
+import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
+import { strings } from "~/constants/strings.ts";
+import { getRecipeDataBySlug } from "~/utils/loadRecipes.ts";
 import styles from "./[slug].module.css";
 
 const RecipePage: Component = () => {

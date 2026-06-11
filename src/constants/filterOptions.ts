@@ -1,7 +1,7 @@
-import { type DifficultyValue, difficultyValues } from "./difficultyOptions.js";
-import { strings } from "./strings.js";
-import { type TagValue, tagValues } from "./tagOptions.js";
-import { type TimeValue, timeValues } from "./timeOptions.js";
+import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
+import { strings } from "./strings.ts";
+import { type TagValue, tagValues } from "./tagOptions.ts";
+import { type TimeValue, timeValues } from "./timeOptions.ts";
 
 const difficultyLabels: Record<DifficultyValue, string> = {
   Easy: strings.filters.easy,

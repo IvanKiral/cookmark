@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { Recipe } from "~/types/Recipe";
+import type { Recipe } from "~/types/Recipe.ts";
 import SearchBar from "./SearchBar.jsx";
 
 const mockRecipes: Recipe[] = [

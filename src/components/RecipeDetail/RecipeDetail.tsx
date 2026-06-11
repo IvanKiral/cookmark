@@ -1,6 +1,6 @@
 import { type Component, For, Show } from "solid-js";
-import { strings } from "~/constants/strings";
-import type { RecipeData } from "~/types/Recipe";
+import { strings } from "~/constants/strings.ts";
+import type { RecipeData } from "~/types/Recipe.ts";
 import styles from "./RecipeDetail.module.css";
 
 type RecipeDetailProps = {
