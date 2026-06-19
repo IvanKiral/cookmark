@@ -3,6 +3,10 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
 import { getPrerenderRoutes } from "./scripts/getPrerenderRoutes.ts";
 
+// Single source of truth for the deploy base path (trailing slash included).
+// GitHub Pages (project site) sets it to "/cookmark/"; Cloudflare Pages (root) uses "/".
+const basePath = process.env.VITE_BASE_URL ?? "/";
+
 export default defineConfig({
   vite: {
     plugins: [
@@ -54,18 +58,18 @@ export default defineConfig({
           theme_color: "#ffffff",
           background_color: "#ffffff",
           display: "standalone",
-          scope: "/cookmark/",
-          start_url: "/cookmark/",
+          scope: basePath,
+          start_url: basePath,
           categories: ["food", "lifestyle"],
           icons: [
             {
-              src: "/cookmark/web-app-manifest-192x192.png",
+              src: `${basePath}web-app-manifest-192x192.png`,
               sizes: "192x192",
               type: "image/png",
               purpose: "maskable any",
             },
             {
-              src: "/cookmark/web-app-manifest-512x512.png",
+              src: `${basePath}web-app-manifest-512x512.png`,
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable any",
@@ -76,8 +80,8 @@ export default defineConfig({
               name: "Search Recipes",
               short_name: "Search",
               description: "Search for recipes",
-              url: "/cookmark/",
-              icons: [{ src: "/cookmark/favicon-96x96.png", sizes: "96x96" }],
+              url: basePath,
+              icons: [{ src: `${basePath}favicon-96x96.png`, sizes: "96x96" }],
             },
           ],
         },
@@ -85,12 +89,13 @@ export default defineConfig({
     ],
   },
   server: {
-    preset: "github-pages",
-    baseURL: process.env.GITHUB_REPOSITORY
-      ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
-      : "/",
+    // "github-pages" emits a fully static site (the prerendered output also
+    // serves as-is from Cloudflare Pages). Override with SERVER_PRESET when a
+    // host-specific preset is needed (e.g. "cloudflare-pages" once R2/Functions land).
+    preset: process.env.SERVER_PRESET ?? "github-pages",
+    baseURL: basePath,
     prerender: {
-      routes: getPrerenderRoutes() as string[],
+      routes: getPrerenderRoutes(basePath) as string[],
     },
   },
 });
