@@ -1,6 +1,6 @@
 import { type Component, For } from "solid-js";
 import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOptions.ts";
-import { difficultyOptions, tagOptions, timeOptions } from "~/constants/filterOptions.ts";
+import { difficultyOptions, tagGroups, timeOptions } from "~/constants/filterOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter, TagValue } from "~/constants/tagOptions.ts";
 import type { TimeFilter, TimeValue } from "~/constants/timeOptions.ts";
@@ -73,12 +73,16 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
         selected={props.timeFilter}
         onToggle={handleTimeToggle}
       />
-      <FilterSection
-        title={strings.filters.tags}
-        options={tagOptions}
-        selected={props.tagFilter}
-        onToggle={handleTagToggle}
-      />
+      <For each={tagGroups}>
+        {(group) => (
+          <FilterSection
+            title={group.label}
+            options={group.options}
+            selected={props.tagFilter}
+            onToggle={handleTagToggle}
+          />
+        )}
+      </For>
     </div>
   );
 };

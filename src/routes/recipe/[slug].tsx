@@ -1,13 +1,23 @@
-import { A, useParams } from "@solidjs/router";
+import { A, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Show } from "solid-js";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
 import { getRecipeDataBySlug } from "~/utils/loadRecipes.ts";
 import styles from "./[slug].module.css";
 
+type RecipeNavState = {
+  fromSearch?: string;
+};
+
 const RecipePage: Component = () => {
   const params = useParams<{ slug: string }>();
+  const location = useLocation();
   const recipe = () => getRecipeDataBySlug(params.slug);
+
+  const backHref = (): string => {
+    const state = location.state as RecipeNavState | null;
+    return state?.fromSearch ? `/${state.fromSearch}` : "/";
+  };
 
   const formatTime = (time: number | null): string => {
     if (!time) {
@@ -68,7 +78,11 @@ const RecipePage: Component = () => {
                 Cookmark
               </A>
               <div class={styles.navActions}>
-                <A href="/" class={styles.navButton} aria-label={strings.recipe.backToList}>
+                <A
+                  href={backHref()}
+                  class={styles.navButton}
+                  aria-label={strings.recipe.backToList}
+                >
                   <span class="material-symbols-outlined">close</span>
                 </A>
               </div>

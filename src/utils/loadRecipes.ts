@@ -23,10 +23,12 @@ const transformRecipeData = (data: RecipeData, filePath: string, index: number):
   id: (index + 1).toString(),
   url_slug: extractSlugFromPath(filePath),
   name: data.title,
+  description: data.description || "",
   difficulty: capitalizeFirstLetter(data.difficulty) as "Easy" | "Medium" | "Hard" | "Unknown",
   time: data.total_time ? `${data.total_time} min` : "N/A",
   total_time: data.total_time || 0,
   tags: data.tags || [],
+  ingredients: (data.ingredients || []).map((ingredient) => ingredient.name),
   created_at: data.created_at || FALLBACK_CREATED_AT,
 });
 

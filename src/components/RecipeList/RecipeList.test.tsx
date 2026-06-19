@@ -12,6 +12,7 @@ vi.mock("@solidjs/router", () => ({
     </a>
   ),
   useParams: () => ({}),
+  useLocation: () => ({ search: "" }),
 }));
 
 describe("<RecipeList />", () => {
@@ -38,6 +39,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -62,6 +65,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -85,6 +90,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -107,6 +114,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -126,6 +135,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -148,6 +159,8 @@ describe("<RecipeList />", () => {
       time: "45 min",
       total_time: 45,
       tags: ["new"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -195,6 +208,8 @@ describe("<RecipeList />", () => {
       time: "30 min",
       total_time: 30,
       tags: ["test"],
+      ingredients: [],
+      description: "",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 

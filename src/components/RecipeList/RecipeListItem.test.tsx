@@ -9,6 +9,7 @@ vi.mock("@solidjs/router", () => ({
       {props.children}
     </a>
   ),
+  useLocation: () => ({ search: "" }),
 }));
 
 describe("<RecipeListItem />", () => {

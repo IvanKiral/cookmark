@@ -71,9 +71,10 @@ const Home = () => {
     () =>
       new Fuse(recipes, {
         keys: [
-          { name: "name", weight: 0.7 },
-          { name: "difficulty", weight: 0.2 },
-          { name: "time", weight: 0.1 },
+          { name: "name", weight: 0.5 },
+          { name: "ingredients", weight: 0.25 },
+          { name: "tags", weight: 0.15 },
+          { name: "description", weight: 0.1 },
         ],
         threshold: 0.3,
         includeScore: true,
