@@ -7,10 +7,12 @@ import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt.jsx";
 
 export default function App() {
   const base = import.meta.env.VITE_BASE_URL ?? "/";
+  // Router base must not have a trailing slash; "/" collapses to "" (root).
+  const routerBase = base.endsWith("/") ? base.slice(0, -1) : base;
 
   return (
     <Router
-      base="/cookmark"
+      base={routerBase}
       root={(props) => (
         <MetaProvider>
           <Title>Cookmark</Title>
