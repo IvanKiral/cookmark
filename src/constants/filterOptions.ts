@@ -44,3 +44,21 @@ export const tagOptions = tagValues.map((value) => ({
   value,
   label: tagLabels[value],
 }));
+
+const buildTagOptions = (values: ReadonlyArray<TagValue>) =>
+  values.map((value) => ({ value, label: tagLabels[value] }));
+
+export const tagGroups = [
+  {
+    label: strings.filters.protein,
+    options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs"]),
+  },
+  {
+    label: strings.filters.diet,
+    options: buildTagOptions(["Vegan", "Vegetarian", "Lactose-free", "Low-Sugar"]),
+  },
+  {
+    label: strings.filters.type,
+    options: buildTagOptions(["Dessert", "Cake", "Meal-prep"]),
+  },
+] as const;

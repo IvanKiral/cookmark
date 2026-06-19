@@ -12,6 +12,8 @@ const mockRecipes: Recipe[] = [
     time: "35 min",
     total_time: 35,
     tags: ["chicken", "herbs"],
+    ingredients: [],
+    description: "",
     created_at: "2024-01-01T00:00:00.000Z",
   },
   {
@@ -22,6 +24,8 @@ const mockRecipes: Recipe[] = [
     time: "20 min",
     total_time: 20,
     tags: ["quinoa", "salad"],
+    ingredients: [],
+    description: "",
     created_at: "2024-01-02T00:00:00.000Z",
   },
   {
@@ -32,6 +36,8 @@ const mockRecipes: Recipe[] = [
     time: "15 min",
     total_time: 15,
     tags: ["chicken", "salad"],
+    ingredients: [],
+    description: "",
     created_at: "2024-01-03T00:00:00.000Z",
   },
 ];

@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, onCleanup, onMount } from "solid-js";
 import { DEFAULT_SORT, type SortValue } from "~/constants/sortOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import styles from "./SortDropdown.module.css";
@@ -10,6 +10,32 @@ type SortDropdownProps = {
 
 const SortDropdown = (props: SortDropdownProps) => {
   const [isOpen, setIsOpen] = createSignal(false);
+  let dropdownRef: HTMLDivElement | undefined;
+
+  const handleDocumentClick = (event: MouseEvent) => {
+    if (!isOpen()) {
+      return;
+    }
+    if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  const handleDocumentKeyDown = (event: KeyboardEvent) => {
+    if (isOpen() && event.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("click", handleDocumentClick);
+    document.addEventListener("keydown", handleDocumentKeyDown);
+
+    onCleanup(() => {
+      document.removeEventListener("click", handleDocumentClick);
+      document.removeEventListener("keydown", handleDocumentKeyDown);
+    });
+  });
 
   const sortOptions = [
     { value: "date-desc", label: strings.sort.dateDesc, shortLabel: strings.sort.shortDateDesc },
@@ -48,7 +74,7 @@ const SortDropdown = (props: SortDropdownProps) => {
   };
 
   return (
-    <div class={styles.dropdown}>
+    <div class={styles.dropdown} ref={dropdownRef}>
       <button
         type="button"
         onClick={handleToggle}

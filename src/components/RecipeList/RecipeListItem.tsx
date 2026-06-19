@@ -1,4 +1,4 @@
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import type { Component } from "solid-js";
 import styles from "./RecipeListItem.module.css";
 
@@ -10,8 +10,14 @@ type RecipeListItemProps = {
 };
 
 const RecipeListItem: Component<RecipeListItemProps> = (props) => {
+  const location = useLocation();
+
   return (
-    <A href={`/recipe/${props.urlSlug}`} class={styles.listItem}>
+    <A
+      href={`/recipe/${props.urlSlug}`}
+      state={{ fromSearch: location.search }}
+      class={styles.listItem}
+    >
       <h3 class={styles.title}>{props.name}</h3>
       <span class={styles.difficulty} data-level={props.difficulty}>
         {props.difficulty}

@@ -30,9 +30,11 @@ export type Recipe = {
   id: string;
   url_slug: string;
   name: string;
+  description: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
   total_time: number;
   tags: ReadonlyArray<string>;
+  ingredients: ReadonlyArray<string>;
   created_at: string;
 };
