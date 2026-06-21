@@ -34,6 +34,7 @@ const RecipeList: Component<RecipeListProps> = (props) => {
           <span class={styles.headerName}>{strings.recipeList.name}</span>
           <span class={styles.headerDifficulty}>{strings.recipeList.difficulty}</span>
           <span class={styles.headerTime}>{strings.recipeList.time}</span>
+          <span class={styles.headerFavorite} aria-hidden="true" />
         </div>
       </Show>
       <Show when={props.recipes.length === 0}>

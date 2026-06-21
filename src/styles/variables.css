@@ -23,6 +23,9 @@
   --color-neutral-800: #262626;
   --color-neutral-900: #171717;
 
+  /* Accent */
+  --color-favorite: #e0245e;
+
   /* Typography */
   --font-family-display: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-family-base: "Inter", system-ui, -apple-system, sans-serif;

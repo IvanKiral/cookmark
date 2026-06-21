@@ -75,6 +75,12 @@ export const strings = {
     clearAll: "Clear all",
     filtersButton: "Filters",
   },
+  favorites: {
+    sectionTitle: "Favourites",
+    only: "Favourites only",
+    add: (name: string) => `Add ${name} to favourites`,
+    remove: (name: string) => `Remove ${name} from favourites`,
+  },
   recipeList: {
     name: "Recipe Name",
     difficulty: "Difficulty",
