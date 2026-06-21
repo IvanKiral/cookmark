@@ -12,7 +12,7 @@ type RecipeListProps = {
   onResetAll?: () => void;
 };
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 15;
 
 const RecipeList: Component<RecipeListProps> = (props) => {
   const paginatedRecipes = createMemo(() => {
