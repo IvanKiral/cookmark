@@ -16,6 +16,7 @@ concurrency:
 
 env:
   VITE_BASE_URL: /cookmark/
+  SERVER_PRESET: github-pages
 
 jobs:
   build:

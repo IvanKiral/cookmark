@@ -4,7 +4,15 @@
   "root": true,
   "files": {
     "ignoreUnknown": true,
-    "includes": ["src/**/*", "!.output", "!.vinxi", "!.claude", "!data", "!bundle-report.html"]
+    "includes": [
+      "src/**/*",
+      "!.output",
+      "!.vinxi",
+      "!.wrangler",
+      "!.claude",
+      "!data",
+      "!bundle-report.html"
+    ]
   },
   "linter": {
     "rules": {
