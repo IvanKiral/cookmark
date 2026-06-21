@@ -39,7 +39,7 @@ describe("<RecipeList />", () => {
   };
 
   it("renders first page of recipes with pagination", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
@@ -57,15 +57,15 @@ describe("<RecipeList />", () => {
     ));
 
     expect(getByText("Recipe 1")).toBeInTheDocument();
-    expect(getByText("Recipe 5")).toBeInTheDocument();
     expect(getByText("Recipe 10")).toBeInTheDocument();
+    expect(getByText("Recipe 15")).toBeInTheDocument();
 
-    expect(queryByText("Recipe 11")).not.toBeInTheDocument();
-    expect(queryByText("Recipe 15")).not.toBeInTheDocument();
+    expect(queryByText("Recipe 16")).not.toBeInTheDocument();
+    expect(queryByText("Recipe 20")).not.toBeInTheDocument();
   });
 
   it("calls onPageChange when next is clicked", async () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
@@ -90,7 +90,7 @@ describe("<RecipeList />", () => {
   });
 
   it("renders correct page when currentPage prop changes", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
@@ -109,12 +109,12 @@ describe("<RecipeList />", () => {
     ));
 
     expect(screen.queryByText("Recipe 1")).not.toBeInTheDocument();
-    expect(screen.getByText("Recipe 11")).toBeInTheDocument();
-    expect(screen.getByText("Recipe 15")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 16")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 20")).toBeInTheDocument();
   });
 
-  it("does not show pagination for 10 or fewer recipes", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 10 }, (_, i) => ({
+  it("does not show pagination for 15 or fewer recipes", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
@@ -130,7 +130,7 @@ describe("<RecipeList />", () => {
     render(() => <RecipeList recipes={mockRecipes} {...defaultProps} />);
 
     expect(screen.getByText("Recipe 1")).toBeInTheDocument();
-    expect(screen.getByText("Recipe 10")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 15")).toBeInTheDocument();
     expect(screen.queryByLabelText("Next")).not.toBeInTheDocument();
   });
 
@@ -159,7 +159,7 @@ describe("<RecipeList />", () => {
     unmount();
     cleanup();
 
-    const mockRecipes2: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+    const mockRecipes2: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 10}`,
       url_slug: `new_recipe_${i + 10}`,
       name: `New Recipe ${i + 10}`,
@@ -177,8 +177,8 @@ describe("<RecipeList />", () => {
     ));
 
     expect(screen.getByText("New Recipe 10")).toBeInTheDocument();
-    expect(screen.getByText("New Recipe 19")).toBeInTheDocument();
-    expect(screen.queryByText("New Recipe 20")).not.toBeInTheDocument();
+    expect(screen.getByText("New Recipe 24")).toBeInTheDocument();
+    expect(screen.queryByText("New Recipe 25")).not.toBeInTheDocument();
   });
 
   it("renders empty list when no recipes provided", () => {
@@ -208,7 +208,7 @@ describe("<RecipeList />", () => {
   });
 
   it("scrolls to top when page changes", async () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
