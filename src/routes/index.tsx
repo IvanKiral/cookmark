@@ -15,6 +15,7 @@ import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOption
 import { strings } from "~/constants/strings.ts";
 import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
+import { useFavorites } from "~/contexts/FavoritesContext.tsx";
 import type { Recipe } from "~/types/Recipe.ts";
 import { loadRecipes } from "~/utils/loadRecipes.ts";
 import styles from "./index.module.css";
@@ -37,6 +38,9 @@ const Home = () => {
   const recipes: Recipe[] = loadRecipes();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
+  const favorites = useFavorites();
+
+  const favoritesOnly = createMemo(() => searchParams.fav === "1");
 
   const difficultyFilter = createMemo(
     (): DifficultyFilter =>
@@ -148,12 +152,21 @@ const Home = () => {
         });
       })
       .filter((recipe) => tags.length === 0 || tags.some((tag) => recipe.tags.includes(tag)))
+      .filter((recipe) => !favoritesOnly() || favorites.isFavorite(recipe.url_slug))
       .sort(getSortComparator(sort));
   });
 
   const activeFilterCount = createMemo(
-    () => difficultyFilter().length + timeFilter().length + tagFilter().length,
+    () =>
+      difficultyFilter().length +
+      timeFilter().length +
+      tagFilter().length +
+      (favoritesOnly() ? 1 : 0),
   );
+
+  const handleFavoritesOnlyChange = (enabled: boolean) => {
+    setSearchParams({ ...searchParams, fav: enabled ? "1" : undefined, page: undefined });
+  };
 
   const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
     setSearchParams({
@@ -177,6 +190,7 @@ const Home = () => {
       difficulty: undefined,
       time: undefined,
       tag: undefined,
+      fav: undefined,
       page: undefined,
     });
   };
@@ -188,6 +202,7 @@ const Home = () => {
       difficulty: undefined,
       time: undefined,
       tag: undefined,
+      fav: undefined,
       page: undefined,
     });
   };
@@ -239,9 +254,11 @@ const Home = () => {
               difficultyFilter={difficultyFilter()}
               timeFilter={timeFilter()}
               tagFilter={tagFilter()}
+              favoritesOnly={favoritesOnly()}
               onDifficultyChange={handleDifficultyFilter}
               onTimeChange={handleTimeFilter}
               onTagChange={handleTagFilter}
+              onFavoritesOnlyChange={handleFavoritesOnlyChange}
             />
           </aside>
           <div class={styles.controls}>
@@ -292,9 +309,11 @@ const Home = () => {
         difficultyFilter={difficultyFilter()}
         timeFilter={timeFilter()}
         tagFilter={tagFilter()}
+        favoritesOnly={favoritesOnly()}
         onDifficultyChange={handleDifficultyFilter}
         onTimeChange={handleTimeFilter}
         onTagChange={handleTagFilter}
+        onFavoritesOnlyChange={handleFavoritesOnlyChange}
         onClearAll={handleClearAllFilters}
       />
     </main>

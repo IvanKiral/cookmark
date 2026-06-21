@@ -10,9 +10,11 @@ type FilterPanelProps = {
   difficultyFilter: DifficultyFilter;
   timeFilter: TimeFilter;
   tagFilter: TagFilter;
+  favoritesOnly: boolean;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
+  onFavoritesOnlyChange: (enabled: boolean) => void;
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>
@@ -61,6 +63,20 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
 
   return (
     <div class={styles.panel}>
+      <div class={styles.section}>
+        <h3 class={styles.sectionTitle}>{strings.favorites.sectionTitle}</h3>
+        <div class={styles.checkboxGroup}>
+          <label class={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              checked={props.favoritesOnly}
+              onChange={() => props.onFavoritesOnlyChange(!props.favoritesOnly)}
+              class={styles.checkbox}
+            />
+            <span class={styles.checkboxText}>{strings.favorites.only}</span>
+          </label>
+        </div>
+      </div>
       <FilterSection
         title={strings.filters.difficulty}
         options={difficultyOptions}

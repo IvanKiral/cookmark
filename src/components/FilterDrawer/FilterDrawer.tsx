@@ -13,15 +13,20 @@ type FilterDrawerProps = {
   difficultyFilter: DifficultyFilter;
   timeFilter: TimeFilter;
   tagFilter: TagFilter;
+  favoritesOnly: boolean;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
+  onFavoritesOnlyChange: (enabled: boolean) => void;
   onClearAll: () => void;
 };
 
 const FilterDrawer: Component<FilterDrawerProps> = (props) => {
   const hasAnyFilter = () =>
-    props.difficultyFilter.length > 0 || props.timeFilter.length > 0 || props.tagFilter.length > 0;
+    props.difficultyFilter.length > 0 ||
+    props.timeFilter.length > 0 ||
+    props.tagFilter.length > 0 ||
+    props.favoritesOnly;
 
   return (
     <Drawer open={props.open} onOpenChange={props.onOpenChange} side="left">
@@ -47,9 +52,11 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
               difficultyFilter={props.difficultyFilter}
               timeFilter={props.timeFilter}
               tagFilter={props.tagFilter}
+              favoritesOnly={props.favoritesOnly}
               onDifficultyChange={props.onDifficultyChange}
               onTimeChange={props.onTimeChange}
               onTagChange={props.onTagChange}
+              onFavoritesOnlyChange={props.onFavoritesOnlyChange}
             />
           </div>
 

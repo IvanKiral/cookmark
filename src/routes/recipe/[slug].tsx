@@ -1,5 +1,6 @@
 import { A, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Show } from "solid-js";
+import FavoriteButton from "~/components/FavoriteButton/FavoriteButton.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
 import { getRecipeDataBySlug } from "~/utils/loadRecipes.ts";
@@ -78,6 +79,7 @@ const RecipePage: Component = () => {
                 Cookmark
               </A>
               <div class={styles.navActions}>
+                <FavoriteButton slug={params.slug} name={recipeData().title} />
                 <A
                   href={backHref()}
                   class={styles.navButton}

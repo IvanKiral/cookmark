@@ -105,9 +105,10 @@ export default defineConfig({
     prerender: {
       routes: getPrerenderRoutes(basePath) as string[],
     },
-    // The media route streams from R2 at runtime — never prerender it.
+    // Runtime-only routes (R2 streaming, per-user favourites) — never prerender.
     routeRules: {
       "/media/**": { prerender: false },
+      "/api/**": { prerender: false },
     },
     // Merged into the wrangler config nitro generates at .output/server.
     // The ASSETS binding and `main` are added automatically by the preset.
@@ -118,10 +119,15 @@ export default defineConfig({
       wrangler: {
         name: "cookmark",
         compatibility_date: "2025-07-15",
+        // Per-user favourites trust the Access JWT, so the app must only be
+        // reachable through the Access-fronted custom domain — not workers.dev.
+        workers_dev: false,
         // Serve the app from the Access-protected custom domain.
         routes: [{ pattern: "cookmark.kiralivan.eu", custom_domain: true }],
         // Private bucket holding the recipe videos (videos/<slug>.mp4).
         r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
+        // Per-user favourite recipe slugs, keyed by Access email.
+        kv_namespaces: [{ binding: "FAVORITES", id: "9be88640af5546f5b2341287ae842757" }],
       },
     },
   },
