@@ -12,6 +12,14 @@ vi.mock("@solidjs/router", () => ({
   useLocation: () => ({ search: "" }),
 }));
 
+vi.mock("~/contexts/FavoritesContext.tsx", () => ({
+  useFavorites: () => ({
+    favorites: () => new Set<string>(),
+    isFavorite: () => false,
+    toggle: () => {},
+  }),
+}));
+
 describe("<RecipeListItem />", () => {
   it("renders recipe item with all props", () => {
     const { getByText } = render(() => (

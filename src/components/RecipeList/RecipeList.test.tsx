@@ -15,6 +15,14 @@ vi.mock("@solidjs/router", () => ({
   useLocation: () => ({ search: "" }),
 }));
 
+vi.mock("~/contexts/FavoritesContext.tsx", () => ({
+  useFavorites: () => ({
+    favorites: () => new Set<string>(),
+    isFavorite: () => false,
+    toggle: () => {},
+  }),
+}));
+
 describe("<RecipeList />", () => {
   beforeEach(() => {
     window.scrollTo = vi.fn();
