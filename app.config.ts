@@ -2,13 +2,20 @@ import { defineConfig } from "@solidjs/start/config";
 import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
 import { getPrerenderRoutes } from "./scripts/getPrerenderRoutes.ts";
+import { getVideoSlugs } from "./scripts/getVideoSlugs.ts";
 
 // Single source of truth for the deploy base path (trailing slash included).
 // GitHub Pages (project site) sets it to "/cookmark/"; Cloudflare Pages (root) uses "/".
 const basePath = process.env.VITE_BASE_URL ?? "/";
 
+// Baked into the bundle so recipe pages know which slugs have a video to stream.
+const videoSlugs = getVideoSlugs();
+
 export default defineConfig({
   vite: {
+    define: {
+      __VIDEO_SLUGS__: JSON.stringify(videoSlugs),
+    },
     plugins: [
       visualizer({
         filename: "bundle-report.html",
@@ -89,13 +96,33 @@ export default defineConfig({
     ],
   },
   server: {
-    // "github-pages" emits a fully static site (the prerendered output also
-    // serves as-is from Cloudflare Pages). Override with SERVER_PRESET when a
-    // host-specific preset is needed (e.g. "cloudflare-pages" once R2/Functions land).
-    preset: process.env.SERVER_PRESET ?? "github-pages",
+    // Default target is a Cloudflare Worker with Static Assets: it serves the
+    // prerendered site for free and runs dynamic routes (e.g. media streamed
+    // from R2). GitHub Pages builds pass SERVER_PRESET=github-pages for a pure
+    // static site (no server runtime).
+    preset: process.env.SERVER_PRESET ?? "cloudflare_module",
     baseURL: basePath,
     prerender: {
       routes: getPrerenderRoutes(basePath) as string[],
+    },
+    // The media route streams from R2 at runtime — never prerender it.
+    routeRules: {
+      "/media/**": { prerender: false },
+    },
+    // Merged into the wrangler config nitro generates at .output/server.
+    // The ASSETS binding and `main` are added automatically by the preset.
+    cloudflare: {
+      // Generate .output/server/wrangler.json (+ deploy redirect) and enable
+      // nodejs_compat so `wrangler deploy` works from the project root.
+      deployConfig: true,
+      wrangler: {
+        name: "cookmark",
+        compatibility_date: "2025-07-15",
+        // Serve the app from the Access-protected custom domain.
+        routes: [{ pattern: "cookmark.kiralivan.eu", custom_domain: true }],
+        // Private bucket holding the recipe videos (videos/<slug>.mp4).
+        r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
+      },
     },
   },
 });

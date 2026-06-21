@@ -1,5 +1,10 @@
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
 
+// Injected at build time (see app.config.ts) with the slugs that have a video.
+declare const __VIDEO_SLUGS__: ReadonlyArray<string>;
+
+const videoSlugs = new Set<string>(__VIDEO_SLUGS__);
+
 const FALLBACK_CREATED_AT = "1970-01-01T00:00:00.000Z";
 
 const recipeModules = import.meta.glob<RecipeData>("../../data/*.json", {
@@ -46,7 +51,11 @@ export const getRecipeDataById = (id: string): RecipeData | undefined => {
 export const getRecipeDataBySlug = (slug: string): RecipeData | undefined => {
   const recipeEntries = Object.entries(recipeModules);
   const entry = recipeEntries.find(([path]) => extractSlugFromPath(path) === slug);
-  return entry ? entry[1] : undefined;
+  if (!entry) {
+    return undefined;
+  }
+  // Point at the same-origin streaming route only when a video exists.
+  return videoSlugs.has(slug) ? { ...entry[1], video_url: `/media/${slug}` } : entry[1];
 };
 
 export const getRecipeIdBySlug = (slug: string): string | undefined => {

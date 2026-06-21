@@ -18,6 +18,7 @@ const RecipeVideo: Component<RecipeVideoProps> = (props) => (
         class={styles.video}
         src={props.src}
         controls
+        playsinline
         preload="metadata"
         aria-label={`Video for ${props.title}`}
       />
