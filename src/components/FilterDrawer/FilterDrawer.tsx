@@ -4,6 +4,7 @@ import type { DifficultyFilter } from "~/constants/difficultyOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter } from "~/constants/tagOptions.ts";
 import type { TimeFilter } from "~/constants/timeOptions.ts";
+import type { AuthorOption } from "~/utils/deriveAuthors.ts";
 import FilterPanel from "../FilterPanel/FilterPanel.jsx";
 import styles from "./FilterDrawer.module.css";
 
@@ -13,10 +14,13 @@ type FilterDrawerProps = {
   difficultyFilter: DifficultyFilter;
   timeFilter: TimeFilter;
   tagFilter: TagFilter;
+  authorFilter: ReadonlyArray<string>;
+  authorOptions: ReadonlyArray<AuthorOption>;
   favoritesOnly: boolean;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
+  onAuthorChange: (author: ReadonlyArray<string>) => void;
   onFavoritesOnlyChange: (enabled: boolean) => void;
   onClearAll: () => void;
 };
@@ -26,6 +30,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
     props.difficultyFilter.length > 0 ||
     props.timeFilter.length > 0 ||
     props.tagFilter.length > 0 ||
+    props.authorFilter.length > 0 ||
     props.favoritesOnly;
 
   return (
@@ -52,10 +57,13 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
               difficultyFilter={props.difficultyFilter}
               timeFilter={props.timeFilter}
               tagFilter={props.tagFilter}
+              authorFilter={props.authorFilter}
+              authorOptions={props.authorOptions}
               favoritesOnly={props.favoritesOnly}
               onDifficultyChange={props.onDifficultyChange}
               onTimeChange={props.onTimeChange}
               onTagChange={props.onTagChange}
+              onAuthorChange={props.onAuthorChange}
               onFavoritesOnlyChange={props.onFavoritesOnlyChange}
             />
           </div>

@@ -22,6 +22,7 @@ export type RecipeData = {
   difficulty: "easy" | "medium" | "hard" | null;
   cuisine: string | null;
   source_url: string | null;
+  author?: string;
   video_url?: string;
   created_at?: string;
 };
@@ -36,5 +37,6 @@ export type Recipe = {
   total_time: number;
   tags: ReadonlyArray<string>;
   ingredients: ReadonlyArray<string>;
+  author?: string;
   created_at: string;
 };

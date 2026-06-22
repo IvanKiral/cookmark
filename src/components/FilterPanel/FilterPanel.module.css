@@ -24,6 +24,52 @@
   gap: 0;
 }
 
+.scrollableGroup {
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+}
+
+.scrollableGroup::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollableGroup::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-300);
+  border-radius: 3px;
+}
+
+.scrollableGroup::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.searchInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-900);
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background-color: white;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-neutral-400);
+  box-shadow: 0 0 0 2px var(--color-neutral-200);
+}
+
+.noMatches {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-400);
+  padding: var(--space-2);
+}
+
 .checkboxLabel {
   display: flex;
   align-items: center;
