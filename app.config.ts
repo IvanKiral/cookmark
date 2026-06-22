@@ -128,6 +128,13 @@ export default defineConfig({
         r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
         // Per-user favourite recipe slugs, keyed by Access email.
         kv_namespaces: [{ binding: "FAVORITES", id: "9be88640af5546f5b2341287ae842757" }],
+        d1_databases: [
+          {
+            binding: "RECIPE_INBOX",
+            database_name: "cookmark-recipe-inbox",
+            database_id: "aa058d7c-4a35-4b14-9d67-5e799eff98ba",
+          },
+        ],
       },
     },
   },
