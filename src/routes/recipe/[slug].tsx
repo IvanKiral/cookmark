@@ -124,6 +124,14 @@ const RecipePage: Component = () => {
                   <span class={styles.metaLabel}>{strings.recipe.servings}</span>
                   <span class={styles.metaValue}>{formatServings(recipeData().servings)}</span>
                 </div>
+                <Show when={recipeData().author}>
+                  {(author) => (
+                    <div class={styles.metaItem}>
+                      <span class={styles.metaLabel}>{strings.recipe.author}</span>
+                      <span class={styles.metaValue}>@{author()}</span>
+                    </div>
+                  )}
+                </Show>
               </div>
 
               <Show when={recipeData().tags.length > 0 || recipeData().source_url}>

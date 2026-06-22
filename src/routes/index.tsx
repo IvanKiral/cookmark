@@ -17,6 +17,7 @@ import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
 import { useFavorites } from "~/contexts/FavoritesContext.tsx";
 import type { Recipe } from "~/types/Recipe.ts";
+import { buildAuthorOptions, deriveAuthors } from "~/utils/deriveAuthors.ts";
 import { loadRecipes } from "~/utils/loadRecipes.ts";
 import styles from "./index.module.css";
 
@@ -36,6 +37,8 @@ const serializeArrayParam = <T extends string>(values: ReadonlyArray<T>): string
 
 const Home = () => {
   const recipes: Recipe[] = loadRecipes();
+  const authorValues = deriveAuthors(recipes);
+  const authorOptions = buildAuthorOptions(recipes);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
   const favorites = useFavorites();
@@ -53,6 +56,10 @@ const Home = () => {
 
   const tagFilter = createMemo(
     (): TagFilter => parseArrayParam(searchParams.tag, tagValues as ReadonlyArray<TagValue>),
+  );
+
+  const authorFilter = createMemo(
+    (): ReadonlyArray<string> => parseArrayParam(searchParams.author, authorValues),
   );
 
   const sortBy = createMemo(() => {
@@ -78,6 +85,7 @@ const Home = () => {
           { name: "name", weight: 0.5 },
           { name: "ingredients", weight: 0.25 },
           { name: "tags", weight: 0.15 },
+          { name: "author", weight: 0.15 },
           { name: "description", weight: 0.1 },
         ],
         threshold: 0.3,
@@ -120,6 +128,7 @@ const Home = () => {
     const difficulties = difficultyFilter();
     const times = timeFilter();
     const tags = tagFilter();
+    const authors = authorFilter();
     const sort = sortBy();
 
     const baseRecipes =
@@ -152,6 +161,10 @@ const Home = () => {
         });
       })
       .filter((recipe) => tags.length === 0 || tags.some((tag) => recipe.tags.includes(tag)))
+      .filter(
+        (recipe) =>
+          authors.length === 0 || (recipe.author !== undefined && authors.includes(recipe.author)),
+      )
       .filter((recipe) => !favoritesOnly() || favorites.isFavorite(recipe.url_slug))
       .sort(getSortComparator(sort));
   });
@@ -161,6 +174,7 @@ const Home = () => {
       difficultyFilter().length +
       timeFilter().length +
       tagFilter().length +
+      authorFilter().length +
       (favoritesOnly() ? 1 : 0),
   );
 
@@ -184,12 +198,17 @@ const Home = () => {
     setSearchParams({ ...searchParams, tag: serializeArrayParam(tag), page: undefined });
   };
 
+  const handleAuthorFilter = (author: ReadonlyArray<string>) => {
+    setSearchParams({ ...searchParams, author: serializeArrayParam(author), page: undefined });
+  };
+
   const handleClearAllFilters = () => {
     setSearchParams({
       ...searchParams,
       difficulty: undefined,
       time: undefined,
       tag: undefined,
+      author: undefined,
       fav: undefined,
       page: undefined,
     });
@@ -202,6 +221,7 @@ const Home = () => {
       difficulty: undefined,
       time: undefined,
       tag: undefined,
+      author: undefined,
       fav: undefined,
       page: undefined,
     });
@@ -254,10 +274,13 @@ const Home = () => {
               difficultyFilter={difficultyFilter()}
               timeFilter={timeFilter()}
               tagFilter={tagFilter()}
+              authorFilter={authorFilter()}
+              authorOptions={authorOptions}
               favoritesOnly={favoritesOnly()}
               onDifficultyChange={handleDifficultyFilter}
               onTimeChange={handleTimeFilter}
               onTagChange={handleTagFilter}
+              onAuthorChange={handleAuthorFilter}
               onFavoritesOnlyChange={handleFavoritesOnlyChange}
             />
           </aside>
@@ -309,10 +332,13 @@ const Home = () => {
         difficultyFilter={difficultyFilter()}
         timeFilter={timeFilter()}
         tagFilter={tagFilter()}
+        authorFilter={authorFilter()}
+        authorOptions={authorOptions}
         favoritesOnly={favoritesOnly()}
         onDifficultyChange={handleDifficultyFilter}
         onTimeChange={handleTimeFilter}
         onTagChange={handleTagFilter}
+        onAuthorChange={handleAuthorFilter}
         onFavoritesOnlyChange={handleFavoritesOnlyChange}
         onClearAll={handleClearAllFilters}
       />

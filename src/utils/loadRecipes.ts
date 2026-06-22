@@ -34,6 +34,7 @@ const transformRecipeData = (data: RecipeData, filePath: string, index: number):
   total_time: data.total_time || 0,
   tags: data.tags || [],
   ingredients: (data.ingredients || []).map((ingredient) => ingredient.name),
+  author: data.author,
   created_at: data.created_at || FALLBACK_CREATED_AT,
 });
 
