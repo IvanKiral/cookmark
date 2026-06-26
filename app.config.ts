@@ -8,6 +8,10 @@ import { getVideoSlugs } from "./scripts/getVideoSlugs.ts";
 // GitHub Pages (project site) sets it to "/cookmark/"; Cloudflare Pages (root) uses "/".
 const basePath = process.env.VITE_BASE_URL ?? "/";
 
+// The static GitHub Pages build prerenders every recipe from the local bundle.
+// Cloudflare serves recipes dynamically from R2, so it renders on demand.
+const isStaticBuild = process.env.SERVER_PRESET === "github-pages";
+
 // Baked into the bundle so recipe pages know which slugs have a video to stream.
 const videoSlugs = getVideoSlugs();
 
@@ -101,9 +105,11 @@ export default defineConfig({
     // from R2). GitHub Pages builds pass SERVER_PRESET=github-pages for a pure
     // static site (no server runtime).
     preset: process.env.SERVER_PRESET ?? "cloudflare_module",
-    baseURL: basePath,
+    // A literal "/" here makes the server-function mount resolve to "//_server"
+    // (a protocol-relative URL), so only set baseURL for a real sub-path.
+    baseURL: basePath === "/" ? undefined : basePath,
     prerender: {
-      routes: getPrerenderRoutes(basePath) as string[],
+      routes: isStaticBuild ? (getPrerenderRoutes(basePath) as string[]) : [],
     },
     // Runtime-only routes (R2 streaming, per-user favourites) — never prerender.
     routeRules: {
@@ -133,6 +139,11 @@ export default defineConfig({
             binding: "RECIPE_INBOX",
             database_name: "cookmark-recipe-inbox",
             database_id: "aa058d7c-4a35-4b14-9d67-5e799eff98ba",
+          },
+          {
+            binding: "RECIPES",
+            database_name: "cookmark-recipes",
+            database_id: "05f0777c-5a1b-43d9-a148-6ee5ea95d42d",
           },
         ],
       },
