@@ -1,6 +1,6 @@
-import { useSearchParams } from "@solidjs/router";
+import { createAsync, useSearchParams } from "@solidjs/router";
 import Fuse from "fuse.js";
-import { createMemo, createSignal, Show } from "solid-js";
+import { createMemo, createSignal, Show, Suspense } from "solid-js";
 import FilterDrawer from "~/components/FilterDrawer/FilterDrawer.tsx";
 import FilterPanel from "~/components/FilterPanel/FilterPanel.tsx";
 import RecipeList from "~/components/RecipeList/RecipeList.tsx";
@@ -16,9 +16,9 @@ import { strings } from "~/constants/strings.ts";
 import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
 import { useFavorites } from "~/contexts/FavoritesContext.tsx";
+import { getRecipesList } from "~/lib/recipeQueries.ts";
 import type { Recipe } from "~/types/Recipe.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/utils/deriveAuthors.ts";
-import { loadRecipes } from "~/utils/loadRecipes.ts";
 import styles from "./index.module.css";
 
 const parseArrayParam = <T extends string>(
@@ -36,9 +36,10 @@ const serializeArrayParam = <T extends string>(values: ReadonlyArray<T>): string
   values.length > 0 ? values.join(",") : undefined;
 
 const Home = () => {
-  const recipes: Recipe[] = loadRecipes();
-  const authorValues = deriveAuthors(recipes);
-  const authorOptions = buildAuthorOptions(recipes);
+  const recipesResource = createAsync(() => getRecipesList());
+  const recipes = createMemo(() => recipesResource() ?? []);
+  const authorValues = createMemo(() => deriveAuthors(recipes()));
+  const authorOptions = createMemo(() => buildAuthorOptions(recipes()));
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
   const favorites = useFavorites();
@@ -59,7 +60,7 @@ const Home = () => {
   );
 
   const authorFilter = createMemo(
-    (): ReadonlyArray<string> => parseArrayParam(searchParams.author, authorValues),
+    (): ReadonlyArray<string> => parseArrayParam(searchParams.author, authorValues()),
   );
 
   const sortBy = createMemo(() => {
@@ -80,7 +81,7 @@ const Home = () => {
 
   const fuse = createMemo(
     () =>
-      new Fuse(recipes, {
+      new Fuse(recipes(), {
         keys: [
           { name: "name", weight: 0.5 },
           { name: "ingredients", weight: 0.25 },
@@ -136,7 +137,7 @@ const Home = () => {
         ? fuse()
             .search(query.trim())
             .map((result) => result.item)
-        : recipes;
+        : recipes();
 
     return baseRecipes
       .filter(
@@ -275,7 +276,7 @@ const Home = () => {
               timeFilter={timeFilter()}
               tagFilter={tagFilter()}
               authorFilter={authorFilter()}
-              authorOptions={authorOptions}
+              authorOptions={authorOptions()}
               favoritesOnly={favoritesOnly()}
               onDifficultyChange={handleDifficultyFilter}
               onTimeChange={handleTimeFilter}
@@ -308,7 +309,7 @@ const Home = () => {
             </Show>
             <div class={styles.searchWrapper}>
               <SearchBar
-                recipes={recipes}
+                recipes={recipes()}
                 searchQuery={(searchQuery() as string) || ""}
                 onSearchChange={handleSearchChange}
               />
@@ -316,12 +317,14 @@ const Home = () => {
             <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
           </div>
           <div class={styles.mainContent}>
-            <RecipeList
-              recipes={filteredRecipes()}
-              currentPage={currentPage()}
-              onPageChange={handlePageChange}
-              onResetAll={handleResetAll}
-            />
+            <Suspense>
+              <RecipeList
+                recipes={filteredRecipes()}
+                currentPage={currentPage()}
+                onPageChange={handlePageChange}
+                onResetAll={handleResetAll}
+              />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -333,7 +336,7 @@ const Home = () => {
         timeFilter={timeFilter()}
         tagFilter={tagFilter()}
         authorFilter={authorFilter()}
-        authorOptions={authorOptions}
+        authorOptions={authorOptions()}
         favoritesOnly={favoritesOnly()}
         onDifficultyChange={handleDifficultyFilter}
         onTimeChange={handleTimeFilter}

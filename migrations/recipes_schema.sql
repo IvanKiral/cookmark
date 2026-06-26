@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS recipes (
+  slug TEXT PRIMARY KEY,
+  data TEXT NOT NULL
+);
