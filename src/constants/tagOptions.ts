@@ -10,7 +10,11 @@ export const tagValues = [
   "Cake",
   "Vegetarian",
   "Eggs",
+  "Air-fryer",
+  "Slowcooker",
   "Meal-prep",
+  "Legumes",
+  "Soup",
 ] as const;
 
 export type TagValue = (typeof tagValues)[number];

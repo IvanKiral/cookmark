@@ -27,7 +27,11 @@ const tagLabels: Record<TagValue, string> = {
   Cake: strings.tags.cake,
   Vegetarian: strings.tags.vegetarian,
   Eggs: strings.tags.eggs,
+  "Air-fryer": strings.tags.airFryer,
+  Slowcooker: strings.tags.slowcooker,
   "Meal-prep": strings.tags.mealPrep,
+  Legumes: strings.tags.legumes,
+  Soup: strings.tags.soup,
 };
 
 export const difficultyOptions = difficultyValues.map((value) => ({
@@ -51,11 +55,15 @@ const buildTagOptions = (values: ReadonlyArray<TagValue>) =>
 export const tagGroups = [
   {
     label: strings.filters.protein,
-    options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs"]),
+    options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs", "Legumes"]),
   },
   {
     label: strings.filters.type,
-    options: buildTagOptions(["Dessert", "Cake", "Meal-prep"]),
+    options: buildTagOptions(["Soup", "Dessert", "Cake", "Meal-prep"]),
+  },
+  {
+    label: strings.filters.method,
+    options: buildTagOptions(["Air-fryer", "Slowcooker"]),
   },
   {
     label: strings.filters.diet,
