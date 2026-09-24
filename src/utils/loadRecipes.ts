@@ -8,7 +8,7 @@ const videoSlugs = new Set<string>(__VIDEO_SLUGS__);
 const FALLBACK_CREATED_AT = "1970-01-01T00:00:00.000Z";
 
 // Local bundle of recipes, used as a fallback when the R2 binding is absent
-// (e.g. `npm run dev` and static prerender builds).
+// (e.g. `pnpm dev` and static prerender builds).
 const recipeModules = import.meta.glob<RecipeData>("../../data/*.json", {
   eager: true,
   import: "default",

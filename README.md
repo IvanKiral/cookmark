@@ -16,7 +16,7 @@ A modern, responsive recipe book web application built with SolidJS/SolidStart.
 
 ### Prerequisites
 
-- Node.js 22+ and npm installed on your system
+- Node.js 22+ and pnpm 12+ installed on your system (version pinned in `package.json` `packageManager`)
 
 ### Development
 
@@ -28,12 +28,12 @@ cd cookmark
 
 2. Install dependencies:
 ```bash
-npm ci
+pnpm install --frozen-lockfile
 ```
 
 3. Start the development server:
 ```bash
-npm run dev 
+pnpm dev
 ```
 
 4. Open your browser and navigate to `http://localhost:3000/cookmark`
@@ -43,7 +43,7 @@ npm run dev
 Build the static site for GitHub Pages deployment:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The built files will be in the `.output` directory, ready for deployment.
@@ -53,9 +53,9 @@ The built files will be in the `.output` directory, ready for deployment.
 Want to create your own recipe book? Use degit to scaffold a new project from this template:
 
 ```bash
-npx degit yourusername/cookmark my-recipe-book
+pnpm dlx degit yourusername/cookmark my-recipe-book
 cd my-recipe-book
-npm install
+pnpm install
 ```
 
 ## 📝 Adding Recipes

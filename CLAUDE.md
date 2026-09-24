@@ -10,19 +10,19 @@ Cookmark is a recipe book web application built with SolidJS/SolidStart. It feat
 
 ### Development
 ```bash
-npm run dev        # Start dev server (http://localhost:3000)
-npm run dev:sk     # Start dev server with Slovak locale
-npm run build      # Build for production (all locales)
+pnpm dev          # Start dev server (http://localhost:3000)
+pnpm dev:sk       # Start dev server with Slovak locale
+pnpm build        # Build for production (all locales)
 ```
 
 ### Testing & Quality
 ```bash
-npm run test       # Run all tests
-npm run test:ui    # Run tests with UI
-npm run test:watch # Run tests in watch mode
-npm run lint       # Run Biome linter/formatter
-npm run lint:fix   # Auto-fix linting issues
-npm run typecheck  # Run TypeScript type checking
+pnpm test         # Run all tests
+pnpm test:ui      # Run tests with UI
+pnpm test:watch   # Run tests in watch mode
+pnpm lint         # Run Biome linter/formatter
+pnpm lint:fix     # Auto-fix linting issues
+pnpm typecheck    # Run TypeScript type checking
 ```
 
 ## Architecture
@@ -71,8 +71,8 @@ npm run typecheck  # Run TypeScript type checking
 **IMPORTANT: After completing any coding task, you MUST run the following command to ensure code quality:**
 
 ```bash
-npm run biome:check:fix     # Fix formatting and linting issues automatically
-npm run typecheck
+pnpm biome:check:fix       # Fix formatting and linting issues automatically
+pnpm typecheck
 ```
 
 Only mark tasks as complete after these checks pass successfully.
