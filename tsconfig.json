@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "types": ["vinxi/types/client", "vitest/globals", "@testing-library/jest-dom"],
+    "types": ["vinxi/types/client", "vitest/globals", "@testing-library/jest-dom/vitest"],
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"]

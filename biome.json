@@ -11,6 +11,7 @@
       "!.wrangler",
       "!.claude",
       "!data",
+      "!public",
       "!bundle-report.html"
     ]
   },
