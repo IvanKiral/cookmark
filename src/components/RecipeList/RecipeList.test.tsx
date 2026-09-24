@@ -35,6 +35,7 @@ describe("<RecipeList />", () => {
 
   const defaultProps = {
     currentPage: 1,
+    viewMode: "list" as const,
     onPageChange: vi.fn(),
   };
 
@@ -80,7 +81,12 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
     ));
 
     const nextButton = screen.getByLabelText("Next");
@@ -105,7 +111,12 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <RecipeList recipes={mockRecipes} currentPage={2} onPageChange={mockOnPageChange} />
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={2}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
     ));
 
     expect(screen.queryByText("Recipe 1")).not.toBeInTheDocument();
@@ -150,7 +161,12 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     const { unmount } = render(() => (
-      <RecipeList recipes={mockRecipes1} currentPage={1} onPageChange={mockOnPageChange} />
+      <RecipeList
+        recipes={mockRecipes1}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
     ));
 
     expect(screen.getByText("Recipe 1")).toBeInTheDocument();
@@ -173,12 +189,40 @@ describe("<RecipeList />", () => {
     }));
 
     render(() => (
-      <RecipeList recipes={mockRecipes2} currentPage={1} onPageChange={mockOnPageChange} />
+      <RecipeList
+        recipes={mockRecipes2}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
     ));
 
     expect(screen.getByText("New Recipe 10")).toBeInTheDocument();
     expect(screen.getByText("New Recipe 24")).toBeInTheDocument();
     expect(screen.queryByText("New Recipe 25")).not.toBeInTheDocument();
+  });
+
+  it("renders recipe thumbnails and hides column header in card view", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 3 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const { container } = render(() => (
+      <RecipeList recipes={mockRecipes} currentPage={1} viewMode="card" onPageChange={vi.fn()} />
+    ));
+
+    const firstImage = container.querySelector("img");
+    expect(firstImage).toHaveAttribute("src", "/thumbnails/recipe_1");
+    expect(screen.queryByText("Recipe Name")).not.toBeInTheDocument();
   });
 
   it("renders empty list when no recipes provided", () => {
@@ -223,7 +267,12 @@ describe("<RecipeList />", () => {
 
     const mockOnPageChange = vi.fn();
     render(() => (
-      <RecipeList recipes={mockRecipes} currentPage={1} onPageChange={mockOnPageChange} />
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
     ));
 
     const nextButton = screen.getByLabelText("Next");
