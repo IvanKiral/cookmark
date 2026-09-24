@@ -26,7 +26,12 @@
   background-color: var(--color-neutral-100);
 }
 
+/* Absolutely positioned so the image never sizes the well: aspect-ratio is
+   only a preferred size, and an in-flow image taller than 3:4 (a 9:16 reel
+   frame) would stretch the card. */
 .image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   /* cover crops to fill the 3:4 well (like Instagram's saved-reels grid). */
@@ -35,6 +40,8 @@
 }
 
 .placeholder {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
