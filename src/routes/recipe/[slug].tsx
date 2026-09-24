@@ -76,18 +76,20 @@ const RecipePage: Component = () => {
           <div class={styles.page}>
             <nav class={styles.nav}>
               <div class={styles.navInner}>
-                <A href="/" class={styles.logo}>
-                  Cookmark
-                </A>
-                <div class={styles.navActions}>
-                  <FavoriteButton slug={params.slug} name={recipeData().title} />
+                <div class={styles.navLeading}>
                   <A
                     href={backHref()}
-                    class={styles.navButton}
+                    class={`${styles.navButton} ${styles.closeButton}`}
                     aria-label={strings.recipe.backToList}
                   >
                     <span class="material-symbols-outlined">close</span>
                   </A>
+                  <A href="/" class={styles.logo}>
+                    Cookmark
+                  </A>
+                </div>
+                <div class={styles.navActions}>
+                  <FavoriteButton slug={params.slug} name={recipeData().title} />
                 </div>
               </div>
             </nav>

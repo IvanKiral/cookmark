@@ -33,6 +33,12 @@
   text-decoration: none;
 }
 
+.navLeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .navActions {
   display: flex;
   align-items: center;
@@ -50,6 +56,12 @@
   transition:
     background-color 0.2s,
     color 0.2s;
+}
+
+.closeButton {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  margin-left: calc(-1 * var(--space-2));
 }
 
 .navButton:hover {

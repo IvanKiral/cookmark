@@ -152,6 +152,16 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
           </label>
         </div>
       </div>
+      <For each={tagGroups}>
+        {(group) => (
+          <FilterSection
+            title={group.label}
+            options={group.options}
+            selected={props.tagFilter}
+            onToggle={handleTagToggle}
+          />
+        )}
+      </For>
       <Show when={props.authorOptions.length > 0}>
         <SearchableFilterSection
           title={strings.filters.author}
@@ -174,16 +184,6 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
         selected={props.timeFilter}
         onToggle={handleTimeToggle}
       />
-      <For each={tagGroups}>
-        {(group) => (
-          <FilterSection
-            title={group.label}
-            options={group.options}
-            selected={props.tagFilter}
-            onToggle={handleTagToggle}
-          />
-        )}
-      </For>
     </div>
   );
 };

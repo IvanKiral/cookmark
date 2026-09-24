@@ -54,11 +54,11 @@ export const tagGroups = [
     options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs"]),
   },
   {
-    label: strings.filters.diet,
-    options: buildTagOptions(["Vegan", "Vegetarian", "Lactose-free", "Low-Sugar"]),
-  },
-  {
     label: strings.filters.type,
     options: buildTagOptions(["Dessert", "Cake", "Meal-prep"]),
+  },
+  {
+    label: strings.filters.diet,
+    options: buildTagOptions(["Vegan", "Vegetarian", "Lactose-free", "Low-Sugar"]),
   },
 ] as const;
