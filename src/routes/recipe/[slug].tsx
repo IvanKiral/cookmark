@@ -1,9 +1,11 @@
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
-import { type Component, For, Show, Suspense } from "solid-js";
+import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
 import FavoriteButton from "~/components/FavoriteButton/FavoriteButton.tsx";
+import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
 import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
+import { getSourceImageUrl } from "~/utils/recipeImage.ts";
 import styles from "./[slug].module.css";
 
 type RecipeNavState = {
@@ -199,9 +201,14 @@ const RecipePage: Component = () => {
                 </section>
               </div>
 
-              <Show when={recipeData().video_url}>
-                {(videoUrl) => <RecipeVideo src={videoUrl()} title={recipeData().title} />}
-              </Show>
+              <Switch>
+                <Match when={recipeData().video_url}>
+                  {(videoUrl) => <RecipeVideo src={videoUrl()} title={recipeData().title} />}
+                </Match>
+                <Match when={getSourceImageUrl(recipeData())}>
+                  {(imageUrl) => <RecipeImage src={imageUrl()} title={recipeData().title} />}
+                </Match>
+              </Switch>
             </main>
           </div>
         )}

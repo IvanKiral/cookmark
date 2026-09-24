@@ -14,6 +14,7 @@ const mockRecipes: Recipe[] = [
     tags: ["chicken", "herbs"],
     ingredients: [],
     description: "",
+    image_url: "/thumbnails/test",
     created_at: "2024-01-01T00:00:00.000Z",
   },
   {
@@ -26,6 +27,7 @@ const mockRecipes: Recipe[] = [
     tags: ["quinoa", "salad"],
     ingredients: [],
     description: "",
+    image_url: "/thumbnails/test",
     created_at: "2024-01-02T00:00:00.000Z",
   },
   {
@@ -38,6 +40,7 @@ const mockRecipes: Recipe[] = [
     tags: ["chicken", "salad"],
     ingredients: [],
     description: "",
+    image_url: "/thumbnails/test",
     created_at: "2024-01-03T00:00:00.000Z",
   },
 ];

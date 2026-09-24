@@ -178,6 +178,9 @@ importers:
       fuse.js:
         specifier: ^7.5.0
         version: 7.5.0
+      photoswipe:
+        specifier: 5.4.4
+        version: 5.4.4
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.5.14
@@ -3616,6 +3619,10 @@ packages:
 
   perfect-freehand@1.2.3:
     resolution: {integrity: sha512-bHZSfqDHGNlPpgH2yxXgPHlQSPpEbo+qg7li0M78J9vNAi2yjwLeA4x79BEQhX44lEWpCLSFCeRZwpw0niiXPA==}
+
+  photoswipe@5.4.4:
+    resolution: {integrity: sha512-WNFHoKrkZNnvFFhbHL93WDkW3ifwVOXSW3w1UuZZelSmgXpIGiZSNlZJq37rR8YejqME2rHs9EhH9ZvlvFH2NA==}
+    engines: {node: '>= 0.12.0'}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -8728,6 +8735,8 @@ snapshots:
   perfect-debounce@2.1.0: {}
 
   perfect-freehand@1.2.3: {}
+
+  photoswipe@5.4.4: {}
 
   picocolors@1.1.1: {}
 

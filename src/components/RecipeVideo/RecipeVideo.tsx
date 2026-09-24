@@ -1,4 +1,6 @@
 import type { Component } from "solid-js";
+import RecipeMediaSection from "~/components/RecipeMediaSection/RecipeMediaSection.tsx";
+import { strings } from "~/constants/strings.ts";
 import styles from "./RecipeVideo.module.css";
 
 type RecipeVideoProps = {
@@ -7,11 +9,7 @@ type RecipeVideoProps = {
 };
 
 const RecipeVideo: Component<RecipeVideoProps> = (props) => (
-  <div class={styles.wrapper}>
-    <div class={styles.header}>
-      <span class={styles.headerTitle}>Video Tutorial</span>
-      <div class={styles.headerLine} />
-    </div>
+  <RecipeMediaSection title={strings.recipe.videoTutorial}>
     <div class={styles.videoContainer}>
       {/* biome-ignore lint/a11y/useMediaCaption: captions not always available for recipe videos */}
       <video
@@ -23,7 +21,7 @@ const RecipeVideo: Component<RecipeVideoProps> = (props) => (
         aria-label={`Video for ${props.title}`}
       />
     </div>
-  </div>
+  </RecipeMediaSection>
 );
 
 export default RecipeVideo;

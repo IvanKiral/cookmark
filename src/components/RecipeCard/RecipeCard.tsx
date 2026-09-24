@@ -6,6 +6,7 @@ import styles from "./RecipeCard.module.css";
 type RecipeCardProps = {
   urlSlug: string;
   name: string;
+  imageUrl: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
 };
@@ -42,7 +43,7 @@ const RecipeCard: Component<RecipeCardProps> = (props) => {
           <img
             ref={imageRef}
             class={styles.image}
-            src={`/thumbnails/${props.urlSlug}`}
+            src={props.imageUrl}
             alt={props.name}
             loading="lazy"
             onError={() => setHasImageError(true)}

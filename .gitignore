@@ -30,6 +30,7 @@ bundle-report.html
 
 # local media source (uploaded to R2, not committed)
 videos/
+/recipe-images/
 
 # local recipe data (sourced from the data branch / R2, not committed)
 data/

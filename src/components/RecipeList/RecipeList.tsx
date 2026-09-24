@@ -81,6 +81,7 @@ const RecipeList: Component<RecipeListProps> = (props) => {
               <RecipeCard
                 urlSlug={recipe.url_slug}
                 name={recipe.name}
+                imageUrl={recipe.image_url}
                 difficulty={recipe.difficulty}
                 time={recipe.time}
               />

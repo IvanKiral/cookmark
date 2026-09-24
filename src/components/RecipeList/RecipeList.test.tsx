@@ -50,6 +50,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -76,6 +77,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -106,6 +108,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -135,6 +138,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -156,6 +160,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -185,6 +190,7 @@ describe("<RecipeList />", () => {
       tags: ["new"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -213,6 +219,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: `/thumbnails/recipe_${i + 1}`,
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 
@@ -262,6 +269,7 @@ describe("<RecipeList />", () => {
       tags: ["test"],
       ingredients: [],
       description: "",
+      image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
     }));
 

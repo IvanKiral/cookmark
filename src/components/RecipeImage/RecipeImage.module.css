@@ -1,0 +1,54 @@
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.trigger {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-neutral-900);
+  outline-offset: 4px;
+  border-radius: var(--radius-xl);
+}
+
+/* Same sizing rules as the video player: keep the photo's own aspect ratio,
+   capped so tall scans don't dominate the page. */
+.image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(80vh, 640px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-neutral-100);
+  background-color: var(--color-neutral-100);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.hint {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background-color: rgb(0 0 0 / 0.6);
+  color: white;
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+
+.hint :global(.material-symbols-outlined) {
+  font-size: 18px;
+}

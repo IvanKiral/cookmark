@@ -1,4 +1,5 @@
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
+import { getRecipeImageUrl } from "~/utils/recipeImage.ts";
 
 // Injected at build time (see app.config.ts) with the slugs that have a video.
 declare const __VIDEO_SLUGS__: ReadonlyArray<string>;
@@ -37,6 +38,7 @@ export const transformRecipeData = (data: RecipeData, slug: string, index: numbe
   tags: data.tags || [],
   ingredients: (data.ingredients || []).map((ingredient) => ingredient.name),
   author: data.author,
+  image_url: getRecipeImageUrl(data, slug),
   created_at: data.created_at || FALLBACK_CREATED_AT,
 });
 

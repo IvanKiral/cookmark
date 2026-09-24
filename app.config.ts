@@ -115,6 +115,7 @@ export default defineConfig({
     routeRules: {
       "/media/**": { prerender: false },
       "/thumbnails/**": { prerender: false },
+      "/recipe-images/**": { prerender: false },
       "/api/**": { prerender: false },
     },
     // Merged into the wrangler config nitro generates at .output/server.
@@ -131,8 +132,8 @@ export default defineConfig({
         workers_dev: false,
         // Serve the app from the Access-protected custom domain.
         routes: [{ pattern: "cookmark.kiralivan.eu", custom_domain: true }],
-        // Private bucket holding recipe videos (videos/<slug>.mp4) and
-        // thumbnails (thumbnails/<slug>.jpg).
+        // Private bucket holding recipe videos (videos/<slug>.mp4), thumbnails
+        // (thumbnails/<slug>.jpg) and image recipe sources (recipe-images/<slug>.<ext>).
         r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
         // Per-user favourite recipe slugs, keyed by Access email.
         kv_namespaces: [{ binding: "FAVORITES", id: "9be88640af5546f5b2341287ae842757" }],
