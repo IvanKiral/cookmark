@@ -89,6 +89,9 @@ export const strings = {
     name: "Recipe Name",
     difficulty: "Difficulty",
     time: "Time",
+    viewLabel: "Recipe view",
+    cardView: "Card view",
+    listView: "List view",
   },
   pagination: {
     previous: "Previous",

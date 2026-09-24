@@ -6,6 +6,7 @@ import FilterPanel from "~/components/FilterPanel/FilterPanel.tsx";
 import RecipeList from "~/components/RecipeList/RecipeList.tsx";
 import SearchBar from "~/components/SearchBar/SearchBar.tsx";
 import SortDropdown from "~/components/SortDropdown/SortDropdown.tsx";
+import ViewToggle, { type ViewMode } from "~/components/ViewToggle/ViewToggle.tsx";
 import {
   type DifficultyFilter,
   type DifficultyValue,
@@ -42,6 +43,8 @@ const Home = () => {
   const authorOptions = createMemo(() => buildAuthorOptions(recipes()));
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
+  // View mode is intentionally ephemeral: every page load starts in card view.
+  const [viewMode, setViewMode] = createSignal<ViewMode>("card");
   const favorites = useFavorites();
 
   const favoritesOnly = createMemo(() => searchParams.fav === "1");
@@ -315,12 +318,14 @@ const Home = () => {
               />
             </div>
             <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
+            <ViewToggle value={viewMode()} onChange={setViewMode} />
           </div>
           <div class={styles.mainContent}>
             <Suspense>
               <RecipeList
                 recipes={filteredRecipes()}
                 currentPage={currentPage()}
+                viewMode={viewMode()}
                 onPageChange={handlePageChange}
                 onResetAll={handleResetAll}
               />

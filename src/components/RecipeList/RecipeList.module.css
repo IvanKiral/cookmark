@@ -37,6 +37,32 @@
   min-height: 400px;
 }
 
+/* Explicit column counts (not auto-fill) so the layout is predictable: two
+   cards per row on mobile, three on tablet, four on desktop. */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  min-height: 400px;
+  /* Keep cards at their natural height: without this a single row would
+     stretch to fill min-height and the lone card would grow vertically. */
+  align-content: start;
+  align-items: start;
+}
+
+@media (min-width: 600px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .cardGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .emptyState {
   display: flex;
   flex-direction: column;
