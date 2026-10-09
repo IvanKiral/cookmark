@@ -10,6 +10,9 @@ export type FormControlProps = {
 
 type FormFieldProps = {
   label: string;
+  // For rows of related inputs where a column header or placeholder already
+  // shows what each one is. Screen readers still get the label.
+  isLabelHidden?: boolean;
   hint?: string;
   error?: string;
   children: (control: FormControlProps) => JSX.Element;
@@ -34,7 +37,7 @@ const FormField: Component<FormFieldProps> = (props) => {
 
   return (
     <div class={styles.field}>
-      <label for={id} class={styles.label}>
+      <label for={id} class={props.isLabelHidden ? styles.visuallyHidden : styles.label}>
         {props.label}
       </label>
       {props.children(control)}

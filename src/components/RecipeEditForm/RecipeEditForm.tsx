@@ -1,5 +1,5 @@
 import { type BeforeLeaveEventArgs, revalidate, useBeforeLeave } from "@solidjs/router";
-import { type Component, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { type Component, createSignal, Index, onCleanup, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import ConfirmDialog from "~/components/ConfirmDialog/ConfirmDialog.tsx";
 import NumberField from "~/components/NumberField/NumberField.tsx";
@@ -11,14 +11,19 @@ import { strings } from "~/constants/strings.ts";
 import type { TagValue } from "~/constants/tagOptions.ts";
 import { getRecipeBySlug, getRecipesList } from "~/lib/recipeQueries.ts";
 import buttonStyles from "~/styles/button.module.css";
+import type { Ingredient } from "~/types/Recipe.ts";
 import {
+  MAX_AMOUNT_LENGTH,
   MAX_DESCRIPTION_LENGTH,
+  MAX_INGREDIENT_LENGTH,
   MAX_MINUTES,
+  MAX_SECTION_NAME_LENGTH,
+  MAX_STEP_LENGTH,
   MAX_TITLE_LENGTH,
+  MAX_UNIT_LENGTH,
   parseRecipeEdit,
   type RecipeEdit,
   type RecipeEditErrors,
-  type RecipeEditField,
 } from "~/utils/recipeEdit.ts";
 import styles from "./RecipeEditForm.module.css";
 
@@ -36,12 +41,10 @@ const toComparable = (edit: RecipeEdit): string =>
   JSON.stringify({ ...edit, tags: [...edit.tags].sort() });
 
 const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
-  // The form starts from the initial values once; later prop changes (e.g. a
-  // revalidated recipe) don't overwrite what the admin is typing.
-  const [form, setForm] = createStore<RecipeEdit>({
-    ...props.initial,
-    tags: [...props.initial.tags],
-  });
+  // The form starts from a deep copy of the initial values, once: the store
+  // mutates what it wraps, and later prop changes (e.g. a revalidated recipe)
+  // shouldn't overwrite what the admin is typing.
+  const [form, setForm] = createStore<RecipeEdit>(structuredClone(props.initial));
   const [errors, setErrors] = createSignal<RecipeEditErrors>({});
   const [isSaving, setIsSaving] = createSignal(false);
   const [isSaved, setIsSaved] = createSignal(false);
@@ -51,9 +54,30 @@ const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
   const hasUnsavedChanges = (): boolean =>
     !isSaved() && toComparable(form) !== toComparable(props.initial);
 
-  const updateField = <K extends RecipeEditField>(field: K, value: RecipeEdit[K]): void => {
+  const clearError = (path: string): void => {
+    setErrors((current) => ({ ...current, [path]: undefined }));
+  };
+
+  const updateField = <K extends keyof RecipeEdit>(field: K, value: RecipeEdit[K]): void => {
     setForm({ [field]: value } as Partial<RecipeEdit>);
-    setErrors((current) => ({ ...current, [field]: undefined }));
+    clearError(field);
+  };
+
+  const updateIngredient = (index: number, field: keyof Ingredient, value: string): void => {
+    setForm("ingredients", index, field, value);
+    clearError(`ingredients.${index}.${field}`);
+  };
+
+  const updateSectionName = (index: number, value: string): void => {
+    setForm("instructions", index, "name", value);
+    clearError(`instructions.${index}.name`);
+  };
+
+  const updateStep = (sectionIndex: number, stepIndex: number, value: string): void => {
+    setForm("instructions", sectionIndex, "steps", (steps) =>
+      steps.map((step, index) => (index === stepIndex ? value : step)),
+    );
+    clearError(`instructions.${sectionIndex}.steps.${stepIndex}`);
   };
 
   const handleTagToggle = (tag: TagValue): void => {
@@ -171,6 +195,85 @@ const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
         onToggle={handleTagToggle}
         error={errors().tags}
       />
+
+      <Show when={form.ingredients.length > 0}>
+        <section class={styles.group}>
+          <h2 class={styles.groupTitle}>{text.ingredients}</h2>
+          <div class={styles.ingredientHeader} aria-hidden="true">
+            <span>{text.amount}</span>
+            <span>{text.unit}</span>
+            <span>{text.ingredient}</span>
+          </div>
+          {/* Index, not For: rows stay mounted while their text changes, so inputs keep focus. */}
+          <Index each={form.ingredients}>
+            {(ingredient, index) => (
+              <div class={styles.ingredientRow}>
+                <TextField
+                  label={text.ingredientAmount(index + 1)}
+                  isLabelHidden
+                  placeholder={text.amount}
+                  value={String(ingredient().amount ?? "")}
+                  onInput={(value) => updateIngredient(index, "amount", value)}
+                  error={errors()[`ingredients.${index}.amount`]}
+                  maxLength={MAX_AMOUNT_LENGTH}
+                />
+                <TextField
+                  label={text.ingredientUnit(index + 1)}
+                  isLabelHidden
+                  placeholder={text.unit}
+                  value={ingredient().unit ?? ""}
+                  onInput={(value) => updateIngredient(index, "unit", value)}
+                  error={errors()[`ingredients.${index}.unit`]}
+                  maxLength={MAX_UNIT_LENGTH}
+                />
+                <TextField
+                  label={text.ingredientName(index + 1)}
+                  isLabelHidden
+                  placeholder={text.ingredient}
+                  value={ingredient().name}
+                  onInput={(value) => updateIngredient(index, "name", value)}
+                  error={errors()[`ingredients.${index}.name`]}
+                  maxLength={MAX_INGREDIENT_LENGTH}
+                />
+              </div>
+            )}
+          </Index>
+        </section>
+      </Show>
+
+      <Show when={form.instructions.length > 0}>
+        <section class={styles.group}>
+          <h2 class={styles.groupTitle}>{text.instructions}</h2>
+          <Index each={form.instructions}>
+            {(section, sectionIndex) => (
+              <div class={styles.instructionSection}>
+                {/* The recipe page only shows section names when there are several. */}
+                <Show when={form.instructions.length > 1}>
+                  <TextField
+                    label={text.sectionName(sectionIndex + 1)}
+                    value={section().name}
+                    onInput={(value) => updateSectionName(sectionIndex, value)}
+                    error={errors()[`instructions.${sectionIndex}.name`]}
+                    maxLength={MAX_SECTION_NAME_LENGTH}
+                  />
+                </Show>
+                <Index each={section().steps}>
+                  {(step, stepIndex) => (
+                    <TextArea
+                      label={text.step(stepIndex + 1)}
+                      value={step()}
+                      onInput={(value) => updateStep(sectionIndex, stepIndex, value)}
+                      error={errors()[`instructions.${sectionIndex}.steps.${stepIndex}`]}
+                      maxLength={MAX_STEP_LENGTH}
+                      rows={3}
+                    />
+                  )}
+                </Index>
+              </div>
+            )}
+          </Index>
+        </section>
+      </Show>
 
       <Show when={hasSaveFailed()}>
         <p role="alert" class={styles.saveError}>

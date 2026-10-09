@@ -30,3 +30,71 @@
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-neutral-200);
 }
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.groupTitle {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-family-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--color-neutral-900);
+}
+
+/* Phones: amount and unit side by side, the ingredient on its own line. */
+.ingredientRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+
+.ingredientRow > :last-child {
+  grid-column: 1 / -1;
+}
+
+.ingredientHeader {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .ingredientRow,
+  .ingredientHeader {
+    grid-template-columns: 6rem 6rem 1fr;
+  }
+
+  .ingredientRow {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .ingredientRow > :last-child {
+    grid-column: auto;
+  }
+
+  .ingredientHeader {
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-neutral-500);
+  }
+}
+
+.instructionSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.instructionSection + .instructionSection {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-neutral-200);
+}

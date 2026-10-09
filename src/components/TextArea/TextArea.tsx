@@ -4,6 +4,7 @@ import styles from "~/styles/formField.module.css";
 
 type TextAreaProps = {
   label: string;
+  isLabelHidden?: boolean;
   value: string;
   onInput: (value: string) => void;
   hint?: string;
@@ -13,7 +14,12 @@ type TextAreaProps = {
 };
 
 const TextArea: Component<TextAreaProps> = (props) => (
-  <FormField label={props.label} hint={props.hint} error={props.error}>
+  <FormField
+    label={props.label}
+    isLabelHidden={props.isLabelHidden}
+    hint={props.hint}
+    error={props.error}
+  >
     {(control) => (
       <textarea
         {...control}

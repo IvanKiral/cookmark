@@ -9,6 +9,7 @@ import { strings } from "~/constants/strings.ts";
 import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
 import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
 import iconButtonStyles from "~/styles/iconToggleButton.module.css";
+import type { Ingredient } from "~/types/Recipe.ts";
 import { getSourceImageUrl } from "~/utils/recipeImage.ts";
 import styles from "./index.module.css";
 
@@ -41,11 +42,7 @@ const RecipePage: Component = () => {
     return `${servings} servings`;
   };
 
-  const formatIngredient = (ingredient: {
-    name: string;
-    amount: string | null;
-    unit: string | null;
-  }): string => {
+  const formatIngredient = (ingredient: Ingredient): string => {
     if (ingredient.amount && ingredient.unit) {
       return `${ingredient.amount} ${ingredient.unit} ${ingredient.name}`;
     }

@@ -27,6 +27,8 @@ const edit: RecipeEdit = {
   cook_time: 20,
   total_time: 25,
   tags: ["Soup", "Vegan"],
+  ingredients: [{ name: "Water", amount: 1.5, unit: "l" }],
+  instructions: [{ name: "Main", steps: ["Boil well"] }],
 };
 
 const createDb = (): TestD1 => {

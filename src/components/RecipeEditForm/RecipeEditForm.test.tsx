@@ -30,6 +30,11 @@ const initial: RecipeEdit = {
   cook_time: 20,
   total_time: 30,
   tags: ["Soup"],
+  ingredients: [
+    { name: "Water", amount: "1", unit: "l" },
+    { name: "Salt", amount: "", unit: "" },
+  ],
+  instructions: [{ name: "Main", steps: ["Boil", "Serve"] }],
 };
 
 const createLeaveEvent = () => {
@@ -88,6 +93,10 @@ describe("<RecipeEditForm />", () => {
         cook_time: 25,
         total_time: null,
         tags: ["Soup", "Vegan"],
+        ingredients: [
+          { name: "Water", amount: 1, unit: "l" },
+          { name: "Salt", amount: null, unit: null },
+        ],
       }),
     });
     expect(router.revalidate).toHaveBeenCalledWith(["recipes-list", "recipe-by-slug"]);
@@ -186,5 +195,43 @@ describe("<RecipeEditForm />", () => {
     router.beforeLeave?.(event);
 
     expect(event.preventDefault).not.toHaveBeenCalled();
+  });
+
+  it("edits existing ingredients and steps and sends them cleaned up", async () => {
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    const { onSaved } = renderForm();
+
+    typeInto("Ingredient 2 amount", "0,5");
+    typeInto("Ingredient 2 unit", "tsp");
+    typeInto("Ingredient 1", "Cold water");
+    typeInto("Step 2", " Serve hot ");
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.ingredients).toEqual([
+      { name: "Cold water", amount: 1, unit: "l" },
+      { name: "Salt", amount: 0.5, unit: "tsp" },
+    ]);
+    expect(body.instructions).toEqual([{ name: "Main", steps: ["Boil", "Serve hot"] }]);
+  });
+
+  it("shows an error on the step that is empty", () => {
+    renderForm();
+
+    typeInto("Step 1", " ");
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+
+    expect(screen.getByLabelText("Step 1")).toHaveAccessibleDescription("Enter the step.");
+    expect(screen.getByLabelText("Step 2")).toHaveAttribute("aria-invalid", "false");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("offers no way to add or remove ingredients and steps", () => {
+    renderForm();
+
+    expect(screen.getAllByLabelText(/^Ingredient \d+$/)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/^Step \d+$/)).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: /add|remove|delete/i })).not.toBeInTheDocument();
   });
 });

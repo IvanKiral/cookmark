@@ -1,6 +1,8 @@
+// Published recipes store amounts mostly as numbers (0.5, 2) and sometimes as
+// text ("1/2"). Older recipes may omit amount or unit entirely.
 export type Ingredient = {
   name: string;
-  amount: string | null;
+  amount: string | number | null;
   unit: string | null;
 };
 
