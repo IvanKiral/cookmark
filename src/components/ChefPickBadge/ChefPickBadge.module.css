@@ -1,0 +1,37 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 10px 4px 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge :global(.material-symbols-outlined) {
+  font-size: 18px;
+  font-variation-settings: "FILL" 1;
+}
+
+.compact {
+  padding: 0;
+  background-color: transparent;
+  color: var(--color-neutral-900);
+  vertical-align: middle;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

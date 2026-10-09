@@ -2,6 +2,7 @@ import Drawer from "@corvu/drawer";
 import type { Component } from "solid-js";
 import type { DifficultyFilter } from "~/constants/difficultyOptions.ts";
 import type { MarkFilter } from "~/constants/markOptions.ts";
+import type { RecommendedFilter } from "~/constants/recommendedOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter } from "~/constants/tagOptions.ts";
 import type { TimeFilter } from "~/constants/timeOptions.ts";
@@ -18,11 +19,13 @@ type FilterDrawerProps = {
   authorFilter: ReadonlyArray<string>;
   authorOptions: ReadonlyArray<AuthorOption>;
   markFilter: MarkFilter;
+  recommendedFilter: RecommendedFilter;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
   onAuthorChange: (author: ReadonlyArray<string>) => void;
   onMarkChange: (marks: MarkFilter) => void;
+  onRecommendedChange: (recommended: RecommendedFilter) => void;
   onClearAll: () => void;
 };
 
@@ -32,7 +35,8 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
     props.timeFilter.length > 0 ||
     props.tagFilter.length > 0 ||
     props.authorFilter.length > 0 ||
-    props.markFilter.length > 0;
+    props.markFilter.length > 0 ||
+    props.recommendedFilter.length > 0;
 
   return (
     <Drawer open={props.open} onOpenChange={props.onOpenChange} side="left">
@@ -61,11 +65,13 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
               authorFilter={props.authorFilter}
               authorOptions={props.authorOptions}
               markFilter={props.markFilter}
+              recommendedFilter={props.recommendedFilter}
               onDifficultyChange={props.onDifficultyChange}
               onTimeChange={props.onTimeChange}
               onTagChange={props.onTagChange}
               onAuthorChange={props.onAuthorChange}
               onMarkChange={props.onMarkChange}
+              onRecommendedChange={props.onRecommendedChange}
             />
           </div>
 

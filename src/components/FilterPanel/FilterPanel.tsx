@@ -3,10 +3,12 @@ import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOp
 import {
   difficultyOptions,
   markOptions,
+  recommendedOptions,
   tagGroups,
   timeOptions,
 } from "~/constants/filterOptions.ts";
 import type { Mark, MarkFilter } from "~/constants/markOptions.ts";
+import type { RecommendedFilter, RecommendedValue } from "~/constants/recommendedOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter, TagValue } from "~/constants/tagOptions.ts";
 import type { TimeFilter, TimeValue } from "~/constants/timeOptions.ts";
@@ -20,11 +22,13 @@ type FilterPanelProps = {
   authorFilter: ReadonlyArray<string>;
   authorOptions: ReadonlyArray<AuthorOption>;
   markFilter: MarkFilter;
+  recommendedFilter: RecommendedFilter;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
   onAuthorChange: (author: ReadonlyArray<string>) => void;
   onMarkChange: (marks: MarkFilter) => void;
+  onRecommendedChange: (recommended: RecommendedFilter) => void;
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>
@@ -142,6 +146,10 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
     props.onMarkChange(toggleValue(props.markFilter, value));
   };
 
+  const handleRecommendedToggle = (value: RecommendedValue) => {
+    props.onRecommendedChange(toggleValue(props.recommendedFilter, value));
+  };
+
   const handleAuthorToggle = (value: string) => {
     props.onAuthorChange(toggleValue(props.authorFilter, value));
   };
@@ -153,6 +161,12 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
         options={markOptions}
         selected={props.markFilter}
         onToggle={handleMarkToggle}
+      />
+      <FilterSection
+        title={strings.filters.recommended}
+        options={recommendedOptions}
+        selected={props.recommendedFilter}
+        onToggle={handleRecommendedToggle}
       />
       <For each={tagGroups}>
         {(group) => (

@@ -67,6 +67,10 @@
   text-align: right;
 }
 
+.chefPick {
+  margin-left: var(--space-2);
+}
+
 .marks {
   display: flex;
   align-items: center;

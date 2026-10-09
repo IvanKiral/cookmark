@@ -1,5 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
-import type { Component } from "solid-js";
+import { type Component, Show } from "solid-js";
+import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import styles from "./RecipeListItem.module.css";
 
@@ -8,6 +9,7 @@ type RecipeListItemProps = {
   name: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
+  isChefPick: boolean;
 };
 
 const RecipeListItem: Component<RecipeListItemProps> = (props) => {
@@ -19,7 +21,14 @@ const RecipeListItem: Component<RecipeListItemProps> = (props) => {
       state={{ fromSearch: location.search }}
       class={styles.listItem}
     >
-      <h3 class={styles.title}>{props.name}</h3>
+      <h3 class={styles.title}>
+        {props.name}
+        <Show when={props.isChefPick}>
+          <span class={styles.chefPick}>
+            <ChefPickBadge isCompact />
+          </span>
+        </Show>
+      </h3>
       <span class={styles.difficulty} data-level={props.difficulty}>
         {props.difficulty}
       </span>

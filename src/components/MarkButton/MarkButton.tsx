@@ -2,7 +2,7 @@ import type { Component } from "solid-js";
 import type { Mark } from "~/constants/markOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import { useMarks } from "~/contexts/MarksContext.tsx";
-import styles from "./MarkButton.module.css";
+import styles from "~/styles/iconToggleButton.module.css";
 
 type MarkButtonProps = {
   mark: Mark;

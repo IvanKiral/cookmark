@@ -20,6 +20,8 @@ export const strings = {
     diet: "Diet",
     type: "Type",
     method: "Method",
+    recommended: "Recommended",
+    chefPick: "Chef's pick",
     easy: "Easy",
     medium: "Medium",
     hard: "Hard",
@@ -95,6 +97,11 @@ export const strings = {
     removeFavorite: (name: string) => `Remove ${name} from favourites`,
     addToTry: (name: string) => `Add ${name} to To try`,
     removeToTry: (name: string) => `Remove ${name} from To try`,
+  },
+  chefPick: {
+    label: "Chef's pick",
+    add: (name: string) => `Mark ${name} as Chef's pick`,
+    remove: (name: string) => `Remove Chef's pick from ${name}`,
   },
   recipeList: {
     name: "Recipe Name",

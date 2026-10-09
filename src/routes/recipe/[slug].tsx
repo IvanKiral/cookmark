@@ -1,5 +1,7 @@
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
+import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
+import ChefPickToggle from "~/components/ChefPickToggle/ChefPickToggle.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
@@ -91,6 +93,11 @@ const RecipePage: Component = () => {
                   </A>
                 </div>
                 <div class={styles.navActions}>
+                  <ChefPickToggle
+                    slug={params.slug}
+                    name={recipeData().title}
+                    isChefPick={recipeData().is_chef_pick ?? false}
+                  />
                   <MarkButton mark="favorite" slug={params.slug} name={recipeData().title} />
                   <MarkButton mark="to-try" slug={params.slug} name={recipeData().title} />
                 </div>
@@ -100,6 +107,11 @@ const RecipePage: Component = () => {
             <main class={styles.main}>
               <header class={styles.header}>
                 <div class={styles.headerTop}>
+                  <Show when={recipeData().is_chef_pick}>
+                    <div class={styles.chefPick}>
+                      <ChefPickBadge />
+                    </div>
+                  </Show>
                   <h1 class={styles.title}>{recipeData().title}</h1>
                   <p class={styles.description}>{recipeData().description}</p>
                 </div>

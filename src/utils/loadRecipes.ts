@@ -40,6 +40,7 @@ export const transformRecipeData = (data: RecipeData, slug: string, index: numbe
   author: data.author,
   image_url: getRecipeImageUrl(data, slug),
   created_at: data.created_at || FALLBACK_CREATED_AT,
+  is_chef_pick: data.is_chef_pick ?? false,
 });
 
 export const bundleRecipes = (): Recipe[] =>

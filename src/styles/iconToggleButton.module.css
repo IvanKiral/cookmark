@@ -1,3 +1,4 @@
+/* Round icon toggle shared by the favourite, to-try and Chef's pick buttons. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -23,6 +24,15 @@
 
 .button.toTryActive {
   color: var(--color-to-try);
+}
+
+.button.chefPickActive {
+  color: var(--color-neutral-900);
+}
+
+.button:disabled {
+  cursor: progress;
+  opacity: 0.6;
 }
 
 .button :global(.material-symbols-outlined) {

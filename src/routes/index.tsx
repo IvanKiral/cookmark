@@ -13,6 +13,11 @@ import {
   difficultyValues,
 } from "~/constants/difficultyOptions.ts";
 import { type Mark, type MarkFilter, markValues } from "~/constants/markOptions.ts";
+import {
+  type RecommendedFilter,
+  type RecommendedValue,
+  recommendedValues,
+} from "~/constants/recommendedOptions.ts";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
@@ -50,6 +55,16 @@ const Home = () => {
 
   const markFilter = createMemo(
     (): MarkFilter => parseArrayParam(searchParams.mark, markValues as ReadonlyArray<Mark>),
+  );
+
+  // "chef-pick" is the only recommended value so far, so any selection means
+  // "show Chef's picks only".
+  const recommendedFilter = createMemo(
+    (): RecommendedFilter =>
+      parseArrayParam(
+        searchParams.recommended,
+        recommendedValues as ReadonlyArray<RecommendedValue>,
+      ),
   );
 
   const difficultyFilter = createMemo(
@@ -177,6 +192,7 @@ const Home = () => {
           markFilter().length === 0 ||
           markFilter().some((mark) => marks.isMarked(mark, recipe.url_slug)),
       )
+      .filter((recipe) => recommendedFilter().length === 0 || recipe.is_chef_pick)
       .sort(getSortComparator(sort));
   });
 
@@ -186,8 +202,17 @@ const Home = () => {
       timeFilter().length +
       tagFilter().length +
       authorFilter().length +
-      markFilter().length,
+      markFilter().length +
+      recommendedFilter().length,
   );
+
+  const handleRecommendedFilter = (recommended: RecommendedFilter) => {
+    setSearchParams({
+      ...searchParams,
+      recommended: serializeArrayParam(recommended),
+      page: undefined,
+    });
+  };
 
   const handleMarkFilter = (mark: MarkFilter) => {
     setSearchParams({ ...searchParams, mark: serializeArrayParam(mark), page: undefined });
@@ -221,6 +246,7 @@ const Home = () => {
       tag: undefined,
       author: undefined,
       mark: undefined,
+      recommended: undefined,
       page: undefined,
     });
   };
@@ -234,6 +260,7 @@ const Home = () => {
       tag: undefined,
       author: undefined,
       mark: undefined,
+      recommended: undefined,
       page: undefined,
     });
   };
@@ -288,11 +315,13 @@ const Home = () => {
               authorFilter={authorFilter()}
               authorOptions={authorOptions()}
               markFilter={markFilter()}
+              recommendedFilter={recommendedFilter()}
               onDifficultyChange={handleDifficultyFilter}
               onTimeChange={handleTimeFilter}
               onTagChange={handleTagFilter}
               onAuthorChange={handleAuthorFilter}
               onMarkChange={handleMarkFilter}
+              onRecommendedChange={handleRecommendedFilter}
             />
           </aside>
           <div class={styles.controls}>
@@ -350,11 +379,13 @@ const Home = () => {
         authorFilter={authorFilter()}
         authorOptions={authorOptions()}
         markFilter={markFilter()}
+        recommendedFilter={recommendedFilter()}
         onDifficultyChange={handleDifficultyFilter}
         onTimeChange={handleTimeFilter}
         onTagChange={handleTagFilter}
         onAuthorChange={handleAuthorFilter}
         onMarkChange={handleMarkFilter}
+        onRecommendedChange={handleRecommendedFilter}
         onClearAll={handleClearAllFilters}
       />
     </main>

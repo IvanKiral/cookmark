@@ -1,6 +1,6 @@
-import { render } from "@solidjs/testing-library";
+import { cleanup, render, screen } from "@solidjs/testing-library";
 import type { JSX } from "solid-js";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import RecipeListItem from "./RecipeListItem.jsx";
 
 vi.mock("@solidjs/router", () => ({
@@ -20,6 +20,10 @@ vi.mock("~/contexts/MarksContext.tsx", () => ({
 }));
 
 describe("<RecipeListItem />", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("renders recipe item with all props", () => {
     const { getByText } = render(() => (
       <RecipeListItem
@@ -27,6 +31,7 @@ describe("<RecipeListItem />", () => {
         name="Pasta Carbonara"
         difficulty="Medium"
         time="30 min"
+        isChefPick={false}
       />
     ));
 
@@ -37,7 +42,13 @@ describe("<RecipeListItem />", () => {
 
   it("renders with different difficulty levels", () => {
     const { getByText } = render(() => (
-      <RecipeListItem urlSlug="simple-salad" name="Simple Salad" difficulty="Easy" time="10 min" />
+      <RecipeListItem
+        urlSlug="simple-salad"
+        name="Simple Salad"
+        difficulty="Easy"
+        time="10 min"
+        isChefPick={false}
+      />
     ));
 
     expect(getByText("Easy")).toBeInTheDocument();
@@ -45,11 +56,37 @@ describe("<RecipeListItem />", () => {
 
   it("renders as a link to the recipe page", () => {
     const { container } = render(() => (
-      <RecipeListItem urlSlug="test-recipe" name="Test Recipe" difficulty="Hard" time="60 min" />
+      <RecipeListItem
+        urlSlug="test-recipe"
+        name="Test Recipe"
+        difficulty="Hard"
+        time="60 min"
+        isChefPick={false}
+      />
     ));
 
     const link = container.querySelector("a");
     expect(link).toBeTruthy();
     expect(link?.getAttribute("href")).toBe("/recipe/test-recipe");
+  });
+
+  it("shows the Chef's pick badge for a picked recipe", () => {
+    render(() => (
+      <RecipeListItem urlSlug="soup" name="Soup" difficulty="Easy" time="20 min" isChefPick />
+    ));
+    expect(screen.getByText("Chef's pick")).toBeInTheDocument();
+  });
+
+  it("shows no Chef's pick badge for other recipes", () => {
+    render(() => (
+      <RecipeListItem
+        urlSlug="cake"
+        name="Cake"
+        difficulty="Easy"
+        time="20 min"
+        isChefPick={false}
+      />
+    ));
+    expect(screen.queryByText("Chef's pick")).not.toBeInTheDocument();
   });
 });

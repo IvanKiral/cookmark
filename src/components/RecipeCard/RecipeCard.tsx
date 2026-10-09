@@ -1,5 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
 import { type Component, createSignal, onMount, Show } from "solid-js";
+import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import styles from "./RecipeCard.module.css";
 
@@ -9,6 +10,7 @@ type RecipeCardProps = {
   imageUrl: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
   time: string;
+  isChefPick: boolean;
 };
 
 const RecipeCard: Component<RecipeCardProps> = (props) => {
@@ -48,6 +50,11 @@ const RecipeCard: Component<RecipeCardProps> = (props) => {
             loading="lazy"
             onError={() => setHasImageError(true)}
           />
+        </Show>
+        <Show when={props.isChefPick}>
+          <div class={styles.chefPick}>
+            <ChefPickBadge />
+          </div>
         </Show>
         <div class={styles.marks}>
           <MarkButton mark="favorite" slug={props.urlSlug} name={props.name} />

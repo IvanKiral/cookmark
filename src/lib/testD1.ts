@@ -4,7 +4,7 @@ import { DatabaseSync, type SQLInputValue } from "node:sqlite";
 
 type TestD1Statement = {
   bind: (...values: ReadonlyArray<unknown>) => TestD1Statement;
-  run: () => Promise<unknown>;
+  run: () => Promise<{ meta: { changes: number } }>;
   first: <T>() => Promise<T | null>;
   all: <T>() => Promise<{ results: ReadonlyArray<T> }>;
 };
@@ -27,7 +27,9 @@ export const createTestD1 = (migrationFiles: ReadonlyArray<string>): TestD1 => {
 
   const prepare = (query: string, values: ReadonlyArray<unknown> = []): TestD1Statement => ({
     bind: (...next: ReadonlyArray<unknown>) => prepare(query, next),
-    run: async () => raw.prepare(query).run(...(values as SQLInputValue[])),
+    run: async () => ({
+      meta: { changes: Number(raw.prepare(query).run(...(values as SQLInputValue[])).changes) },
+    }),
     first: async <T>() =>
       (raw.prepare(query).get(...(values as SQLInputValue[])) ?? null) as T | null,
     all: async <T>() => ({

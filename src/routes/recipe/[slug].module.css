@@ -89,6 +89,10 @@
   margin-bottom: var(--space-8);
 }
 
+.chefPick {
+  margin-bottom: var(--space-3);
+}
+
 .title {
   font-family: var(--font-family-display);
   font-size: var(--text-3xl);

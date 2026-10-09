@@ -12,6 +12,12 @@ type D1PreparedStatement = {
   first: <T>() => Promise<T | null>;
 };
 
+type RecipeRow = {
+  slug: string;
+  data: string;
+  is_chef_pick: number;
+};
+
 type D1Database = {
   prepare: (query: string) => D1PreparedStatement;
 };
@@ -29,17 +35,21 @@ const getEnv = (): SourceEnv => (globalThis as unknown as { __env__?: SourceEnv 
 
 // D1 reads can throw (e.g. missing table in an unseeded local dev DB), so any
 // failure falls back to the bundled recipes rather than crashing the render.
+// The is_chef_pick column wins over anything in the source JSON.
+const toRecipeData = (row: Pick<RecipeRow, "data" | "is_chef_pick">): RecipeData => ({
+  ...(JSON.parse(row.data) as RecipeData),
+  is_chef_pick: row.is_chef_pick === 1,
+});
+
 const readRecipesFromDb = async (db: D1Database): Promise<Recipe[] | undefined> => {
   try {
     const { results } = await db
-      .prepare("SELECT slug, data FROM recipes")
-      .all<{ slug: string; data: string }>();
+      .prepare("SELECT slug, data, is_chef_pick FROM recipes")
+      .all<RecipeRow>();
     if (results.length === 0) {
       return undefined;
     }
-    return results.map((row, index) =>
-      transformRecipeData(JSON.parse(row.data) as RecipeData, row.slug, index),
-    );
+    return results.map((row, index) => transformRecipeData(toRecipeData(row), row.slug, index));
   } catch {
     return undefined;
   }
@@ -48,10 +58,10 @@ const readRecipesFromDb = async (db: D1Database): Promise<Recipe[] | undefined> 
 const readRecipeFromDb = async (db: D1Database, slug: string): Promise<RecipeData | undefined> => {
   try {
     const row = await db
-      .prepare("SELECT data FROM recipes WHERE slug = ?")
+      .prepare("SELECT data, is_chef_pick FROM recipes WHERE slug = ?")
       .bind(slug)
-      .first<{ data: string }>();
-    return row ? (JSON.parse(row.data) as RecipeData) : undefined;
+      .first<Pick<RecipeRow, "data" | "is_chef_pick">>();
+    return row ? toRecipeData(row) : undefined;
   } catch {
     return undefined;
   }

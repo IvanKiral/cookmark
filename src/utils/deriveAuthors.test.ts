@@ -15,6 +15,7 @@ const makeRecipe = (author?: string): Recipe => ({
   author,
   image_url: "/thumbnails/test",
   created_at: "2026-01-01T00:00:00.000Z",
+  is_chef_pick: false,
 });
 
 describe("deriveAuthors", () => {

@@ -1,5 +1,6 @@
 import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
 import { type Mark, markValues } from "./markOptions.ts";
+import { type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
 import { strings } from "./strings.ts";
 import { type TagValue, tagValues } from "./tagOptions.ts";
 import { type TimeValue, timeValues } from "./timeOptions.ts";
@@ -19,6 +20,10 @@ const timeLabels: Record<TimeValue, string> = {
 const markLabels: Record<Mark, string> = {
   favorite: strings.marks.favorites,
   "to-try": strings.marks.toTry,
+};
+
+const recommendedLabels: Record<RecommendedValue, string> = {
+  "chef-pick": strings.filters.chefPick,
 };
 
 const tagLabels: Record<TagValue, string> = {
@@ -53,6 +58,11 @@ export const timeOptions = timeValues.map((value) => ({
 export const markOptions = markValues.map((value) => ({
   value,
   label: markLabels[value],
+}));
+
+export const recommendedOptions = recommendedValues.map((value) => ({
+  value,
+  label: recommendedLabels[value],
 }));
 
 export const tagOptions = tagValues.map((value) => ({

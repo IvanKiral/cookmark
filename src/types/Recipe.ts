@@ -42,6 +42,8 @@ export type RecipeData = {
   author?: string;
   video_url?: string;
   created_at?: string;
+  // Set by the app from the recipes table, not part of the source JSON.
+  is_chef_pick?: boolean;
 };
 
 export type Recipe = {
@@ -57,4 +59,5 @@ export type Recipe = {
   author?: string;
   image_url: string;
   created_at: string;
+  is_chef_pick: boolean;
 };
