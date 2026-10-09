@@ -13,6 +13,8 @@ Cookmark is a recipe book web application built with SolidJS/SolidStart. It feat
 pnpm dev          # Start dev server (http://localhost:3000)
 pnpm dev:sk       # Start dev server with Slovak locale
 pnpm build        # Build for production (all locales)
+pnpm local:setup  # Recreate local D1 databases (migrations, recipes, admin@localhost)
+pnpm local:preview # Build and serve via wrangler dev on :8787, signed in as admin@localhost
 ```
 
 ### Testing & Quality

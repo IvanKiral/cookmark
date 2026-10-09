@@ -8,6 +8,8 @@
     "biome:check:fix": "biome check --write",
     "biome:lint": "biome lint",
     "start": "vinxi start",
+    "local:setup": "node scripts/localSetup.ts",
+    "local:preview": "node scripts/localPreview.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

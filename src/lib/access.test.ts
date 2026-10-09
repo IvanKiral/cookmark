@@ -83,4 +83,17 @@ describe("getUserEmail", () => {
     });
     expect(await getUserEmail(request)).toBeUndefined();
   });
+
+  it("uses LOCAL_USER_EMAIL for requests to localhost without a token", async () => {
+    vi.stubEnv("DEV", false);
+    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
+    expect(await getUserEmail(new Request("http://localhost:8787/api/me"))).toBe("admin@localhost");
+    expect(await getUserEmail(new Request("http://127.0.0.1:8787/api/me"))).toBe("admin@localhost");
+  });
+
+  it("ignores LOCAL_USER_EMAIL on any other hostname", async () => {
+    vi.stubEnv("DEV", false);
+    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
+    expect(await getUserEmail(new Request("https://cookmark.kiralivan.eu/api/me"))).toBeUndefined();
+  });
 });

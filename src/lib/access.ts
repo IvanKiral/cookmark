@@ -9,6 +9,8 @@ type AccessEnv = {
   ACCESS_TEAM_DOMAIN?: string;
   // Application Audience (AUD) Tag of the Access application.
   ACCESS_AUD?: string;
+  // Set only by `pnpm local:preview` (wrangler dev). See getLocalUserEmail.
+  LOCAL_USER_EMAIL?: string;
 };
 
 export type AccessConfig = {
@@ -20,8 +22,25 @@ export type AccessConfig = {
 // with false in production builds, so this never applies to a deployed Worker.
 const DEV_USER_EMAIL = "dev@localhost";
 
+const LOCAL_HOSTNAMES = new Set(["localhost", "127.0.0.1"]);
+
+const getEnv = (): AccessEnv | undefined =>
+  (globalThis as unknown as { __env__?: AccessEnv }).__env__;
+
+// Lets the production build run under `wrangler dev` as a signed-in user
+// without Access. Honoured only for requests to localhost: in production the
+// Worker is reachable solely through its custom domain, so it never applies
+// there even if the variable were set by mistake.
+const getLocalUserEmail = (request: Request): string | undefined => {
+  const email = getEnv()?.LOCAL_USER_EMAIL;
+  if (!email) {
+    return undefined;
+  }
+  return LOCAL_HOSTNAMES.has(new URL(request.url).hostname) ? email : undefined;
+};
+
 const getAccessConfig = (): AccessConfig | undefined => {
-  const env = (globalThis as unknown as { __env__?: AccessEnv }).__env__;
+  const env = getEnv();
   const teamDomain = env?.ACCESS_TEAM_DOMAIN;
   const audience = env?.ACCESS_AUD;
   if (!(teamDomain && audience)) {
@@ -65,7 +84,7 @@ export const verifyAccessToken = async (
 export const getUserEmail = async (request: Request): Promise<string | undefined> => {
   const token = request.headers.get("cf-access-jwt-assertion");
   if (!token) {
-    return import.meta.env.DEV ? DEV_USER_EMAIL : undefined;
+    return import.meta.env.DEV ? DEV_USER_EMAIL : getLocalUserEmail(request);
   }
   const config = getAccessConfig();
   if (!config) {
