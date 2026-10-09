@@ -17,15 +17,20 @@
   color: var(--color-neutral-700);
 }
 
-.button.active {
+.button.favoriteActive {
   color: var(--color-favorite);
 }
 
-.button .material-symbols-outlined {
+.button.toTryActive {
+  color: var(--color-to-try);
+}
+
+.button :global(.material-symbols-outlined) {
   font-size: 1.5rem;
 }
 
-.button.active .material-symbols-outlined {
+/* Needs the FILL axis range (0..1) requested in app.tsx. */
+.button.active :global(.material-symbols-outlined) {
   font-variation-settings: "FILL" 1;
 }
 

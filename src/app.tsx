@@ -4,7 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "./app.css";
 import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt.jsx";
-import { FavoritesProvider } from "./contexts/FavoritesContext.jsx";
+import { MarksProvider } from "./contexts/MarksContext.jsx";
 
 export default function App() {
   const base = import.meta.env.VITE_BASE_URL ?? "/";
@@ -25,12 +25,12 @@ export default function App() {
           />
           <Link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
           />
           <InstallPrompt />
-          <FavoritesProvider>
+          <MarksProvider>
             <Suspense>{props.children}</Suspense>
-          </FavoritesProvider>
+          </MarksProvider>
           <Link rel="icon" href={`${base}favicon.ico`} />
           <Link rel="icon" type="image/png" href={`${base}favicon-96x96.png`} sizes="96x96" />
           <Link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />

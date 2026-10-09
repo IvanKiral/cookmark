@@ -1,6 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
 import { type Component, createSignal, onMount, Show } from "solid-js";
-import FavoriteButton from "~/components/FavoriteButton/FavoriteButton.tsx";
+import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import styles from "./RecipeCard.module.css";
 
 type RecipeCardProps = {
@@ -49,8 +49,9 @@ const RecipeCard: Component<RecipeCardProps> = (props) => {
             onError={() => setHasImageError(true)}
           />
         </Show>
-        <div class={styles.favorite}>
-          <FavoriteButton slug={props.urlSlug} name={props.name} />
+        <div class={styles.marks}>
+          <MarkButton mark="favorite" slug={props.urlSlug} name={props.name} />
+          <MarkButton mark="to-try" slug={props.urlSlug} name={props.name} />
         </div>
       </div>
       <div class={styles.body}>

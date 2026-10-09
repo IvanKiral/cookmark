@@ -1,10 +1,16 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { createTestD1 } from "~/lib/testD1.ts";
+import { createTestD1, readMigration } from "~/lib/testD1.ts";
 import { addMark, readMarkedSlugs, removeMark } from "./userMarksStore.ts";
 import { getOrCreateUser } from "./userStore.ts";
 
-const createDb = () => createTestD1(["0002_users.sql", "0003_user_recipe_marks.sql"]);
+const migrations = [
+  "0002_users.sql",
+  "0003_user_recipe_marks.sql",
+  "0004_user_recipe_marks_to_try.sql",
+];
+
+const createDb = () => createTestD1(migrations);
 
 const createDbWithUser = async (email: string) => {
   const db = createDb();
@@ -61,5 +67,37 @@ describe("user recipe marks", () => {
         "INSERT INTO user_recipe_marks (email, slug, mark, created_at) VALUES ('ana@example.com', 'soup', 'pinned', 'x')",
       ),
     ).toThrow(/CHECK/);
+  });
+
+  it("keeps favourites and to-try marks separate", async () => {
+    const db = await createDbWithUser("ana@example.com");
+    await addMark(db, "ana@example.com", "soup", "favorite", "2026-10-09T10:00:00.000Z");
+    await addMark(db, "ana@example.com", "cake", "to-try", "2026-10-09T10:00:00.000Z");
+    await addMark(db, "ana@example.com", "soup", "to-try", "2026-10-09T10:00:01.000Z");
+    await removeMark(db, "ana@example.com", "soup", "favorite");
+    expect(await readMarkedSlugs(db, "ana@example.com", "favorite")).toEqual([]);
+    expect(await readMarkedSlugs(db, "ana@example.com", "to-try")).toEqual(["cake", "soup"]);
+  });
+});
+
+describe("0004 migration", () => {
+  it("keeps existing favourites when rebuilding the table", async () => {
+    const db = createTestD1(migrations.slice(0, 2));
+    await getOrCreateUser(db, "ana@example.com", "2026-10-09T10:00:00.000Z");
+    await addMark(db, "ana@example.com", "soup", "favorite", "2026-10-09T10:00:00.000Z");
+
+    db.raw.exec(readMigration("0004_user_recipe_marks_to_try.sql"));
+
+    expect(db.raw.prepare("SELECT * FROM user_recipe_marks").all()).toEqual([
+      {
+        email: "ana@example.com",
+        slug: "soup",
+        mark: "favorite",
+        created_at: "2026-10-09T10:00:00.000Z",
+      },
+    ]);
+    await expect(
+      addMark(db, "ghost@example.com", "soup", "to-try", "2026-10-09T10:00:00.000Z"),
+    ).rejects.toThrow(/FOREIGN KEY/);
   });
 });

@@ -12,11 +12,12 @@ import {
   type DifficultyValue,
   difficultyValues,
 } from "~/constants/difficultyOptions.ts";
+import { type Mark, type MarkFilter, markValues } from "~/constants/markOptions.ts";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
-import { useFavorites } from "~/contexts/FavoritesContext.tsx";
+import { useMarks } from "~/contexts/MarksContext.tsx";
 import { getRecipesList } from "~/lib/recipeQueries.ts";
 import type { Recipe } from "~/types/Recipe.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/utils/deriveAuthors.ts";
@@ -45,9 +46,11 @@ const Home = () => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
   // View mode is intentionally ephemeral: every page load starts in card view.
   const [viewMode, setViewMode] = createSignal<ViewMode>("card");
-  const favorites = useFavorites();
+  const marks = useMarks();
 
-  const favoritesOnly = createMemo(() => searchParams.fav === "1");
+  const markFilter = createMemo(
+    (): MarkFilter => parseArrayParam(searchParams.mark, markValues as ReadonlyArray<Mark>),
+  );
 
   const difficultyFilter = createMemo(
     (): DifficultyFilter =>
@@ -169,7 +172,11 @@ const Home = () => {
         (recipe) =>
           authors.length === 0 || (recipe.author !== undefined && authors.includes(recipe.author)),
       )
-      .filter((recipe) => !favoritesOnly() || favorites.isFavorite(recipe.url_slug))
+      .filter(
+        (recipe) =>
+          markFilter().length === 0 ||
+          markFilter().some((mark) => marks.isMarked(mark, recipe.url_slug)),
+      )
       .sort(getSortComparator(sort));
   });
 
@@ -179,11 +186,11 @@ const Home = () => {
       timeFilter().length +
       tagFilter().length +
       authorFilter().length +
-      (favoritesOnly() ? 1 : 0),
+      markFilter().length,
   );
 
-  const handleFavoritesOnlyChange = (enabled: boolean) => {
-    setSearchParams({ ...searchParams, fav: enabled ? "1" : undefined, page: undefined });
+  const handleMarkFilter = (mark: MarkFilter) => {
+    setSearchParams({ ...searchParams, mark: serializeArrayParam(mark), page: undefined });
   };
 
   const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
@@ -213,7 +220,7 @@ const Home = () => {
       time: undefined,
       tag: undefined,
       author: undefined,
-      fav: undefined,
+      mark: undefined,
       page: undefined,
     });
   };
@@ -226,7 +233,7 @@ const Home = () => {
       time: undefined,
       tag: undefined,
       author: undefined,
-      fav: undefined,
+      mark: undefined,
       page: undefined,
     });
   };
@@ -280,12 +287,12 @@ const Home = () => {
               tagFilter={tagFilter()}
               authorFilter={authorFilter()}
               authorOptions={authorOptions()}
-              favoritesOnly={favoritesOnly()}
+              markFilter={markFilter()}
               onDifficultyChange={handleDifficultyFilter}
               onTimeChange={handleTimeFilter}
               onTagChange={handleTagFilter}
               onAuthorChange={handleAuthorFilter}
-              onFavoritesOnlyChange={handleFavoritesOnlyChange}
+              onMarkChange={handleMarkFilter}
             />
           </aside>
           <div class={styles.controls}>
@@ -342,12 +349,12 @@ const Home = () => {
         tagFilter={tagFilter()}
         authorFilter={authorFilter()}
         authorOptions={authorOptions()}
-        favoritesOnly={favoritesOnly()}
+        markFilter={markFilter()}
         onDifficultyChange={handleDifficultyFilter}
         onTimeChange={handleTimeFilter}
         onTagChange={handleTagFilter}
         onAuthorChange={handleAuthorFilter}
-        onFavoritesOnlyChange={handleFavoritesOnlyChange}
+        onMarkChange={handleMarkFilter}
         onClearAll={handleClearAllFilters}
       />
     </main>

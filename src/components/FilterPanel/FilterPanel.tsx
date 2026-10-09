@@ -1,6 +1,12 @@
 import { type Component, createMemo, createSignal, For, Show } from "solid-js";
 import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOptions.ts";
-import { difficultyOptions, tagGroups, timeOptions } from "~/constants/filterOptions.ts";
+import {
+  difficultyOptions,
+  markOptions,
+  tagGroups,
+  timeOptions,
+} from "~/constants/filterOptions.ts";
+import type { Mark, MarkFilter } from "~/constants/markOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter, TagValue } from "~/constants/tagOptions.ts";
 import type { TimeFilter, TimeValue } from "~/constants/timeOptions.ts";
@@ -13,12 +19,12 @@ type FilterPanelProps = {
   tagFilter: TagFilter;
   authorFilter: ReadonlyArray<string>;
   authorOptions: ReadonlyArray<AuthorOption>;
-  favoritesOnly: boolean;
+  markFilter: MarkFilter;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
   onAuthorChange: (author: ReadonlyArray<string>) => void;
-  onFavoritesOnlyChange: (enabled: boolean) => void;
+  onMarkChange: (marks: MarkFilter) => void;
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>
@@ -132,26 +138,22 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
     props.onTagChange(toggleValue(props.tagFilter, value) as TagFilter);
   };
 
+  const handleMarkToggle = (value: Mark) => {
+    props.onMarkChange(toggleValue(props.markFilter, value));
+  };
+
   const handleAuthorToggle = (value: string) => {
     props.onAuthorChange(toggleValue(props.authorFilter, value));
   };
 
   return (
     <div class={styles.panel}>
-      <div class={styles.section}>
-        <h3 class={styles.sectionTitle}>{strings.favorites.sectionTitle}</h3>
-        <div class={styles.checkboxGroup}>
-          <label class={styles.checkboxLabel}>
-            <input
-              type="checkbox"
-              checked={props.favoritesOnly}
-              onChange={() => props.onFavoritesOnlyChange(!props.favoritesOnly)}
-              class={styles.checkbox}
-            />
-            <span class={styles.checkboxText}>{strings.favorites.only}</span>
-          </label>
-        </div>
-      </div>
+      <FilterSection
+        title={strings.marks.sectionTitle}
+        options={markOptions}
+        selected={props.markFilter}
+        onToggle={handleMarkToggle}
+      />
       <For each={tagGroups}>
         {(group) => (
           <FilterSection

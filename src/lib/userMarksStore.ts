@@ -1,3 +1,4 @@
+import type { Mark } from "~/constants/markOptions.ts";
 import { normalizeEmail } from "~/lib/userStore.ts";
 
 type D1PreparedStatement = {
@@ -7,7 +8,7 @@ type D1PreparedStatement = {
   all: <T>() => Promise<{ results: ReadonlyArray<T> }>;
 };
 
-type D1Database = {
+export type D1Database = {
   prepare: (query: string) => D1PreparedStatement;
 };
 
@@ -15,8 +16,6 @@ type D1Database = {
 type MarksEnv = {
   RECIPES?: D1Database;
 };
-
-export type Mark = "favorite";
 
 export const getMarksDb = (): D1Database | undefined =>
   (globalThis as unknown as { __env__?: MarksEnv }).__env__?.RECIPES;

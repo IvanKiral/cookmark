@@ -15,10 +15,9 @@ vi.mock("@solidjs/router", () => ({
   useLocation: () => ({ search: "" }),
 }));
 
-vi.mock("~/contexts/FavoritesContext.tsx", () => ({
-  useFavorites: () => ({
-    favorites: () => new Set<string>(),
-    isFavorite: () => false,
+vi.mock("~/contexts/MarksContext.tsx", () => ({
+  useMarks: () => ({
+    isMarked: () => false,
     toggle: () => {},
   }),
 }));

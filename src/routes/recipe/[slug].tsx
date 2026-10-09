@@ -1,6 +1,6 @@
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
-import FavoriteButton from "~/components/FavoriteButton/FavoriteButton.tsx";
+import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
@@ -91,7 +91,8 @@ const RecipePage: Component = () => {
                   </A>
                 </div>
                 <div class={styles.navActions}>
-                  <FavoriteButton slug={params.slug} name={recipeData().title} />
+                  <MarkButton mark="favorite" slug={params.slug} name={recipeData().title} />
+                  <MarkButton mark="to-try" slug={params.slug} name={recipeData().title} />
                 </div>
               </div>
             </nav>

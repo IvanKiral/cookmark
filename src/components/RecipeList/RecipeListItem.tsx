@@ -1,6 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
 import type { Component } from "solid-js";
-import FavoriteButton from "~/components/FavoriteButton/FavoriteButton.tsx";
+import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import styles from "./RecipeListItem.module.css";
 
 type RecipeListItemProps = {
@@ -24,8 +24,9 @@ const RecipeListItem: Component<RecipeListItemProps> = (props) => {
         {props.difficulty}
       </span>
       <span class={styles.time}>{props.time}</span>
-      <div class={styles.favorite}>
-        <FavoriteButton slug={props.urlSlug} name={props.name} />
+      <div class={styles.marks}>
+        <MarkButton mark="favorite" slug={props.urlSlug} name={props.name} />
+        <MarkButton mark="to-try" slug={props.urlSlug} name={props.name} />
       </div>
     </A>
   );

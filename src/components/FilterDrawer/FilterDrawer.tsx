@@ -1,6 +1,7 @@
 import Drawer from "@corvu/drawer";
 import type { Component } from "solid-js";
 import type { DifficultyFilter } from "~/constants/difficultyOptions.ts";
+import type { MarkFilter } from "~/constants/markOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter } from "~/constants/tagOptions.ts";
 import type { TimeFilter } from "~/constants/timeOptions.ts";
@@ -16,12 +17,12 @@ type FilterDrawerProps = {
   tagFilter: TagFilter;
   authorFilter: ReadonlyArray<string>;
   authorOptions: ReadonlyArray<AuthorOption>;
-  favoritesOnly: boolean;
+  markFilter: MarkFilter;
   onDifficultyChange: (difficulty: DifficultyFilter) => void;
   onTimeChange: (time: TimeFilter) => void;
   onTagChange: (tag: TagFilter) => void;
   onAuthorChange: (author: ReadonlyArray<string>) => void;
-  onFavoritesOnlyChange: (enabled: boolean) => void;
+  onMarkChange: (marks: MarkFilter) => void;
   onClearAll: () => void;
 };
 
@@ -31,7 +32,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
     props.timeFilter.length > 0 ||
     props.tagFilter.length > 0 ||
     props.authorFilter.length > 0 ||
-    props.favoritesOnly;
+    props.markFilter.length > 0;
 
   return (
     <Drawer open={props.open} onOpenChange={props.onOpenChange} side="left">
@@ -59,12 +60,12 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
               tagFilter={props.tagFilter}
               authorFilter={props.authorFilter}
               authorOptions={props.authorOptions}
-              favoritesOnly={props.favoritesOnly}
+              markFilter={props.markFilter}
               onDifficultyChange={props.onDifficultyChange}
               onTimeChange={props.onTimeChange}
               onTagChange={props.onTagChange}
               onAuthorChange={props.onAuthorChange}
-              onFavoritesOnlyChange={props.onFavoritesOnlyChange}
+              onMarkChange={props.onMarkChange}
             />
           </div>
 
