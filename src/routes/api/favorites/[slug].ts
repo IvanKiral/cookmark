@@ -7,7 +7,10 @@ export const PUT = async (event: APIEvent): Promise<Response> => {
   if (!kv) {
     return new Response("Favorites unavailable", { status: 500 });
   }
-  const email = getUserEmail(event.request);
+  const email = await getUserEmail(event.request);
+  if (!email) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const slug = event.params.slug;
   const current = await readFavorites(kv, email);
   if (!current.includes(slug)) {
@@ -21,7 +24,10 @@ export const DELETE = async (event: APIEvent): Promise<Response> => {
   if (!kv) {
     return new Response("Favorites unavailable", { status: 500 });
   }
-  const email = getUserEmail(event.request);
+  const email = await getUserEmail(event.request);
+  if (!email) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const slug = event.params.slug;
   const current = await readFavorites(kv, email);
   if (current.includes(slug)) {

@@ -129,6 +129,10 @@ export default defineConfig({
         compatibility_date: "2025-07-15",
         // Per-user favourites trust the Access JWT, so the app must only be
         // reachable through the Access-fronted custom domain — not workers.dev.
+        // The JWT is verified with two Worker secrets (set via `wrangler secret
+        // put`, which survive deploys unlike `vars`): ACCESS_TEAM_DOMAIN
+        // (https://<team-name>.cloudflareaccess.com) and ACCESS_AUD (the Access
+        // application's AUD tag). Without them every request is unauthenticated.
         workers_dev: false,
         // Serve the app from the Access-protected custom domain.
         routes: [{ pattern: "cookmark.kiralivan.eu", custom_domain: true }],

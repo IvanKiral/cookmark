@@ -7,6 +7,10 @@ export const GET = async (event: APIEvent): Promise<Response> => {
   if (!kv) {
     return new Response("Favorites unavailable", { status: 500 });
   }
-  const slugs = await readFavorites(kv, getUserEmail(event.request));
+  const email = await getUserEmail(event.request);
+  if (!email) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  const slugs = await readFavorites(kv, email);
   return Response.json({ slugs });
 };
