@@ -51,6 +51,17 @@ LOCAL_USER_EMAIL=someone@localhost pnpm local:preview   # sign in as someone els
 
 `local:setup` wipes all local D1 data each time. `local:preview` rebuilds on every start, so restart it after code changes. The local sign-in replaces Cloudflare Access and only works on `localhost`.
 
+### Undoing a recipe edit
+
+Every admin edit saves the recipe as it was before into `recipe_revisions`. To restore the version before the latest edit of a recipe (replace `<slug>` in both places; use `--local` instead of `--remote` for the local database):
+
+```bash
+wrangler d1 execute cookmark-recipes --remote --config .output/server/wrangler.json --command \
+  "UPDATE recipes SET data = (SELECT data FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC LIMIT 1) WHERE slug = '<slug>' AND EXISTS (SELECT 1 FROM recipe_revisions WHERE slug = '<slug>')"
+```
+
+List a recipe's history with `SELECT id, edited_by, edited_at FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC`. The undo itself is not recorded as a revision.
+
 ### Building for Production
 
 Build the static site for GitHub Pages deployment:

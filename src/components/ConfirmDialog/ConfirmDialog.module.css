@@ -45,34 +45,3 @@
   justify-content: flex-end;
   gap: var(--space-2);
 }
-
-.cancelButton,
-.confirmButton {
-  min-height: 2.75rem;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-full);
-  font-family: var(--font-family-base);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.cancelButton {
-  border: 1px solid var(--color-neutral-300);
-  background: white;
-  color: var(--color-neutral-700);
-}
-
-.cancelButton:hover {
-  background: var(--color-neutral-100);
-}
-
-.confirmButton {
-  border: 1px solid var(--color-neutral-900);
-  background: var(--color-neutral-900);
-  color: white;
-}
-
-.confirmButton:hover {
-  background: var(--color-neutral-700);
-}

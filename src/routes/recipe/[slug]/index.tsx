@@ -8,8 +8,9 @@ import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
 import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
 import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
+import iconButtonStyles from "~/styles/iconToggleButton.module.css";
 import { getSourceImageUrl } from "~/utils/recipeImage.ts";
-import styles from "./[slug].module.css";
+import styles from "./index.module.css";
 
 type RecipeNavState = {
   fromSearch?: string;
@@ -95,6 +96,18 @@ const RecipePage: Component = () => {
                   </A>
                 </div>
                 <div class={styles.navActions}>
+                  <Show when={isAdmin()}>
+                    <A
+                      href={`/recipe/${params.slug}/edit`}
+                      state={location.state}
+                      class={iconButtonStyles.button}
+                      aria-label={strings.recipeEdit.edit(recipeData().title)}
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        edit
+                      </span>
+                    </A>
+                  </Show>
                   <RecipeFlagToggle
                     flag="chef-pick"
                     slug={params.slug}

@@ -1,4 +1,4 @@
-/* Round icon toggle shared by the favourite, to-try and recipe flag buttons. */
+/* Round icon button shared by the favourite, to-try and recipe flag toggles and the edit link. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -9,6 +9,7 @@
   color: var(--color-neutral-400);
   cursor: pointer;
   border-radius: var(--radius-full);
+  text-decoration: none;
   transition:
     color 0.15s ease,
     transform 0.15s ease;

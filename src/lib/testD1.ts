@@ -11,6 +11,9 @@ type TestD1Statement = {
 
 export type TestD1 = {
   prepare: (query: string) => TestD1Statement;
+  batch: (
+    statements: ReadonlyArray<{ run: () => Promise<unknown> }>,
+  ) => Promise<ReadonlyArray<unknown>>;
   raw: DatabaseSync;
 };
 
@@ -39,5 +42,21 @@ export const createTestD1 = (migrationFiles: ReadonlyArray<string>): TestD1 => {
     }),
   });
 
-  return { prepare: (query: string) => prepare(query), raw };
+  // Like D1, a batch runs as one transaction: any failure rolls back every statement.
+  const batch = async (statements: ReadonlyArray<{ run: () => Promise<unknown> }>) => {
+    raw.exec("BEGIN");
+    try {
+      const results: unknown[] = [];
+      for (const statement of statements) {
+        results.push(await statement.run());
+      }
+      raw.exec("COMMIT");
+      return results;
+    } catch (error) {
+      raw.exec("ROLLBACK");
+      throw error;
+    }
+  };
+
+  return { prepare: (query: string) => prepare(query), batch, raw };
 };
