@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
-import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
+import RecipeFlagBadge from "~/components/RecipeFlagBadge/RecipeFlagBadge.tsx";
 import styles from "./RecipeListItem.module.css";
 
 type RecipeListItemProps = {
@@ -25,7 +25,7 @@ const RecipeListItem: Component<RecipeListItemProps> = (props) => {
         {props.name}
         <Show when={props.isChefPick}>
           <span class={styles.chefPick}>
-            <ChefPickBadge isCompact />
+            <RecipeFlagBadge flag="chef-pick" isCompact />
           </span>
         </Show>
       </h3>

@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router";
 import { type Component, createSignal, onMount, Show } from "solid-js";
-import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
+import RecipeFlagBadge from "~/components/RecipeFlagBadge/RecipeFlagBadge.tsx";
 import styles from "./RecipeCard.module.css";
 
 type RecipeCardProps = {
@@ -53,7 +53,7 @@ const RecipeCard: Component<RecipeCardProps> = (props) => {
         </Show>
         <Show when={props.isChefPick}>
           <div class={styles.chefPick}>
-            <ChefPickBadge />
+            <RecipeFlagBadge flag="chef-pick" />
           </div>
         </Show>
         <div class={styles.marks}>

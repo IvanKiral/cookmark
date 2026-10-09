@@ -25,17 +25,21 @@ const recipeJson = (title: string): string =>
   });
 
 const createDb = (): TestD1 => {
-  const db = createTestD1(["recipes_schema.sql", "0005_recipes_chef_pick.sql"]);
+  const db = createTestD1([
+    "recipes_schema.sql",
+    "0005_recipes_chef_pick.sql",
+    "0006_recipes_should_delete.sql",
+  ]);
   db.raw
-    .prepare("INSERT INTO recipes (slug, data, is_chef_pick) VALUES (?, ?, ?)")
-    .run("soup", recipeJson("Soup"), 1);
+    .prepare("INSERT INTO recipes (slug, data, is_chef_pick, should_delete) VALUES (?, ?, ?, ?)")
+    .run("soup", recipeJson("Soup"), 1, 0);
   db.raw
-    .prepare("INSERT INTO recipes (slug, data, is_chef_pick) VALUES (?, ?, ?)")
-    .run("cake", recipeJson("Cake"), 0);
+    .prepare("INSERT INTO recipes (slug, data, is_chef_pick, should_delete) VALUES (?, ?, ?, ?)")
+    .run("cake", recipeJson("Cake"), 0, 1);
   return db;
 };
 
-describe("recipe source chef pick", () => {
+describe("recipe source flags", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -53,5 +57,11 @@ describe("recipe source chef pick", () => {
     vi.stubGlobal("__env__", { RECIPES: createDb() });
     expect((await loadRecipeDataFromSource("soup"))?.is_chef_pick).toBe(true);
     expect((await loadRecipeDataFromSource("cake"))?.is_chef_pick).toBe(false);
+  });
+
+  it("carries should_delete into a single recipe", async () => {
+    vi.stubGlobal("__env__", { RECIPES: createDb() });
+    expect((await loadRecipeDataFromSource("soup"))?.should_delete).toBe(false);
+    expect((await loadRecipeDataFromSource("cake"))?.should_delete).toBe(true);
   });
 });

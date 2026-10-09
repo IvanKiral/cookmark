@@ -44,6 +44,8 @@ export type RecipeData = {
   created_at?: string;
   // Set by the app from the recipes table, not part of the source JSON.
   is_chef_pick?: boolean;
+  // Admin-only "To delete" mark. Sent to every visitor, only shown to admins.
+  should_delete?: boolean;
 };
 
 export type Recipe = {

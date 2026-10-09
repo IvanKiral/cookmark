@@ -89,7 +89,10 @@
   margin-bottom: var(--space-8);
 }
 
-.chefPick {
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   margin-bottom: var(--space-3);
 }
 

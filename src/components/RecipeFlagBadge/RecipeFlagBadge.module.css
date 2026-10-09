@@ -4,7 +4,7 @@
   gap: var(--space-1);
   padding: 4px 10px 4px 6px;
   border-radius: var(--radius-full);
-  background-color: var(--color-neutral-900);
+  background-color: var(--badge-color);
   color: var(--color-neutral-50);
   font-family: var(--font-family-base);
   font-size: 11px;
@@ -15,6 +15,14 @@
   white-space: nowrap;
 }
 
+.chefPick {
+  --badge-color: var(--color-neutral-900);
+}
+
+.shouldDelete {
+  --badge-color: var(--color-should-delete);
+}
+
 .badge :global(.material-symbols-outlined) {
   font-size: 18px;
   font-variation-settings: "FILL" 1;
@@ -23,7 +31,7 @@
 .compact {
   padding: 0;
   background-color: transparent;
-  color: var(--color-neutral-900);
+  color: var(--badge-color);
   vertical-align: middle;
 }
 

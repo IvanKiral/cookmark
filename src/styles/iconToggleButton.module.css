@@ -1,4 +1,4 @@
-/* Round icon toggle shared by the favourite, to-try and Chef's pick buttons. */
+/* Round icon toggle shared by the favourite, to-try and recipe flag buttons. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -28,6 +28,10 @@
 
 .button.chefPickActive {
   color: var(--color-neutral-900);
+}
+
+.button.shouldDeleteActive {
+  color: var(--color-should-delete);
 }
 
 .button:disabled {

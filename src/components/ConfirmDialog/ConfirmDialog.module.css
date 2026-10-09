@@ -1,0 +1,78 @@
+/* Above the sticky recipe nav (z-index 50). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.positioner {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.content {
+  width: 100%;
+  max-width: 24rem;
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-family-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--color-neutral-900);
+}
+
+.description {
+  margin: 0 0 var(--space-6);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-neutral-600);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.cancelButton,
+.confirmButton {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border: 1px solid var(--color-neutral-300);
+  background: white;
+  color: var(--color-neutral-700);
+}
+
+.cancelButton:hover {
+  background: var(--color-neutral-100);
+}
+
+.confirmButton {
+  border: 1px solid var(--color-neutral-900);
+  background: var(--color-neutral-900);
+  color: white;
+}
+
+.confirmButton:hover {
+  background: var(--color-neutral-700);
+}

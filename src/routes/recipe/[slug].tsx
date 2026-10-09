@@ -1,11 +1,12 @@
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
-import ChefPickBadge from "~/components/ChefPickBadge/ChefPickBadge.tsx";
-import ChefPickToggle from "~/components/ChefPickToggle/ChefPickToggle.tsx";
 import MarkButton from "~/components/MarkButton/MarkButton.tsx";
+import RecipeFlagBadge from "~/components/RecipeFlagBadge/RecipeFlagBadge.tsx";
+import RecipeFlagToggle from "~/components/RecipeFlagToggle/RecipeFlagToggle.tsx";
 import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
+import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
 import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
 import { getSourceImageUrl } from "~/utils/recipeImage.ts";
 import styles from "./[slug].module.css";
@@ -18,6 +19,7 @@ const RecipePage: Component = () => {
   const params = useParams<{ slug: string }>();
   const location = useLocation();
   const recipe = createAsync(() => getRecipeBySlug(params.slug));
+  const { isAdmin } = useCurrentUser();
 
   const backHref = (): string => {
     const state = location.state as RecipeNavState | null;
@@ -93,10 +95,17 @@ const RecipePage: Component = () => {
                   </A>
                 </div>
                 <div class={styles.navActions}>
-                  <ChefPickToggle
+                  <RecipeFlagToggle
+                    flag="chef-pick"
                     slug={params.slug}
                     name={recipeData().title}
-                    isChefPick={recipeData().is_chef_pick ?? false}
+                    isSet={recipeData().is_chef_pick ?? false}
+                  />
+                  <RecipeFlagToggle
+                    flag="should-delete"
+                    slug={params.slug}
+                    name={recipeData().title}
+                    isSet={recipeData().should_delete ?? false}
                   />
                   <MarkButton mark="favorite" slug={params.slug} name={recipeData().title} />
                   <MarkButton mark="to-try" slug={params.slug} name={recipeData().title} />
@@ -107,9 +116,16 @@ const RecipePage: Component = () => {
             <main class={styles.main}>
               <header class={styles.header}>
                 <div class={styles.headerTop}>
-                  <Show when={recipeData().is_chef_pick}>
-                    <div class={styles.chefPick}>
-                      <ChefPickBadge />
+                  <Show
+                    when={recipeData().is_chef_pick || (isAdmin() && recipeData().should_delete)}
+                  >
+                    <div class={styles.badges}>
+                      <Show when={recipeData().is_chef_pick}>
+                        <RecipeFlagBadge flag="chef-pick" />
+                      </Show>
+                      <Show when={isAdmin() && recipeData().should_delete}>
+                        <RecipeFlagBadge flag="should-delete" />
+                      </Show>
                     </div>
                   </Show>
                   <h1 class={styles.title}>{recipeData().title}</h1>

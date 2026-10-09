@@ -1,4 +1,4 @@
-import { createSetChefPickHandler } from "~/lib/chefPickStore.ts";
+import { createSetRecipeFlagHandler } from "~/lib/recipeFlagStore.ts";
 
-export const PUT = createSetChefPickHandler(true);
-export const DELETE = createSetChefPickHandler(false);
+export const PUT = createSetRecipeFlagHandler("chef-pick", true);
+export const DELETE = createSetRecipeFlagHandler("chef-pick", false);

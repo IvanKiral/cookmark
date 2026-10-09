@@ -102,6 +102,25 @@ export const strings = {
     label: "Chef's pick",
     add: (name: string) => `Mark ${name} as Chef's pick`,
     remove: (name: string) => `Remove Chef's pick from ${name}`,
+    confirmRemoveTitle: "Remove Chef's pick?",
+    confirmRemoveDescription: (name: string) =>
+      `${name} will no longer be recommended to everyone.`,
+    confirmRemove: "Remove pick",
+  },
+  shouldDelete: {
+    label: "To delete",
+    add: (name: string) => `Mark ${name} to delete`,
+    remove: (name: string) => `Remove the To delete mark from ${name}`,
+    confirmAddTitle: "Mark recipe to delete?",
+    confirmAddDescription: (name: string) =>
+      `${name} stays in the cookbook. Only admins see this mark.`,
+    confirmAdd: "Mark to delete",
+    confirmRemoveTitle: "Remove the To delete mark?",
+    confirmRemoveDescription: (name: string) => `${name} will no longer be marked to delete.`,
+    confirmRemove: "Remove mark",
+  },
+  confirmDialog: {
+    cancel: "Cancel",
   },
   recipeList: {
     name: "Recipe Name",

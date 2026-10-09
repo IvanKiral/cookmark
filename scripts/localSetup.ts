@@ -24,6 +24,7 @@ const migrationsByDatabase: Record<string, ReadonlyArray<string>> = {
     "0003_user_recipe_marks.sql",
     "0004_user_recipe_marks_to_try.sql",
     "0005_recipes_chef_pick.sql",
+    "0006_recipes_should_delete.sql",
   ],
   "cookmark-recipe-inbox": ["0001_recipe_inbox.sql"],
 };
