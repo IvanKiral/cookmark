@@ -13,11 +13,13 @@
 
 .content {
   position: fixed;
+  /* Top and bottom instead of 100vh: in iPhone Safari 100vh is taller than
+     the visible area, which would hide the footer behind the toolbar. */
   top: 0;
+  bottom: 0;
   left: 0;
   width: 320px;
   max-width: 90vw;
-  height: 100vh;
   background: white;
   box-shadow: var(--shadow-lg);
   z-index: 50;
@@ -58,8 +60,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   background: transparent;
   border: none;
   border-radius: var(--radius-full);
@@ -85,32 +87,14 @@
 }
 
 .footer {
+  display: flex;
+  gap: var(--space-2);
   padding: var(--space-6);
   border-top: 1px solid var(--color-neutral-200);
 }
 
-.clearButton {
-  width: 100%;
-  padding: var(--space-3) var(--space-4);
-  background: transparent;
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-lg);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-neutral-600);
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.clearButton:hover {
-  background: var(--color-neutral-100);
-  border-color: var(--color-neutral-400);
-  color: var(--color-neutral-800);
-}
-
-.clearButton:focus {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: var(--focus-ring-offset);
+.showButton {
+  flex: 1;
 }
 
 @media (max-width: 480px) {

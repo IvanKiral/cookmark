@@ -387,6 +387,7 @@ const Home = () => {
         onMarkChange={handleMarkFilter}
         onRecommendedChange={handleRecommendedFilter}
         onClearAll={handleClearAllFilters}
+        resultCount={filteredRecipes().length}
       />
     </main>
   );

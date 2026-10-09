@@ -3,6 +3,7 @@ import RecipeCard from "~/components/RecipeCard/RecipeCard.tsx";
 import type { ViewMode } from "~/components/ViewToggle/ViewToggle.tsx";
 import { strings } from "~/constants/strings.ts";
 import type { Recipe } from "~/types/Recipe.ts";
+import createMediaQuery from "~/utils/createMediaQuery.ts";
 import { Pagination } from "../Pagination/Pagination.jsx";
 import styles from "./RecipeList.module.css";
 import RecipeListItem from "./RecipeListItem.jsx";
@@ -16,14 +17,22 @@ type RecipeListProps = {
 };
 
 const ITEMS_PER_PAGE_LIST = 15;
-// 12 divides evenly by every card-grid column count (2/3/4), so the last row
-// is never ragged regardless of breakpoint.
+// Full rows on every card grid: 4 rows of 4 on wide screens (4 columns from
+// 960px, see RecipeList.module.css), 12 below for the 2 and 3 column grids.
 const ITEMS_PER_PAGE_CARD = 12;
+const ITEMS_PER_PAGE_CARD_WIDE = 16;
+const WIDE_CARD_GRID_QUERY = "(min-width: 960px)";
 
 const RecipeList: Component<RecipeListProps> = (props) => {
-  const itemsPerPage = createMemo(() =>
-    props.viewMode === "card" ? ITEMS_PER_PAGE_CARD : ITEMS_PER_PAGE_LIST,
-  );
+  // false on the server and until mount, so a wide screen briefly renders 12.
+  const isWideCardGrid = createMediaQuery(WIDE_CARD_GRID_QUERY);
+
+  const itemsPerPage = createMemo(() => {
+    if (props.viewMode === "list") {
+      return ITEMS_PER_PAGE_LIST;
+    }
+    return isWideCardGrid() ? ITEMS_PER_PAGE_CARD_WIDE : ITEMS_PER_PAGE_CARD;
+  });
 
   const paginatedRecipes = createMemo(() => {
     const page = props.currentPage;

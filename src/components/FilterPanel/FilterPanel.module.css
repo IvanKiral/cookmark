@@ -1,12 +1,30 @@
 .panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
 }
 
 .section {
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+
+.summary {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--color-neutral-900);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
 }
 
 .sectionTitle {
@@ -14,8 +32,40 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  color: var(--color-neutral-500);
+}
+
+.summary:hover .sectionTitle {
+  color: var(--color-neutral-900);
+}
+
+.count {
+  min-width: 1.25rem;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-900);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.chevron {
+  margin-left: auto;
   color: var(--color-neutral-400);
-  margin: 0 0 var(--space-2) 0;
+  font-size: 20px;
+  transition: transform 0.15s ease;
+}
+
+.section[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-3);
 }
 
 .checkboxGroup {
@@ -45,12 +95,13 @@
   background: transparent;
 }
 
+/* 16px text keeps iPhone Safari from zooming in when the field is focused. */
 .searchInput {
   width: 100%;
   box-sizing: border-box;
   padding: var(--space-2) var(--space-3);
   margin-bottom: var(--space-2);
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
   color: var(--color-neutral-900);
   border: 1.5px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
@@ -134,4 +185,65 @@
 
 .checkboxLabel:hover .checkboxText {
   color: var(--color-neutral-900);
+}
+
+/* Drawer layout: options as wrapping chips, 44px tall for touch. */
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background-color: white;
+  color: var(--color-neutral-700);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chipSelected {
+  border-color: var(--color-neutral-900);
+  background-color: var(--color-neutral-900);
+  color: white;
+}
+
+.chip:has(:focus-visible) {
+  outline: 2px solid var(--color-neutral-900);
+  outline-offset: 2px;
+}
+
+.touchRow {
+  min-height: 2.75rem;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.showAllButton {
+  align-self: flex-start;
+  min-height: 2.75rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }

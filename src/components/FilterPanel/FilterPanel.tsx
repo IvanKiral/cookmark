@@ -1,4 +1,4 @@
-import { type Component, createMemo, createSignal, For, Show } from "solid-js";
+import { type Component, createMemo, createSignal, For, type JSX, Show } from "solid-js";
 import type { DifficultyFilter, DifficultyValue } from "~/constants/difficultyOptions.ts";
 import {
   difficultyOptions,
@@ -29,6 +29,9 @@ type FilterPanelProps = {
   onAuthorChange: (author: ReadonlyArray<string>) => void;
   onMarkChange: (marks: MarkFilter) => void;
   onRecommendedChange: (recommended: RecommendedFilter) => void;
+  // "chips" (used in the phone and tablet drawer) wraps options as 44px chips
+  // so the expanded panel fits about one screen; "list" is the desktop sidebar.
+  layout?: "list" | "chips";
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>
@@ -39,27 +42,64 @@ type FilterSectionProps<T extends string> = {
   options: ReadonlyArray<{ value: T; label: string }>;
   selected: ReadonlyArray<T>;
   onToggle: (value: T) => void;
+  isChips: boolean;
 };
 
+type CollapsibleSectionProps = {
+  title: string;
+  selectedCount: number;
+  children: JSX.Element;
+};
+
+// A native <details>, so it toggles with a click, Enter or Space and needs no
+// extra state. Every section starts expanded.
+const CollapsibleSection: Component<CollapsibleSectionProps> = (props) => (
+  <details class={styles.section} open>
+    <summary class={styles.summary}>
+      <span class={styles.sectionTitle}>{props.title}</span>
+      <Show when={props.selectedCount > 0}>
+        <span class={styles.count}>{props.selectedCount}</span>
+      </Show>
+      <span class={`material-symbols-outlined ${styles.chevron}`} aria-hidden="true">
+        expand_more
+      </span>
+    </summary>
+    <div class={styles.sectionBody}>{props.children}</div>
+  </details>
+);
+
+// Counts only this section's options; tag groups share one selected list.
+const countSelected = <T extends string>(
+  options: ReadonlyArray<{ value: T }>,
+  selected: ReadonlyArray<string>,
+): number => options.filter((option) => selected.includes(option.value)).length;
+
 const FilterSection = <T extends string>(props: FilterSectionProps<T>) => (
-  <div class={styles.section}>
-    <h3 class={styles.sectionTitle}>{props.title}</h3>
-    <div class={styles.checkboxGroup}>
+  <CollapsibleSection
+    title={props.title}
+    selectedCount={countSelected(props.options, props.selected)}
+  >
+    <div class={props.isChips ? styles.chipGroup : styles.checkboxGroup}>
       <For each={props.options}>
         {(option) => (
-          <label class={styles.checkboxLabel}>
+          <label
+            class={props.isChips ? styles.chip : styles.checkboxLabel}
+            classList={{
+              [styles.chipSelected]: props.isChips && props.selected.includes(option.value),
+            }}
+          >
             <input
               type="checkbox"
               checked={props.selected.includes(option.value)}
               onChange={() => props.onToggle(option.value)}
-              class={styles.checkbox}
+              class={props.isChips ? styles.visuallyHidden : styles.checkbox}
             />
-            <span class={styles.checkboxText}>{option.label}</span>
+            <span class={props.isChips ? undefined : styles.checkboxText}>{option.label}</span>
           </label>
         )}
       </For>
     </div>
-  </div>
+  </CollapsibleSection>
 );
 
 type SearchableFilterSectionProps = {
@@ -69,10 +109,15 @@ type SearchableFilterSectionProps = {
   options: ReadonlyArray<{ value: string; label: string }>;
   selected: ReadonlyArray<string>;
   onToggle: (value: string) => void;
+  isChips: boolean;
 };
+
+// In the drawer, the author list starts short so it doesn't dominate the scroll.
+const AUTHOR_PREVIEW_COUNT = 5;
 
 const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
   const [query, setQuery] = createSignal("");
+  const [isShowingAll, setIsShowingAll] = createSignal(false);
 
   // Selected options stay visible even when they don't match the query, so a
   // current selection is never silently hidden.
@@ -97,9 +142,24 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
     });
   });
 
+  // Searching or a selection beyond the preview always shows every match.
+  const isPreviewLimited = (): boolean =>
+    props.isChips &&
+    !isShowingAll() &&
+    query().trim() === "" &&
+    visibleOptions().length > AUTHOR_PREVIEW_COUNT;
+
+  const shownOptions = createMemo(() =>
+    isPreviewLimited()
+      ? visibleOptions().slice(0, Math.max(AUTHOR_PREVIEW_COUNT, props.selected.length))
+      : visibleOptions(),
+  );
+
+  const canToggleAll = (): boolean =>
+    props.isChips && query().trim() === "" && props.options.length > AUTHOR_PREVIEW_COUNT;
+
   return (
-    <div class={styles.section}>
-      <h3 class={styles.sectionTitle}>{props.title}</h3>
+    <CollapsibleSection title={props.title} selectedCount={props.selected.length}>
       <input
         type="search"
         class={styles.searchInput}
@@ -107,13 +167,15 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
         value={query()}
         onInput={(event) => setQuery(event.currentTarget.value)}
       />
-      <div class={`${styles.checkboxGroup} ${styles.scrollableGroup}`}>
+      {/* Authors stay a list (many, long names). In the drawer the list isn't
+          scrollable on its own, so swipes always scroll the drawer. */}
+      <div class={styles.checkboxGroup} classList={{ [styles.scrollableGroup]: !props.isChips }}>
         <For
-          each={visibleOptions()}
+          each={shownOptions()}
           fallback={<span class={styles.noMatches}>{props.noMatchesLabel}</span>}
         >
           {(option) => (
-            <label class={styles.checkboxLabel}>
+            <label class={styles.checkboxLabel} classList={{ [styles.touchRow]: props.isChips }}>
               <input
                 type="checkbox"
                 checked={props.selected.includes(option.value)}
@@ -125,11 +187,24 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
           )}
         </For>
       </div>
-    </div>
+      <Show when={canToggleAll()}>
+        <button
+          type="button"
+          class={styles.showAllButton}
+          onClick={() => setIsShowingAll((current) => !current)}
+        >
+          {isShowingAll()
+            ? strings.filters.authorShowFewer
+            : strings.filters.authorShowAll(props.options.length)}
+        </button>
+      </Show>
+    </CollapsibleSection>
   );
 };
 
 const FilterPanel: Component<FilterPanelProps> = (props) => {
+  const isChips = (): boolean => props.layout === "chips";
+
   const handleDifficultyToggle = (value: DifficultyValue) => {
     props.onDifficultyChange(toggleValue(props.difficultyFilter, value) as DifficultyFilter);
   };
@@ -161,12 +236,14 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
         options={markOptions}
         selected={props.markFilter}
         onToggle={handleMarkToggle}
+        isChips={isChips()}
       />
       <FilterSection
         title={strings.filters.recommended}
         options={recommendedOptions}
         selected={props.recommendedFilter}
         onToggle={handleRecommendedToggle}
+        isChips={isChips()}
       />
       <For each={tagGroups}>
         {(group) => (
@@ -175,9 +252,24 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
             options={group.options}
             selected={props.tagFilter}
             onToggle={handleTagToggle}
+            isChips={isChips()}
           />
         )}
       </For>
+      <FilterSection
+        title={strings.filters.time}
+        options={timeOptions}
+        selected={props.timeFilter}
+        onToggle={handleTimeToggle}
+        isChips={isChips()}
+      />
+      <FilterSection
+        title={strings.filters.difficulty}
+        options={difficultyOptions}
+        selected={props.difficultyFilter}
+        onToggle={handleDifficultyToggle}
+        isChips={isChips()}
+      />
       <Show when={props.authorOptions.length > 0}>
         <SearchableFilterSection
           title={strings.filters.author}
@@ -186,20 +278,9 @@ const FilterPanel: Component<FilterPanelProps> = (props) => {
           options={props.authorOptions}
           selected={props.authorFilter}
           onToggle={handleAuthorToggle}
+          isChips={isChips()}
         />
       </Show>
-      <FilterSection
-        title={strings.filters.difficulty}
-        options={difficultyOptions}
-        selected={props.difficultyFilter}
-        onToggle={handleDifficultyToggle}
-      />
-      <FilterSection
-        title={strings.filters.time}
-        options={timeOptions}
-        selected={props.timeFilter}
-        onToggle={handleTimeToggle}
-      />
     </div>
   );
 };

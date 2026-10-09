@@ -22,14 +22,69 @@ vi.mock("~/contexts/MarksContext.tsx", () => ({
   }),
 }));
 
+// jsdom has no matchMedia; the card page size depends on the wide-grid query.
+const media = { isWide: false };
+
+const createCardRecipes = (count: number): ReadonlyArray<Recipe> =>
+  Array.from({ length: count }, (_, i) => ({
+    id: `${i + 1}`,
+    url_slug: `recipe_${i + 1}`,
+    name: `Recipe ${i + 1}`,
+    difficulty: "Easy",
+    time: "30 min",
+    total_time: 30,
+    tags: ["test"],
+    ingredients: [],
+    description: "",
+    image_url: `/thumbnails/recipe_${i + 1}`,
+    created_at: "2024-01-01T00:00:00.000Z",
+    is_chef_pick: false,
+  }));
+
 describe("<RecipeList />", () => {
   beforeEach(() => {
     window.scrollTo = vi.fn();
+    media.isWide = false;
+    vi.stubGlobal("matchMedia", () => ({
+      matches: media.isWide,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("shows 12 cards per page below the four-column grid", () => {
+    render(() => (
+      <RecipeList
+        recipes={createCardRecipes(20)}
+        currentPage={1}
+        viewMode="card"
+        onPageChange={vi.fn()}
+      />
+    ));
+
+    expect(screen.getByText("Recipe 12")).toBeInTheDocument();
+    expect(screen.queryByText("Recipe 13")).not.toBeInTheDocument();
+  });
+
+  it("shows 16 cards per page on the four-column grid", () => {
+    media.isWide = true;
+    render(() => (
+      <RecipeList
+        recipes={createCardRecipes(20)}
+        currentPage={1}
+        viewMode="card"
+        onPageChange={vi.fn()}
+      />
+    ));
+
+    expect(screen.getByText("Recipe 16")).toBeInTheDocument();
+    expect(screen.queryByText("Recipe 17")).not.toBeInTheDocument();
   });
 
   const defaultProps = {

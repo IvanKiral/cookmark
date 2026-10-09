@@ -6,6 +6,7 @@ import type { RecommendedFilter } from "~/constants/recommendedOptions.ts";
 import { strings } from "~/constants/strings.ts";
 import type { TagFilter } from "~/constants/tagOptions.ts";
 import type { TimeFilter } from "~/constants/timeOptions.ts";
+import buttonStyles from "~/styles/button.module.css";
 import type { AuthorOption } from "~/utils/deriveAuthors.ts";
 import FilterPanel from "../FilterPanel/FilterPanel.jsx";
 import styles from "./FilterDrawer.module.css";
@@ -27,6 +28,8 @@ type FilterDrawerProps = {
   onMarkChange: (marks: MarkFilter) => void;
   onRecommendedChange: (recommended: RecommendedFilter) => void;
   onClearAll: () => void;
+  // Recipes matching the current search and filters, shown on the close button.
+  resultCount: number;
 };
 
 const FilterDrawer: Component<FilterDrawerProps> = (props) => {
@@ -59,6 +62,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
 
           <div class={styles.sections}>
             <FilterPanel
+              layout="chips"
               difficultyFilter={props.difficultyFilter}
               timeFilter={props.timeFilter}
               tagFilter={props.tagFilter}
@@ -75,13 +79,26 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
             />
           </div>
 
-          {hasAnyFilter() && (
-            <div class={styles.footer}>
-              <button type="button" class={styles.clearButton} onClick={props.onClearAll}>
+          {/* Always visible, so the result count updates while filtering and
+              there's an obvious way back to the recipes. */}
+          <div class={styles.footer}>
+            {hasAnyFilter() && (
+              <button
+                type="button"
+                class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                onClick={props.onClearAll}
+              >
                 {strings.filterDrawer.clearAll}
               </button>
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
+              onClick={() => props.onOpenChange(false)}
+            >
+              {strings.filterDrawer.showResults(props.resultCount)}
+            </button>
+          </div>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer>

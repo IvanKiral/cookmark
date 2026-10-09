@@ -43,6 +43,10 @@ const tagLabels: Record<TagValue, string> = {
   "Meal-prep": strings.tags.mealPrep,
   Legumes: strings.tags.legumes,
   Soup: strings.tags.soup,
+  Breakfast: strings.tags.breakfast,
+  Lunch: strings.tags.lunch,
+  Dinner: strings.tags.dinner,
+  Snack: strings.tags.snack,
 };
 
 export const difficultyOptions = difficultyValues.map((value) => ({
@@ -74,6 +78,10 @@ const buildTagOptions = (values: ReadonlyArray<TagValue>) =>
   values.map((value) => ({ value, label: tagLabels[value] }));
 
 export const tagGroups = [
+  {
+    label: strings.filters.meal,
+    options: buildTagOptions(["Breakfast", "Lunch", "Dinner", "Snack"]),
+  },
   {
     label: strings.filters.protein,
     options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs", "Legumes"]),
