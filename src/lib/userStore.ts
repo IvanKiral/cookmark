@@ -23,7 +23,7 @@ export type User = {
 export const getUsersDb = (): D1Database | undefined =>
   (globalThis as unknown as { __env__?: UsersEnv }).__env__?.RECIPES;
 
-const normalizeEmail = (email: string): string => email.trim().toLowerCase();
+export const normalizeEmail = (email: string): string => email.trim().toLowerCase();
 
 // Anything other than an explicit admin is treated as the least-privileged role.
 const parseRole = (value: unknown): Role => (value === "admin" ? "admin" : "viewer");

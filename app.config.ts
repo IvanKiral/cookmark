@@ -127,8 +127,9 @@ export default defineConfig({
       wrangler: {
         name: "cookmark",
         compatibility_date: "2025-07-15",
-        // Per-user favourites trust the Access JWT, so the app must only be
-        // reachable through the Access-fronted custom domain — not workers.dev.
+        // Per-user data (favourites, roles) trusts the Access JWT, so the app
+        // must only be reachable through the Access-fronted custom domain — not
+        // workers.dev.
         // The JWT is verified with two Worker secrets (set via `wrangler secret
         // put`, which survive deploys unlike `vars`): ACCESS_TEAM_DOMAIN
         // (https://<team-name>.cloudflareaccess.com) and ACCESS_AUD (the Access
@@ -139,14 +140,13 @@ export default defineConfig({
         // Private bucket holding recipe videos (videos/<slug>.mp4), thumbnails
         // (thumbnails/<slug>.jpg) and image recipe sources (recipe-images/<slug>.<ext>).
         r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
-        // Per-user favourite recipe slugs, keyed by Access email.
-        kv_namespaces: [{ binding: "FAVORITES", id: "9be88640af5546f5b2341287ae842757" }],
         d1_databases: [
           {
             binding: "RECIPE_INBOX",
             database_name: "cookmark-recipe-inbox",
             database_id: "aa058d7c-4a35-4b14-9d67-5e799eff98ba",
           },
+          // Recipes plus users and their per-user recipe marks (favourites).
           {
             binding: "RECIPES",
             database_name: "cookmark-recipes",

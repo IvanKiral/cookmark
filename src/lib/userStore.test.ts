@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createTestD1 } from "~/lib/testD1.ts";
 import { getOrCreateUser, readUser } from "./userStore.ts";
 
-const createDb = () => createTestD1("0002_users.sql");
+const createDb = () => createTestD1(["0002_users.sql"]);
 
 describe("getOrCreateUser", () => {
   it("creates a first-time user as a viewer", async () => {

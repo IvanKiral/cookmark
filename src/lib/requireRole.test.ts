@@ -41,13 +41,13 @@ describe("requireRole", () => {
   });
 
   it("returns 403 for a viewer on an admin action", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createTestD1("0002_users.sql") });
+    vi.stubGlobal("__env__", { RECIPES: createTestD1(["0002_users.sql"]) });
     const check = await requireRole(request, "admin");
     expect(check.isAllowed ? undefined : check.response.status).toBe(403);
   });
 
   it("allows an admin and returns the user", async () => {
-    const db = createTestD1("0002_users.sql");
+    const db = createTestD1(["0002_users.sql"]);
     db.raw.exec(
       "INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', 'admin', 'x')",
     );

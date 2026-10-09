@@ -1,41 +1,32 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { getUserEmail } from "~/lib/access.ts";
-import { getFavoritesKv, readFavorites, writeFavorites } from "~/lib/favoritesStore.ts";
+import { addMark, getMarksDb, removeMark } from "~/lib/userMarksStore.ts";
+import { getOrCreateUser } from "~/lib/userStore.ts";
 
 export const PUT = async (event: APIEvent): Promise<Response> => {
-  const kv = getFavoritesKv();
-  if (!kv) {
+  const db = getMarksDb();
+  if (!db) {
     return new Response("Favorites unavailable", { status: 500 });
   }
   const email = await getUserEmail(event.request);
   if (!email) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const slug = event.params.slug;
-  const current = await readFavorites(kv, email);
-  if (!current.includes(slug)) {
-    await writeFavorites(kv, email, [...current, slug]);
-  }
+  const now = new Date().toISOString();
+  await getOrCreateUser(db, email, now);
+  await addMark(db, email, event.params.slug, "favorite", now);
   return new Response(null, { status: 204 });
 };
 
 export const DELETE = async (event: APIEvent): Promise<Response> => {
-  const kv = getFavoritesKv();
-  if (!kv) {
+  const db = getMarksDb();
+  if (!db) {
     return new Response("Favorites unavailable", { status: 500 });
   }
   const email = await getUserEmail(event.request);
   if (!email) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const slug = event.params.slug;
-  const current = await readFavorites(kv, email);
-  if (current.includes(slug)) {
-    await writeFavorites(
-      kv,
-      email,
-      current.filter((entry) => entry !== slug),
-    );
-  }
+  await removeMark(db, email, event.params.slug, "favorite");
   return new Response(null, { status: 204 });
 };
