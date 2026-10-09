@@ -117,7 +117,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  box-sizing: border-box;
+  height: var(--control-height);
+  padding: 0 var(--space-4);
   background: white;
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-lg);
@@ -215,8 +217,12 @@
     padding: var(--space-6) var(--space-4) var(--space-4);
   }
 
+  /* Phones: Filters, Sort and the view toggle on one row, search below.
+     Clear all lives in the filter drawer's footer here; the count on the
+     Filters button shows that filters are active. */
   .controls {
     flex-wrap: wrap;
+    gap: var(--space-3) var(--space-2);
   }
 
   .searchWrapper {
@@ -225,11 +231,14 @@
   }
 
   .filtersButton {
-    order: 2;
+    padding: 0 var(--space-3);
+  }
+
+  .clearFiltersButton {
+    display: none;
   }
 
   .controls > :last-child {
-    order: 3;
     margin-left: auto;
   }
 }
@@ -287,9 +296,5 @@
     position: relative;
     transform: none;
     margin-top: var(--space-4);
-  }
-
-  .controls {
-    gap: var(--space-3);
   }
 }
