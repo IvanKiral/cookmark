@@ -38,7 +38,6 @@ const createCardRecipes = (count: number): ReadonlyArray<Recipe> =>
     description: "",
     image_url: `/thumbnails/recipe_${i + 1}`,
     created_at: "2024-01-01T00:00:00.000Z",
-    is_chef_pick: false,
   }));
 
 describe("<RecipeList />", () => {
@@ -106,7 +105,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const { getByText, queryByText } = render(() => (
@@ -134,7 +132,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const mockOnPageChange = vi.fn();
@@ -166,7 +163,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const mockOnPageChange = vi.fn();
@@ -197,7 +193,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     render(() => <RecipeList recipes={mockRecipes} {...defaultProps} />);
@@ -220,7 +215,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const mockOnPageChange = vi.fn();
@@ -251,7 +245,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     render(() => (
@@ -281,7 +274,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: `/thumbnails/recipe_${i + 1}`,
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const { container } = render(() => (
@@ -332,7 +324,6 @@ describe("<RecipeList />", () => {
       description: "",
       image_url: "/thumbnails/test",
       created_at: "2024-01-01T00:00:00.000Z",
-      is_chef_pick: false,
     }));
 
     const mockOnPageChange = vi.fn();

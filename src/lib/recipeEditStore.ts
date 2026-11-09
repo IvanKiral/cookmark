@@ -23,7 +23,7 @@ const getRecipeEditDb = (): D1Database | undefined =>
 
 // Saves the current JSON to recipe_revisions and writes the edited JSON in one
 // D1 batch, which is a single transaction. The UPDATE leaves the flag columns
-// (is_chef_pick, should_delete) alone. Returns false when no recipe has this slug.
+// (verdict, should_delete) alone. Returns false when no recipe has this slug.
 export const updateRecipe = async (
   db: D1Database,
   slug: string,

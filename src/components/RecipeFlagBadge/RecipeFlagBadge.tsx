@@ -1,17 +1,43 @@
 import type { Component } from "solid-js";
 import type { RecipeFlag } from "~/constants/recipeFlags.ts";
+import {
+  type RecipeVerdict,
+  recipeVerdictIcons,
+  recipeVerdictLabels,
+} from "~/constants/recipeVerdicts.ts";
 import { strings } from "~/constants/strings.ts";
 import styles from "./RecipeFlagBadge.module.css";
 
+type RecipeBadgeKind = RecipeVerdict | RecipeFlag;
+
 type RecipeFlagBadgeProps = {
-  flag: RecipeFlag;
+  kind: RecipeBadgeKind;
   // Icon only, for tight spots like list rows. The label stays available to
   // screen readers and as a tooltip.
   isCompact?: boolean;
 };
 
-const badgeConfigs: Record<RecipeFlag, { icon: string; label: string; class: string }> = {
-  "chef-pick": { icon: "chef_hat", label: strings.chefPick.label, class: styles.chefPick },
+const badgeConfigs: Record<RecipeBadgeKind, { icon: string; label: string; class: string }> = {
+  "chef-kiss": {
+    icon: recipeVerdictIcons["chef-kiss"],
+    label: recipeVerdictLabels["chef-kiss"],
+    class: styles.chefKiss,
+  },
+  "chef-approved": {
+    icon: recipeVerdictIcons["chef-approved"],
+    label: recipeVerdictLabels["chef-approved"],
+    class: styles.chefApproved,
+  },
+  "chef-ok": {
+    icon: recipeVerdictIcons["chef-ok"],
+    label: recipeVerdictLabels["chef-ok"],
+    class: styles.chefOk,
+  },
+  "chef-flop": {
+    icon: recipeVerdictIcons["chef-flop"],
+    label: recipeVerdictLabels["chef-flop"],
+    class: styles.chefFlop,
+  },
   "should-delete": {
     icon: "delete",
     label: strings.shouldDelete.label,
@@ -20,7 +46,7 @@ const badgeConfigs: Record<RecipeFlag, { icon: string; label: string; class: str
 };
 
 const RecipeFlagBadge: Component<RecipeFlagBadgeProps> = (props) => {
-  const config = () => badgeConfigs[props.flag];
+  const config = () => badgeConfigs[props.kind];
 
   return (
     <span

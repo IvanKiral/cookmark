@@ -16,7 +16,6 @@ const mockRecipes: Recipe[] = [
     description: "",
     image_url: "/thumbnails/test",
     created_at: "2024-01-01T00:00:00.000Z",
-    is_chef_pick: false,
   },
   {
     id: "2",
@@ -30,7 +29,6 @@ const mockRecipes: Recipe[] = [
     description: "",
     image_url: "/thumbnails/test",
     created_at: "2024-01-02T00:00:00.000Z",
-    is_chef_pick: false,
   },
   {
     id: "3",
@@ -44,7 +42,6 @@ const mockRecipes: Recipe[] = [
     description: "",
     image_url: "/thumbnails/test",
     created_at: "2024-01-03T00:00:00.000Z",
-    is_chef_pick: false,
   },
 ];
 

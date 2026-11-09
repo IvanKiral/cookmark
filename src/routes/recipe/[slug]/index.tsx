@@ -4,6 +4,7 @@ import MarkButton from "~/components/MarkButton/MarkButton.tsx";
 import RecipeFlagBadge from "~/components/RecipeFlagBadge/RecipeFlagBadge.tsx";
 import RecipeFlagToggle from "~/components/RecipeFlagToggle/RecipeFlagToggle.tsx";
 import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
+import RecipeVerdictToggle from "~/components/RecipeVerdictToggle/RecipeVerdictToggle.tsx";
 import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
 import { strings } from "~/constants/strings.ts";
 import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
@@ -88,9 +89,12 @@ const RecipePage: Component = () => {
                   >
                     <span class="material-symbols-outlined">close</span>
                   </A>
-                  <A href="/" class={styles.logo}>
-                    Cookmark
-                  </A>
+                  {/* Admins get extra action buttons; the logo would crowd them on phones. */}
+                  <Show when={!isAdmin()}>
+                    <A href="/" class={styles.logo}>
+                      Cookmark
+                    </A>
+                  </Show>
                 </div>
                 <div class={styles.navActions}>
                   <Show when={isAdmin()}>
@@ -105,11 +109,10 @@ const RecipePage: Component = () => {
                       </span>
                     </A>
                   </Show>
-                  <RecipeFlagToggle
-                    flag="chef-pick"
+                  <RecipeVerdictToggle
                     slug={params.slug}
                     name={recipeData().title}
-                    isSet={recipeData().is_chef_pick ?? false}
+                    verdict={recipeData().verdict}
                   />
                   <RecipeFlagToggle
                     flag="should-delete"
@@ -126,15 +129,13 @@ const RecipePage: Component = () => {
             <main class={styles.main}>
               <header class={styles.header}>
                 <div class={styles.headerTop}>
-                  <Show
-                    when={recipeData().is_chef_pick || (isAdmin() && recipeData().should_delete)}
-                  >
+                  <Show when={recipeData().verdict || (isAdmin() && recipeData().should_delete)}>
                     <div class={styles.badges}>
-                      <Show when={recipeData().is_chef_pick}>
-                        <RecipeFlagBadge flag="chef-pick" />
+                      <Show when={recipeData().verdict}>
+                        {(verdict) => <RecipeFlagBadge kind={verdict()} />}
                       </Show>
                       <Show when={isAdmin() && recipeData().should_delete}>
-                        <RecipeFlagBadge flag="should-delete" />
+                        <RecipeFlagBadge kind="should-delete" />
                       </Show>
                     </div>
                   </Show>

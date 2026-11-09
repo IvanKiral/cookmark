@@ -17,7 +17,6 @@ type RecipeFlagEnv = {
 
 // Column names can't be bound as parameters, so they only ever come from here.
 const flagColumns: Record<RecipeFlag, string> = {
-  "chef-pick": "is_chef_pick",
   "should-delete": "should_delete",
 };
 

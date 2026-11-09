@@ -38,19 +38,20 @@ const createDb = (): TestD1 => {
     "0005_recipes_chef_pick.sql",
     "0006_recipes_should_delete.sql",
     "0007_recipe_revisions.sql",
+    "0008_recipes_verdict.sql",
   ]);
   db.raw
-    .prepare("INSERT INTO recipes (slug, data, is_chef_pick, should_delete) VALUES (?, ?, 1, 1)")
+    .prepare(
+      "INSERT INTO recipes (slug, data, verdict, should_delete) VALUES (?, ?, 'chef-kiss', 1)",
+    )
     .run("soup", originalData);
   return db;
 };
 
 const readRecipe = (db: TestD1) =>
-  db.raw
-    .prepare("SELECT data, is_chef_pick, should_delete FROM recipes WHERE slug = 'soup'")
-    .get() as {
+  db.raw.prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = 'soup'").get() as {
     data: string;
-    is_chef_pick: number;
+    verdict: string;
     should_delete: number;
   };
 
@@ -66,7 +67,7 @@ describe("updateRecipe", () => {
 
     const row = readRecipe(db);
     expect(JSON.parse(row.data)).toEqual({ ...JSON.parse(originalData), ...edit });
-    expect([row.is_chef_pick, row.should_delete]).toEqual([1, 1]);
+    expect([row.verdict, row.should_delete]).toEqual(["chef-kiss", 1]);
     expect(readRevisions(db)).toEqual([
       {
         slug: "soup",

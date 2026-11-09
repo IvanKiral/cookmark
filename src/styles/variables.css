@@ -29,6 +29,12 @@
   --color-should-delete: #dc2626;
   --color-error: #dc2626;
 
+  /* Chef verdicts, best to worst. All keep white badge text readable. */
+  --color-chef-kiss: var(--color-neutral-900);
+  --color-chef-approved: #15803d;
+  --color-chef-ok: var(--color-neutral-500);
+  --color-chef-flop: #9a3412;
+
   /* One height for the list page controls (Filters, search, Sort, view
      toggle) so they line up; 44px is Apple's minimum touch target. */
   --control-height: 2.75rem;

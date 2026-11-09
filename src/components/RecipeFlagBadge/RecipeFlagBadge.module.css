@@ -15,8 +15,20 @@
   white-space: nowrap;
 }
 
-.chefPick {
-  --badge-color: var(--color-neutral-900);
+.chefKiss {
+  --badge-color: var(--color-chef-kiss);
+}
+
+.chefApproved {
+  --badge-color: var(--color-chef-approved);
+}
+
+.chefOk {
+  --badge-color: var(--color-chef-ok);
+}
+
+.chefFlop {
+  --badge-color: var(--color-chef-flop);
 }
 
 .shouldDelete {

@@ -40,7 +40,7 @@ pnpm dev
 
 ### Local testing with the Cloudflare runtime
 
-`pnpm dev` has no database, so favourites, To try, roles and Chef's pick do not work there. To test them locally, run the production build in Cloudflare's local runtime (`wrangler dev`) against local D1 databases. You need `wrangler` installed and, for `--from-remote`, logged in.
+`pnpm dev` has no database, so favourites, To try, roles and chef verdicts do not work there. To test them locally, run the production build in Cloudflare's local runtime (`wrangler dev`) against local D1 databases. You need `wrangler` installed and, for `--from-remote`, logged in.
 
 ```bash
 pnpm local:setup                 # fresh local databases: all migrations, recipes from ./data, admin@localhost as admin

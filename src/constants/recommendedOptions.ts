@@ -1,5 +1,7 @@
-// Recipe-level highlights set by admins (as opposed to per-user marks).
-export const recommendedValues = ["chef-pick"] as const;
+import { type RecipeVerdict, recipeVerdictValues } from "./recipeVerdicts.ts";
 
-export type RecommendedValue = (typeof recommendedValues)[number];
+// The Recommended filter offers every admin verdict (as opposed to per-user marks).
+export const recommendedValues = recipeVerdictValues;
+
+export type RecommendedValue = RecipeVerdict;
 export type RecommendedFilter = ReadonlyArray<RecommendedValue>;

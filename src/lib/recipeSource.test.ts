@@ -29,13 +29,14 @@ const createDb = (): TestD1 => {
     "recipes_schema.sql",
     "0005_recipes_chef_pick.sql",
     "0006_recipes_should_delete.sql",
+    "0008_recipes_verdict.sql",
   ]);
-  db.raw
-    .prepare("INSERT INTO recipes (slug, data, is_chef_pick, should_delete) VALUES (?, ?, ?, ?)")
-    .run("soup", recipeJson("Soup"), 1, 0);
-  db.raw
-    .prepare("INSERT INTO recipes (slug, data, is_chef_pick, should_delete) VALUES (?, ?, ?, ?)")
-    .run("cake", recipeJson("Cake"), 0, 1);
+  const insert = db.raw.prepare(
+    "INSERT INTO recipes (slug, data, verdict, should_delete) VALUES (?, ?, ?, ?)",
+  );
+  insert.run("soup", recipeJson("Soup"), "chef-kiss", 0);
+  insert.run("cake", recipeJson("Cake"), null, 1);
+  insert.run("stew", recipeJson("Stew"), "chef-ok", 0);
   return db;
 };
 
@@ -44,19 +45,21 @@ describe("recipe source flags", () => {
     vi.unstubAllGlobals();
   });
 
-  it("carries is_chef_pick from the recipes table into the list", async () => {
+  it("carries the verdict from the recipes table into the list", async () => {
     vi.stubGlobal("__env__", { RECIPES: createDb() });
     const recipes = await loadRecipesFromSource();
-    expect(recipes.map((recipe) => [recipe.url_slug, recipe.is_chef_pick])).toEqual([
-      ["soup", true],
-      ["cake", false],
+    expect(recipes.map((recipe) => [recipe.url_slug, recipe.verdict])).toEqual([
+      ["soup", "chef-kiss"],
+      ["cake", undefined],
+      ["stew", "chef-ok"],
     ]);
   });
 
-  it("carries is_chef_pick into a single recipe", async () => {
+  it("carries the verdict into a single recipe", async () => {
     vi.stubGlobal("__env__", { RECIPES: createDb() });
-    expect((await loadRecipeDataFromSource("soup"))?.is_chef_pick).toBe(true);
-    expect((await loadRecipeDataFromSource("cake"))?.is_chef_pick).toBe(false);
+    expect((await loadRecipeDataFromSource("soup"))?.verdict).toBe("chef-kiss");
+    expect((await loadRecipeDataFromSource("cake"))?.verdict).toBeUndefined();
+    expect((await loadRecipeDataFromSource("stew"))?.verdict).toBe("chef-ok");
   });
 
   it("carries should_delete into a single recipe", async () => {

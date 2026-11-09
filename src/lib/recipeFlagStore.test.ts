@@ -10,31 +10,30 @@ const createDb = (): TestD1 => {
     "0002_users.sql",
     "0005_recipes_chef_pick.sql",
     "0006_recipes_should_delete.sql",
+    "0008_recipes_verdict.sql",
   ]);
   db.raw.exec(`INSERT INTO recipes (slug, data) VALUES ('soup', '{"title":"Soup"}')`);
   return db;
 };
 
 const readFlags = (db: TestD1, slug: string): unknown =>
-  db.raw.prepare("SELECT is_chef_pick, should_delete FROM recipes WHERE slug = ?").get(slug);
+  db.raw.prepare("SELECT verdict, should_delete FROM recipes WHERE slug = ?").get(slug);
 
 describe("setRecipeFlag", () => {
-  it("sets and clears each flag in its own column without touching the recipe data", async () => {
+  it("sets and clears the flag in its own column without touching the recipe data or verdict", async () => {
     const db = createDb();
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 0, should_delete: 0 });
-
-    expect(await setRecipeFlag(db, "soup", "chef-pick", true)).toBe(true);
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 1, should_delete: 0 });
+    db.raw.exec(`UPDATE recipes SET verdict = 'chef-kiss'`);
+    expect(readFlags(db, "soup")).toEqual({ verdict: "chef-kiss", should_delete: 0 });
 
     expect(await setRecipeFlag(db, "soup", "should-delete", true)).toBe(true);
-    expect(db.raw.prepare("SELECT data, is_chef_pick, should_delete FROM recipes").get()).toEqual({
+    expect(db.raw.prepare("SELECT data, verdict, should_delete FROM recipes").get()).toEqual({
       data: '{"title":"Soup"}',
-      is_chef_pick: 1,
+      verdict: "chef-kiss",
       should_delete: 1,
     });
 
-    expect(await setRecipeFlag(db, "soup", "chef-pick", false)).toBe(true);
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 0, should_delete: 1 });
+    expect(await setRecipeFlag(db, "soup", "should-delete", false)).toBe(true);
+    expect(readFlags(db, "soup")).toEqual({ verdict: "chef-kiss", should_delete: 0 });
   });
 
   it("reports an unknown recipe", async () => {
@@ -70,31 +69,33 @@ describe("recipe flag endpoint", () => {
     expect(
       (await createSetRecipeFlagHandler("should-delete", true)(createEvent("soup"))).status,
     ).toBe(204);
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 0, should_delete: 1 });
+    expect(readFlags(db, "soup")).toEqual({ verdict: null, should_delete: 1 });
     expect(
       (await createSetRecipeFlagHandler("should-delete", false)(createEvent("soup"))).status,
     ).toBe(204);
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 0, should_delete: 0 });
+    expect(readFlags(db, "soup")).toEqual({ verdict: null, should_delete: 0 });
   });
 
   it("returns 404 for an unknown recipe", async () => {
     createDbWithRole("admin");
     expect(
-      (await createSetRecipeFlagHandler("chef-pick", true)(createEvent("missing"))).status,
+      (await createSetRecipeFlagHandler("should-delete", true)(createEvent("missing"))).status,
     ).toBe(404);
   });
 
-  it.each(["chef-pick", "should-delete"] as const)("forbids viewers to change %s", async (flag) => {
+  it("forbids viewers to change a flag", async () => {
     const db = createDbWithRole("viewer");
-    expect((await createSetRecipeFlagHandler(flag, true)(createEvent("soup"))).status).toBe(403);
-    expect(readFlags(db, "soup")).toEqual({ is_chef_pick: 0, should_delete: 0 });
+    expect(
+      (await createSetRecipeFlagHandler("should-delete", true)(createEvent("soup"))).status,
+    ).toBe(403);
+    expect(readFlags(db, "soup")).toEqual({ verdict: null, should_delete: 0 });
   });
 
   it("rejects requests without an identity", async () => {
     createDbWithRole("admin");
     vi.stubEnv("DEV", false);
-    expect((await createSetRecipeFlagHandler("chef-pick", true)(createEvent("soup"))).status).toBe(
-      401,
-    );
+    expect(
+      (await createSetRecipeFlagHandler("should-delete", true)(createEvent("soup"))).status,
+    ).toBe(401);
   });
 });

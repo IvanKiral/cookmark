@@ -1,5 +1,6 @@
 import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
 import { type Mark, markValues } from "./markOptions.ts";
+import { recipeVerdictLabels } from "./recipeVerdicts.ts";
 import { type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
 import { strings } from "./strings.ts";
 import { type TagValue, tagValues } from "./tagOptions.ts";
@@ -22,9 +23,7 @@ const markLabels: Record<Mark, string> = {
   "to-try": strings.marks.toTry,
 };
 
-const recommendedLabels: Record<RecommendedValue, string> = {
-  "chef-pick": strings.filters.chefPick,
-};
+const recommendedLabels: Record<RecommendedValue, string> = recipeVerdictLabels;
 
 const tagLabels: Record<TagValue, string> = {
   Chicken: strings.tags.chicken,

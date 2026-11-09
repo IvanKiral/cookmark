@@ -57,8 +57,6 @@ const Home = () => {
     (): MarkFilter => parseArrayParam(searchParams.mark, markValues as ReadonlyArray<Mark>),
   );
 
-  // "chef-pick" is the only recommended value so far, so any selection means
-  // "show Chef's picks only".
   const recommendedFilter = createMemo(
     (): RecommendedFilter =>
       parseArrayParam(
@@ -192,7 +190,11 @@ const Home = () => {
           markFilter().length === 0 ||
           markFilter().some((mark) => marks.isMarked(mark, recipe.url_slug)),
       )
-      .filter((recipe) => recommendedFilter().length === 0 || recipe.is_chef_pick)
+      .filter(
+        (recipe) =>
+          recommendedFilter().length === 0 ||
+          (recipe.verdict !== undefined && recommendedFilter().includes(recipe.verdict)),
+      )
       .sort(getSortComparator(sort));
   });
 

@@ -39,7 +39,7 @@ describe("<FilterPanel />", () => {
 
     expect(readSections(container).map((section) => section.title)).toEqual([
       "My recipes",
-      "Recommended",
+      "Chef's verdict",
       "Meal",
       "Protein",
       "Type",

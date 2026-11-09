@@ -32,47 +32,10 @@ describe("<RecipeFlagToggle />", () => {
     vi.unstubAllGlobals();
   });
 
-  it.each(["chef-pick", "should-delete"] as const)("is hidden from viewers (%s)", (flag) => {
+  it("is hidden from viewers", () => {
     currentUser.isAdmin = false;
-    render(() => <RecipeFlagToggle flag={flag} slug="soup" name="Soup" isSet />);
+    render(() => <RecipeFlagToggle flag="should-delete" slug="soup" name="Soup" isSet />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
-  });
-
-  it("marks a recipe as Chef's pick without asking and refreshes the recipe data", async () => {
-    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
-    render(() => <RecipeFlagToggle flag="chef-pick" slug="soup" name="Soup" isSet={false} />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Mark Soup as Chef's pick" }));
-
-    await waitFor(() =>
-      expect(revalidate).toHaveBeenCalledWith(["recipes-list", "recipe-by-slug"]),
-    );
-    expect(fetchMock).toHaveBeenCalledWith("/api/chef-pick/soup", { method: "PUT" });
-    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
-  });
-
-  it("asks before removing Chef's pick and keeps it when cancelled", async () => {
-    render(() => <RecipeFlagToggle flag="chef-pick" slug="soup" name="Soup" isSet />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Remove Chef's pick from Soup" }));
-    const dialog = await screen.findByRole("alertdialog");
-    expect(dialog).toHaveTextContent("Soup will no longer be recommended to everyone.");
-
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-
-    await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-
-  it("removes Chef's pick once confirmed", async () => {
-    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
-    render(() => <RecipeFlagToggle flag="chef-pick" slug="soup" name="Soup" isSet />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Remove Chef's pick from Soup" }));
-    fireEvent.click(await screen.findByRole("button", { name: "Remove pick" }));
-
-    await waitFor(() => expect(revalidate).toHaveBeenCalled());
-    expect(fetchMock).toHaveBeenCalledWith("/api/chef-pick/soup", { method: "DELETE" });
   });
 
   it("asks before marking a recipe to delete", async () => {

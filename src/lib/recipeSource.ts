@@ -1,3 +1,4 @@
+import type { RecipeVerdict } from "~/constants/recipeVerdicts.ts";
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
 import {
   bundleHasVideo,
@@ -15,7 +16,7 @@ type D1PreparedStatement = {
 type RecipeRow = {
   slug: string;
   data: string;
-  is_chef_pick: number;
+  verdict: RecipeVerdict | null;
   should_delete: number;
 };
 
@@ -39,14 +40,14 @@ const getEnv = (): SourceEnv => (globalThis as unknown as { __env__?: SourceEnv 
 // The flag columns win over anything in the source JSON.
 const toRecipeData = (row: Omit<RecipeRow, "slug">): RecipeData => ({
   ...(JSON.parse(row.data) as RecipeData),
-  is_chef_pick: row.is_chef_pick === 1,
+  verdict: row.verdict ?? undefined,
   should_delete: row.should_delete === 1,
 });
 
 const readRecipesFromDb = async (db: D1Database): Promise<Recipe[] | undefined> => {
   try {
     const { results } = await db
-      .prepare("SELECT slug, data, is_chef_pick, should_delete FROM recipes")
+      .prepare("SELECT slug, data, verdict, should_delete FROM recipes")
       .all<RecipeRow>();
     if (results.length === 0) {
       return undefined;
@@ -60,7 +61,7 @@ const readRecipesFromDb = async (db: D1Database): Promise<Recipe[] | undefined> 
 const readRecipeFromDb = async (db: D1Database, slug: string): Promise<RecipeData | undefined> => {
   try {
     const row = await db
-      .prepare("SELECT data, is_chef_pick, should_delete FROM recipes WHERE slug = ?")
+      .prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = ?")
       .bind(slug)
       .first<Omit<RecipeRow, "slug">>();
     return row ? toRecipeData(row) : undefined;

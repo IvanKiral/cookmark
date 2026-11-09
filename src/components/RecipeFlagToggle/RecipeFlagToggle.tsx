@@ -29,19 +29,6 @@ type FlagConfig = {
 };
 
 const flagConfigs: Record<RecipeFlag, FlagConfig> = {
-  "chef-pick": {
-    icon: "chef_hat",
-    activeClass: styles.chefPickActive,
-    getLabel: (name, isSet) => (isSet ? strings.chefPick.remove(name) : strings.chefPick.add(name)),
-    getConfirmation: (name, isSet) =>
-      isSet
-        ? {
-            title: strings.chefPick.confirmRemoveTitle,
-            description: strings.chefPick.confirmRemoveDescription(name),
-            confirmLabel: strings.chefPick.confirmRemove,
-          }
-        : undefined,
-  },
   "should-delete": {
     icon: "delete",
     activeClass: styles.shouldDeleteActive,

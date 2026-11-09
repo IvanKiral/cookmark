@@ -78,7 +78,7 @@ const RecipeList: Component<RecipeListProps> = (props) => {
                   name={recipe.name}
                   difficulty={recipe.difficulty}
                   time={recipe.time}
-                  isChefPick={recipe.is_chef_pick}
+                  verdict={recipe.verdict}
                 />
               )}
             </For>
@@ -94,7 +94,7 @@ const RecipeList: Component<RecipeListProps> = (props) => {
                 imageUrl={recipe.image_url}
                 difficulty={recipe.difficulty}
                 time={recipe.time}
-                isChefPick={recipe.is_chef_pick}
+                verdict={recipe.verdict}
               />
             )}
           </For>

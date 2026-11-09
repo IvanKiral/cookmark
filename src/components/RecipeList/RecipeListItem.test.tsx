@@ -31,7 +31,6 @@ describe("<RecipeListItem />", () => {
         name="Pasta Carbonara"
         difficulty="Medium"
         time="30 min"
-        isChefPick={false}
       />
     ));
 
@@ -42,13 +41,7 @@ describe("<RecipeListItem />", () => {
 
   it("renders with different difficulty levels", () => {
     const { getByText } = render(() => (
-      <RecipeListItem
-        urlSlug="simple-salad"
-        name="Simple Salad"
-        difficulty="Easy"
-        time="10 min"
-        isChefPick={false}
-      />
+      <RecipeListItem urlSlug="simple-salad" name="Simple Salad" difficulty="Easy" time="10 min" />
     ));
 
     expect(getByText("Easy")).toBeInTheDocument();
@@ -56,13 +49,7 @@ describe("<RecipeListItem />", () => {
 
   it("renders as a link to the recipe page", () => {
     const { container } = render(() => (
-      <RecipeListItem
-        urlSlug="test-recipe"
-        name="Test Recipe"
-        difficulty="Hard"
-        time="60 min"
-        isChefPick={false}
-      />
+      <RecipeListItem urlSlug="test-recipe" name="Test Recipe" difficulty="Hard" time="60 min" />
     ));
 
     const link = container.querySelector("a");
@@ -70,23 +57,27 @@ describe("<RecipeListItem />", () => {
     expect(link?.getAttribute("href")).toBe("/recipe/test-recipe");
   });
 
-  it("shows the Chef's pick badge for a picked recipe", () => {
-    render(() => (
-      <RecipeListItem urlSlug="soup" name="Soup" difficulty="Easy" time="20 min" isChefPick />
-    ));
-    expect(screen.getByText("Chef's pick")).toBeInTheDocument();
-  });
-
-  it("shows no Chef's pick badge for other recipes", () => {
+  it.each([
+    ["chef-kiss", "Chef's kiss"],
+    ["chef-approved", "Chef approved"],
+    ["chef-ok", "Chef's ok"],
+    ["chef-flop", "Chef's flop"],
+  ] as const)("shows only the %s badge for a recipe with that verdict", (verdict, label) => {
     render(() => (
       <RecipeListItem
-        urlSlug="cake"
-        name="Cake"
+        urlSlug="soup"
+        name="Soup"
         difficulty="Easy"
         time="20 min"
-        isChefPick={false}
+        verdict={verdict}
       />
     ));
-    expect(screen.queryByText("Chef's pick")).not.toBeInTheDocument();
+    expect(screen.getByText(label)).toBeInTheDocument();
+    expect(screen.getAllByText(/^Chef/)).toHaveLength(1);
+  });
+
+  it("shows no verdict badge for other recipes", () => {
+    render(() => <RecipeListItem urlSlug="cake" name="Cake" difficulty="Easy" time="20 min" />);
+    expect(screen.queryByText(/^Chef/)).not.toBeInTheDocument();
   });
 });

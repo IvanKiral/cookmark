@@ -27,8 +27,20 @@
   color: var(--color-to-try);
 }
 
-.button.chefPickActive {
-  color: var(--color-neutral-900);
+.button.chefKissActive {
+  color: var(--color-chef-kiss);
+}
+
+.button.chefApprovedActive {
+  color: var(--color-chef-approved);
+}
+
+.button.chefOkActive {
+  color: var(--color-chef-ok);
+}
+
+.button.chefFlopActive {
+  color: var(--color-chef-flop);
 }
 
 .button.shouldDeleteActive {

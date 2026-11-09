@@ -1,0 +1,82 @@
+.container {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Right-aligned under the trigger so it opens towards the middle of the
+   screen; the trigger sits near the right edge of the recipe top bar. */
+.panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 60;
+  min-width: 13rem;
+  margin-top: var(--space-2);
+  padding: var(--space-1) 0;
+  background: white;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  background: none;
+  border: none;
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover,
+.option:focus-visible {
+  outline: none;
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-900);
+}
+
+.optionSelected {
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.optionIcon {
+  font-size: 1.25rem;
+  font-variation-settings: "FILL" 1;
+}
+
+.optionLabel {
+  flex: 1;
+}
+
+.optionCheck {
+  font-size: 1.125rem;
+}
+
+.clearOption {
+  border-top: 1px solid var(--color-neutral-200);
+  color: var(--color-neutral-500);
+}
+
+.chefKiss {
+  color: var(--color-chef-kiss);
+}
+
+.chefApproved {
+  color: var(--color-chef-approved);
+}
+
+.chefOk {
+  color: var(--color-chef-ok);
+}
+
+.chefFlop {
+  color: var(--color-chef-flop);
+}

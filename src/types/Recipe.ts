@@ -1,3 +1,5 @@
+import type { RecipeVerdict } from "~/constants/recipeVerdicts.ts";
+
 // Published recipes store amounts mostly as numbers (0.5, 2) and sometimes as
 // text ("1/2"). Older recipes may omit amount or unit entirely.
 export type Ingredient = {
@@ -45,7 +47,7 @@ export type RecipeData = {
   video_url?: string;
   created_at?: string;
   // Set by the app from the recipes table, not part of the source JSON.
-  is_chef_pick?: boolean;
+  verdict?: RecipeVerdict;
   // Admin-only "To delete" mark. Sent to every visitor, only shown to admins.
   should_delete?: boolean;
 };
@@ -63,5 +65,5 @@ export type Recipe = {
   author?: string;
   image_url: string;
   created_at: string;
-  is_chef_pick: boolean;
+  verdict?: RecipeVerdict;
 };
