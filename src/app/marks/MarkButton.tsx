@@ -1,8 +1,8 @@
 import type { Component } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import type { Mark } from "~/shared/marks.ts";
 import styles from "~/styles/iconToggleButton.module.css";
 import { useMarks } from "./MarksContext.tsx";
+import { markStrings } from "./strings.ts";
 
 type MarkButtonProps = {
   mark: Mark;
@@ -22,14 +22,14 @@ const appearances: Record<Mark, MarkAppearance> = {
   favorite: {
     icon: "favorite",
     activeClass: styles.favoriteActive,
-    addLabel: strings.marks.addFavorite,
-    removeLabel: strings.marks.removeFavorite,
+    addLabel: markStrings.addFavorite,
+    removeLabel: markStrings.removeFavorite,
   },
   "to-try": {
     icon: "bookmark",
     activeClass: styles.toTryActive,
-    addLabel: strings.marks.addToTry,
-    removeLabel: strings.marks.removeToTry,
+    addLabel: markStrings.addToTry,
+    removeLabel: markStrings.removeToTry,
   },
 };
 

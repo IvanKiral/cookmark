@@ -1,9 +1,9 @@
 import { Dialog } from "@ark-ui/solid/dialog";
 import type { Component } from "solid-js";
 import { Portal } from "solid-js/web";
-import { strings } from "~/app/strings.ts";
 import buttonStyles from "~/styles/button.module.css";
 import styles from "./ConfirmDialog.module.css";
+import { uiStrings } from "./strings.ts";
 
 type ConfirmDialogProps = {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export const ConfirmDialog: Component<ConfirmDialogProps> = (props) => (
           <Dialog.Description class={styles.description}>{props.description}</Dialog.Description>
           <div class={styles.actions}>
             <Dialog.CloseTrigger class={`${buttonStyles.button} ${buttonStyles.secondary}`}>
-              {props.cancelLabel ?? strings.confirmDialog.cancel}
+              {props.cancelLabel ?? uiStrings.cancel}
             </Dialog.CloseTrigger>
             <button
               type="button"

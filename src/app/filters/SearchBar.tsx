@@ -1,6 +1,6 @@
-import { strings } from "~/app/strings.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import styles from "./SearchBar.module.css";
+import { filterStrings } from "./strings.ts";
 
 type SearchBarProps = {
   recipes: RecipeSummary[];
@@ -19,7 +19,7 @@ export const SearchBar = (props: SearchBarProps) => {
         <span class={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
         <input
           type="search"
-          placeholder={strings.search.placeholder}
+          placeholder={filterStrings.searchPlaceholder}
           value={props.searchQuery}
           onInput={(e) => handleInput(e.currentTarget.value)}
           class={styles.searchInput}

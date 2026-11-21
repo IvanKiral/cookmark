@@ -1,8 +1,9 @@
 import { A, createAsync, useLocation, useNavigate, useParams } from "@solidjs/router";
 import { type Component, Match, Show, Suspense, Switch } from "solid-js";
 import { RecipeEditForm } from "~/app/admin/RecipeEditForm.tsx";
+import { adminStrings } from "~/app/admin/strings.ts";
 import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
-import { strings } from "~/app/strings.ts";
+import { recipePageStrings } from "~/app/recipe-page/strings.ts";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import { getInitialRecipeEdit } from "~/shared/recipeEdit.ts";
 import styles from "./edit.module.css";
@@ -34,7 +35,7 @@ const RecipeEditPage: Component = () => {
               href={recipeHref()}
               state={location.state}
               class={`${pageStyles.navButton} ${pageStyles.closeButton}`}
-              aria-label={strings.recipeEdit.backToRecipe}
+              aria-label={adminStrings.edit.backToRecipe}
             >
               <span class="material-symbols-outlined">close</span>
             </A>
@@ -51,14 +52,14 @@ const RecipeEditPage: Component = () => {
             <Switch>
               <Match when={!isAdmin()}>
                 <div class={styles.message}>
-                  <p>{strings.recipeEdit.notAllowed}</p>
-                  <A href={recipeHref()}>{strings.recipeEdit.backToRecipe}</A>
+                  <p>{adminStrings.edit.notAllowed}</p>
+                  <A href={recipeHref()}>{adminStrings.edit.backToRecipe}</A>
                 </div>
               </Match>
               <Match when={recipe()}>
                 {(recipeData) => (
                   <>
-                    <h1 class={styles.title}>{strings.recipeEdit.pageTitle}</h1>
+                    <h1 class={styles.title}>{adminStrings.edit.pageTitle}</h1>
                     <RecipeEditForm
                       slug={params.slug}
                       initial={getInitialRecipeEdit(recipeData())}
@@ -70,8 +71,8 @@ const RecipeEditPage: Component = () => {
               </Match>
               <Match when={true}>
                 <div class={styles.message}>
-                  <p>{strings.recipe.notFound}</p>
-                  <A href="/">{strings.recipe.backToList}</A>
+                  <p>{recipePageStrings.notFound}</p>
+                  <A href="/">{recipePageStrings.backToList}</A>
                 </div>
               </Match>
             </Switch>

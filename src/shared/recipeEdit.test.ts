@@ -88,17 +88,17 @@ describe("parseRecipeEdit", () => {
     expect(result).toEqual({
       isValid: false,
       errors: {
-        title: "Enter a name.",
-        description: "Keep this to 1000 characters or fewer.",
-        prep_time: "Enter whole minutes from 0 to 1440.",
-        cook_time: "Enter whole minutes from 0 to 1440.",
-        total_time: "Enter whole minutes from 0 to 1440.",
-        tags: "Unknown tag: Pizza.",
-        "ingredients.1.name": "Enter the ingredient.",
-        "ingredients.1.amount": "This value is not valid.",
-        "ingredients.1.unit": "Keep this to 30 characters or fewer.",
-        "instructions.0.steps.1": "Enter the step.",
-        "instructions.1.name": "Enter a section name.",
+        title: { code: "nameRequired" },
+        description: { code: "tooLong", maxLength: 1000 },
+        prep_time: { code: "minutes", max: 1440 },
+        cook_time: { code: "minutes", max: 1440 },
+        total_time: { code: "minutes", max: 1440 },
+        tags: { code: "unknownTag", tag: "Pizza" },
+        "ingredients.1.name": { code: "ingredientRequired" },
+        "ingredients.1.amount": { code: "invalid" },
+        "ingredients.1.unit": { code: "tooLong", maxLength: 30 },
+        "instructions.0.steps.1": { code: "stepRequired" },
+        "instructions.1.name": { code: "sectionNameRequired" },
       },
     });
   });
@@ -126,9 +126,10 @@ describe("parseRecipeEdit", () => {
 
   it("rejects a name over the limit", () => {
     const result = parseRecipeEdit({ ...validBody, title: "x".repeat(121) });
-    expect(result.isValid ? undefined : result.errors.title).toBe(
-      "Keep this to 120 characters or fewer.",
-    );
+    expect(result.isValid ? undefined : result.errors.title).toEqual({
+      code: "tooLong",
+      maxLength: 120,
+    });
   });
 });
 

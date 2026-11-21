@@ -1,9 +1,9 @@
 import "photoswipe/style.css";
 import type PhotoSwipe from "photoswipe";
 import { type Component, onCleanup } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import styles from "./RecipeImage.module.css";
 import { RecipeMediaSection } from "./RecipeMediaSection.tsx";
+import { recipePageStrings } from "./strings.ts";
 
 type RecipeImageProps = {
   src: string;
@@ -42,13 +42,13 @@ export const RecipeImage: Component<RecipeImageProps> = (props) => {
   onCleanup(() => lightbox?.destroy());
 
   return (
-    <RecipeMediaSection title={strings.recipe.originalRecipe}>
+    <RecipeMediaSection title={recipePageStrings.originalRecipe}>
       <div class={styles.imageContainer}>
         <button
           type="button"
           class={styles.trigger}
           onClick={handleOpen}
-          aria-label={`${strings.recipe.zoomImage}: ${props.title}`}
+          aria-label={`${recipePageStrings.zoomImage}: ${props.title}`}
         >
           <img
             ref={imageRef}
@@ -59,7 +59,7 @@ export const RecipeImage: Component<RecipeImageProps> = (props) => {
           />
           <span class={styles.hint} aria-hidden="true">
             <span class="material-symbols-outlined">zoom_in</span>
-            {strings.recipe.zoomImage}
+            {recipePageStrings.zoomImage}
           </span>
         </button>
       </div>

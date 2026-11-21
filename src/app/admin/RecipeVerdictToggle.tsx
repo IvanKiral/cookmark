@@ -8,13 +8,13 @@ import {
   Show,
 } from "solid-js";
 import { saveRecipeVerdict } from "~/app/api/adminApi.ts";
-import { strings } from "~/app/strings.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import { recipeVerdictIcons, recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import { type RecipeVerdict, recipeVerdictValues } from "~/shared/verdicts.ts";
 import buttonStyles from "~/styles/iconToggleButton.module.css";
 import styles from "./RecipeVerdictToggle.module.css";
+import { adminStrings } from "./strings.ts";
 
 type RecipeVerdictToggleProps = {
   slug: string;
@@ -57,16 +57,16 @@ const getPendingChange = (
     const nextLabel = recipeVerdictLabels[nextVerdict];
     return {
       nextVerdict,
-      title: strings.verdicts.confirmChangeTitle(nextLabel),
-      description: strings.verdicts.confirmRemoveDescription(name),
-      confirmLabel: strings.verdicts.confirmChange(nextLabel),
+      title: adminStrings.verdict.confirmChangeTitle(nextLabel),
+      description: adminStrings.verdict.confirmRemoveDescription(name),
+      confirmLabel: adminStrings.verdict.confirmChange(nextLabel),
     };
   }
   return {
     nextVerdict,
-    title: strings.verdicts.confirmRemoveTitle,
-    description: strings.verdicts.confirmRemoveDescription(name),
-    confirmLabel: strings.verdicts.confirmRemove,
+    title: adminStrings.verdict.confirmRemoveTitle,
+    description: adminStrings.verdict.confirmRemoveDescription(name),
+    confirmLabel: adminStrings.verdict.confirmRemove,
   };
 };
 
@@ -139,9 +139,9 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
   };
 
   const triggerLabel = (): string =>
-    strings.verdicts.menuLabel(
+    adminStrings.verdict.menuLabel(
       props.name,
-      props.verdict ? recipeVerdictLabels[props.verdict] : strings.verdicts.none,
+      props.verdict ? recipeVerdictLabels[props.verdict] : adminStrings.verdict.none,
     );
 
   return (
@@ -203,7 +203,7 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
                 <span class={`material-symbols-outlined ${styles.optionIcon}`} aria-hidden="true">
                   close
                 </span>
-                <span class={styles.optionLabel}>{strings.verdicts.clear}</span>
+                <span class={styles.optionLabel}>{adminStrings.verdict.clear}</span>
               </button>
             </Show>
           </div>

@@ -1,10 +1,10 @@
 import { type Component, createSignal, Show } from "solid-js";
 import { saveRecipeFlag } from "~/app/api/adminApi.ts";
-import { strings } from "~/app/strings.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import type { RecipeFlag } from "~/shared/recipeFlags.ts";
 import styles from "~/styles/iconToggleButton.module.css";
+import { adminStrings } from "./strings.ts";
 
 type RecipeFlagToggleProps = {
   flag: RecipeFlag;
@@ -32,18 +32,18 @@ const flagConfigs: Record<RecipeFlag, FlagConfig> = {
     icon: "delete",
     activeClass: styles.shouldDeleteActive,
     getLabel: (name, isSet) =>
-      isSet ? strings.shouldDelete.remove(name) : strings.shouldDelete.add(name),
+      isSet ? adminStrings.shouldDelete.remove(name) : adminStrings.shouldDelete.add(name),
     getConfirmation: (name, isSet) =>
       isSet
         ? {
-            title: strings.shouldDelete.confirmRemoveTitle,
-            description: strings.shouldDelete.confirmRemoveDescription(name),
-            confirmLabel: strings.shouldDelete.confirmRemove,
+            title: adminStrings.shouldDelete.confirmRemoveTitle,
+            description: adminStrings.shouldDelete.confirmRemoveDescription(name),
+            confirmLabel: adminStrings.shouldDelete.confirmRemove,
           }
         : {
-            title: strings.shouldDelete.confirmAddTitle,
-            description: strings.shouldDelete.confirmAddDescription(name),
-            confirmLabel: strings.shouldDelete.confirmAdd,
+            title: adminStrings.shouldDelete.confirmAddTitle,
+            description: adminStrings.shouldDelete.confirmAddDescription(name),
+            confirmLabel: adminStrings.shouldDelete.confirmAdd,
           },
   },
 };

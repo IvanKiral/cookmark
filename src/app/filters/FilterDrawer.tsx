@@ -1,6 +1,5 @@
 import Drawer from "@corvu/drawer";
 import type { Component } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import type { MarkFilter } from "~/shared/marks.ts";
 import type { TagFilter } from "~/shared/tags.ts";
 import buttonStyles from "~/styles/button.module.css";
@@ -9,6 +8,7 @@ import type { DifficultyFilter } from "./difficultyOptions.ts";
 import styles from "./FilterDrawer.module.css";
 import { FilterPanel } from "./FilterPanel.tsx";
 import type { RecommendedFilter } from "./recommendedOptions.ts";
+import { filterStrings } from "./strings.ts";
 import type { TimeFilter } from "./timeOptions.ts";
 
 type FilterDrawerProps = {
@@ -53,7 +53,7 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
         >
           <div class={styles.header}>
             <h2 id="filter-drawer-title" class={styles.title}>
-              {strings.filterDrawer.title}
+              {filterStrings.drawer.title}
             </h2>
             <Drawer.Close class={styles.closeButton} aria-label="Close filters">
               <span class="material-symbols-outlined">close</span>
@@ -88,7 +88,7 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
                 class={`${buttonStyles.button} ${buttonStyles.secondary}`}
                 onClick={props.onClearAll}
               >
-                {strings.filterDrawer.clearAll}
+                {filterStrings.drawer.clearAll}
               </button>
             )}
             <button
@@ -96,7 +96,7 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
               class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
               onClick={() => props.onOpenChange(false)}
             >
-              {strings.filterDrawer.showResults(props.resultCount)}
+              {filterStrings.drawer.showResults(props.resultCount)}
             </button>
           </div>
         </Drawer.Content>

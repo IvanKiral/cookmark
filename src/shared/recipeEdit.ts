@@ -1,4 +1,3 @@
-import { strings } from "~/app/strings.ts";
 import type { Ingredient, InstructionSection, Recipe } from "./recipe.ts";
 import { type TagValue, tagValues } from "./tags.ts";
 
@@ -17,8 +16,23 @@ export type RecipeEdit = {
   instructions: ReadonlyArray<InstructionSection>;
 };
 
+// Error codes rather than text, so the server never needs to know the
+// visitor's language. The edit form turns them into messages.
+export type RecipeEditError =
+  | {
+      code:
+        | "nameRequired"
+        | "ingredientRequired"
+        | "sectionNameRequired"
+        | "stepRequired"
+        | "invalid";
+    }
+  | { code: "tooLong"; maxLength: number }
+  | { code: "minutes"; max: number }
+  | { code: "unknownTag"; tag: string };
+
 // Keyed by field path, e.g. "title", "ingredients.2.name" or "instructions.0.steps.3".
-export type RecipeEditErrors = Partial<Record<string, string>>;
+export type RecipeEditErrors = Partial<Record<string, RecipeEditError>>;
 
 export type RecipeEditResult =
   | { isValid: true; edit: RecipeEdit }
@@ -41,16 +55,17 @@ type Parsed<T> = { isValid: true; value: T } | { isValid: false; errors: RecipeE
 
 type ParsedFields<T> = { [K in keyof T]: Parsed<T[K]> };
 
-const errors = strings.recipeEdit.errors;
-
 const valid = <T>(value: T): Parsed<T> => ({ isValid: true, value });
-const invalid = <T>(message: string): Parsed<T> => ({ isValid: false, errors: { "": message } });
+const invalid = <T>(error: RecipeEditError): Parsed<T> => ({
+  isValid: false,
+  errors: { "": error },
+});
 
 const prefixErrors = (prefix: string, fieldErrors: RecipeEditErrors): RecipeEditErrors =>
   Object.fromEntries(
-    Object.entries(fieldErrors).map(([path, message]) => [
+    Object.entries(fieldErrors).map(([path, error]) => [
       path === "" ? prefix : `${prefix}.${path}`,
-      message,
+      error,
     ]),
   );
 
@@ -89,19 +104,19 @@ const isTagValue = (value: unknown): value is TagValue => tagValues.some((tag) =
 type TextRule = {
   maxLength: number;
   // Set for required text; also used when the value isn't text at all.
-  requiredError?: string;
+  requiredError?: RecipeEditError;
 };
 
 const parseText = (value: unknown, rule: TextRule): Parsed<string> => {
   if (typeof value !== "string") {
-    return invalid(rule.requiredError ?? errors.invalid);
+    return invalid(rule.requiredError ?? { code: "invalid" });
   }
   const text = value.trim();
   if (rule.requiredError && text === "") {
     return invalid(rule.requiredError);
   }
   if (text.length > rule.maxLength) {
-    return invalid(errors.tooLong(rule.maxLength));
+    return invalid({ code: "tooLong", maxLength: rule.maxLength });
   }
   return valid(text);
 };
@@ -124,7 +139,7 @@ const NUMERIC_AMOUNT = /^\d+([.,]\d+)?$/;
 // published recipes; anything else ("1/2", "2-3") stays text.
 const parseAmount = (value: unknown): Parsed<string | number | null> => {
   if (typeof value === "number") {
-    return Number.isFinite(value) && value >= 0 ? valid(value) : invalid(errors.invalid);
+    return Number.isFinite(value) && value >= 0 ? valid(value) : invalid({ code: "invalid" });
   }
   const text = parseOptionalText(value, MAX_AMOUNT_LENGTH);
   if (!text.isValid || text.value === null) {
@@ -140,16 +155,16 @@ const parseMinutes = (value: unknown): Parsed<number | null> => {
   }
   const isWholeMinutes =
     typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= MAX_MINUTES;
-  return isWholeMinutes ? valid(value) : invalid(errors.minutes(MAX_MINUTES));
+  return isWholeMinutes ? valid(value) : invalid({ code: "minutes", max: MAX_MINUTES });
 };
 
 const parseTags = (value: unknown): Parsed<ReadonlyArray<TagValue>> => {
   if (!Array.isArray(value)) {
-    return invalid(errors.invalid);
+    return invalid({ code: "invalid" });
   }
   const unknownTag = value.find((tag) => !isTagValue(tag));
   if (unknownTag !== undefined) {
-    return invalid(errors.unknownTag(String(unknownTag)));
+    return invalid({ code: "unknownTag", tag: String(unknownTag) });
   }
   return valid([...new Set(value.filter(isTagValue))]);
 };
@@ -160,7 +175,7 @@ const parseList = <T>(
   parseItem: (item: unknown) => Parsed<T>,
 ): Parsed<ReadonlyArray<T>> => {
   if (!Array.isArray(value) || value.length > maxItems) {
-    return invalid(errors.invalid);
+    return invalid({ code: "invalid" });
   }
   return combineList(value.map(parseItem));
 };
@@ -170,7 +185,7 @@ const parseIngredient = (value: unknown): Parsed<Ingredient> => {
   return combine<Ingredient>({
     name: parseText(item.name, {
       maxLength: MAX_INGREDIENT_LENGTH,
-      requiredError: errors.ingredientRequired,
+      requiredError: { code: "ingredientRequired" },
     }),
     amount: parseAmount(item.amount),
     unit: parseOptionalText(item.unit, MAX_UNIT_LENGTH),
@@ -182,10 +197,10 @@ const parseSection = (value: unknown): Parsed<InstructionSection> => {
   return combine<InstructionSection>({
     name: parseText(item.name, {
       maxLength: MAX_SECTION_NAME_LENGTH,
-      requiredError: errors.sectionNameRequired,
+      requiredError: { code: "sectionNameRequired" },
     }),
     steps: parseList(item.steps, MAX_STEPS, (step) =>
-      parseText(step, { maxLength: MAX_STEP_LENGTH, requiredError: errors.stepRequired }),
+      parseText(step, { maxLength: MAX_STEP_LENGTH, requiredError: { code: "stepRequired" } }),
     ),
   });
 };
@@ -195,7 +210,7 @@ export const parseRecipeEdit = (input: unknown): RecipeEditResult => {
   const result = combine<RecipeEdit>({
     title: parseText(body.title, {
       maxLength: MAX_TITLE_LENGTH,
-      requiredError: errors.nameRequired,
+      requiredError: { code: "nameRequired" },
     }),
     description: parseText(body.description, { maxLength: MAX_DESCRIPTION_LENGTH }),
     prep_time: parseMinutes(body.prep_time),

@@ -18,13 +18,14 @@ import {
   recommendedValues,
 } from "~/app/filters/recommendedOptions.ts";
 import { SearchBar } from "~/app/filters/SearchBar.tsx";
+import { filterStrings } from "~/app/filters/strings.ts";
 import { type TimeFilter, type TimeValue, timeValues } from "~/app/filters/timeOptions.ts";
 import { useMarks } from "~/app/marks/MarksContext.tsx";
 import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import { SortDropdown } from "~/app/recipe-list/SortDropdown.tsx";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
+import { recipeListStrings } from "~/app/recipe-list/strings.ts";
 import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
-import { strings } from "~/app/strings.ts";
 import { type Mark, type MarkFilter, markValues } from "~/shared/marks.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { type TagFilter, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
@@ -289,22 +290,22 @@ const Home = () => {
     <main class={styles.main}>
       <header class={styles.header}>
         <div class={styles.headerContent}>
-          <h1 class={styles.title}>{strings.app.title}</h1>
-          <p class={styles.subtitle}>The minimalist kitchen collection</p>
+          <h1 class={styles.title}>{recipeListStrings.title}</h1>
+          <p class={styles.subtitle}>{recipeListStrings.subtitle}</p>
         </div>
       </header>
       <div class={styles.container}>
         <div class={styles.layout}>
-          <aside class={styles.sidebar} aria-label="Recipe filters">
+          <aside class={styles.sidebar} aria-label={filterStrings.panelLabel}>
             <div class={styles.sidebarHeader}>
-              <span class={styles.sidebarTitle}>{strings.filterDrawer.title}</span>
+              <span class={styles.sidebarTitle}>{filterStrings.drawer.title}</span>
               <Show when={activeFilterCount() > 0}>
                 <button
                   type="button"
                   class={styles.sidebarClearButton}
                   onClick={handleClearAllFilters}
                 >
-                  {strings.filterDrawer.clearAll}
+                  {filterStrings.drawer.clearAll}
                 </button>
               </Show>
             </div>
@@ -331,7 +332,7 @@ const Home = () => {
               onClick={() => setIsFilterDrawerOpen(true)}
             >
               <span class="material-symbols-outlined">tune</span>
-              {strings.filterDrawer.filtersButton}
+              {filterStrings.drawer.filtersButton}
               <Show when={activeFilterCount() > 0}>
                 <span class={styles.filterCount}>{activeFilterCount()}</span>
               </Show>
@@ -343,7 +344,7 @@ const Home = () => {
                 onClick={handleClearAllFilters}
               >
                 <span class="material-symbols-outlined">close</span>
-                {strings.filterDrawer.clearAll}
+                {filterStrings.drawer.clearAll}
               </button>
             </Show>
             <div class={styles.searchWrapper}>

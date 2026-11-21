@@ -1,8 +1,8 @@
 import { Pagination as ArkPagination } from "@ark-ui/solid/pagination";
 import type { Component } from "solid-js";
 import { For, Show } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import styles from "./Pagination.module.css";
+import { uiStrings } from "./strings.ts";
 
 type PaginationProps = {
   count: number;
@@ -23,7 +23,10 @@ export const Pagination: Component<PaginationProps> = (props) => {
         siblingCount={1}
         class={`${styles.pagination} ${props.class || ""}`}
       >
-        <ArkPagination.PrevTrigger class={styles.trigger} aria-label={strings.pagination.previous}>
+        <ArkPagination.PrevTrigger
+          class={styles.trigger}
+          aria-label={uiStrings.pagination.previous}
+        >
           <svg
             width="16"
             height="16"
@@ -40,7 +43,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
               stroke-linejoin="round"
             />
           </svg>
-          <span class={styles.triggerText}>{strings.pagination.previous}</span>
+          <span class={styles.triggerText}>{uiStrings.pagination.previous}</span>
         </ArkPagination.PrevTrigger>
 
         <ArkPagination.Context>
@@ -52,7 +55,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
                     <ArkPagination.Item
                       {...page}
                       class={styles.pageItem}
-                      aria-label={strings.pagination.goToPage(page.value)}
+                      aria-label={uiStrings.pagination.goToPage(page.value)}
                     >
                       {page.value}
                     </ArkPagination.Item>
@@ -67,8 +70,8 @@ export const Pagination: Component<PaginationProps> = (props) => {
           )}
         </ArkPagination.Context>
 
-        <ArkPagination.NextTrigger class={styles.trigger} aria-label={strings.pagination.next}>
-          <span class={styles.triggerText}>{strings.pagination.next}</span>
+        <ArkPagination.NextTrigger class={styles.trigger} aria-label={uiStrings.pagination.next}>
+          <span class={styles.triggerText}>{uiStrings.pagination.next}</span>
           <svg
             width="16"
             height="16"

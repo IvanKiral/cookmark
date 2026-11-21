@@ -120,7 +120,7 @@ describe("recipe edit endpoint", () => {
       createEvent("soup", JSON.stringify({ ...edit, title: "" })),
     );
     expect(response.status).toBe(422);
-    expect(await response.json()).toEqual({ errors: { title: "Enter a name." } });
+    expect(await response.json()).toEqual({ errors: { title: { code: "nameRequired" } } });
     expect(readRevisions(db)).toEqual([]);
   });
 

@@ -1,0 +1,18 @@
+export const recipePageStrings = {
+  prep: "Prep:",
+  total: "Total:",
+  servings: "Servings:",
+  author: "Author",
+  ingredients: "Ingredients",
+  instructions: "Instructions",
+  viewSource: "View Recipe Source",
+  videoTutorial: "Video Tutorial",
+  originalRecipe: "Original Recipe",
+  zoomImage: "View full size",
+  difficultyLabel: "Difficulty",
+  notFound: "Recipe not found",
+  backToList: "Back to recipes",
+  notAvailable: "N/A",
+  minutes: (minutes: number) => `${minutes} min`,
+  servingsCount: (servings: number) => `${servings} servings`,
+} as const;

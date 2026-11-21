@@ -1,12 +1,12 @@
 import { type Component, createMemo, For, Show } from "solid-js";
 import { formatMinutes } from "~/app/recipe-page/recipeFormat.ts";
-import { strings } from "~/app/strings.ts";
 import { createMediaQuery } from "~/app/ui/createMediaQuery.ts";
 import { Pagination } from "~/app/ui/Pagination.tsx";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { RecipeCard } from "./RecipeCard.tsx";
 import styles from "./RecipeList.module.css";
 import { RecipeListItem } from "./RecipeListItem.tsx";
+import { recipeListStrings } from "./strings.ts";
 import type { ViewMode } from "./ViewToggle.tsx";
 
 type RecipeListProps = {
@@ -51,19 +51,19 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
     <div class={styles.wrapper}>
       <Show when={props.recipes.length > 0 && props.viewMode === "list"}>
         <div class={styles.header}>
-          <span class={styles.headerName}>{strings.recipeList.name}</span>
-          <span class={styles.headerDifficulty}>{strings.recipeList.difficulty}</span>
-          <span class={styles.headerTime}>{strings.recipeList.time}</span>
+          <span class={styles.headerName}>{recipeListStrings.name}</span>
+          <span class={styles.headerDifficulty}>{recipeListStrings.difficulty}</span>
+          <span class={styles.headerTime}>{recipeListStrings.time}</span>
           <span class={styles.headerFavorite} aria-hidden="true" />
         </div>
       </Show>
       <Show when={props.recipes.length === 0}>
         <div class={styles.emptyState}>
-          <p class={styles.emptyTitle}>{strings.search.noResults}</p>
-          <p class={styles.emptyHint}>{strings.search.noResultsHint}</p>
+          <p class={styles.emptyTitle}>{recipeListStrings.noResults}</p>
+          <p class={styles.emptyHint}>{recipeListStrings.noResultsHint}</p>
           <Show when={props.onResetAll}>
             <button type="button" class={styles.emptyClearButton} onClick={props.onResetAll}>
-              {strings.search.clearSearchAndFilters}
+              {recipeListStrings.clearSearchAndFilters}
             </button>
           </Show>
         </div>

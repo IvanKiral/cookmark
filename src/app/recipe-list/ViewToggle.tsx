@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import { strings } from "~/app/strings.ts";
+import { recipeListStrings } from "./strings.ts";
 import styles from "./ViewToggle.module.css";
 
 export type ViewMode = "card" | "list";
@@ -10,13 +10,13 @@ type ViewToggleProps = {
 };
 
 export const ViewToggle: Component<ViewToggleProps> = (props) => (
-  <div class={styles.toggle} role="group" aria-label={strings.recipeList.viewLabel}>
+  <div class={styles.toggle} role="group" aria-label={recipeListStrings.viewLabel}>
     <button
       type="button"
       class={styles.button}
       classList={{ [styles.active]: props.value === "card" }}
       aria-pressed={props.value === "card"}
-      aria-label={strings.recipeList.cardView}
+      aria-label={recipeListStrings.cardView}
       onClick={() => props.onChange("card")}
     >
       <span class="material-symbols-outlined">grid_view</span>
@@ -26,7 +26,7 @@ export const ViewToggle: Component<ViewToggleProps> = (props) => (
       class={styles.button}
       classList={{ [styles.active]: props.value === "list" }}
       aria-pressed={props.value === "list"}
-      aria-label={strings.recipeList.listView}
+      aria-label={recipeListStrings.listView}
       onClick={() => props.onChange("list")}
     >
       <span class="material-symbols-outlined">view_list</span>

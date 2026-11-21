@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import { RecipeMediaSection } from "./RecipeMediaSection.tsx";
 import styles from "./RecipeVideo.module.css";
+import { recipePageStrings } from "./strings.ts";
 
 type RecipeVideoProps = {
   src: string;
@@ -9,7 +9,7 @@ type RecipeVideoProps = {
 };
 
 export const RecipeVideo: Component<RecipeVideoProps> = (props) => (
-  <RecipeMediaSection title={strings.recipe.videoTutorial}>
+  <RecipeMediaSection title={recipePageStrings.videoTutorial}>
     <div class={styles.videoContainer}>
       {/* biome-ignore lint/a11y/useMediaCaption: captions not always available for recipe videos */}
       <video

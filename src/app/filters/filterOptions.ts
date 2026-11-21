@@ -1,54 +1,56 @@
-import { strings } from "~/app/strings.ts";
+import { markStrings } from "~/app/marks/strings.ts";
+import { verdictStrings } from "~/app/verdicts/strings.ts";
 import { recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import { type Mark, markValues } from "~/shared/marks.ts";
 import { type TagGroupKey, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
 import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
 import { NO_VERDICT, type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
+import { filterStrings } from "./strings.ts";
 import { type TimeValue, timeValues } from "./timeOptions.ts";
 
 const difficultyLabels: Record<DifficultyValue, string> = {
-  Easy: strings.filters.easy,
-  Medium: strings.filters.medium,
-  Hard: strings.filters.hard,
+  Easy: filterStrings.easy,
+  Medium: filterStrings.medium,
+  Hard: filterStrings.hard,
 };
 
 const timeLabels: Record<TimeValue, string> = {
-  under30: strings.filters.under30,
-  under60: strings.filters.under60,
-  over60: strings.filters.over60,
+  under30: filterStrings.under30,
+  under60: filterStrings.under60,
+  over60: filterStrings.over60,
 };
 
 const markLabels: Record<Mark, string> = {
-  favorite: strings.marks.favorites,
-  "to-try": strings.marks.toTry,
+  favorite: markStrings.favorites,
+  "to-try": markStrings.toTry,
 };
 
 const recommendedLabels: Record<RecommendedValue, string> = {
   ...recipeVerdictLabels,
-  [NO_VERDICT]: strings.verdicts.noVerdict,
+  [NO_VERDICT]: verdictStrings.noVerdict,
 };
 
 const tagLabels: Record<TagValue, string> = {
-  Chicken: strings.tags.chicken,
-  Pork: strings.tags.pork,
-  Beef: strings.tags.beef,
-  Fish: strings.tags.fish,
-  Vegan: strings.tags.vegan,
-  Dessert: strings.tags.dessert,
-  "Lactose-free": strings.tags.lactoseFree,
-  "Low-Sugar": strings.tags.lowSugar,
-  Cake: strings.tags.cake,
-  Vegetarian: strings.tags.vegetarian,
-  Eggs: strings.tags.eggs,
-  "Air-fryer": strings.tags.airFryer,
-  Slowcooker: strings.tags.slowcooker,
-  "Meal-prep": strings.tags.mealPrep,
-  Legumes: strings.tags.legumes,
-  Soup: strings.tags.soup,
-  Breakfast: strings.tags.breakfast,
-  Lunch: strings.tags.lunch,
-  Dinner: strings.tags.dinner,
-  Snack: strings.tags.snack,
+  Chicken: filterStrings.tags.chicken,
+  Pork: filterStrings.tags.pork,
+  Beef: filterStrings.tags.beef,
+  Fish: filterStrings.tags.fish,
+  Vegan: filterStrings.tags.vegan,
+  Dessert: filterStrings.tags.dessert,
+  "Lactose-free": filterStrings.tags.lactoseFree,
+  "Low-Sugar": filterStrings.tags.lowSugar,
+  Cake: filterStrings.tags.cake,
+  Vegetarian: filterStrings.tags.vegetarian,
+  Eggs: filterStrings.tags.eggs,
+  "Air-fryer": filterStrings.tags.airFryer,
+  Slowcooker: filterStrings.tags.slowcooker,
+  "Meal-prep": filterStrings.tags.mealPrep,
+  Legumes: filterStrings.tags.legumes,
+  Soup: filterStrings.tags.soup,
+  Breakfast: filterStrings.tags.breakfast,
+  Lunch: filterStrings.tags.lunch,
+  Dinner: filterStrings.tags.dinner,
+  Snack: filterStrings.tags.snack,
 };
 
 export const difficultyOptions = difficultyValues.map((value) => ({
@@ -80,11 +82,11 @@ const buildTagOptions = (values: ReadonlyArray<TagValue>) =>
   values.map((value) => ({ value, label: tagLabels[value] }));
 
 const tagGroupLabels: Record<TagGroupKey, string> = {
-  meal: strings.filters.meal,
-  protein: strings.filters.protein,
-  type: strings.filters.type,
-  method: strings.filters.method,
-  diet: strings.filters.diet,
+  meal: filterStrings.meal,
+  protein: filterStrings.protein,
+  type: filterStrings.type,
+  method: filterStrings.method,
+  diet: filterStrings.diet,
 };
 
 export const tagGroups = tagGroupDefinitions.map((group) => ({

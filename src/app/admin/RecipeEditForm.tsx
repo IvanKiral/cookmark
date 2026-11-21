@@ -3,7 +3,6 @@ import { type Component, createSignal, Index, onCleanup, onMount, Show } from "s
 import { createStore } from "solid-js/store";
 import { saveRecipeEdit } from "~/app/api/adminApi.ts";
 import { tagOptions } from "~/app/filters/filterOptions.ts";
-import { strings } from "~/app/strings.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { NumberField } from "~/app/ui/NumberField.tsx";
 import { TextArea } from "~/app/ui/TextArea.tsx";
@@ -24,7 +23,9 @@ import {
 } from "~/shared/recipeEdit.ts";
 import type { TagValue } from "~/shared/tags.ts";
 import buttonStyles from "~/styles/button.module.css";
+import { formatRecipeEditError } from "./formatRecipeEditError.ts";
 import styles from "./RecipeEditForm.module.css";
+import { adminStrings } from "./strings.ts";
 import { TagPicker } from "./TagPicker.tsx";
 
 type RecipeEditFormProps = {
@@ -34,7 +35,7 @@ type RecipeEditFormProps = {
   onCancel: () => void;
 };
 
-const text = strings.recipeEdit;
+const text = adminStrings.edit;
 
 // Tag order doesn't matter, so toggling a tag off and on again isn't a change.
 const toComparable = (edit: RecipeEdit): string =>
@@ -46,6 +47,10 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
   // shouldn't overwrite what the admin is typing.
   const [form, setForm] = createStore<RecipeEdit>(structuredClone(props.initial));
   const [errors, setErrors] = createSignal<RecipeEditErrors>({});
+  const errorText = (path: string): string | undefined => {
+    const error = errors()[path];
+    return error ? formatRecipeEditError(error) : undefined;
+  };
   const [isSaving, setIsSaving] = createSignal(false);
   const [isSaved, setIsSaved] = createSignal(false);
   const [hasSaveFailed, setHasSaveFailed] = createSignal(false);
@@ -142,7 +147,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
         label={text.name}
         value={form.title}
         onInput={(value) => updateField("title", value)}
-        error={errors().title}
+        error={errorText("title")}
         maxLength={MAX_TITLE_LENGTH}
         isRequired
       />
@@ -150,7 +155,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
         label={text.description}
         value={form.description}
         onInput={(value) => updateField("description", value)}
-        error={errors().description}
+        error={errorText("description")}
         maxLength={MAX_DESCRIPTION_LENGTH}
       />
       <div class={styles.times}>
@@ -158,14 +163,14 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
           label={text.prepTime}
           value={form.prep_time}
           onChange={(value) => updateField("prep_time", value)}
-          error={errors().prep_time}
+          error={errorText("prep_time")}
           max={MAX_MINUTES}
         />
         <NumberField
           label={text.cookTime}
           value={form.cook_time}
           onChange={(value) => updateField("cook_time", value)}
-          error={errors().cook_time}
+          error={errorText("cook_time")}
           max={MAX_MINUTES}
         />
         <NumberField
@@ -173,7 +178,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
           value={form.total_time}
           onChange={(value) => updateField("total_time", value)}
           hint={text.totalTimeHint}
-          error={errors().total_time}
+          error={errorText("total_time")}
           max={MAX_MINUTES}
         />
       </div>
@@ -182,7 +187,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
         options={tagOptions}
         selected={form.tags}
         onToggle={handleTagToggle}
-        error={errors().tags}
+        error={errorText("tags")}
       />
 
       <Show when={form.ingredients.length > 0}>
@@ -203,7 +208,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                   placeholder={text.amount}
                   value={String(ingredient().amount ?? "")}
                   onInput={(value) => updateIngredient(index, "amount", value)}
-                  error={errors()[`ingredients.${index}.amount`]}
+                  error={errorText(`ingredients.${index}.amount`)}
                   maxLength={MAX_AMOUNT_LENGTH}
                 />
                 <TextField
@@ -212,7 +217,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                   placeholder={text.unit}
                   value={ingredient().unit ?? ""}
                   onInput={(value) => updateIngredient(index, "unit", value)}
-                  error={errors()[`ingredients.${index}.unit`]}
+                  error={errorText(`ingredients.${index}.unit`)}
                   maxLength={MAX_UNIT_LENGTH}
                 />
                 <TextField
@@ -221,7 +226,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                   placeholder={text.ingredient}
                   value={ingredient().name}
                   onInput={(value) => updateIngredient(index, "name", value)}
-                  error={errors()[`ingredients.${index}.name`]}
+                  error={errorText(`ingredients.${index}.name`)}
                   maxLength={MAX_INGREDIENT_LENGTH}
                 />
               </div>
@@ -242,7 +247,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                     label={text.sectionName(sectionIndex + 1)}
                     value={section().name}
                     onInput={(value) => updateSectionName(sectionIndex, value)}
-                    error={errors()[`instructions.${sectionIndex}.name`]}
+                    error={errorText(`instructions.${sectionIndex}.name`)}
                     maxLength={MAX_SECTION_NAME_LENGTH}
                   />
                 </Show>
@@ -252,7 +257,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                       label={text.step(stepIndex + 1)}
                       value={step()}
                       onInput={(value) => updateStep(sectionIndex, stepIndex, value)}
-                      error={errors()[`instructions.${sectionIndex}.steps.${stepIndex}`]}
+                      error={errorText(`instructions.${sectionIndex}.steps.${stepIndex}`)}
                       maxLength={MAX_STEP_LENGTH}
                       rows={3}
                     />

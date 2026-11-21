@@ -1,5 +1,5 @@
 import { type Component, createMemo, createSignal, For, type JSX, Show } from "solid-js";
-import { strings } from "~/app/strings.ts";
+import { markStrings } from "~/app/marks/strings.ts";
 import type { Mark, MarkFilter } from "~/shared/marks.ts";
 import type { TagFilter, TagValue } from "~/shared/tags.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
@@ -13,6 +13,7 @@ import {
   timeOptions,
 } from "./filterOptions.ts";
 import type { RecommendedFilter, RecommendedValue } from "./recommendedOptions.ts";
+import { filterStrings } from "./strings.ts";
 import type { TimeFilter, TimeValue } from "./timeOptions.ts";
 
 type FilterPanelProps = {
@@ -192,8 +193,8 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
           onClick={() => setIsShowingAll((current) => !current)}
         >
           {isShowingAll()
-            ? strings.filters.authorShowFewer
-            : strings.filters.authorShowAll(props.options.length)}
+            ? filterStrings.authorShowFewer
+            : filterStrings.authorShowAll(props.options.length)}
         </button>
       </Show>
     </CollapsibleSection>
@@ -230,14 +231,14 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
   return (
     <div class={styles.panel}>
       <FilterSection
-        title={strings.marks.sectionTitle}
+        title={markStrings.sectionTitle}
         options={markOptions}
         selected={props.markFilter}
         onToggle={handleMarkToggle}
         isTouch={isTouch()}
       />
       <FilterSection
-        title={strings.filters.recommended}
+        title={filterStrings.recommended}
         options={recommendedOptions}
         selected={props.recommendedFilter}
         onToggle={handleRecommendedToggle}
@@ -255,14 +256,14 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
         )}
       </For>
       <FilterSection
-        title={strings.filters.time}
+        title={filterStrings.time}
         options={timeOptions}
         selected={props.timeFilter}
         onToggle={handleTimeToggle}
         isTouch={isTouch()}
       />
       <FilterSection
-        title={strings.filters.difficulty}
+        title={filterStrings.difficulty}
         options={difficultyOptions}
         selected={props.difficultyFilter}
         onToggle={handleDifficultyToggle}
@@ -270,9 +271,9 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
       />
       <Show when={props.authorOptions.length > 0}>
         <SearchableFilterSection
-          title={strings.filters.author}
-          placeholder={strings.filters.authorSearchPlaceholder}
-          noMatchesLabel={strings.filters.authorNoMatches}
+          title={filterStrings.author}
+          placeholder={filterStrings.authorSearchPlaceholder}
+          noMatchesLabel={filterStrings.authorNoMatches}
           options={props.authorOptions}
           selected={props.authorFilter}
           onToggle={handleAuthorToggle}

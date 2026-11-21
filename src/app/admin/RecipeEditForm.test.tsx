@@ -123,7 +123,7 @@ describe("<RecipeEditForm />", () => {
 
   it("shows the errors the server returns", async () => {
     fetchMock.mockResolvedValue(
-      Response.json({ errors: { tags: "Unknown tag: Pizza." } }, { status: 422 }),
+      Response.json({ errors: { tags: { code: "unknownTag", tag: "Pizza" } } }, { status: 422 }),
     );
     const { onSaved } = renderForm();
 

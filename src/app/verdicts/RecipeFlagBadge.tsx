@@ -1,8 +1,8 @@
 import type { Component } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import type { RecipeFlag } from "~/shared/recipeFlags.ts";
 import type { RecipeVerdict } from "~/shared/verdicts.ts";
 import styles from "./RecipeFlagBadge.module.css";
+import { verdictStrings } from "./strings.ts";
 import { recipeVerdictIcons, recipeVerdictLabels } from "./verdictDisplay.ts";
 
 type RecipeBadgeKind = RecipeVerdict | RecipeFlag;
@@ -37,7 +37,7 @@ const badgeConfigs: Record<RecipeBadgeKind, { icon: string; label: string; class
   },
   "should-delete": {
     icon: "delete",
-    label: strings.shouldDelete.label,
+    label: verdictStrings.shouldDelete,
     class: styles.shouldDelete,
   },
 };

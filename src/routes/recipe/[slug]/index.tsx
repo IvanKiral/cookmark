@@ -2,12 +2,13 @@ import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
 import { RecipeFlagToggle } from "~/app/admin/RecipeFlagToggle.tsx";
 import { RecipeVerdictToggle } from "~/app/admin/RecipeVerdictToggle.tsx";
+import { adminStrings } from "~/app/admin/strings.ts";
 import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
 import { RecipeImage } from "~/app/recipe-page/RecipeImage.tsx";
 import { RecipeVideo } from "~/app/recipe-page/RecipeVideo.tsx";
 import { formatMinutes } from "~/app/recipe-page/recipeFormat.ts";
-import { strings } from "~/app/strings.ts";
+import { recipePageStrings } from "~/app/recipe-page/strings.ts";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { Ingredient } from "~/shared/recipe.ts";
@@ -30,12 +31,8 @@ const RecipePage: Component = () => {
     return state?.fromSearch ? `/${state.fromSearch}` : "/";
   };
 
-  const formatServings = (servings: number | null): string => {
-    if (!servings) {
-      return "N/A";
-    }
-    return `${servings} servings`;
-  };
+  const formatServings = (servings: number | null): string =>
+    servings ? recipePageStrings.servingsCount(servings) : recipePageStrings.notAvailable;
 
   const formatIngredient = (ingredient: Ingredient): string => {
     if (ingredient.amount && ingredient.unit) {
@@ -66,8 +63,8 @@ const RecipePage: Component = () => {
         when={recipe()}
         fallback={
           <div class={styles.notFound}>
-            <h1>{strings.recipe.notFound}</h1>
-            <A href="/">{strings.recipe.backToList}</A>
+            <h1>{recipePageStrings.notFound}</h1>
+            <A href="/">{recipePageStrings.backToList}</A>
           </div>
         }
       >
@@ -79,7 +76,7 @@ const RecipePage: Component = () => {
                   <A
                     href={backHref()}
                     class={`${styles.navButton} ${styles.closeButton}`}
-                    aria-label={strings.recipe.backToList}
+                    aria-label={recipePageStrings.backToList}
                   >
                     <span class="material-symbols-outlined">close</span>
                   </A>
@@ -96,7 +93,7 @@ const RecipePage: Component = () => {
                       href={`/recipe/${params.slug}/edit`}
                       state={location.state}
                       class={iconButtonStyles.button}
-                      aria-label={strings.recipeEdit.edit(recipeData().title)}
+                      aria-label={adminStrings.edit.edit(recipeData().title)}
                     >
                       <span class="material-symbols-outlined" aria-hidden="true">
                         edit
@@ -139,7 +136,7 @@ const RecipePage: Component = () => {
 
                 <div class={styles.metaBar}>
                   <div class={styles.metaItem}>
-                    <span class={styles.metaLabel}>{strings.recipe.difficultyLabel}</span>
+                    <span class={styles.metaLabel}>{recipePageStrings.difficultyLabel}</span>
                     <span
                       class={`${styles.difficultyBadge} ${getDifficultyClass(recipeData().difficulty)}`}
                     >
@@ -151,22 +148,22 @@ const RecipePage: Component = () => {
                   </div>
                   <Show when={recipeData().prep_time}>
                     <div class={styles.metaItem}>
-                      <span class={styles.metaLabel}>{strings.recipe.prep}</span>
+                      <span class={styles.metaLabel}>{recipePageStrings.prep}</span>
                       <span class={styles.metaValue}>{formatMinutes(recipeData().prep_time)}</span>
                     </div>
                   </Show>
                   <div class={styles.metaItem}>
-                    <span class={styles.metaLabel}>{strings.recipe.total}</span>
+                    <span class={styles.metaLabel}>{recipePageStrings.total}</span>
                     <span class={styles.metaValue}>{formatMinutes(recipeData().total_time)}</span>
                   </div>
                   <div class={styles.metaItem}>
-                    <span class={styles.metaLabel}>{strings.recipe.servings}</span>
+                    <span class={styles.metaLabel}>{recipePageStrings.servings}</span>
                     <span class={styles.metaValue}>{formatServings(recipeData().servings)}</span>
                   </div>
                   <Show when={recipeData().author}>
                     {(author) => (
                       <div class={styles.metaItem}>
-                        <span class={styles.metaLabel}>{strings.recipe.author}</span>
+                        <span class={styles.metaLabel}>{recipePageStrings.author}</span>
                         <span class={styles.metaValue}>@{author()}</span>
                       </div>
                     )}
@@ -190,7 +187,7 @@ const RecipePage: Component = () => {
                           rel="noopener noreferrer"
                           class={styles.sourceLink}
                         >
-                          {strings.recipe.viewSource}
+                          {recipePageStrings.viewSource}
                           <span class="material-symbols-outlined">open_in_new</span>
                         </a>
                       )}
@@ -201,7 +198,7 @@ const RecipePage: Component = () => {
 
               <div class={styles.content}>
                 <section class={styles.ingredientsSection}>
-                  <h2 class={styles.sectionTitle}>{strings.recipe.ingredients}</h2>
+                  <h2 class={styles.sectionTitle}>{recipePageStrings.ingredients}</h2>
                   <ul class={styles.ingredientsList}>
                     {recipeData().ingredients.map((ingredient) => (
                       <li class={styles.ingredientItem}>
@@ -212,7 +209,7 @@ const RecipePage: Component = () => {
                 </section>
 
                 <section class={styles.instructionsSection}>
-                  <h2 class={styles.sectionTitle}>{strings.recipe.instructions}</h2>
+                  <h2 class={styles.sectionTitle}>{recipePageStrings.instructions}</h2>
                   <For each={recipeData().instructions}>
                     {(section) => (
                       <div class={styles.instructionGroup}>

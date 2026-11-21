@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import { strings } from "~/app/strings.ts";
 import styles from "./SortDropdown.module.css";
 import { DEFAULT_SORT, type SortValue } from "./sortOptions.ts";
+import { recipeListStrings } from "./strings.ts";
 
 type SortDropdownProps = {
   value: SortValue;
@@ -38,30 +38,56 @@ export const SortDropdown = (props: SortDropdownProps) => {
   });
 
   const sortOptions = [
-    { value: "date-desc", label: strings.sort.dateDesc, shortLabel: strings.sort.shortDateDesc },
-    { value: "date-asc", label: strings.sort.dateAsc, shortLabel: strings.sort.shortDateAsc },
-    { value: "name-asc", label: strings.sort.nameAsc, shortLabel: strings.sort.shortNameAsc },
-    { value: "name-desc", label: strings.sort.nameDesc, shortLabel: strings.sort.shortNameDesc },
-    { value: "time-asc", label: strings.sort.timeAsc, shortLabel: strings.sort.shortTimeAsc },
-    { value: "time-desc", label: strings.sort.timeDesc, shortLabel: strings.sort.shortTimeDesc },
+    {
+      value: "date-desc",
+      label: recipeListStrings.sort.dateDesc,
+      shortLabel: recipeListStrings.sort.shortDateDesc,
+    },
+    {
+      value: "date-asc",
+      label: recipeListStrings.sort.dateAsc,
+      shortLabel: recipeListStrings.sort.shortDateAsc,
+    },
+    {
+      value: "name-asc",
+      label: recipeListStrings.sort.nameAsc,
+      shortLabel: recipeListStrings.sort.shortNameAsc,
+    },
+    {
+      value: "name-desc",
+      label: recipeListStrings.sort.nameDesc,
+      shortLabel: recipeListStrings.sort.shortNameDesc,
+    },
+    {
+      value: "time-asc",
+      label: recipeListStrings.sort.timeAsc,
+      shortLabel: recipeListStrings.sort.shortTimeAsc,
+    },
+    {
+      value: "time-desc",
+      label: recipeListStrings.sort.timeDesc,
+      shortLabel: recipeListStrings.sort.shortTimeDesc,
+    },
     {
       value: "difficulty-easy",
-      label: strings.sort.difficultyEasy,
-      shortLabel: strings.sort.shortDifficultyEasy,
+      label: recipeListStrings.sort.difficultyEasy,
+      shortLabel: recipeListStrings.sort.shortDifficultyEasy,
     },
     {
       value: "difficulty-hard",
-      label: strings.sort.difficultyHard,
-      shortLabel: strings.sort.shortDifficultyHard,
+      label: recipeListStrings.sort.difficultyHard,
+      shortLabel: recipeListStrings.sort.shortDifficultyHard,
     },
   ] as const;
 
   const buttonLabel = () => {
     if (props.value === DEFAULT_SORT) {
-      return strings.sort.label;
+      return recipeListStrings.sort.label;
     }
     const activeOption = sortOptions.find((option) => option.value === props.value);
-    return activeOption ? strings.sort.activeLabel(activeOption.shortLabel) : strings.sort.label;
+    return activeOption
+      ? recipeListStrings.sort.activeLabel(activeOption.shortLabel)
+      : recipeListStrings.sort.label;
   };
 
   const handleOptionClick = (value: SortValue) => {
