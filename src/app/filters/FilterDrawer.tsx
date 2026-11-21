@@ -1,45 +1,25 @@
 import Drawer from "@corvu/drawer";
 import type { Component } from "solid-js";
-import type { MarkFilter } from "~/shared/marks.ts";
-import type { TagFilter } from "~/shared/tags.ts";
 import buttonStyles from "~/styles/button.module.css";
 import type { AuthorOption } from "./deriveAuthors.ts";
-import type { DifficultyFilter } from "./difficultyOptions.ts";
 import styles from "./FilterDrawer.module.css";
 import { FilterPanel } from "./FilterPanel.tsx";
-import type { RecommendedFilter } from "./recommendedOptions.ts";
+import { countActiveFilters, type RecipeFilterKey, type RecipeFilters } from "./recipeFilters.ts";
 import { filterStrings } from "./strings.ts";
-import type { TimeFilter } from "./timeOptions.ts";
 
 type FilterDrawerProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  difficultyFilter: DifficultyFilter;
-  timeFilter: TimeFilter;
-  tagFilter: TagFilter;
-  authorFilter: ReadonlyArray<string>;
+  filters: RecipeFilters;
   authorOptions: ReadonlyArray<AuthorOption>;
-  markFilter: MarkFilter;
-  recommendedFilter: RecommendedFilter;
-  onDifficultyChange: (difficulty: DifficultyFilter) => void;
-  onTimeChange: (time: TimeFilter) => void;
-  onTagChange: (tag: TagFilter) => void;
-  onAuthorChange: (author: ReadonlyArray<string>) => void;
-  onMarkChange: (marks: MarkFilter) => void;
-  onRecommendedChange: (recommended: RecommendedFilter) => void;
+  onFilterChange: <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]) => void;
   onClearAll: () => void;
   // Recipes matching the current search and filters, shown on the close button.
   resultCount: number;
 };
 
 export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
-  const hasAnyFilter = () =>
-    props.difficultyFilter.length > 0 ||
-    props.timeFilter.length > 0 ||
-    props.tagFilter.length > 0 ||
-    props.authorFilter.length > 0 ||
-    props.markFilter.length > 0 ||
-    props.recommendedFilter.length > 0;
+  const hasAnyFilter = (): boolean => countActiveFilters(props.filters) > 0;
 
   return (
     <Drawer open={props.open} onOpenChange={props.onOpenChange} side="left">
@@ -63,19 +43,9 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
           <div class={styles.sections}>
             <FilterPanel
               variant="drawer"
-              difficultyFilter={props.difficultyFilter}
-              timeFilter={props.timeFilter}
-              tagFilter={props.tagFilter}
-              authorFilter={props.authorFilter}
+              filters={props.filters}
               authorOptions={props.authorOptions}
-              markFilter={props.markFilter}
-              recommendedFilter={props.recommendedFilter}
-              onDifficultyChange={props.onDifficultyChange}
-              onTimeChange={props.onTimeChange}
-              onTagChange={props.onTagChange}
-              onAuthorChange={props.onAuthorChange}
-              onMarkChange={props.onMarkChange}
-              onRecommendedChange={props.onRecommendedChange}
+              onFilterChange={props.onFilterChange}
             />
           </div>
 

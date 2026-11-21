@@ -1,24 +1,19 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { FilterPanel } from "./FilterPanel.tsx";
+import { emptyFilters, type RecipeFilters } from "./recipeFilters.ts";
 
-const renderPanel = (overrides: Partial<Parameters<typeof FilterPanel>[0]> = {}) =>
+type PanelProps = Parameters<typeof FilterPanel>[0];
+
+const renderPanel = (
+  overrides: Partial<Omit<PanelProps, "filters">> & { filters?: Partial<RecipeFilters> } = {},
+) =>
   render(() => (
     <FilterPanel
-      difficultyFilter={[]}
-      timeFilter={[]}
-      tagFilter={[]}
-      authorFilter={[]}
       authorOptions={[{ value: "ana", label: "@ana" }]}
-      markFilter={[]}
-      recommendedFilter={[]}
-      onDifficultyChange={vi.fn()}
-      onTimeChange={vi.fn()}
-      onTagChange={vi.fn()}
-      onAuthorChange={vi.fn()}
-      onMarkChange={vi.fn()}
-      onRecommendedChange={vi.fn()}
+      onFilterChange={vi.fn()}
       {...overrides}
+      filters={{ ...emptyFilters, ...overrides.filters }}
     />
   ));
 
@@ -66,8 +61,7 @@ describe("<FilterPanel />", () => {
 
   it("shows how many options each section has selected", () => {
     const { container } = renderPanel({
-      tagFilter: ["Dinner", "Snack", "Beef"],
-      timeFilter: ["under30"],
+      filters: { tag: ["Dinner", "Snack", "Beef"], time: ["under30"] },
     });
 
     const counts = Object.fromEntries(
@@ -77,8 +71,8 @@ describe("<FilterPanel />", () => {
   });
 
   it("shows options as chips, still grouped by section", () => {
-    const onTagChange = vi.fn();
-    const { container } = renderPanel({ tagFilter: ["Beef"], onTagChange });
+    const onFilterChange = vi.fn();
+    const { container } = renderPanel({ filters: { tag: ["Beef"] }, onFilterChange });
 
     expect(readSections(container).map((section) => section.title)).toContain("Meal");
     const beef = screen.getByRole("checkbox", { name: "Beef" });
@@ -89,7 +83,7 @@ describe("<FilterPanel />", () => {
     );
 
     fireEvent.click(screen.getByRole("checkbox", { name: "Dinner" }));
-    expect(onTagChange).toHaveBeenCalledWith(["Beef", "Dinner"]);
+    expect(onFilterChange).toHaveBeenCalledWith("tag", ["Beef", "Dinner"]);
   });
 
   it("keeps chips compact in the sidebar and touch sized in the drawer", () => {
@@ -109,7 +103,7 @@ describe("<FilterPanel />", () => {
       value: `cook${i + 1}`,
       label: `@cook${i + 1}`,
     }));
-    renderPanel({ variant: "drawer", authorOptions, authorFilter: ["cook7"] });
+    renderPanel({ variant: "drawer", authorOptions, filters: { author: ["cook7"] } });
 
     const authorBoxes = () => screen.getAllByRole("checkbox", { name: /^@cook/ });
     // The selected author always shows, first, plus the next four.

@@ -1,290 +1,43 @@
-import { createAsync, useSearchParams } from "@solidjs/router";
-import Fuse from "fuse.js";
+import { createAsync } from "@solidjs/router";
 import { createMemo, createSignal, Show, Suspense } from "solid-js";
 import { getRecipesList } from "~/app/api/recipeQueries.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/app/filters/deriveAuthors.ts";
-import {
-  type DifficultyFilter,
-  type DifficultyValue,
-  difficultyValues,
-} from "~/app/filters/difficultyOptions.ts";
 import { FilterDrawer } from "~/app/filters/FilterDrawer.tsx";
 import { FilterPanel } from "~/app/filters/FilterPanel.tsx";
-import { matchesTagFilter } from "~/app/filters/matchesTagFilter.ts";
-import {
-  matchesRecommendedFilter,
-  type RecommendedFilter,
-  type RecommendedValue,
-  recommendedValues,
-} from "~/app/filters/recommendedOptions.ts";
+import { countActiveFilters, filterRecipes } from "~/app/filters/recipeFilters.ts";
+import { createRecipeSearch } from "~/app/filters/recipeSearch.ts";
 import { SearchBar } from "~/app/filters/SearchBar.tsx";
 import { filterStrings } from "~/app/filters/strings.ts";
-import { type TimeFilter, type TimeValue, timeValues } from "~/app/filters/timeOptions.ts";
+import { useRecipeListParams } from "~/app/filters/useRecipeListParams.ts";
 import { useMarks } from "~/app/marks/MarksContext.tsx";
 import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import { SortDropdown } from "~/app/recipe-list/SortDropdown.tsx";
-import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
+import { sortRecipes } from "~/app/recipe-list/sortRecipes.ts";
 import { recipeListStrings } from "~/app/recipe-list/strings.ts";
 import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
-import { type Mark, type MarkFilter, markValues } from "~/shared/marks.ts";
-import type { RecipeSummary } from "~/shared/recipe.ts";
-import { type TagFilter, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
 import styles from "./index.module.css";
-
-const parseArrayParam = <T extends string>(
-  param: string | string[] | undefined,
-  validValues: ReadonlyArray<T>,
-): ReadonlyArray<T> => {
-  if (!param) {
-    return [];
-  }
-  const values = Array.isArray(param) ? param : param.split(",");
-  return values.filter((v): v is T => validValues.includes(v as T));
-};
-
-const serializeArrayParam = <T extends string>(values: ReadonlyArray<T>): string | undefined =>
-  values.length > 0 ? values.join(",") : undefined;
 
 const Home = () => {
   const recipesResource = createAsync(() => getRecipesList());
   const recipes = createMemo(() => recipesResource() ?? []);
   const authorValues = createMemo(() => deriveAuthors(recipes()));
   const authorOptions = createMemo(() => buildAuthorOptions(recipes()));
-  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useRecipeListParams(authorValues);
+  const marks = useMarks();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
   // View mode is intentionally ephemeral: every page load starts in card view.
   const [viewMode, setViewMode] = createSignal<ViewMode>("card");
-  const marks = useMarks();
 
-  const markFilter = createMemo(
-    (): MarkFilter => parseArrayParam(searchParams.mark, markValues as ReadonlyArray<Mark>),
+  const search = createMemo(() => createRecipeSearch(recipes()));
+
+  const filteredRecipes = createMemo(() =>
+    sortRecipes(
+      filterRecipes(search()(params.searchQuery()), params.filters(), marks.isMarked),
+      params.sort(),
+    ),
   );
 
-  const recommendedFilter = createMemo(
-    (): RecommendedFilter =>
-      parseArrayParam(
-        searchParams.recommended,
-        recommendedValues as ReadonlyArray<RecommendedValue>,
-      ),
-  );
-
-  const difficultyFilter = createMemo(
-    (): DifficultyFilter =>
-      parseArrayParam(searchParams.difficulty, difficultyValues as ReadonlyArray<DifficultyValue>),
-  );
-
-  const timeFilter = createMemo(
-    (): TimeFilter => parseArrayParam(searchParams.time, timeValues as ReadonlyArray<TimeValue>),
-  );
-
-  const tagFilter = createMemo(
-    (): TagFilter => parseArrayParam(searchParams.tag, tagValues as ReadonlyArray<TagValue>),
-  );
-
-  const authorFilter = createMemo(
-    (): ReadonlyArray<string> => parseArrayParam(searchParams.author, authorValues()),
-  );
-
-  const sortBy = createMemo(() => {
-    const value = searchParams.sort as SortValue;
-    return sortValues.includes(value) ? value : DEFAULT_SORT;
-  });
-
-  const searchQuery = createMemo(() => searchParams.q || "");
-
-  const currentPage = createMemo(() => {
-    const pageParam = searchParams.page;
-    if (!pageParam || Array.isArray(pageParam)) {
-      return 1;
-    }
-    const page = Number.parseInt(pageParam, 10);
-    return Number.isNaN(page) || page < 1 ? 1 : page;
-  });
-
-  const fuse = createMemo(
-    () =>
-      new Fuse(recipes(), {
-        keys: [
-          { name: "name", weight: 0.5 },
-          { name: "ingredients", weight: 0.25 },
-          { name: "tags", weight: 0.15 },
-          { name: "author", weight: 0.15 },
-          { name: "description", weight: 0.1 },
-        ],
-        threshold: 0.3,
-        includeScore: true,
-        minMatchCharLength: 2,
-      }),
-  );
-
-  const getSortComparator = (sortBy: SortValue) => {
-    switch (sortBy) {
-      case "date-desc":
-        return (a: RecipeSummary, b: RecipeSummary) => b.created_at.localeCompare(a.created_at);
-      case "date-asc":
-        return (a: RecipeSummary, b: RecipeSummary) => a.created_at.localeCompare(b.created_at);
-      case "name-asc":
-        return (a: RecipeSummary, b: RecipeSummary) => a.name.localeCompare(b.name);
-      case "name-desc":
-        return (a: RecipeSummary, b: RecipeSummary) => b.name.localeCompare(a.name);
-      case "time-asc":
-        return (a: RecipeSummary, b: RecipeSummary) => a.total_time - b.total_time;
-      case "time-desc":
-        return (a: RecipeSummary, b: RecipeSummary) => b.total_time - a.total_time;
-      case "difficulty-easy": {
-        const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2, Unknown: 3 };
-        return (a: RecipeSummary, b: RecipeSummary) =>
-          difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-      }
-      case "difficulty-hard": {
-        const difficultyOrderReverse = { Hard: 0, Medium: 1, Easy: 2, Unknown: 3 };
-        return (a: RecipeSummary, b: RecipeSummary) =>
-          difficultyOrderReverse[a.difficulty] - difficultyOrderReverse[b.difficulty];
-      }
-      default:
-        return (a: RecipeSummary, b: RecipeSummary) => b.created_at.localeCompare(a.created_at);
-    }
-  };
-
-  const filteredRecipes = createMemo(() => {
-    const query = searchQuery();
-    const difficulties = difficultyFilter();
-    const times = timeFilter();
-    const tags = tagFilter();
-    const authors = authorFilter();
-    const sort = sortBy();
-
-    const baseRecipes =
-      query && typeof query === "string" && query.trim()
-        ? fuse()
-            .search(query.trim())
-            .map((result) => result.item)
-        : recipes();
-
-    return baseRecipes
-      .filter(
-        (recipe) =>
-          difficulties.length === 0 || difficulties.includes(recipe.difficulty as DifficultyValue),
-      )
-      .filter((recipe) => {
-        if (times.length === 0) {
-          return true;
-        }
-        return times.some((time) => {
-          switch (time) {
-            case "under30":
-              return recipe.total_time < 30;
-            case "under60":
-              return recipe.total_time < 60;
-            case "over60":
-              return recipe.total_time >= 60;
-            default:
-              return true;
-          }
-        });
-      })
-      .filter((recipe) => matchesTagFilter(recipe.tags, tags, tagGroupDefinitions))
-      .filter(
-        (recipe) =>
-          authors.length === 0 || (recipe.author !== undefined && authors.includes(recipe.author)),
-      )
-      .filter(
-        (recipe) =>
-          markFilter().length === 0 ||
-          markFilter().some((mark) => marks.isMarked(mark, recipe.url_slug)),
-      )
-      .filter((recipe) => matchesRecommendedFilter(recipe.verdict, recommendedFilter()))
-      .sort(getSortComparator(sort));
-  });
-
-  const activeFilterCount = createMemo(
-    () =>
-      difficultyFilter().length +
-      timeFilter().length +
-      tagFilter().length +
-      authorFilter().length +
-      markFilter().length +
-      recommendedFilter().length,
-  );
-
-  const handleRecommendedFilter = (recommended: RecommendedFilter) => {
-    setSearchParams({
-      ...searchParams,
-      recommended: serializeArrayParam(recommended),
-      page: undefined,
-    });
-  };
-
-  const handleMarkFilter = (mark: MarkFilter) => {
-    setSearchParams({ ...searchParams, mark: serializeArrayParam(mark), page: undefined });
-  };
-
-  const handleDifficultyFilter = (difficulty: DifficultyFilter) => {
-    setSearchParams({
-      ...searchParams,
-      difficulty: serializeArrayParam(difficulty),
-      page: undefined,
-    });
-  };
-
-  const handleTimeFilter = (time: TimeFilter) => {
-    setSearchParams({ ...searchParams, time: serializeArrayParam(time), page: undefined });
-  };
-
-  const handleTagFilter = (tag: TagFilter) => {
-    setSearchParams({ ...searchParams, tag: serializeArrayParam(tag), page: undefined });
-  };
-
-  const handleAuthorFilter = (author: ReadonlyArray<string>) => {
-    setSearchParams({ ...searchParams, author: serializeArrayParam(author), page: undefined });
-  };
-
-  const handleClearAllFilters = () => {
-    setSearchParams({
-      ...searchParams,
-      difficulty: undefined,
-      time: undefined,
-      tag: undefined,
-      author: undefined,
-      mark: undefined,
-      recommended: undefined,
-      page: undefined,
-    });
-  };
-
-  const handleResetAll = () => {
-    setSearchParams({
-      ...searchParams,
-      q: undefined,
-      difficulty: undefined,
-      time: undefined,
-      tag: undefined,
-      author: undefined,
-      mark: undefined,
-      recommended: undefined,
-      page: undefined,
-    });
-  };
-
-  const handleSortChange = (sort: SortValue) => {
-    setSearchParams({
-      ...searchParams,
-      sort: sort !== DEFAULT_SORT ? sort : undefined,
-      page: undefined,
-    });
-  };
-
-  const handleSearchChange = (query: string) => {
-    setSearchParams({ ...searchParams, q: query || undefined, page: undefined });
-  };
-
-  const handlePageChange = (details: { page: number }) => {
-    if (details.page === 1) {
-      setSearchParams({ ...searchParams, page: undefined });
-    } else {
-      setSearchParams({ ...searchParams, page: details.page.toString() });
-    }
-  };
+  const activeFilterCount = createMemo(() => countActiveFilters(params.filters()));
 
   return (
     <main class={styles.main}>
@@ -303,26 +56,16 @@ const Home = () => {
                 <button
                   type="button"
                   class={styles.sidebarClearButton}
-                  onClick={handleClearAllFilters}
+                  onClick={params.clearFilters}
                 >
                   {filterStrings.drawer.clearAll}
                 </button>
               </Show>
             </div>
             <FilterPanel
-              difficultyFilter={difficultyFilter()}
-              timeFilter={timeFilter()}
-              tagFilter={tagFilter()}
-              authorFilter={authorFilter()}
+              filters={params.filters()}
               authorOptions={authorOptions()}
-              markFilter={markFilter()}
-              recommendedFilter={recommendedFilter()}
-              onDifficultyChange={handleDifficultyFilter}
-              onTimeChange={handleTimeFilter}
-              onTagChange={handleTagFilter}
-              onAuthorChange={handleAuthorFilter}
-              onMarkChange={handleMarkFilter}
-              onRecommendedChange={handleRecommendedFilter}
+              onFilterChange={params.setFilter}
             />
           </aside>
           <div class={styles.controls}>
@@ -338,11 +81,7 @@ const Home = () => {
               </Show>
             </button>
             <Show when={activeFilterCount() > 0}>
-              <button
-                type="button"
-                class={styles.clearFiltersButton}
-                onClick={handleClearAllFilters}
-              >
+              <button type="button" class={styles.clearFiltersButton} onClick={params.clearFilters}>
                 <span class="material-symbols-outlined">close</span>
                 {filterStrings.drawer.clearAll}
               </button>
@@ -350,21 +89,21 @@ const Home = () => {
             <div class={styles.searchWrapper}>
               <SearchBar
                 recipes={recipes()}
-                searchQuery={(searchQuery() as string) || ""}
-                onSearchChange={handleSearchChange}
+                searchQuery={params.searchQuery()}
+                onSearchChange={params.setSearchQuery}
               />
             </div>
-            <SortDropdown value={sortBy()} onSortChange={handleSortChange} />
+            <SortDropdown value={params.sort()} onSortChange={params.setSort} />
             <ViewToggle value={viewMode()} onChange={setViewMode} />
           </div>
           <div class={styles.mainContent}>
             <Suspense>
               <RecipeList
                 recipes={filteredRecipes()}
-                currentPage={currentPage()}
+                currentPage={params.page()}
                 viewMode={viewMode()}
-                onPageChange={handlePageChange}
-                onResetAll={handleResetAll}
+                onPageChange={(details) => params.setPage(details.page)}
+                onResetAll={params.resetAll}
               />
             </Suspense>
           </div>
@@ -374,20 +113,10 @@ const Home = () => {
       <FilterDrawer
         open={isFilterDrawerOpen()}
         onOpenChange={setIsFilterDrawerOpen}
-        difficultyFilter={difficultyFilter()}
-        timeFilter={timeFilter()}
-        tagFilter={tagFilter()}
-        authorFilter={authorFilter()}
+        filters={params.filters()}
         authorOptions={authorOptions()}
-        markFilter={markFilter()}
-        recommendedFilter={recommendedFilter()}
-        onDifficultyChange={handleDifficultyFilter}
-        onTimeChange={handleTimeFilter}
-        onTagChange={handleTagFilter}
-        onAuthorChange={handleAuthorFilter}
-        onMarkChange={handleMarkFilter}
-        onRecommendedChange={handleRecommendedFilter}
-        onClearAll={handleClearAllFilters}
+        onFilterChange={params.setFilter}
+        onClearAll={params.clearFilters}
         resultCount={filteredRecipes().length}
       />
     </main>

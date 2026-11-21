@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FilterDrawer } from "./FilterDrawer.tsx";
+import { emptyFilters } from "./recipeFilters.ts";
 
 const renderDrawer = (overrides: Partial<Parameters<typeof FilterDrawer>[0]> = {}) => {
   const onOpenChange = vi.fn();
@@ -9,19 +10,9 @@ const renderDrawer = (overrides: Partial<Parameters<typeof FilterDrawer>[0]> = {
     <FilterDrawer
       open
       onOpenChange={onOpenChange}
-      difficultyFilter={[]}
-      timeFilter={[]}
-      tagFilter={[]}
-      authorFilter={[]}
+      filters={emptyFilters}
       authorOptions={[]}
-      markFilter={[]}
-      recommendedFilter={[]}
-      onDifficultyChange={vi.fn()}
-      onTimeChange={vi.fn()}
-      onTagChange={vi.fn()}
-      onAuthorChange={vi.fn()}
-      onMarkChange={vi.fn()}
-      onRecommendedChange={vi.fn()}
+      onFilterChange={vi.fn()}
       onClearAll={onClearAll}
       resultCount={12}
       {...overrides}
@@ -68,7 +59,7 @@ describe("<FilterDrawer />", () => {
     expect(screen.queryByRole("button", { name: "Clear all" })).not.toBeInTheDocument();
     cleanup();
 
-    const { onClearAll } = renderDrawer({ tagFilter: ["Soup"] });
+    const { onClearAll } = renderDrawer({ filters: { ...emptyFilters, tag: ["Soup"] } });
     fireEvent.click(screen.getByRole("button", { name: "Clear all" }));
     expect(onClearAll).toHaveBeenCalled();
   });

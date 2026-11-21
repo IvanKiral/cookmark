@@ -1,9 +1,6 @@
 import { type Component, createMemo, createSignal, For, type JSX, Show } from "solid-js";
 import { markStrings } from "~/app/marks/strings.ts";
-import type { Mark, MarkFilter } from "~/shared/marks.ts";
-import type { TagFilter, TagValue } from "~/shared/tags.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
-import type { DifficultyFilter, DifficultyValue } from "./difficultyOptions.ts";
 import styles from "./FilterPanel.module.css";
 import {
   difficultyOptions,
@@ -12,24 +9,13 @@ import {
   tagGroups,
   timeOptions,
 } from "./filterOptions.ts";
-import type { RecommendedFilter, RecommendedValue } from "./recommendedOptions.ts";
+import type { RecipeFilterKey, RecipeFilters } from "./recipeFilters.ts";
 import { filterStrings } from "./strings.ts";
-import type { TimeFilter, TimeValue } from "./timeOptions.ts";
 
 type FilterPanelProps = {
-  difficultyFilter: DifficultyFilter;
-  timeFilter: TimeFilter;
-  tagFilter: TagFilter;
-  authorFilter: ReadonlyArray<string>;
+  filters: RecipeFilters;
   authorOptions: ReadonlyArray<AuthorOption>;
-  markFilter: MarkFilter;
-  recommendedFilter: RecommendedFilter;
-  onDifficultyChange: (difficulty: DifficultyFilter) => void;
-  onTimeChange: (time: TimeFilter) => void;
-  onTagChange: (tag: TagFilter) => void;
-  onAuthorChange: (author: ReadonlyArray<string>) => void;
-  onMarkChange: (marks: MarkFilter) => void;
-  onRecommendedChange: (recommended: RecommendedFilter) => void;
+  onFilterChange: <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]) => void;
   // Both show options as chips. "drawer" (phones and tablets) makes every
   // target 44px tall for touch; "sidebar" (desktop) keeps them compact.
   variant?: "sidebar" | "drawer";
@@ -204,44 +190,26 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
 export const FilterPanel: Component<FilterPanelProps> = (props) => {
   const isTouch = (): boolean => props.variant === "drawer";
 
-  const handleDifficultyToggle = (value: DifficultyValue) => {
-    props.onDifficultyChange(toggleValue(props.difficultyFilter, value) as DifficultyFilter);
-  };
-
-  const handleTimeToggle = (value: TimeValue) => {
-    props.onTimeChange(toggleValue(props.timeFilter, value) as TimeFilter);
-  };
-
-  const handleTagToggle = (value: TagValue) => {
-    props.onTagChange(toggleValue(props.tagFilter, value) as TagFilter);
-  };
-
-  const handleMarkToggle = (value: Mark) => {
-    props.onMarkChange(toggleValue(props.markFilter, value));
-  };
-
-  const handleRecommendedToggle = (value: RecommendedValue) => {
-    props.onRecommendedChange(toggleValue(props.recommendedFilter, value));
-  };
-
-  const handleAuthorToggle = (value: string) => {
-    props.onAuthorChange(toggleValue(props.authorFilter, value));
-  };
+  const toggle =
+    <K extends RecipeFilterKey>(key: K) =>
+    (value: RecipeFilters[K][number]): void => {
+      props.onFilterChange(key, toggleValue(props.filters[key], value) as RecipeFilters[K]);
+    };
 
   return (
     <div class={styles.panel}>
       <FilterSection
         title={markStrings.sectionTitle}
         options={markOptions}
-        selected={props.markFilter}
-        onToggle={handleMarkToggle}
+        selected={props.filters.mark}
+        onToggle={toggle("mark")}
         isTouch={isTouch()}
       />
       <FilterSection
         title={filterStrings.recommended}
         options={recommendedOptions}
-        selected={props.recommendedFilter}
-        onToggle={handleRecommendedToggle}
+        selected={props.filters.recommended}
+        onToggle={toggle("recommended")}
         isTouch={isTouch()}
       />
       <For each={tagGroups}>
@@ -249,8 +217,8 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
           <FilterSection
             title={group.label}
             options={group.options}
-            selected={props.tagFilter}
-            onToggle={handleTagToggle}
+            selected={props.filters.tag}
+            onToggle={toggle("tag")}
             isTouch={isTouch()}
           />
         )}
@@ -258,15 +226,15 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
       <FilterSection
         title={filterStrings.time}
         options={timeOptions}
-        selected={props.timeFilter}
-        onToggle={handleTimeToggle}
+        selected={props.filters.time}
+        onToggle={toggle("time")}
         isTouch={isTouch()}
       />
       <FilterSection
         title={filterStrings.difficulty}
         options={difficultyOptions}
-        selected={props.difficultyFilter}
-        onToggle={handleDifficultyToggle}
+        selected={props.filters.difficulty}
+        onToggle={toggle("difficulty")}
         isTouch={isTouch()}
       />
       <Show when={props.authorOptions.length > 0}>
@@ -275,8 +243,8 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
           placeholder={filterStrings.authorSearchPlaceholder}
           noMatchesLabel={filterStrings.authorNoMatches}
           options={props.authorOptions}
-          selected={props.authorFilter}
-          onToggle={handleAuthorToggle}
+          selected={props.filters.author}
+          onToggle={toggle("author")}
           isTouch={isTouch()}
         />
       </Show>
