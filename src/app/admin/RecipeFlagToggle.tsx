@@ -1,9 +1,9 @@
 import { type Component, createSignal, Show } from "solid-js";
 import { saveRecipeFlag } from "~/app/api/adminApi.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
+import styles from "~/app/ui/iconToggleButton.module.css";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import type { RecipeFlag } from "~/shared/recipeFlags.ts";
-import styles from "~/styles/iconToggleButton.module.css";
 import { adminStrings } from "./strings.ts";
 
 type RecipeFlagToggleProps = {

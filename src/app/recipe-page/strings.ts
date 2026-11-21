@@ -9,6 +9,7 @@ export const recipePageStrings = {
   videoTutorial: "Video Tutorial",
   originalRecipe: "Original Recipe",
   zoomImage: "View full size",
+  videoLabel: (title: string) => `Video for ${title}`,
   difficultyLabel: "Difficulty",
   notFound: "Recipe not found",
   backToList: "Back to recipes",

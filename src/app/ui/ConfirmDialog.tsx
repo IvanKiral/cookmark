@@ -1,7 +1,7 @@
 import { Dialog } from "@ark-ui/solid/dialog";
 import type { Component } from "solid-js";
 import { Portal } from "solid-js/web";
-import buttonStyles from "~/styles/button.module.css";
+import buttonStyles from "./button.module.css";
 import styles from "./ConfirmDialog.module.css";
 import { uiStrings } from "./strings.ts";
 

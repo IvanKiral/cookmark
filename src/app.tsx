@@ -5,6 +5,7 @@ import { Suspense } from "solid-js";
 import "./app.css";
 import { MarksProvider } from "~/app/marks/MarksContext.tsx";
 import { InstallPrompt } from "~/app/pwa/InstallPrompt.tsx";
+import { uiStrings } from "~/app/ui/strings.ts";
 import { CurrentUserProvider } from "~/app/user/CurrentUserContext.tsx";
 
 export default function App() {
@@ -12,7 +13,7 @@ export default function App() {
     <Router
       root={(props) => (
         <MetaProvider>
-          <Title>Cookmark</Title>
+          <Title>{uiStrings.appName}</Title>
           <Link rel="preconnect" href="https://fonts.googleapis.com" />
           <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
           <Link

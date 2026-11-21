@@ -1,29 +1,36 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import styles from "./InstallPrompt.module.css";
+import { pwaStrings } from "./strings.ts";
+
+// Chrome's install event, which TypeScript's DOM types do not include.
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
 
 export const InstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = createSignal<Event | null>(null);
-  const [showPrompt, setShowPrompt] = createSignal(false);
+  const [deferredPrompt, setDeferredPrompt] = createSignal<BeforeInstallPromptEvent | null>(null);
+  const [isPromptShown, setIsPromptShown] = createSignal(false);
 
   onMount(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowPrompt(true);
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setDeferredPrompt(event as BeforeInstallPromptEvent);
+      setIsPromptShown(true);
     };
 
     const handleAppInstalled = () => {
-      setShowPrompt(false);
+      setIsPromptShown(false);
       setDeferredPrompt(null);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
-    return () => {
+    onCleanup(() => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
-    };
+    });
   });
 
   const handleInstallClick = async () => {
@@ -32,44 +39,47 @@ export const InstallPrompt = () => {
       return;
     }
 
-    setShowPrompt(false);
+    setIsPromptShown(false);
+    await prompt.prompt();
 
-    // Type assertion for the prompt event with proper interface
-    interface BeforeInstallPromptEvent extends Event {
-      prompt: () => Promise<void>;
-      userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-    }
-
-    const promptEvent = prompt as BeforeInstallPromptEvent;
-    await promptEvent.prompt();
-
-    const result = await promptEvent.userChoice;
+    const result = await prompt.userChoice;
     if (result.outcome === "accepted") {
       setDeferredPrompt(null);
     } else {
-      setShowPrompt(true);
+      setIsPromptShown(true);
     }
   };
 
   const handleDismiss = () => {
-    setShowPrompt(false);
+    setIsPromptShown(false);
   };
 
   return (
-    <Show when={showPrompt()}>
+    <Show when={isPromptShown()}>
       <div class={styles.installPrompt}>
         <div class={styles.content}>
-          <div class={styles.icon}>📱</div>
+          <div class={styles.icon}>
+            <span class="material-symbols-outlined" aria-hidden="true">
+              install_mobile
+            </span>
+          </div>
           <div class={styles.text}>
-            <h3>Install Cookmark</h3>
-            <p>Add to your home screen for quick access to your recipes</p>
+            <h3>{pwaStrings.title}</h3>
+            <p>{pwaStrings.hint}</p>
           </div>
           <div class={styles.actions}>
             <button class={styles.installButton} onClick={handleInstallClick} type="button">
-              Install
+              {pwaStrings.install}
             </button>
-            <button class={styles.dismissButton} onClick={handleDismiss} type="button">
-              ✕
+            <button
+              class={styles.dismissButton}
+              onClick={handleDismiss}
+              type="button"
+              aria-label={pwaStrings.dismiss}
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">
+                close
+              </span>
             </button>
           </div>
         </div>

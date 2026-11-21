@@ -1,4 +1,5 @@
 export const uiStrings = {
+  appName: "Cookmark",
   cancel: "Cancel",
   pagination: {
     previous: "Previous",

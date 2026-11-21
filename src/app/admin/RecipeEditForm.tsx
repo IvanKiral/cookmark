@@ -3,6 +3,7 @@ import { type Component, createSignal, Index, onCleanup, onMount, Show } from "s
 import { createStore } from "solid-js/store";
 import { saveRecipeEdit } from "~/app/api/adminApi.ts";
 import { tagOptions } from "~/app/filters/filterOptions.ts";
+import buttonStyles from "~/app/ui/button.module.css";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { NumberField } from "~/app/ui/NumberField.tsx";
 import { TextArea } from "~/app/ui/TextArea.tsx";
@@ -22,7 +23,6 @@ import {
   type RecipeEditErrors,
 } from "~/shared/recipeEdit.ts";
 import type { TagValue } from "~/shared/tags.ts";
-import buttonStyles from "~/styles/button.module.css";
 import { formatRecipeEditError } from "./formatRecipeEditError.ts";
 import styles from "./RecipeEditForm.module.css";
 import { adminStrings } from "./strings.ts";

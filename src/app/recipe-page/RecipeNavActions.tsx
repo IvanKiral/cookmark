@@ -4,9 +4,9 @@ import { RecipeFlagToggle } from "~/app/admin/RecipeFlagToggle.tsx";
 import { RecipeVerdictToggle } from "~/app/admin/RecipeVerdictToggle.tsx";
 import { adminStrings } from "~/app/admin/strings.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
+import iconButtonStyles from "~/app/ui/iconToggleButton.module.css";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import type { Recipe } from "~/shared/recipe.ts";
-import iconButtonStyles from "~/styles/iconToggleButton.module.css";
 
 type RecipeNavActionsProps = {
   slug: string;

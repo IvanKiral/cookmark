@@ -1,5 +1,5 @@
 import { For, Show } from "solid-js";
-import styles from "~/styles/formField.module.css";
+import styles from "~/app/ui/formField.module.css";
 
 type TagPickerProps<T extends string> = {
   label: string;

@@ -1,5 +1,5 @@
 import { type Component, createUniqueId, type JSX, Show } from "solid-js";
-import styles from "~/styles/formField.module.css";
+import styles from "./formField.module.css";
 
 // Spread onto the control so the label, hint and error are announced with it.
 export type FormControlProps = {

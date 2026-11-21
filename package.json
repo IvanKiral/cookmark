@@ -7,7 +7,6 @@
     "biome:check": "biome check",
     "biome:check:fix": "biome check --write",
     "biome:lint": "biome lint",
-    "start": "vinxi start",
     "local:setup": "node scripts/localSetup.ts",
     "local:preview": "node scripts/localPreview.ts",
     "test": "vitest run",

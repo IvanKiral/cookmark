@@ -151,11 +151,11 @@
   color: var(--color-neutral-900);
 }
 
-.sourceLink :global(.material-symbols-outlined) {
+.sourceLink .material-symbols-outlined {
   font-size: 1rem;
   transition: transform 0.2s;
 }
 
-.sourceLink:hover :global(.material-symbols-outlined) {
+.sourceLink:hover .material-symbols-outlined {
   transform: translateX(2px);
 }

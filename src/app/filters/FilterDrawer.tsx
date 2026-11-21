@@ -1,6 +1,6 @@
 import Drawer from "@corvu/drawer";
 import type { Component } from "solid-js";
-import buttonStyles from "~/styles/button.module.css";
+import buttonStyles from "~/app/ui/button.module.css";
 import type { AuthorOption } from "./deriveAuthors.ts";
 import styles from "./FilterDrawer.module.css";
 import { FilterPanel } from "./FilterPanel.tsx";
@@ -35,7 +35,7 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
             <h2 id="filter-drawer-title" class={styles.title}>
               {filterStrings.drawer.title}
             </h2>
-            <Drawer.Close class={styles.closeButton} aria-label="Close filters">
+            <Drawer.Close class={styles.closeButton} aria-label={filterStrings.closeDrawer}>
               <span class="material-symbols-outlined">close</span>
             </Drawer.Close>
           </div>

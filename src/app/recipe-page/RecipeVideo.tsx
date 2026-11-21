@@ -18,7 +18,7 @@ export const RecipeVideo: Component<RecipeVideoProps> = (props) => (
         controls
         playsinline
         preload="metadata"
-        aria-label={`Video for ${props.title}`}
+        aria-label={recipePageStrings.videoLabel(props.title)}
       />
     </div>
   </RecipeMediaSection>

@@ -1,6 +1,6 @@
 import type { Component } from "solid-js";
+import styles from "~/app/ui/iconToggleButton.module.css";
 import type { Mark } from "~/shared/marks.ts";
-import styles from "~/styles/iconToggleButton.module.css";
 import { useMarks } from "./MarksContext.tsx";
 import { markStrings } from "./strings.ts";
 

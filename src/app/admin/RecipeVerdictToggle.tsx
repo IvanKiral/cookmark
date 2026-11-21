@@ -9,10 +9,10 @@ import {
 } from "solid-js";
 import { saveRecipeVerdict } from "~/app/api/adminApi.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
+import buttonStyles from "~/app/ui/iconToggleButton.module.css";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import { recipeVerdictIcons, recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import { type RecipeVerdict, recipeVerdictValues } from "~/shared/verdicts.ts";
-import buttonStyles from "~/styles/iconToggleButton.module.css";
 import styles from "./RecipeVerdictToggle.module.css";
 import { adminStrings } from "./strings.ts";
 

@@ -1,6 +1,7 @@
 export const filterStrings = {
   searchPlaceholder: "Search recipes...",
   panelLabel: "Recipe filters",
+  closeDrawer: "Close filters",
   difficulty: "Difficulty",
   time: "Time",
   author: "Author",

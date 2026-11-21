@@ -19,8 +19,14 @@ const difficultyClasses: Record<NonNullable<Recipe["difficulty"]>, string> = {
 export const RecipeHeader: Component<RecipeHeaderProps> = (props) => {
   const { isAdmin } = useCurrentUser();
   const isShouldDeleteShown = (): boolean => isAdmin() && (props.recipe.should_delete ?? false);
-  const difficultyClass = (): string =>
-    props.recipe.difficulty ? difficultyClasses[props.recipe.difficulty] : styles.difficultyUnknown;
+  // The recipe JSON is not validated, so any other value gets the unknown style.
+  const difficultyClass = (): string => {
+    const difficulty = props.recipe.difficulty;
+    if (!difficulty) {
+      return styles.difficultyUnknown;
+    }
+    return difficultyClasses[difficulty] ?? styles.difficultyUnknown;
+  };
 
   return (
     <header class={styles.header}>
