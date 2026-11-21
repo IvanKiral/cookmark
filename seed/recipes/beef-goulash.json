@@ -1,0 +1,50 @@
+{
+  "created_at": "2026-05-20T11:00:00.000Z",
+  "title": "Slow cooked beef goulash",
+  "description": "A rich goulash that is even better the next day.",
+  "cook_time": 420,
+  "servings": 6,
+  "ingredients": [
+    {
+      "name": "beef shin",
+      "amount": 1,
+      "unit": "kg"
+    },
+    {
+      "name": "onions",
+      "amount": 3,
+      "unit": null
+    },
+    {
+      "name": "sweet paprika",
+      "amount": 2,
+      "unit": "tbsp"
+    },
+    {
+      "name": "tomato paste",
+      "amount": 2,
+      "unit": "tbsp"
+    },
+    {
+      "name": "beef stock",
+      "amount": 500,
+      "unit": "ml"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Main",
+      "steps": [
+        "Brown the beef in batches.",
+        "Fry the onions until soft, then add paprika and tomato paste.",
+        "Add everything to the slow cooker with the stock and cook on low for 7 hours."
+      ]
+    }
+  ],
+  "tags": ["Beef", "Slowcooker", "Meal-prep", "Lunch", "Dinner", "Lactose-free"],
+  "difficulty": "easy",
+  "cuisine": "Hungarian",
+  "source_url": "https://www.youtube.com/shorts/example0003",
+  "source_type": "youtube_short",
+  "author": "Example Cooking Channel"
+}

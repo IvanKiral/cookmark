@@ -1,0 +1,47 @@
+{
+  "created_at": "2026-04-12T19:30:00.000Z",
+  "title": "Crispy air fryer salmon",
+  "description": "Salmon fillets in a crunchy coating, ready in 15 minutes.",
+  "prep_time": null,
+  "cook_time": 12,
+  "total_time": null,
+  "servings": 2,
+  "ingredients": [
+    {
+      "name": "salmon fillets",
+      "amount": 2,
+      "unit": null
+    },
+    {
+      "name": "egg",
+      "amount": 1,
+      "unit": null
+    },
+    {
+      "name": "breadcrumbs",
+      "amount": 50,
+      "unit": "g"
+    },
+    {
+      "name": "lemon",
+      "amount": 0.5,
+      "unit": null
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Main",
+      "steps": [
+        "Dip the salmon in beaten egg, then in breadcrumbs.",
+        "Air fry at 200 °C for 12 minutes.",
+        "Serve with lemon."
+      ]
+    }
+  ],
+  "tags": ["Fish", "Eggs", "Air-fryer", "Dinner"],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://www.instagram.com/reel/example0002/",
+  "source_type": "instagram_reel",
+  "author": "sample.fishcook"
+}

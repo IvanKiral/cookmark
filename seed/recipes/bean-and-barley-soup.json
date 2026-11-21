@@ -1,0 +1,54 @@
+{
+  "created_at": "2026-06-01T10:00:00.000Z",
+  "title": "Bean and barley soup",
+  "description": "A thick soup made from a handful of pulses and grains.",
+  "prep_time": 10,
+  "cook_time": 60,
+  "total_time": 70,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "mixed dried beans",
+      "amount": 150,
+      "unit": "g"
+    },
+    {
+      "name": "pearl barley",
+      "amount": 50,
+      "unit": "g"
+    },
+    {
+      "name": "potatoes",
+      "amount": 2,
+      "unit": null
+    },
+    {
+      "name": "garlic",
+      "amount": 2,
+      "unit": "cloves"
+    },
+    {
+      "name": "marjoram",
+      "amount": 1,
+      "unit": "tsp"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Main",
+      "steps": [
+        "Soak the beans overnight.",
+        "Simmer the beans and barley for 45 minutes.",
+        "Add diced potatoes, garlic and marjoram and cook 15 minutes more."
+      ]
+    }
+  ],
+  "tags": ["Vegetarian", "Legumes", "Soup", "Lunch", "Dinner"],
+  "difficulty": "easy",
+  "cuisine": "Central European",
+  "source_type": "image",
+  "source_file": {
+    "key": "recipe-images/bean-and-barley-soup.jpg",
+    "mime_type": "image/jpeg"
+  }
+}

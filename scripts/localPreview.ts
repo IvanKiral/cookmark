@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { LOCAL_ADMIN_EMAIL, LOCAL_STATE_DIR, WRANGLER_CONFIG } from "./localWrangler.ts";
+import { BUILT_WRANGLER_CONFIG, LOCAL_ADMIN_EMAIL, LOCAL_STATE_DIR } from "./localWrangler.ts";
 
 // Builds the production bundle and serves it with wrangler dev against the
 // local D1 data from `pnpm local:setup`, signed in as LOCAL_USER_EMAIL
@@ -22,7 +22,7 @@ execFileSync(
   [
     "dev",
     "--config",
-    WRANGLER_CONFIG,
+    BUILT_WRANGLER_CONFIG,
     "--persist-to",
     LOCAL_STATE_DIR,
     "--local",

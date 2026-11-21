@@ -1,0 +1,61 @@
+{
+  "created_at": "2026-06-15T13:00:00.000Z",
+  "title": "Lentils with halloumi and a poached egg",
+  "description": "Warm lentils with grilled halloumi and a soft poached egg.",
+  "prep_time": null,
+  "cook_time": null,
+  "total_time": 45,
+  "servings": 4,
+  "ingredients": [
+    {
+      "name": "green lentils",
+      "amount": 250,
+      "unit": "g"
+    },
+    {
+      "name": "halloumi",
+      "amount": 225,
+      "unit": "g"
+    },
+    {
+      "name": "eggs",
+      "amount": 4,
+      "unit": null
+    },
+    {
+      "name": "cherry tomatoes",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "olive oil",
+      "amount": 2,
+      "unit": "tbsp"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Lentils",
+      "steps": [
+        "Cook the lentils until tender, about 25 minutes.",
+        "Stir in the halved tomatoes and olive oil."
+      ]
+    },
+    {
+      "name": "Topping",
+      "steps": [
+        "Grill the sliced halloumi.",
+        "Poach the eggs for 3 minutes.",
+        "Serve the lentils topped with halloumi and an egg."
+      ]
+    }
+  ],
+  "tags": ["Vegetarian", "Eggs", "Legumes"],
+  "difficulty": "medium",
+  "cuisine": "Mediterranean",
+  "source_type": "image",
+  "source_file": {
+    "key": "recipe-images/lentils-with-halloumi-and-egg.jpg",
+    "mime_type": "image/jpeg"
+  }
+}

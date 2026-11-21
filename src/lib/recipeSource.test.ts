@@ -20,7 +20,7 @@ const recipeJson = (title: string): string =>
 
 const createDb = (): TestD1 => {
   const db = createTestD1([
-    "recipes_schema.sql",
+    "0001_recipes.sql",
     "0005_recipes_chef_pick.sql",
     "0006_recipes_should_delete.sql",
     "0008_recipes_verdict.sql",

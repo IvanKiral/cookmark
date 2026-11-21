@@ -1,0 +1,62 @@
+{
+  "created_at": "2026-01-10T09:00:00.000Z",
+  "title": "Swedish style meatballs",
+  "description": "Small meatballs in a creamy gravy.",
+  "prep_time": 30,
+  "cook_time": 20,
+  "total_time": 50,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "minced beef",
+      "amount": 250,
+      "unit": "g"
+    },
+    {
+      "name": "minced pork",
+      "amount": 250,
+      "unit": "g"
+    },
+    {
+      "name": "breadcrumbs",
+      "amount": 40,
+      "unit": "g"
+    },
+    {
+      "name": "egg",
+      "amount": 1,
+      "unit": null
+    },
+    {
+      "name": "cream",
+      "amount": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "beef stock",
+      "amount": 200,
+      "unit": "ml"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Meatballs",
+      "steps": [
+        "Mix the meat, breadcrumbs and egg.",
+        "Roll into small balls and fry until browned."
+      ]
+    },
+    {
+      "name": "Gravy",
+      "steps": [
+        "Add the stock and cream to the pan.",
+        "Simmer until thick and return the meatballs."
+      ]
+    }
+  ],
+  "tags": ["Beef", "Pork"],
+  "difficulty": "easy",
+  "cuisine": "Swedish",
+  "source_url": "https://example.com/recipes/swedish-meatballs",
+  "author": "sample.kitchen"
+}

@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-01-10T09:00:00.000Z",
+  "title": "Chicken with peaches",
+  "description": "Pan fried chicken with a sweet and sour peach sauce.",
+  "prep_time": null,
+  "cook_time": 30,
+  "total_time": 30,
+  "servings": null,
+  "ingredients": [
+    {
+      "name": "chicken breasts",
+      "amount": 2,
+      "unit": null
+    },
+    {
+      "name": "tinned peaches",
+      "amount": 1,
+      "unit": "tin"
+    },
+    {
+      "name": "soy sauce",
+      "amount": 2,
+      "unit": "tbsp"
+    },
+    {
+      "name": "honey",
+      "amount": 1,
+      "unit": "tbsp"
+    }
+  ],
+  "instructions": [
+    {
+      "name": "Main",
+      "steps": [
+        "Fry the chicken until cooked through.",
+        "Add the chopped peaches, soy sauce and honey.",
+        "Simmer until the sauce thickens."
+      ]
+    }
+  ],
+  "tags": ["Chicken"],
+  "difficulty": "easy",
+  "cuisine": null,
+  "source_url": "https://example.com/recipes/chicken-with-peaches",
+  "author": "sample.home.cook"
+}

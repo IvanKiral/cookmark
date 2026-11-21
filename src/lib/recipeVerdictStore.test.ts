@@ -11,7 +11,7 @@ import {
 
 const createDb = (): TestD1 => {
   const db = createTestD1([
-    "recipes_schema.sql",
+    "0001_recipes.sql",
     "0002_users.sql",
     "0005_recipes_chef_pick.sql",
     "0006_recipes_should_delete.sql",
@@ -27,7 +27,7 @@ const readVerdict = (db: TestD1, slug: string): unknown =>
 describe("0008_recipes_verdict migration", () => {
   it("turns existing Chef's picks into the chef-kiss verdict", () => {
     const db = createTestD1([
-      "recipes_schema.sql",
+      "0001_recipes.sql",
       "0005_recipes_chef_pick.sql",
       "0006_recipes_should_delete.sql",
     ]);
