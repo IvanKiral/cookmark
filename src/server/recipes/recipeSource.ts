@@ -25,11 +25,18 @@ const getRecipesDb = (): D1Database => {
   return db;
 };
 
+// A failed read is logged and shows as an empty list or a missing recipe.
+// Letting it throw would render the error, stack included, into the page.
 export const loadRecipesFromSource = async (): Promise<RecipeSummary[]> => {
-  const { results } = await getRecipesDb()
-    .prepare("SELECT slug, data, verdict, should_delete FROM recipes")
-    .all<RecipeRow>();
-  return results.map((row) => toRecipeSummary(toRecipe(row), row.slug));
+  try {
+    const { results } = await getRecipesDb()
+      .prepare("SELECT slug, data, verdict, should_delete FROM recipes")
+      .all<RecipeRow>();
+    return results.map((row) => toRecipeSummary(toRecipe(row), row.slug));
+  } catch (error) {
+    console.error("Loading recipes from D1 failed", error);
+    return [];
+  }
 };
 
 const hasVideo = async (slug: string): Promise<boolean> => {
@@ -40,11 +47,21 @@ const hasVideo = async (slug: string): Promise<boolean> => {
   return (await media.head(`videos/${slug}.mp4`)) !== null;
 };
 
+const readRecipeRow = async (slug: string): Promise<Omit<RecipeRow, "slug"> | undefined> => {
+  try {
+    const row = await getRecipesDb()
+      .prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = ?")
+      .bind(slug)
+      .first<Omit<RecipeRow, "slug">>();
+    return row ?? undefined;
+  } catch (error) {
+    console.error(`Loading recipe ${slug} from D1 failed`, error);
+    return undefined;
+  }
+};
+
 export const loadRecipeDataFromSource = async (slug: string): Promise<Recipe | undefined> => {
-  const row = await getRecipesDb()
-    .prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = ?")
-    .bind(slug)
-    .first<Omit<RecipeRow, "slug">>();
+  const row = await readRecipeRow(slug);
   if (!row) {
     return undefined;
   }

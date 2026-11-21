@@ -62,3 +62,25 @@ describe("recipe source flags", () => {
     expect((await loadRecipeDataFromSource("cake"))?.should_delete).toBe(true);
   });
 });
+
+describe("recipe source failures", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("logs a failed read and shows no recipes instead of throwing", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal("__env__", { RECIPES: createTestD1([]) });
+    expect(await loadRecipesFromSource()).toEqual([]);
+    expect(await loadRecipeDataFromSource("soup")).toBeUndefined();
+    expect(consoleError).toHaveBeenCalledTimes(2);
+  });
+
+  it("treats a missing database binding the same way", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal("__env__", {});
+    expect(await loadRecipesFromSource()).toEqual([]);
+    expect(await loadRecipeDataFromSource("soup")).toBeUndefined();
+  });
+});
