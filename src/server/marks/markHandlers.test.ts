@@ -1,6 +1,8 @@
 // @vitest-environment node
-import type { APIEvent } from "@solidjs/start/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { afterEach, describe, expect, it } from "vitest";
+import type { APIEvent } from "~/server/apiEvent.ts";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { createTestD1, type TestD1 } from "~/server/testing/testD1.ts";
 import {
   createAddMarkHandler,
@@ -24,12 +26,12 @@ describe("mark handlers", () => {
     ]);
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("adds, lists and removes marks, creating the user on first add", async () => {
     const testDb = db();
-    vi.stubGlobal("__env__", { RECIPES: testDb, LOCAL_USER_EMAIL: "dev@localhost" });
+    setTestEnv({ RECIPES: testDb, LOCAL_USER_EMAIL: "dev@localhost" });
 
     expect((await createAddMarkHandler("to-try")(createEvent("soup"))).status).toBe(204);
     expect(testDb.raw.prepare("SELECT email, role FROM users").all()).toEqual([
@@ -45,13 +47,13 @@ describe("mark handlers", () => {
   });
 
   it("returns 401 without an identity", async () => {
-    vi.stubGlobal("__env__", { RECIPES: db() });
+    setTestEnv({ RECIPES: db() });
     expect((await createReadMarksHandler("favorite")(createEvent())).status).toBe(401);
     expect((await createAddMarkHandler("favorite")(createEvent("soup"))).status).toBe(401);
   });
 
   it("returns 500 when the database binding is missing", async () => {
-    vi.stubGlobal("__env__", {});
+    setTestEnv({});
     expect((await createRemoveMarkHandler("favorite")(createEvent("soup"))).status).toBe(500);
   });
 });

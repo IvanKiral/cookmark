@@ -1,6 +1,8 @@
 // @vitest-environment node
-import type { APIEvent } from "@solidjs/start/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { afterEach, describe, expect, it } from "vitest";
+import type { APIEvent } from "~/server/apiEvent.ts";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { createTestD1, type TestD1 } from "~/server/testing/testD1.ts";
 import type { RecipeEdit } from "~/shared/recipeEdit.ts";
 import { handleUpdateRecipe, updateRecipe } from "./recipeEditStore.ts";
@@ -98,12 +100,12 @@ describe("recipe edit endpoint", () => {
     db.raw.exec(
       `INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', '${role}', 'x')`,
     );
-    vi.stubGlobal("__env__", { RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
+    setTestEnv({ RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
     return db;
   };
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("lets an admin save an edit and records who made it", async () => {
@@ -143,7 +145,7 @@ describe("recipe edit endpoint", () => {
   });
 
   it("rejects requests without an identity", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createDbWithRole("admin") });
+    setTestEnv({ RECIPES: createDbWithRole("admin") });
     expect((await handleUpdateRecipe(createEvent("soup", JSON.stringify(edit)))).status).toBe(401);
   });
 });

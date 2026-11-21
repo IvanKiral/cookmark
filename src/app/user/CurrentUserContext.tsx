@@ -2,7 +2,7 @@ import {
   type Accessor,
   createContext,
   createSignal,
-  onMount,
+  onSettled,
   type ParentComponent,
   useContext,
 } from "solid-js";
@@ -26,24 +26,18 @@ export const CurrentUserProvider: ParentComponent = (props) => {
   // Runs on the client after hydration. /api/me also registers first-time
   // visitors as viewers. Until it answers (or if it fails) nobody is an admin,
   // so admin-only controls stay hidden. The server enforces the role regardless.
-  onMount(async () => {
-    setUser(await fetchCurrentUser());
-    setIsLoaded(true);
+  onSettled(() => {
+    fetchCurrentUser().then((currentUser) => {
+      setUser(currentUser);
+      setIsLoaded(true);
+    });
   });
 
   const isAdmin = (): boolean => user()?.role === "admin";
 
   return (
-    <CurrentUserContext.Provider value={{ user, isAdmin, isLoaded }}>
-      {props.children}
-    </CurrentUserContext.Provider>
+    <CurrentUserContext value={{ user, isAdmin, isLoaded }}>{props.children}</CurrentUserContext>
   );
 };
 
-export const useCurrentUser = (): CurrentUserContextValue => {
-  const context = useContext(CurrentUserContext);
-  if (!context) {
-    throw new Error("useCurrentUser must be used within a CurrentUserProvider");
-  }
-  return context;
-};
+export const useCurrentUser = (): CurrentUserContextValue => useContext(CurrentUserContext);

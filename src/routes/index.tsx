@@ -1,5 +1,4 @@
-import { createAsync } from "@solidjs/router";
-import { createMemo, createSignal, Show, Suspense } from "solid-js";
+import { createMemo, createSignal, Loading, Show } from "solid-js";
 import { getRecipesList } from "~/app/api/recipeQueries.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/app/filters/deriveAuthors.ts";
 import { FilterDrawer } from "~/app/filters/FilterDrawer.tsx";
@@ -18,8 +17,7 @@ import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
 import styles from "./index.module.css";
 
 const Home = () => {
-  const recipesResource = createAsync(() => getRecipesList());
-  const recipes = createMemo(() => recipesResource() ?? []);
+  const recipes = createMemo(() => getRecipesList());
   const authorValues = createMemo(() => deriveAuthors(recipes()));
   const authorOptions = createMemo(() => buildAuthorOptions(recipes()));
   const params = useRecipeListParams(authorValues);
@@ -97,7 +95,7 @@ const Home = () => {
             <ViewToggle value={viewMode()} onChange={setViewMode} />
           </div>
           <div class={styles.mainContent}>
-            <Suspense>
+            <Loading>
               <RecipeList
                 recipes={filteredRecipes()}
                 currentPage={params.page()}
@@ -105,7 +103,7 @@ const Home = () => {
                 onPageChange={(details) => params.setPage(details.page)}
                 onResetAll={params.resetAll}
               />
-            </Suspense>
+            </Loading>
           </div>
         </div>
       </div>

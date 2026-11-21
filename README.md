@@ -2,7 +2,7 @@
 
 A private recipe book. Recipes are written to the database by owl-sight; Cookmark shows them, lets you search and filter them, and keeps everyone's favourites and To try list. Admins can edit recipes, give a chef's verdict and mark recipes to delete.
 
-It runs as a Cloudflare Worker (SolidStart) on cookmark.kiralivan.eu, behind Cloudflare Access. Recipes and users live in the D1 database `cookmark-recipes`, and videos, thumbnails and recipe photos in the R2 bucket `cookmark`.
+It runs as a Cloudflare Worker (Solid 2 in start mode, built with Vite and the Cloudflare Vite plugin) on cookmark.kiralivan.eu, behind Cloudflare Access. Recipes and users live in the D1 database `cookmark-recipes`, and videos, thumbnails and recipe photos in the R2 bucket `cookmark`.
 
 ## Local development
 
@@ -11,7 +11,7 @@ You need Node 24 and pnpm (the version is pinned in `package.json`).
 ```bash
 pnpm install
 pnpm local:setup   # local database: migrations, 10 sample recipes from seed/recipes, admin@localhost as admin
-pnpm dev           # http://localhost:3000, signed in as admin@localhost
+pnpm dev           # http://localhost:3000 (the server side runs in workerd), signed in as admin@localhost
 ```
 
 - `LOCAL_USER_EMAIL=someone@localhost pnpm dev` signs you in as someone else. A new email is a viewer.
@@ -27,8 +27,8 @@ Before committing, run `pnpm test`, `pnpm typecheck` and `pnpm biome:check:fix`.
 Deploys are manual:
 
 ```bash
-pnpm build
-pnpm exec wrangler deploy
+pnpm build                 # dist/client and dist/server, including dist/server/wrangler.json
+pnpm exec wrangler deploy  # picks up the built config through .wrangler/deploy/config.json
 ```
 
 The Worker reads two secrets, set once with `wrangler secret put`: `ACCESS_TEAM_DOMAIN` (`https://<team>.cloudflareaccess.com`) and `ACCESS_AUD` (the Access application's AUD tag). Without them nobody is signed in.
@@ -44,7 +44,7 @@ pnpm exec wrangler d1 migrations apply cookmark-recipes --local --config wrangle
 pnpm exec wrangler d1 migrations apply cookmark-recipes --remote --config wrangler.jsonc
 ```
 
-Always pass `--config wrangler.jsonc`: after a build, wrangler otherwise picks up the generated config in `.output/server`.
+Always pass `--config wrangler.jsonc`: after a build, wrangler otherwise picks up the generated config in `dist/server`.
 
 Never write to `recipes` with `INSERT OR REPLACE`. It deletes the row, which resets the verdict and the To delete mark. Use `UPDATE`.
 
@@ -68,6 +68,7 @@ pnpm exec wrangler d1 execute cookmark-recipes --remote --config wrangler.jsonc 
 
 ## Code layout
 
+- `src/app.tsx`, `src/Document.tsx`, `src/router.ts`, `src/middleware.ts`: the app root, the HTML shell, the file-based router and the middleware that serves the API routes.
 - `src/routes`: pages and API endpoints. They only wire things together.
 - `src/server`: code that runs only in the Worker (D1, R2, Access). Nothing in `src/app` imports it.
 - `src/app`: the UI, one folder per feature. `src/app/api` is the only place that talks to the server.

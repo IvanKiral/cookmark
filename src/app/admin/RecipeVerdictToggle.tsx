@@ -1,13 +1,16 @@
 import {
+  action,
   type Component,
+  createOptimistic,
   createSignal,
   createUniqueId,
   For,
-  onCleanup,
-  onMount,
+  onSettled,
   Show,
 } from "solid-js";
 import { saveRecipeVerdict } from "~/app/api/adminApi.ts";
+import { revalidateRecipes } from "~/app/api/recipeQueries.ts";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import buttonStyles from "~/app/ui/iconToggleButton.module.css";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
@@ -73,13 +76,15 @@ const getPendingChange = (
 // Admin-only. One icon button showing the current verdict opens a list of all
 // verdicts plus Clear, so the recipe top bar stays narrow enough for phones.
 // The list is a disclosure of plain buttons (Tab moves between them) rather
-// than an ARIA menu, which would also need arrow-key handling. Not optimistic:
-// the badge updates once the server has saved the change and the recipe
-// queries are refetched.
+// than an ARIA menu, which would also need arrow-key handling. Optimistic: the
+// button shows the new verdict at once and keeps it until the refetched recipe
+// confirms it. On failure it reverts and the admin can try again.
 export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) => {
   const { isAdmin } = useCurrentUser();
   const [isOpen, setIsOpen] = createSignal(false);
-  const [isPending, setIsPending] = createSignal(false);
+  const [verdict, setVerdict] = createOptimistic(() => props.verdict);
+  // True only while a save runs; it reverts on its own when the action ends.
+  const [isSaving, setIsSaving] = createOptimistic(false);
   const [isConfirming, setIsConfirming] = createSignal(false);
   const [pendingChange, setPendingChange] = createSignal<PendingChange>();
   const panelId = createUniqueId();
@@ -103,28 +108,32 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
     }
   };
 
-  onMount(() => {
+  onSettled(() => {
     document.addEventListener("click", handleDocumentClick);
     document.addEventListener("keydown", handleDocumentKeyDown);
-    onCleanup(() => {
+    return () => {
       document.removeEventListener("click", handleDocumentClick);
       document.removeEventListener("keydown", handleDocumentKeyDown);
-    });
+    };
   });
 
-  const saveVerdict = async (verdict: RecipeVerdict | undefined): Promise<void> => {
-    // On failure the state stays as it was and the admin can try again.
-    setIsPending(true);
-    await saveRecipeVerdict(props.slug, verdict);
-    setIsPending(false);
-  };
+  const saveVerdict = action(async function* (nextVerdict: RecipeVerdict | undefined) {
+    setVerdict(nextVerdict);
+    setIsSaving(true);
+    const isSaved = await saveRecipeVerdict(props.slug, nextVerdict);
+    // Re-enter the action's transaction before the refetch.
+    yield;
+    if (isSaved) {
+      revalidateRecipes();
+    }
+  });
 
   const handleSelect = async (nextVerdict: RecipeVerdict | undefined): Promise<void> => {
     closePanel();
-    if (nextVerdict === props.verdict) {
+    if (nextVerdict === verdict()) {
       return;
     }
-    const change = getPendingChange(props.name, props.verdict, nextVerdict);
+    const change = getPendingChange(props.name, verdict(), nextVerdict);
     if (change) {
       setPendingChange(change);
       setIsConfirming(true);
@@ -138,11 +147,20 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
     await saveVerdict(pendingChange()?.nextVerdict);
   };
 
-  const triggerLabel = (): string =>
-    adminStrings.verdict.menuLabel(
+  const triggerLabel = (): string => {
+    const current = verdict();
+    return adminStrings.verdict.menuLabel(
       props.name,
-      props.verdict ? recipeVerdictLabels[props.verdict] : adminStrings.verdict.none,
+      current ? recipeVerdictLabels[current] : adminStrings.verdict.none,
     );
+  };
+
+  const triggerClass = (): string => {
+    const current = verdict();
+    return current
+      ? `${buttonStyles.button} ${buttonStyles.active} ${triggerActiveClasses[current]}`
+      : buttonStyles.button;
+  };
 
   return (
     <Show when={isAdmin()}>
@@ -150,40 +168,35 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
         <button
           ref={triggerRef}
           type="button"
-          class={
-            props.verdict
-              ? `${buttonStyles.button} ${buttonStyles.active} ${triggerActiveClasses[props.verdict]}`
-              : buttonStyles.button
-          }
+          class={triggerClass()}
           aria-label={triggerLabel()}
-          aria-expanded={isOpen()}
+          aria-expanded={ariaBoolean(isOpen())}
           aria-controls={panelId}
-          disabled={isPending()}
+          disabled={isSaving()}
           onClick={() => setIsOpen(!isOpen())}
         >
           <span class="material-symbols-outlined" aria-hidden="true">
-            {props.verdict ? recipeVerdictIcons[props.verdict] : recipeVerdictIcons["chef-kiss"]}
+            {recipeVerdictIcons[verdict() ?? "chef-kiss"]}
           </span>
         </button>
         <Show when={isOpen()}>
           <div id={panelId} class={styles.panel}>
             <For each={recipeVerdictValues}>
-              {(verdict) => (
+              {(option) => (
                 <button
                   type="button"
-                  class={styles.option}
-                  classList={{ [styles.optionSelected]: props.verdict === verdict }}
-                  aria-pressed={props.verdict === verdict}
-                  onClick={() => handleSelect(verdict)}
+                  class={[styles.option, { [styles.optionSelected]: verdict() === option }]}
+                  aria-pressed={ariaBoolean(verdict() === option)}
+                  onClick={() => handleSelect(option)}
                 >
                   <span
-                    class={`material-symbols-outlined ${styles.optionIcon} ${optionIconClasses[verdict]}`}
+                    class={`material-symbols-outlined ${styles.optionIcon} ${optionIconClasses[option]}`}
                     aria-hidden="true"
                   >
-                    {recipeVerdictIcons[verdict]}
+                    {recipeVerdictIcons[option]}
                   </span>
-                  <span class={styles.optionLabel}>{recipeVerdictLabels[verdict]}</span>
-                  <Show when={props.verdict === verdict}>
+                  <span class={styles.optionLabel}>{recipeVerdictLabels[option]}</span>
+                  <Show when={verdict() === option}>
                     <span
                       class={`material-symbols-outlined ${styles.optionCheck}`}
                       aria-hidden="true"
@@ -194,7 +207,7 @@ export const RecipeVerdictToggle: Component<RecipeVerdictToggleProps> = (props) 
                 </button>
               )}
             </For>
-            <Show when={props.verdict}>
+            <Show when={verdict()}>
               <button
                 type="button"
                 class={`${styles.option} ${styles.clearOption}`}

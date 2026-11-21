@@ -1,4 +1,4 @@
-import type { APIEvent } from "@solidjs/start/server";
+import type { APIEvent } from "~/server/apiEvent.ts";
 import { getMediaBucket } from "./mediaBucket.ts";
 
 // Recipe thumbnails live alongside the videos in the same R2 bucket as

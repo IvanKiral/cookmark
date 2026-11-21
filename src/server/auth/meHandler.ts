@@ -1,4 +1,4 @@
-import type { APIEvent } from "@solidjs/start/server";
+import type { APIEvent } from "~/server/apiEvent.ts";
 import { getUserEmail } from "./access.ts";
 import { getOrCreateUser, getUsersDb } from "./userStore.ts";
 

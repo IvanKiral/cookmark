@@ -4,27 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Cookmark is a private recipe book built with SolidStart and deployed manually as a Cloudflare Worker behind Cloudflare Access. Recipes live in the D1 database `cookmark-recipes` (written by owl-sight), media in the R2 bucket `cookmark`. See README.md for setup, deploys and database changes.
+Cookmark is a private recipe book built with Solid 2 (start mode of `@solidjs/vite-plugin`, Solid Router 2, Kobalte) and deployed manually as a Cloudflare Worker behind Cloudflare Access. Recipes live in the D1 database `cookmark-recipes` (written by owl-sight), media in the R2 bucket `cookmark`. See README.md for setup, deploys and database changes.
 
 ## Commands
 
 ```bash
 pnpm local:setup     # Recreate the local D1 database: migrations, seed/recipes, admin@localhost
-pnpm dev             # Dev server on :3000 with local D1/R2, signed in as LOCAL_USER_EMAIL (default admin@localhost)
+pnpm dev             # Vite dev server on :3000, server side in workerd with local D1/R2, signed in as LOCAL_USER_EMAIL (default admin@localhost)
 pnpm local:preview   # Build and run the real Worker on :8787
-pnpm build           # Production build (.output)
+pnpm build           # Production build (dist/client, dist/server)
 pnpm test            # Vitest
 pnpm typecheck
 pnpm biome:check:fix
 pnpm cf:types        # Regenerate src/server/worker-configuration.d.ts after changing wrangler.jsonc
 ```
 
-Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build wrangler otherwise uses the generated `.output/server/wrangler.json`.
+Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build wrangler otherwise uses the generated `dist/server/wrangler.json`.
 
 ## Structure
 
-- `src/routes`: SolidStart pages (default exports) and API endpoints. Keep them thin: API files only re-export a handler from `src/server`.
-- `src/server`: Worker-only code (D1 stores and handlers, R2 media, Access auth). Read bindings with `getEnv()` from `src/server/env.ts`. `src/app` must never import from here.
+- `src/app.tsx` (root), `src/Document.tsx` (HTML shell), `src/router.ts`, `src/middleware.ts` (dispatches API routes), `src/clientSetup.ts` (service worker): start-mode entry points.
+- `src/routes`: file-based pages (default exports) and API endpoints (uppercase method exports). Keep them thin: API files only re-export a handler from `src/server`.
+- `src/server`: Worker-only code (D1 stores and handlers, R2 media, Access auth). Read bindings with `getEnv()` from `src/server/env.ts` (backed by `cloudflare:workers`; tests set them with `setTestEnv`). `src/app` must never import from here.
 - `src/app/<feature>`: UI grouped by feature (recipe-list, filters, recipe-page, marks, verdicts, admin, user, pwa) plus `ui/` for generic pieces. Each feature has its own `strings.ts`.
 - `src/app/api`: the only bridge to the server: `"use server"` queries and fetch wrappers for `/api/*`.
 - `src/shared`: types and logic used by both sides (recipe types, tags, verdicts, edit validation). It must not import from `app` or `server`, and returns error codes instead of UI text.
@@ -37,6 +38,7 @@ Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build 
 - Imports: `./` for files in the same folder, `~/` for everything else, never `../`. Always use the real `.ts`/`.tsx` extension.
 - All UI text goes in the feature's `strings.ts` so the app can be translated later.
 - `RecipeSummary` is the slim list shape, `Recipe` the full recipe.
+- Solid 2: links are plain `<a>` (router state via `toLinkState`), ARIA state attributes take `ariaBoolean(...)`, mutations are `action`s with `createOptimistic` for pending and optimistic UI, and signal writes apply on the next microtask (component tests flush after every `fireEvent`, see `src/testing/setupTests.ts`).
 - Tests are co-located (`*.test.ts(x)`). Server store tests run real SQL against the migrations via `src/server/testing/testD1.ts`.
 
 ### Core Principles

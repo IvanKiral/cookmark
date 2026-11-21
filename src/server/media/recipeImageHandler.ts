@@ -1,4 +1,4 @@
-import type { APIEvent } from "@solidjs/start/server";
+import type { APIEvent } from "~/server/apiEvent.ts";
 import { RECIPE_IMAGE_FILENAME_PATTERN, RECIPE_IMAGES_PREFIX } from "~/shared/recipeImage.ts";
 import { getMediaBucket } from "./mediaBucket.ts";
 

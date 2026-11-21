@@ -47,8 +47,7 @@ export const RecipeFlagBadge: Component<RecipeFlagBadgeProps> = (props) => {
 
   return (
     <span
-      class={`${styles.badge} ${config().class}`}
-      classList={{ [styles.compact]: props.isCompact }}
+      class={[`${styles.badge} ${config().class}`, { [styles.compact]: props.isCompact }]}
       title={props.isCompact ? config().label : undefined}
     >
       <span class="material-symbols-outlined" aria-hidden="true">

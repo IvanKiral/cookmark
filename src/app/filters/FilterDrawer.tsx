@@ -1,6 +1,7 @@
-import Drawer from "@corvu/drawer";
-import type { Component } from "solid-js";
+import { Drawer } from "@kobalte/core/drawer";
+import { type Component, createEffect } from "solid-js";
 import buttonStyles from "~/app/ui/button.module.css";
+import { createReturnFocus } from "~/app/ui/createReturnFocus.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
 import styles from "./FilterDrawer.module.css";
 import { FilterPanel } from "./FilterPanel.tsx";
@@ -20,24 +21,46 @@ type FilterDrawerProps = {
 
 export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
   const hasAnyFilter = (): boolean => countActiveFilters(props.filters) > 0;
+  createReturnFocus(() => props.open);
+  let closeButtonRef: HTMLButtonElement | undefined;
+
+  // Kobalte 2.0.0-alpha.5's drawer neither moves focus into itself nor closes
+  // on Escape or a click outside (its dialog does all three), so the drawer
+  // does it here and on the overlay. Remove once Kobalte's drawer handles it.
+  createEffect(
+    () => props.open,
+    (isOpen) => {
+      if (!isOpen) {
+        return;
+      }
+      const frame = requestAnimationFrame(() => closeButtonRef?.focus({ preventScroll: true }));
+      const handleKeyDown = (event: KeyboardEvent): void => {
+        if (event.key === "Escape") {
+          props.onOpenChange(false);
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        cancelAnimationFrame(frame);
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    },
+  );
 
   return (
     <Drawer open={props.open} onOpenChange={props.onOpenChange} side="left">
       <Drawer.Portal>
-        <Drawer.Overlay class={styles.overlay} aria-hidden="true" />
-        <Drawer.Content
-          class={styles.content}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="filter-drawer-title"
-        >
+        <Drawer.Overlay class={styles.overlay} onClick={() => props.onOpenChange(false)} />
+        <Drawer.Content class={styles.content}>
           <div class={styles.header}>
-            <h2 id="filter-drawer-title" class={styles.title}>
-              {filterStrings.drawer.title}
-            </h2>
-            <Drawer.Close class={styles.closeButton} aria-label={filterStrings.closeDrawer}>
+            <Drawer.Title class={styles.title}>{filterStrings.drawer.title}</Drawer.Title>
+            <Drawer.CloseButton
+              ref={closeButtonRef}
+              class={styles.closeButton}
+              aria-label={filterStrings.closeDrawer}
+            >
               <span class="material-symbols-outlined">close</span>
-            </Drawer.Close>
+            </Drawer.CloseButton>
           </div>
 
           <div class={styles.sections}>

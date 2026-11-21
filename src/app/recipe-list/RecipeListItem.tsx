@@ -1,6 +1,7 @@
-import { A, useLocation } from "@solidjs/router";
+import { useLocation } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
+import { toLinkState } from "~/app/ui/linkState.ts";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { RecipeVerdict } from "~/shared/verdicts.ts";
 import styles from "./RecipeListItem.module.css";
@@ -17,9 +18,9 @@ export const RecipeListItem: Component<RecipeListItemProps> = (props) => {
   const location = useLocation();
 
   return (
-    <A
+    <a
       href={`/recipe/${props.urlSlug}`}
-      state={{ fromSearch: location.search }}
+      state={toLinkState({ fromSearch: location.search })}
       class={styles.listItem}
     >
       <h3 class={styles.title}>
@@ -40,6 +41,6 @@ export const RecipeListItem: Component<RecipeListItemProps> = (props) => {
         <MarkButton mark="favorite" slug={props.urlSlug} name={props.name} />
         <MarkButton mark="to-try" slug={props.urlSlug} name={props.name} />
       </div>
-    </A>
+    </a>
   );
 };

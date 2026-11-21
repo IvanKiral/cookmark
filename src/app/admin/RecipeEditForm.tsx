@@ -1,7 +1,17 @@
 import { type BeforeLeaveEventArgs, useBeforeLeave } from "@solidjs/router";
-import { type Component, createSignal, Index, onCleanup, onMount, Show } from "solid-js";
-import { createStore } from "solid-js/store";
+import {
+  action,
+  type Component,
+  createOptimistic,
+  createSignal,
+  createStore,
+  For,
+  onSettled,
+  Show,
+  untrack,
+} from "solid-js";
 import { saveRecipeEdit } from "~/app/api/adminApi.ts";
+import { revalidateRecipes } from "~/app/api/recipeQueries.ts";
 import { tagOptions } from "~/app/filters/filterOptions.ts";
 import buttonStyles from "~/app/ui/button.module.css";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
@@ -42,46 +52,56 @@ const toComparable = (edit: RecipeEdit): string =>
   JSON.stringify({ ...edit, tags: [...edit.tags].sort() });
 
 export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
-  // The form starts from a deep copy of the initial values, once: the store
-  // mutates what it wraps, and later prop changes (e.g. a revalidated recipe)
-  // shouldn't overwrite what the admin is typing.
-  const [form, setForm] = createStore<RecipeEdit>(structuredClone(props.initial));
+  // The form starts from a deep copy of the initial values, once: later prop
+  // changes (e.g. a revalidated recipe) shouldn't overwrite what the admin is
+  // typing.
+  const [form, setForm] = createStore<RecipeEdit>(untrack(() => structuredClone(props.initial)));
   const [errors, setErrors] = createSignal<RecipeEditErrors>({});
   const errorText = (path: string): string | undefined => {
     const error = errors()[path];
     return error ? formatRecipeEditError(error) : undefined;
   };
-  const [isSaving, setIsSaving] = createSignal(false);
-  const [isSaved, setIsSaved] = createSignal(false);
+  // True only while the save action runs; it reverts on its own when it ends.
+  const [isSaving, setIsSaving] = createOptimistic(false);
   const [hasSaveFailed, setHasSaveFailed] = createSignal(false);
   const [pendingLeave, setPendingLeave] = createSignal<BeforeLeaveEventArgs>();
+  // Lets the navigation after a successful save through the leave guard. Only
+  // event handlers read it, so it doesn't need to be reactive.
+  let isLeavingAfterSave = false;
 
   const hasUnsavedChanges = (): boolean =>
-    !isSaved() && toComparable(form) !== toComparable(props.initial);
+    !isLeavingAfterSave && toComparable(form) !== toComparable(props.initial);
 
   const clearError = (path: string): void => {
     setErrors((current) => ({ ...current, [path]: undefined }));
   };
 
   const updateField = <K extends keyof RecipeEdit>(field: K, value: RecipeEdit[K]): void => {
-    setForm({ [field]: value } as Partial<RecipeEdit>);
+    setForm((draft) => {
+      draft[field] = value;
+    });
     clearError(field);
   };
 
   const updateIngredient = (index: number, field: keyof Ingredient, value: string): void => {
-    setForm("ingredients", index, field, value);
+    setForm((draft) => {
+      draft.ingredients[index][field] = value;
+    });
     clearError(`ingredients.${index}.${field}`);
   };
 
   const updateSectionName = (index: number, value: string): void => {
-    setForm("instructions", index, "name", value);
+    setForm((draft) => {
+      draft.instructions[index].name = value;
+    });
     clearError(`instructions.${index}.name`);
   };
 
   const updateStep = (sectionIndex: number, stepIndex: number, value: string): void => {
-    setForm("instructions", sectionIndex, "steps", (steps) =>
-      steps.map((step, index) => (index === stepIndex ? value : step)),
-    );
+    setForm((draft) => {
+      const section = draft.instructions[sectionIndex];
+      section.steps = section.steps.map((step, index) => (index === stepIndex ? value : step));
+    });
     clearError(`instructions.${sectionIndex}.steps.${stepIndex}`);
   };
 
@@ -102,14 +122,14 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
   });
 
   // Covers closing the tab and reloading, which the router can't intercept.
-  onMount(() => {
+  onSettled(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent): void => {
       if (hasUnsavedChanges()) {
         event.preventDefault();
       }
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
-    onCleanup(() => window.removeEventListener("beforeunload", handleBeforeUnload));
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   });
 
   const handleDiscard = (): void => {
@@ -118,6 +138,25 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
     leave?.retry(true);
   };
 
+  // Returns whether the edit was saved.
+  const save = action(async function* (edit: RecipeEdit) {
+    setIsSaving(true);
+    setHasSaveFailed(false);
+    const saveResult = await saveRecipeEdit(props.slug, edit);
+    // Re-enter the action's transaction before writing.
+    yield;
+    if (saveResult.kind === "invalid") {
+      setErrors(saveResult.errors);
+      return false;
+    }
+    if (saveResult.kind === "failed") {
+      setHasSaveFailed(true);
+      return false;
+    }
+    revalidateRecipes();
+    return true;
+  });
+
   const handleSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
     const result = parseRecipeEdit(form);
@@ -125,24 +164,14 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
       setErrors(result.errors);
       return;
     }
-    setIsSaving(true);
-    setHasSaveFailed(false);
-    const saveResult = await saveRecipeEdit(props.slug, result.edit);
-    setIsSaving(false);
-    if (saveResult.kind === "invalid") {
-      setErrors(saveResult.errors);
-      return;
+    if (await save(result.edit)) {
+      isLeavingAfterSave = true;
+      props.onSaved();
     }
-    if (saveResult.kind === "failed") {
-      setHasSaveFailed(true);
-      return;
-    }
-    setIsSaved(true);
-    props.onSaved();
   };
 
   return (
-    <form class={styles.form} onSubmit={handleSubmit} noValidate>
+    <form class={styles.form} onSubmit={handleSubmit} novalidate>
       <TextField
         label={text.name}
         value={form.title}
@@ -198,8 +227,8 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
             <span>{text.unit}</span>
             <span>{text.ingredient}</span>
           </div>
-          {/* Index, not For: rows stay mounted while their text changes, so inputs keep focus. */}
-          <Index each={form.ingredients}>
+          {/* Not keyed: rows stay mounted while their text changes, so inputs keep focus. */}
+          <For each={form.ingredients} keyed={false}>
             {(ingredient, index) => (
               <div class={styles.ingredientRow}>
                 <TextField
@@ -231,14 +260,14 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                 />
               </div>
             )}
-          </Index>
+          </For>
         </section>
       </Show>
 
       <Show when={form.instructions.length > 0}>
         <section class={styles.group}>
           <h2 class={styles.groupTitle}>{text.instructions}</h2>
-          <Index each={form.instructions}>
+          <For each={form.instructions} keyed={false}>
             {(section, sectionIndex) => (
               <div class={styles.instructionSection}>
                 {/* The recipe page only shows section names when there are several. */}
@@ -251,7 +280,7 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                     maxLength={MAX_SECTION_NAME_LENGTH}
                   />
                 </Show>
-                <Index each={section().steps}>
+                <For each={section().steps} keyed={false}>
                   {(step, stepIndex) => (
                     <TextArea
                       label={text.step(stepIndex + 1)}
@@ -262,10 +291,10 @@ export const RecipeEditForm: Component<RecipeEditFormProps> = (props) => {
                       rows={3}
                     />
                   )}
-                </Index>
+                </For>
               </div>
             )}
-          </Index>
+          </For>
         </section>
       </Show>
 

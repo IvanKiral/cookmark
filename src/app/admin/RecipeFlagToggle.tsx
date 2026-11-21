@@ -1,5 +1,7 @@
-import { type Component, createSignal, Show } from "solid-js";
+import { action, type Component, createOptimistic, createSignal, Show } from "solid-js";
 import { saveRecipeFlag } from "~/app/api/adminApi.ts";
+import { revalidateRecipes } from "~/app/api/recipeQueries.ts";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import styles from "~/app/ui/iconToggleButton.module.css";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
@@ -48,21 +50,29 @@ const flagConfigs: Record<RecipeFlag, FlagConfig> = {
   },
 };
 
-// Admin-only. Not optimistic: the badge updates once the server has saved the
-// change and the recipe queries are refetched.
+// Admin-only. Optimistic: the button shows the new state at once and keeps it
+// until the refetched recipe confirms it. On failure it reverts and the admin
+// can try again.
 export const RecipeFlagToggle: Component<RecipeFlagToggleProps> = (props) => {
   const { isAdmin } = useCurrentUser();
-  const [isPending, setIsPending] = createSignal(false);
+  const [isSet, setIsSet] = createOptimistic(() => props.isSet);
+  // True only while a save runs; it reverts on its own when the action ends.
+  const [isSaving, setIsSaving] = createOptimistic(false);
   const [isConfirming, setIsConfirming] = createSignal(false);
   const config = () => flagConfigs[props.flag];
-  const confirmation = () => config().getConfirmation(props.name, props.isSet);
+  const confirmation = () => config().getConfirmation(props.name, isSet());
 
-  const toggleFlag = async (): Promise<void> => {
-    // On failure the state stays as it was and the admin can try again.
-    setIsPending(true);
-    await saveRecipeFlag(props.slug, props.flag, !props.isSet);
-    setIsPending(false);
-  };
+  const toggleFlag = action(async function* () {
+    const nextIsSet = !isSet();
+    setIsSet(nextIsSet);
+    setIsSaving(true);
+    const isSaved = await saveRecipeFlag(props.slug, props.flag, nextIsSet);
+    // Re-enter the action's transaction before the refetch.
+    yield;
+    if (isSaved) {
+      revalidateRecipes();
+    }
+  });
 
   const handleClick = async (): Promise<void> => {
     if (confirmation()) {
@@ -81,14 +91,10 @@ export const RecipeFlagToggle: Component<RecipeFlagToggleProps> = (props) => {
     <Show when={isAdmin()}>
       <button
         type="button"
-        class={styles.button}
-        classList={{
-          [styles.active]: props.isSet,
-          [config().activeClass]: props.isSet,
-        }}
-        aria-pressed={props.isSet}
-        aria-label={config().getLabel(props.name, props.isSet)}
-        disabled={isPending()}
+        class={[styles.button, { [styles.active]: isSet(), [config().activeClass]: isSet() }]}
+        aria-pressed={ariaBoolean(isSet())}
+        aria-label={config().getLabel(props.name, isSet())}
+        disabled={isSaving()}
         onClick={handleClick}
       >
         <span class="material-symbols-outlined" aria-hidden="true">

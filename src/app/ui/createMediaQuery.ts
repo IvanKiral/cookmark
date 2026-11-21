@@ -1,9 +1,9 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, onSettled } from "solid-js";
 
 export const createMediaQuery = (query: string) => {
   const [matches, setMatches] = createSignal(false);
 
-  onMount(() => {
+  onSettled(() => {
     const onChange = (event: MediaQueryListEvent) => {
       setMatches(event.matches);
     };
@@ -12,9 +12,9 @@ export const createMediaQuery = (query: string) => {
     result.addEventListener("change", onChange);
     setMatches(result.matches);
 
-    onCleanup(() => {
+    return () => {
       result.removeEventListener("change", onChange);
-    });
+    };
   });
 
   return matches;

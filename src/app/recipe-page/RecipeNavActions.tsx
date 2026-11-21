@@ -1,10 +1,11 @@
-import { A, useLocation } from "@solidjs/router";
+import { useLocation } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
 import { RecipeFlagToggle } from "~/app/admin/RecipeFlagToggle.tsx";
 import { RecipeVerdictToggle } from "~/app/admin/RecipeVerdictToggle.tsx";
 import { adminStrings } from "~/app/admin/strings.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
 import iconButtonStyles from "~/app/ui/iconToggleButton.module.css";
+import { toLinkState } from "~/app/ui/linkState.ts";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import type { Recipe } from "~/shared/recipe.ts";
 
@@ -21,16 +22,17 @@ export const RecipeNavActions: Component<RecipeNavActionsProps> = (props) => {
   return (
     <>
       <Show when={isAdmin()}>
-        <A
+        {/* biome-ignore lint/a11y/useAnchorContent: the aria-label names the link, the icon is decorative */}
+        <a
           href={`/recipe/${props.slug}/edit`}
-          state={location.state}
+          state={toLinkState(location.state)}
           class={iconButtonStyles.button}
           aria-label={adminStrings.edit.edit(props.recipe.title)}
         >
           <span class="material-symbols-outlined" aria-hidden="true">
             edit
           </span>
-        </A>
+        </a>
       </Show>
       <RecipeVerdictToggle
         slug={props.slug}

@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createSignal, onSettled, Show } from "solid-js";
 import styles from "./InstallPrompt.module.css";
 import { pwaStrings } from "./strings.ts";
 
@@ -12,7 +12,7 @@ export const InstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = createSignal<BeforeInstallPromptEvent | null>(null);
   const [isPromptShown, setIsPromptShown] = createSignal(false);
 
-  onMount(() => {
+  onSettled(() => {
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
       setDeferredPrompt(event as BeforeInstallPromptEvent);
@@ -27,10 +27,10 @@ export const InstallPrompt = () => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
-    onCleanup(() => {
+    return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
-    });
+    };
   });
 
   const handleInstallClick = async () => {

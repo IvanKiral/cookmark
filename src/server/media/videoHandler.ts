@@ -1,4 +1,4 @@
-import type { APIEvent } from "@solidjs/start/server";
+import type { APIEvent } from "~/server/apiEvent.ts";
 import { getMediaBucket } from "./mediaBucket.ts";
 
 const buildBaseHeaders = (meta: R2Object): Headers => {

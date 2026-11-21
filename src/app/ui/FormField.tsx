@@ -1,11 +1,13 @@
-import { type Component, createUniqueId, type JSX, Show } from "solid-js";
+import type { JSX } from "@solidjs/web";
+import { type Component, createUniqueId, Show } from "solid-js";
+import { ariaBoolean } from "./ariaBoolean.ts";
 import styles from "./formField.module.css";
 
 // Spread onto the control so the label, hint and error are announced with it.
 export type FormControlProps = {
   id: string;
   "aria-describedby": string | undefined;
-  "aria-invalid": boolean;
+  "aria-invalid": "true" | "false";
 };
 
 type FormFieldProps = {
@@ -31,7 +33,7 @@ export const FormField: Component<FormFieldProps> = (props) => {
       return ids.filter(Boolean).join(" ") || undefined;
     },
     get "aria-invalid"() {
-      return Boolean(props.error);
+      return ariaBoolean(Boolean(props.error));
     },
   };
 

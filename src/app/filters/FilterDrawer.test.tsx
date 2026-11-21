@@ -63,4 +63,22 @@ describe("<FilterDrawer />", () => {
     fireEvent.click(screen.getByRole("button", { name: "Clear all" }));
     expect(onClearAll).toHaveBeenCalled();
   });
+  it("closes on Escape", () => {
+    const { onOpenChange } = renderDrawer();
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+  it("closes on a click outside the drawer", () => {
+    const { onOpenChange } = renderDrawer();
+
+    const overlay = document.querySelector('[class*="overlay"]');
+    if (!overlay) {
+      throw new Error("overlay not found");
+    }
+    fireEvent.click(overlay);
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
 });

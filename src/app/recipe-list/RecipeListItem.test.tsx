@@ -1,14 +1,8 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
-import type { JSX } from "solid-js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { RecipeListItem } from "./RecipeListItem.tsx";
 
 vi.mock("@solidjs/router", () => ({
-  A: (props: { href: string; class: string; children: JSX.Element }) => (
-    <a href={props.href} class={props.class}>
-      {props.children}
-    </a>
-  ),
   useLocation: () => ({ search: "" }),
 }));
 

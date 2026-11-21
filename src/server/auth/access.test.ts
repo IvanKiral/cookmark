@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { createLocalJWKSet, exportJWK, generateKeyPair, type JWTPayload, SignJWT } from "jose";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { type AccessConfig, getUserEmail, verifyAccessToken } from "./access.ts";
 
 const config: AccessConfig = {
@@ -61,16 +62,16 @@ describe("verifyAccessToken", () => {
 
 describe("getUserEmail", () => {
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("has no identity without a token or LOCAL_USER_EMAIL", async () => {
-    vi.stubGlobal("__env__", {});
+    setTestEnv({});
     expect(await getUserEmail(new Request("http://localhost/"))).toBeUndefined();
   });
 
   it("has no identity when the Access secrets are not configured", async () => {
-    vi.stubGlobal("__env__", {});
+    setTestEnv({});
     const { sign } = await createSigner();
     const request = new Request("http://localhost/", {
       headers: { "cf-access-jwt-assertion": await sign({ email: "ana@example.com" }) },
@@ -79,13 +80,13 @@ describe("getUserEmail", () => {
   });
 
   it("uses LOCAL_USER_EMAIL for requests to localhost without a token", async () => {
-    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
+    setTestEnv({ LOCAL_USER_EMAIL: "admin@localhost" });
     expect(await getUserEmail(new Request("http://localhost:8787/api/me"))).toBe("admin@localhost");
     expect(await getUserEmail(new Request("http://127.0.0.1:8787/api/me"))).toBe("admin@localhost");
   });
 
   it("ignores LOCAL_USER_EMAIL on any other hostname", async () => {
-    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
+    setTestEnv({ LOCAL_USER_EMAIL: "admin@localhost" });
     expect(await getUserEmail(new Request("https://cookmark.kiralivan.eu/api/me"))).toBeUndefined();
   });
 });

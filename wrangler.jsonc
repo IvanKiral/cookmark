@@ -1,10 +1,14 @@
-// Read by `pnpm build` (merged into .output/server/wrangler.json, which
-// `wrangler deploy` uses), by `pnpm dev` for local bindings, and by the
-// migration and type generation commands.
+// Read by the Cloudflare Vite plugin for `pnpm dev`, `pnpm build` (which writes
+// dist/server/wrangler.json for `wrangler deploy`) and the local bindings,
+// and by the migration and type generation commands.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cookmark",
+  // Solid's generated request handler (start mode); the Vite plugin resolves it.
+  "main": "virtual:solid-ssr-handler",
   "compatibility_date": "2025-07-15",
+  // Solid keeps the request event in AsyncLocalStorage.
+  "compatibility_flags": ["nodejs_compat"],
   // Per-user data trusts the Cloudflare Access JWT, so the Worker must only be
   // reachable through the Access-protected custom domain, never workers.dev.
   // The JWT is checked with the ACCESS_TEAM_DOMAIN and ACCESS_AUD secrets (set

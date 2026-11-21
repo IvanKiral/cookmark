@@ -1,5 +1,5 @@
-import { A, createAsync, useLocation, useNavigate, useParams } from "@solidjs/router";
-import { type Component, Match, Show, Suspense, Switch } from "solid-js";
+import { useLocation, useNavigate, useParams } from "@solidjs/router";
+import { type Component, createMemo, Loading, Match, Show, Switch } from "solid-js";
 import { RecipeEditForm } from "~/app/admin/RecipeEditForm.tsx";
 import { adminStrings } from "~/app/admin/strings.ts";
 import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
@@ -15,7 +15,7 @@ const RecipeEditPage: Component = () => {
   const params = useParams<{ slug: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const recipe = createAsync(() => getRecipeBySlug(params.slug));
+  const recipe = createMemo(() => getRecipeBySlug(params.slug));
   const { isAdmin, isLoaded } = useCurrentUser();
 
   const recipeHref = (): string => `/recipe/${params.slug}`;
@@ -34,13 +34,13 @@ const RecipeEditPage: Component = () => {
       isLogoShown
       mainClass={styles.main}
     >
-      <Suspense>
+      <Loading>
         <Show when={isLoaded()}>
           <Switch>
             <Match when={!isAdmin()}>
               <div class={styles.message}>
                 <p>{adminStrings.edit.notAllowed}</p>
-                <A href={recipeHref()}>{adminStrings.edit.backToRecipe}</A>
+                <a href={recipeHref()}>{adminStrings.edit.backToRecipe}</a>
               </div>
             </Match>
             <Match when={recipe()}>
@@ -59,12 +59,12 @@ const RecipeEditPage: Component = () => {
             <Match when={true}>
               <div class={styles.message}>
                 <p>{recipePageStrings.notFound}</p>
-                <A href="/">{recipePageStrings.backToList}</A>
+                <a href="/">{recipePageStrings.backToList}</a>
               </div>
             </Match>
           </Switch>
         </Show>
-      </Suspense>
+      </Loading>
     </RecipePageLayout>
   );
 };

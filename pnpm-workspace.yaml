@@ -3,6 +3,8 @@ allowBuilds:
   esbuild: true
   workerd: true
 
-# vinxi pins h3 to exactly 1.15.3, which has path traversal and request smuggling advisories
-overrides:
-  vinxi>h3: ^1.15.11
+# Kobalte's first build for stable Solid 2 is younger than the default release
+# age; the earlier alphas require a Solid 2 release candidate.
+minimumReleaseAgeExclude:
+  - '@kobalte/core@2.0.0-alpha.5'
+  - '@kobalte/utils@2.0.0-alpha.2'

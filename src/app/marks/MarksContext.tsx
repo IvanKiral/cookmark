@@ -1,4 +1,12 @@
-import { createContext, createSignal, onMount, type ParentComponent, useContext } from "solid-js";
+import {
+  action,
+  createContext,
+  createOptimistic,
+  createSignal,
+  onSettled,
+  type ParentComponent,
+  useContext,
+} from "solid-js";
 import { fetchMarkedSlugs, saveMark } from "~/app/api/marksApi.ts";
 import { type Mark, markValues } from "~/shared/marks.ts";
 
@@ -13,52 +21,54 @@ const MarksContext = createContext<MarksContextValue>();
 
 const emptyMarks: MarkedSlugs = { favorite: new Set(), "to-try": new Set() };
 
+const withMark = (
+  marks: MarkedSlugs,
+  mark: Mark,
+  slug: string,
+  shouldMark: boolean,
+): MarkedSlugs => {
+  const next = new Set(marks[mark]);
+  if (shouldMark) {
+    next.add(slug);
+  } else {
+    next.delete(slug);
+  }
+  return { ...marks, [mark]: next };
+};
+
 export const MarksProvider: ParentComponent = (props) => {
-  const [marks, setMarks] = createSignal<MarkedSlugs>(emptyMarks);
+  // What the server has saved.
+  const [savedMarks, setSavedMarks] = createSignal<MarkedSlugs>(emptyMarks);
+  // What the buttons show: the saved marks plus any toggle still being saved.
+  const [marks, setMarks] = createOptimistic(() => savedMarks());
 
   // Runs on the client after hydration, because marks are per-user data.
-  onMount(async () => {
-    const entries = await Promise.all(
-      markValues.map(async (mark) => [mark, await fetchMarkedSlugs(mark)] as const),
+  onSettled(() => {
+    Promise.all(markValues.map(async (mark) => [mark, await fetchMarkedSlugs(mark)] as const)).then(
+      (entries) => setSavedMarks(Object.fromEntries(entries) as MarkedSlugs),
     );
-    setMarks(Object.fromEntries(entries) as MarkedSlugs);
   });
 
   const isMarked = (mark: Mark, slug: string): boolean => marks()[mark].has(slug);
 
-  const setMarked = (mark: Mark, slug: string, shouldMark: boolean): void => {
-    setMarks((current) => {
-      const next = new Set(current[mark]);
-      if (shouldMark) {
-        next.add(slug);
-      } else {
-        next.delete(slug);
-      }
-      return { ...current, [mark]: next };
-    });
-  };
+  // Optimistic: the button flips at once. A failed save ends the action
+  // without touching the saved marks, so the button flips back on its own.
+  const saveToggle = action(async function* (mark: Mark, slug: string) {
+    const shouldMark = !isMarked(mark, slug);
+    setMarks((current) => withMark(current, mark, slug, shouldMark));
+    const isSaved = await saveMark(mark, slug, shouldMark);
+    // Re-enter the action's transaction before writing.
+    yield;
+    if (isSaved) {
+      setSavedMarks((current) => withMark(current, mark, slug, shouldMark));
+    }
+  });
 
   const toggle = (mark: Mark, slug: string): void => {
-    const wasMarked = isMarked(mark, slug);
-
-    // Optimistic update, reverted if the request fails.
-    setMarked(mark, slug, !wasMarked);
-    saveMark(mark, slug, !wasMarked).then((isSaved) => {
-      if (!isSaved) {
-        setMarked(mark, slug, wasMarked);
-      }
-    });
+    saveToggle(mark, slug);
   };
 
-  return (
-    <MarksContext.Provider value={{ isMarked, toggle }}>{props.children}</MarksContext.Provider>
-  );
+  return <MarksContext value={{ isMarked, toggle }}>{props.children}</MarksContext>;
 };
 
-export const useMarks = (): MarksContextValue => {
-  const context = useContext(MarksContext);
-  if (!context) {
-    throw new Error("useMarks must be used within a MarksProvider");
-  }
-  return context;
-};
+export const useMarks = (): MarksContextValue => useContext(MarksContext);

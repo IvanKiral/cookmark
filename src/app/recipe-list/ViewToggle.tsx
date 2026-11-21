@@ -1,4 +1,5 @@
 import type { Component } from "solid-js";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import { recipeListStrings } from "./strings.ts";
 import styles from "./ViewToggle.module.css";
 
@@ -13,9 +14,8 @@ export const ViewToggle: Component<ViewToggleProps> = (props) => (
   <div class={styles.toggle} role="group" aria-label={recipeListStrings.viewLabel}>
     <button
       type="button"
-      class={styles.button}
-      classList={{ [styles.active]: props.value === "card" }}
-      aria-pressed={props.value === "card"}
+      class={[styles.button, { [styles.active]: props.value === "card" }]}
+      aria-pressed={ariaBoolean(props.value === "card")}
       aria-label={recipeListStrings.cardView}
       onClick={() => props.onChange("card")}
     >
@@ -23,9 +23,8 @@ export const ViewToggle: Component<ViewToggleProps> = (props) => (
     </button>
     <button
       type="button"
-      class={styles.button}
-      classList={{ [styles.active]: props.value === "list" }}
-      aria-pressed={props.value === "list"}
+      class={[styles.button, { [styles.active]: props.value === "list" }]}
+      aria-pressed={ariaBoolean(props.value === "list")}
       aria-label={recipeListStrings.listView}
       onClick={() => props.onChange("list")}
     >

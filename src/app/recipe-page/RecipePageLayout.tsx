@@ -1,6 +1,7 @@
-import { A } from "@solidjs/router";
-import { type JSX, type ParentComponent, Show } from "solid-js";
+import type { JSX } from "@solidjs/web";
+import { type ParentComponent, Show } from "solid-js";
 import { recipeListStrings } from "~/app/recipe-list/strings.ts";
+import { toLinkState } from "~/app/ui/linkState.ts";
 import styles from "./RecipePageLayout.module.css";
 
 type RecipePageLayoutProps = {
@@ -19,18 +20,18 @@ export const RecipePageLayout: ParentComponent<RecipePageLayoutProps> = (props) 
     <nav class={styles.nav}>
       <div class={styles.navInner}>
         <div class={styles.navLeading}>
-          <A
+          <a
             href={props.closeHref}
-            state={props.closeState}
+            state={toLinkState(props.closeState)}
             class={`${styles.navButton} ${styles.closeButton}`}
             aria-label={props.closeLabel}
           >
             <span class="material-symbols-outlined">close</span>
-          </A>
+          </a>
           <Show when={props.isLogoShown}>
-            <A href="/" class={styles.logo}>
+            <a href="/" class={styles.logo}>
               {recipeListStrings.title}
-            </A>
+            </a>
           </Show>
         </div>
         <Show when={props.actions}>

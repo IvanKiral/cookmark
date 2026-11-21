@@ -1,6 +1,6 @@
-import { Pagination as ArkPagination } from "@ark-ui/solid/pagination";
+import { Pagination as KobaltePagination } from "@kobalte/core/pagination";
 import type { Component } from "solid-js";
-import { For, Show } from "solid-js";
+import { Show } from "solid-js";
 import styles from "./Pagination.module.css";
 import { uiStrings } from "./strings.ts";
 
@@ -13,17 +13,33 @@ type PaginationProps = {
 };
 
 export const Pagination: Component<PaginationProps> = (props) => {
+  const pageCount = (): number => Math.ceil(props.count / props.pageSize);
+
   return (
     <Show when={props.count > props.pageSize}>
-      <ArkPagination.Root
-        count={props.count}
-        pageSize={props.pageSize}
+      <KobaltePagination
+        count={pageCount()}
         page={props.page}
-        onPageChange={props.onPageChange}
+        onPageChange={(page) => props.onPageChange?.({ page })}
         siblingCount={1}
+        // The same number of buttons on every page, so the bar doesn't shift.
+        fixedItems
+        aria-label={uiStrings.pagination.label}
         class={`${styles.pagination} ${props.class || ""}`}
+        itemComponent={(itemProps) => (
+          <KobaltePagination.Item
+            page={itemProps.page}
+            class={styles.pageItem}
+            aria-label={uiStrings.pagination.goToPage(itemProps.page)}
+          >
+            {itemProps.page}
+          </KobaltePagination.Item>
+        )}
+        ellipsisComponent={() => (
+          <KobaltePagination.Ellipsis class={styles.ellipsis}>⋯</KobaltePagination.Ellipsis>
+        )}
       >
-        <ArkPagination.PrevTrigger
+        <KobaltePagination.Previous
           class={styles.trigger}
           aria-label={uiStrings.pagination.previous}
         >
@@ -44,33 +60,9 @@ export const Pagination: Component<PaginationProps> = (props) => {
             />
           </svg>
           <span class={styles.triggerText}>{uiStrings.pagination.previous}</span>
-        </ArkPagination.PrevTrigger>
-
-        <ArkPagination.Context>
-          {(api) => (
-            <div class={styles.pages}>
-              <For each={api().pages}>
-                {(page, index) =>
-                  page.type === "page" ? (
-                    <ArkPagination.Item
-                      {...page}
-                      class={styles.pageItem}
-                      aria-label={uiStrings.pagination.goToPage(page.value)}
-                    >
-                      {page.value}
-                    </ArkPagination.Item>
-                  ) : (
-                    <ArkPagination.Ellipsis index={index()} class={styles.ellipsis}>
-                      ⋯
-                    </ArkPagination.Ellipsis>
-                  )
-                }
-              </For>
-            </div>
-          )}
-        </ArkPagination.Context>
-
-        <ArkPagination.NextTrigger class={styles.trigger} aria-label={uiStrings.pagination.next}>
+        </KobaltePagination.Previous>
+        <KobaltePagination.Items />
+        <KobaltePagination.Next class={styles.trigger} aria-label={uiStrings.pagination.next}>
           <span class={styles.triggerText}>{uiStrings.pagination.next}</span>
           <svg
             width="16"
@@ -88,8 +80,8 @@ export const Pagination: Component<PaginationProps> = (props) => {
               stroke-linejoin="round"
             />
           </svg>
-        </ArkPagination.NextTrigger>
-      </ArkPagination.Root>
+        </KobaltePagination.Next>
+      </KobaltePagination>
     </Show>
   );
 };

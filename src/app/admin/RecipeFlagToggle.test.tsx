@@ -1,5 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@solidjs/testing-library";
+import { createSignal } from "solid-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createPendingResponse, nextTask } from "~/testing/pendingResponse.ts";
 import { RecipeFlagToggle } from "./RecipeFlagToggle.tsx";
 
 const { currentUser, revalidate } = vi.hoisted(() => ({
@@ -61,6 +63,52 @@ describe("<RecipeFlagToggle />", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     await waitFor(() => expect(button).not.toBeDisabled());
     expect(fetchMock).toHaveBeenCalledWith("/api/should-delete/soup", { method: "DELETE" });
+    expect(revalidate).not.toHaveBeenCalled();
+  });
+  // The recipe data the parent passes down; the mocked revalidate stands in
+  // for the refetch by writing the saved flag.
+  const renderWithRecipe = (isInitiallySet: boolean) => {
+    const [isSet, setIsSet] = createSignal(isInitiallySet);
+    revalidate.mockImplementation(() => setIsSet(!isInitiallySet));
+    render(() => <RecipeFlagToggle flag="should-delete" slug="soup" name="Soup" isSet={isSet()} />);
+  };
+
+  const confirm = async (button: HTMLElement, confirmLabel: string): Promise<void> => {
+    fireEvent.click(button);
+    fireEvent.click(await screen.findByRole("button", { name: confirmLabel }));
+  };
+
+  it("shows the flag while it is saved and keeps it once the recipe is refetched", async () => {
+    const save = createPendingResponse();
+    fetchMock.mockReturnValue(save.promise);
+    renderWithRecipe(false);
+    const button = screen.getByRole("button", { name: "Mark Soup to delete" });
+
+    await confirm(button, "Mark to delete");
+    await waitFor(() => expect(button).toHaveAttribute("aria-pressed", "true"));
+    expect(button).toBeDisabled();
+
+    await nextTask();
+    save.resolve(new Response(null, { status: 204 }));
+    await waitFor(() => expect(button).not.toBeDisabled());
+    expect(revalidate).toHaveBeenCalled();
+    expect(button).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("reverts the flag when the save fails", async () => {
+    const save = createPendingResponse();
+    fetchMock.mockReturnValue(save.promise);
+    renderWithRecipe(false);
+    const button = screen.getByRole("button", { name: "Mark Soup to delete" });
+
+    await confirm(button, "Mark to delete");
+    await waitFor(() => expect(button).toHaveAttribute("aria-pressed", "true"));
+
+    await nextTask();
+    save.resolve(new Response("Forbidden", { status: 403 }));
+    await waitFor(() => expect(button).not.toBeDisabled());
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(button).toHaveAccessibleName("Mark Soup to delete");
     expect(revalidate).not.toHaveBeenCalled();
   });
 });

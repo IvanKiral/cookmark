@@ -6,8 +6,7 @@
     "ignoreUnknown": true,
     "includes": [
       "src/**/*",
-      "!.output",
-      "!.vinxi",
+      "!dist",
       "!.wrangler",
       "!.claude",
       "!data",
@@ -30,9 +29,9 @@
       "includes": [
         "src/routes/**",
         "src/app.tsx",
-        "src/entry-client.tsx",
-        "src/entry-server.tsx",
-        "app.config.ts",
+        "src/Document.tsx",
+        "src/middleware.ts",
+        "vite.config.ts",
         "vitest.config.ts"
       ],
       "linter": {

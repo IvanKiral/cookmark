@@ -27,7 +27,7 @@ export const TextField: Component<TextFieldProps> = (props) => (
         type="text"
         class={styles.input}
         value={props.value}
-        maxLength={props.maxLength}
+        maxlength={props.maxLength}
         placeholder={props.placeholder}
         required={props.isRequired}
         onInput={(event) => props.onInput(event.currentTarget.value)}

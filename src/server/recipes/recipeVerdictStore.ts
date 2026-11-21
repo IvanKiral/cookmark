@@ -1,4 +1,4 @@
-import type { APIEvent } from "@solidjs/start/server";
+import type { APIEvent } from "~/server/apiEvent.ts";
 import { requireRole } from "~/server/auth/requireRole.ts";
 import { getEnv } from "~/server/env.ts";
 import { isRecipeVerdict, type RecipeVerdict } from "~/shared/verdicts.ts";

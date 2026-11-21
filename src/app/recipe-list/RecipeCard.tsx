@@ -1,6 +1,7 @@
-import { A, useLocation } from "@solidjs/router";
-import { type Component, createSignal, onMount, Show } from "solid-js";
+import { useLocation } from "@solidjs/router";
+import { type Component, createSignal, onSettled, Show } from "solid-js";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
+import { toLinkState } from "~/app/ui/linkState.ts";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { RecipeVerdict } from "~/shared/verdicts.ts";
 import styles from "./RecipeCard.module.css";
@@ -22,16 +23,16 @@ export const RecipeCard: Component<RecipeCardProps> = (props) => {
   // The image is server-rendered, so a 404 can fire its error event before the
   // client hydrates and attaches onError. Re-check once mounted: a finished load
   // with zero intrinsic width means the thumbnail failed.
-  onMount(() => {
+  onSettled(() => {
     if (imageRef?.complete && imageRef.naturalWidth === 0) {
       setHasImageError(true);
     }
   });
 
   return (
-    <A
+    <a
       href={`/recipe/${props.urlSlug}`}
-      state={{ fromSearch: location.search }}
+      state={toLinkState({ fromSearch: location.search })}
       class={styles.card}
     >
       <div class={styles.thumb}>
@@ -73,6 +74,6 @@ export const RecipeCard: Component<RecipeCardProps> = (props) => {
           <span class={styles.time}>{props.time}</span>
         </div>
       </div>
-    </A>
+    </a>
   );
 };

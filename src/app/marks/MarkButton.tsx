@@ -1,4 +1,5 @@
 import type { Component } from "solid-js";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import styles from "~/app/ui/iconToggleButton.module.css";
 import type { Mark } from "~/shared/marks.ts";
 import { useMarks } from "./MarksContext.tsx";
@@ -48,9 +49,11 @@ export const MarkButton: Component<MarkButtonProps> = (props) => {
   return (
     <button
       type="button"
-      class={styles.button}
-      classList={{ [styles.active]: isActive(), [appearance().activeClass]: isActive() }}
-      aria-pressed={isActive()}
+      class={[
+        styles.button,
+        { [styles.active]: isActive(), [appearance().activeClass]: isActive() },
+      ]}
+      aria-pressed={ariaBoolean(isActive())}
       aria-label={
         isActive() ? appearance().removeLabel(props.name) : appearance().addLabel(props.name)
       }

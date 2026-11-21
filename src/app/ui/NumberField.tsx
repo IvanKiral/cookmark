@@ -19,7 +19,7 @@ export const NumberField: Component<NumberFieldProps> = (props) => (
       <input
         {...control}
         type="number"
-        inputMode="numeric"
+        inputmode="numeric"
         min={0}
         max={props.max}
         step={1}

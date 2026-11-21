@@ -25,7 +25,7 @@ export const TextArea: Component<TextAreaProps> = (props) => (
         {...control}
         class={`${styles.input} ${styles.textarea}`}
         value={props.value}
-        maxLength={props.maxLength}
+        maxlength={props.maxLength}
         rows={props.rows ?? 4}
         onInput={(event) => props.onInput(event.currentTarget.value)}
       />

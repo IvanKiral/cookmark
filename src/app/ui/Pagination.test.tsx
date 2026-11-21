@@ -74,6 +74,6 @@ describe("Pagination", () => {
   it("should highlight current page", () => {
     render(() => <Pagination count={20} pageSize={5} page={2} />);
     const page2Button = screen.getByLabelText("Go to page 2");
-    expect(page2Button).toHaveAttribute("data-selected");
+    expect(page2Button).toHaveAttribute("aria-current", "page");
   });
 });

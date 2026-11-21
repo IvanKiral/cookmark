@@ -17,8 +17,7 @@ export const TagPicker = <T extends string>(props: TagPickerProps<T>) => (
       <For each={props.options}>
         {(option) => (
           <label
-            class={styles.chip}
-            classList={{ [styles.chipSelected]: props.selected.includes(option.value) }}
+            class={[styles.chip, { [styles.chipSelected]: props.selected.includes(option.value) }]}
           >
             <input
               type="checkbox"

@@ -1,6 +1,8 @@
 // @vitest-environment node
-import type { APIEvent } from "@solidjs/start/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { afterEach, describe, expect, it } from "vitest";
+import type { APIEvent } from "~/server/apiEvent.ts";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { createTestD1, type TestD1 } from "~/server/testing/testD1.ts";
 import { createSetRecipeFlagHandler, setRecipeFlag } from "./recipeFlagStore.ts";
 
@@ -51,12 +53,12 @@ describe("recipe flag endpoint", () => {
     db.raw.exec(
       `INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', '${role}', 'x')`,
     );
-    vi.stubGlobal("__env__", { RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
+    setTestEnv({ RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
     return db;
   };
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("lets an admin set and clear a flag", async () => {
@@ -87,7 +89,7 @@ describe("recipe flag endpoint", () => {
   });
 
   it("rejects requests without an identity", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createDbWithRole("admin") });
+    setTestEnv({ RECIPES: createDbWithRole("admin") });
     expect(
       (await createSetRecipeFlagHandler("should-delete", true)(createEvent("soup"))).status,
     ).toBe(401);

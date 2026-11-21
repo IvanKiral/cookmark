@@ -1,4 +1,5 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, onSettled } from "solid-js";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import styles from "./SortDropdown.module.css";
 import { DEFAULT_SORT, type SortValue } from "./sortOptions.ts";
 import { recipeListStrings } from "./strings.ts";
@@ -27,14 +28,14 @@ export const SortDropdown = (props: SortDropdownProps) => {
     }
   };
 
-  onMount(() => {
+  onSettled(() => {
     document.addEventListener("click", handleDocumentClick);
     document.addEventListener("keydown", handleDocumentKeyDown);
 
-    onCleanup(() => {
+    return () => {
       document.removeEventListener("click", handleDocumentClick);
       document.removeEventListener("keydown", handleDocumentKeyDown);
-    });
+    };
   });
 
   const sortOptions = [
@@ -106,7 +107,7 @@ export const SortDropdown = (props: SortDropdownProps) => {
         onClick={handleToggle}
         class={styles.dropdownButton}
         aria-haspopup="true"
-        aria-expanded={isOpen()}
+        aria-expanded={ariaBoolean(isOpen())}
       >
         <span class={styles.label}>{buttonLabel()}</span>
         <span

@@ -1,4 +1,5 @@
-import { type Component, createMemo, createSignal, For, type JSX, Show } from "solid-js";
+import type { JSX } from "@solidjs/web";
+import { type Component, createMemo, createSignal, For, Show } from "solid-js";
 import { markStrings } from "~/app/marks/strings.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
 import styles from "./FilterPanel.module.css";
@@ -70,11 +71,13 @@ const FilterSection = <T extends string>(props: FilterSectionProps<T>) => (
       <For each={props.options}>
         {(option) => (
           <label
-            class={styles.chip}
-            classList={{
-              [styles.chipCompact]: !props.isTouch,
-              [styles.chipSelected]: props.selected.includes(option.value),
-            }}
+            class={[
+              styles.chip,
+              {
+                [styles.chipCompact]: !props.isTouch,
+                [styles.chipSelected]: props.selected.includes(option.value),
+              },
+            ]}
           >
             <input
               type="checkbox"
@@ -160,7 +163,7 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
           fallback={<span class={styles.noMatches}>{props.noMatchesLabel}</span>}
         >
           {(option) => (
-            <label class={styles.checkboxLabel} classList={{ [styles.touchRow]: props.isTouch }}>
+            <label class={[styles.checkboxLabel, { [styles.touchRow]: props.isTouch }]}>
               <input
                 type="checkbox"
                 checked={props.selected.includes(option.value)}

@@ -1,5 +1,5 @@
-import { A, createAsync, useLocation, useParams } from "@solidjs/router";
-import { type Component, Match, Show, Suspense, Switch } from "solid-js";
+import { useLocation, useParams } from "@solidjs/router";
+import { type Component, createMemo, Loading, Match, Show, Switch } from "solid-js";
 import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
 import { RecipeBody } from "~/app/recipe-page/RecipeBody.tsx";
 import { RecipeHeader } from "~/app/recipe-page/RecipeHeader.tsx";
@@ -19,7 +19,7 @@ type RecipeNavState = {
 const RecipePage: Component = () => {
   const params = useParams<{ slug: string }>();
   const location = useLocation();
-  const recipe = createAsync(() => getRecipeBySlug(params.slug));
+  const recipe = createMemo(() => getRecipeBySlug(params.slug));
   const { isAdmin } = useCurrentUser();
 
   // Back to the list with the search and filters it had.
@@ -29,13 +29,13 @@ const RecipePage: Component = () => {
   };
 
   return (
-    <Suspense>
+    <Loading>
       <Show
         when={recipe()}
         fallback={
           <div class={styles.notFound}>
             <h1>{recipePageStrings.notFound}</h1>
-            <A href="/">{recipePageStrings.backToList}</A>
+            <a href="/">{recipePageStrings.backToList}</a>
           </div>
         }
       >
@@ -60,7 +60,7 @@ const RecipePage: Component = () => {
           </RecipePageLayout>
         )}
       </Show>
-    </Suspense>
+    </Loading>
   );
 };
 

@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { createTestD1, type TestD1 } from "~/server/testing/testD1.ts";
 import { loadRecipeDataFromSource, loadRecipesFromSource } from "./recipeSource.ts";
 
@@ -36,11 +37,11 @@ const createDb = (): TestD1 => {
 
 describe("recipe source flags", () => {
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("carries the verdict from the recipes table into the list", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createDb() });
+    setTestEnv({ RECIPES: createDb() });
     const recipes = await loadRecipesFromSource();
     expect(recipes.map((recipe) => [recipe.url_slug, recipe.verdict])).toEqual([
       ["soup", "chef-kiss"],
@@ -50,14 +51,14 @@ describe("recipe source flags", () => {
   });
 
   it("carries the verdict into a single recipe", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createDb() });
+    setTestEnv({ RECIPES: createDb() });
     expect((await loadRecipeDataFromSource("soup"))?.verdict).toBe("chef-kiss");
     expect((await loadRecipeDataFromSource("cake"))?.verdict).toBeUndefined();
     expect((await loadRecipeDataFromSource("stew"))?.verdict).toBe("chef-ok");
   });
 
   it("carries should_delete into a single recipe", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createDb() });
+    setTestEnv({ RECIPES: createDb() });
     expect((await loadRecipeDataFromSource("soup"))?.should_delete).toBe(false);
     expect((await loadRecipeDataFromSource("cake"))?.should_delete).toBe(true);
   });
@@ -65,13 +66,13 @@ describe("recipe source flags", () => {
 
 describe("recipe source failures", () => {
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
     vi.restoreAllMocks();
   });
 
   it("logs a failed read and shows no recipes instead of throwing", async () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("__env__", { RECIPES: createTestD1([]) });
+    setTestEnv({ RECIPES: createTestD1([]) });
     expect(await loadRecipesFromSource()).toEqual([]);
     expect(await loadRecipeDataFromSource("soup")).toBeUndefined();
     expect(consoleError).toHaveBeenCalledTimes(2);
@@ -79,7 +80,7 @@ describe("recipe source failures", () => {
 
   it("treats a missing database binding the same way", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("__env__", {});
+    setTestEnv({});
     expect(await loadRecipesFromSource()).toEqual([]);
     expect(await loadRecipeDataFromSource("soup")).toBeUndefined();
   });

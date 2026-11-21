@@ -1,5 +1,6 @@
 // @vitest-environment node
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { setTestEnv } from "~/server/testing/cloudflareWorkersStub.ts";
 import { createTestD1 } from "~/server/testing/testD1.ts";
 import { hasRole, requireRole } from "./requireRole.ts";
 
@@ -20,23 +21,23 @@ describe("requireRole", () => {
   const request = new Request("http://localhost/");
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    setTestEnv({});
   });
 
   it("returns 401 when there is no identity", async () => {
-    vi.stubGlobal("__env__", {});
+    setTestEnv({});
     const check = await requireRole(request, "viewer");
     expect(check.isAllowed ? undefined : check.response.status).toBe(401);
   });
 
   it("returns 500 when the database binding is missing", async () => {
-    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "dev@localhost" });
+    setTestEnv({ LOCAL_USER_EMAIL: "dev@localhost" });
     const check = await requireRole(request, "viewer");
     expect(check.isAllowed ? undefined : check.response.status).toBe(500);
   });
 
   it("returns 403 for a viewer on an admin action", async () => {
-    vi.stubGlobal("__env__", {
+    setTestEnv({
       RECIPES: createTestD1(["0002_users.sql"]),
       LOCAL_USER_EMAIL: "dev@localhost",
     });
@@ -49,7 +50,7 @@ describe("requireRole", () => {
     db.raw.exec(
       "INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', 'admin', 'x')",
     );
-    vi.stubGlobal("__env__", { RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
+    setTestEnv({ RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
     const check = await requireRole(request, "admin");
     expect(check.isAllowed ? check.user : undefined).toEqual({
       email: "dev@localhost",

@@ -7,16 +7,16 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js",
+    "jsxImportSource": "@solidjs/web",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "types": ["vinxi/types/client", "vitest/globals", "@testing-library/jest-dom/vitest"],
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom/vitest"],
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts", "vitest.config.ts"]
 }
