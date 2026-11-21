@@ -1,0 +1,344 @@
+import { cleanup, render, screen } from "@solidjs/testing-library";
+import userEvent from "@testing-library/user-event";
+import type { JSX } from "solid-js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { Recipe } from "~/shared/recipe.ts";
+import { RecipeList } from "./RecipeList.tsx";
+
+vi.mock("@solidjs/router", () => ({
+  A: (props: { href: string; class: string; children: JSX.Element }) => (
+    <a href={props.href} class={props.class}>
+      {props.children}
+    </a>
+  ),
+  useParams: () => ({}),
+  useLocation: () => ({ search: "" }),
+}));
+
+vi.mock("~/app/marks/MarksContext.tsx", () => ({
+  useMarks: () => ({
+    isMarked: () => false,
+    toggle: () => {},
+  }),
+}));
+
+// jsdom has no matchMedia; the card page size depends on the wide-grid query.
+const media = { isWide: false };
+
+const createCardRecipes = (count: number): ReadonlyArray<Recipe> =>
+  Array.from({ length: count }, (_, i) => ({
+    id: `${i + 1}`,
+    url_slug: `recipe_${i + 1}`,
+    name: `Recipe ${i + 1}`,
+    difficulty: "Easy",
+    time: "30 min",
+    total_time: 30,
+    tags: ["test"],
+    ingredients: [],
+    description: "",
+    image_url: `/thumbnails/recipe_${i + 1}`,
+    created_at: "2024-01-01T00:00:00.000Z",
+  }));
+
+describe("<RecipeList />", () => {
+  beforeEach(() => {
+    window.scrollTo = vi.fn();
+    media.isWide = false;
+    vi.stubGlobal("matchMedia", () => ({
+      matches: media.isWide,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.clearAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("shows 12 cards per page below the four-column grid", () => {
+    render(() => (
+      <RecipeList
+        recipes={createCardRecipes(20)}
+        currentPage={1}
+        viewMode="card"
+        onPageChange={vi.fn()}
+      />
+    ));
+
+    expect(screen.getByText("Recipe 12")).toBeInTheDocument();
+    expect(screen.queryByText("Recipe 13")).not.toBeInTheDocument();
+  });
+
+  it("shows 16 cards per page on the four-column grid", () => {
+    media.isWide = true;
+    render(() => (
+      <RecipeList
+        recipes={createCardRecipes(20)}
+        currentPage={1}
+        viewMode="card"
+        onPageChange={vi.fn()}
+      />
+    ));
+
+    expect(screen.getByText("Recipe 16")).toBeInTheDocument();
+    expect(screen.queryByText("Recipe 17")).not.toBeInTheDocument();
+  });
+
+  const defaultProps = {
+    currentPage: 1,
+    viewMode: "list" as const,
+    onPageChange: vi.fn(),
+  };
+
+  it("renders first page of recipes with pagination", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const { getByText, queryByText } = render(() => (
+      <RecipeList recipes={mockRecipes} {...defaultProps} />
+    ));
+
+    expect(getByText("Recipe 1")).toBeInTheDocument();
+    expect(getByText("Recipe 10")).toBeInTheDocument();
+    expect(getByText("Recipe 15")).toBeInTheDocument();
+
+    expect(queryByText("Recipe 16")).not.toBeInTheDocument();
+    expect(queryByText("Recipe 20")).not.toBeInTheDocument();
+  });
+
+  it("calls onPageChange when next is clicked", async () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const mockOnPageChange = vi.fn();
+    render(() => (
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
+    ));
+
+    const nextButton = screen.getByLabelText("Next");
+    await userEvent.click(nextButton);
+
+    expect(mockOnPageChange).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }));
+  });
+
+  it("renders correct page when currentPage prop changes", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const mockOnPageChange = vi.fn();
+    render(() => (
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={2}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
+    ));
+
+    expect(screen.queryByText("Recipe 1")).not.toBeInTheDocument();
+    expect(screen.getByText("Recipe 16")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 20")).toBeInTheDocument();
+  });
+
+  it("does not show pagination for 15 or fewer recipes", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    render(() => <RecipeList recipes={mockRecipes} {...defaultProps} />);
+
+    expect(screen.getByText("Recipe 1")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 15")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Next")).not.toBeInTheDocument();
+  });
+
+  it("renders different recipes when recipe list changes", () => {
+    const mockRecipes1: ReadonlyArray<Recipe> = Array.from({ length: 3 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const mockOnPageChange = vi.fn();
+    const { unmount } = render(() => (
+      <RecipeList
+        recipes={mockRecipes1}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
+    ));
+
+    expect(screen.getByText("Recipe 1")).toBeInTheDocument();
+    expect(screen.getByText("Recipe 3")).toBeInTheDocument();
+
+    unmount();
+    cleanup();
+
+    const mockRecipes2: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
+      id: `${i + 10}`,
+      url_slug: `new_recipe_${i + 10}`,
+      name: `New Recipe ${i + 10}`,
+      difficulty: "Medium",
+      time: "45 min",
+      total_time: 45,
+      tags: ["new"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    render(() => (
+      <RecipeList
+        recipes={mockRecipes2}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
+    ));
+
+    expect(screen.getByText("New Recipe 10")).toBeInTheDocument();
+    expect(screen.getByText("New Recipe 24")).toBeInTheDocument();
+    expect(screen.queryByText("New Recipe 25")).not.toBeInTheDocument();
+  });
+
+  it("renders recipe thumbnails and hides column header in card view", () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 3 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: `/thumbnails/recipe_${i + 1}`,
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const { container } = render(() => (
+      <RecipeList recipes={mockRecipes} currentPage={1} viewMode="card" onPageChange={vi.fn()} />
+    ));
+
+    const firstImage = container.querySelector("img");
+    expect(firstImage).toHaveAttribute("src", "/thumbnails/recipe_1");
+    expect(screen.queryByText("Recipe Name")).not.toBeInTheDocument();
+  });
+
+  it("renders empty list when no recipes provided", () => {
+    const { container } = render(() => <RecipeList recipes={[]} {...defaultProps} />);
+
+    const wrapper = container.querySelector("div");
+    expect(wrapper).toBeTruthy();
+    const recipeContainer = container.querySelector('[class*="container"]');
+    expect(recipeContainer?.children).toHaveLength(0);
+  });
+
+  it("shows empty state message when no recipes match", () => {
+    render(() => <RecipeList recipes={[]} {...defaultProps} />);
+
+    expect(screen.getByText("No recipes found")).toBeInTheDocument();
+    expect(screen.getByText("Try adjusting your search or filters.")).toBeInTheDocument();
+  });
+
+  it("calls onResetAll when clear button in empty state is clicked", async () => {
+    const mockOnResetAll = vi.fn();
+    render(() => <RecipeList recipes={[]} {...defaultProps} onResetAll={mockOnResetAll} />);
+
+    const clearButton = screen.getByText("Clear search and filters");
+    await userEvent.click(clearButton);
+
+    expect(mockOnResetAll).toHaveBeenCalled();
+  });
+
+  it("scrolls to top when page changes", async () => {
+    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
+      id: `${i + 1}`,
+      url_slug: `recipe_${i + 1}`,
+      name: `Recipe ${i + 1}`,
+      difficulty: "Easy",
+      time: "30 min",
+      total_time: 30,
+      tags: ["test"],
+      ingredients: [],
+      description: "",
+      image_url: "/thumbnails/test",
+      created_at: "2024-01-01T00:00:00.000Z",
+    }));
+
+    const mockOnPageChange = vi.fn();
+    render(() => (
+      <RecipeList
+        recipes={mockRecipes}
+        currentPage={1}
+        viewMode="list"
+        onPageChange={mockOnPageChange}
+      />
+    ));
+
+    const nextButton = screen.getByLabelText("Next");
+    await userEvent.click(nextButton);
+
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+  });
+});

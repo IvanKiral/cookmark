@@ -1,17 +1,17 @@
 import { A, createAsync, useLocation, useParams } from "@solidjs/router";
 import { type Component, For, Match, Show, Suspense, Switch } from "solid-js";
-import MarkButton from "~/components/MarkButton/MarkButton.tsx";
-import RecipeFlagBadge from "~/components/RecipeFlagBadge/RecipeFlagBadge.tsx";
-import RecipeFlagToggle from "~/components/RecipeFlagToggle/RecipeFlagToggle.tsx";
-import RecipeImage from "~/components/RecipeImage/RecipeImage.tsx";
-import RecipeVerdictToggle from "~/components/RecipeVerdictToggle/RecipeVerdictToggle.tsx";
-import RecipeVideo from "~/components/RecipeVideo/RecipeVideo.tsx";
-import { strings } from "~/constants/strings.ts";
-import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
-import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
+import { RecipeFlagToggle } from "~/app/admin/RecipeFlagToggle.tsx";
+import { RecipeVerdictToggle } from "~/app/admin/RecipeVerdictToggle.tsx";
+import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
+import { MarkButton } from "~/app/marks/MarkButton.tsx";
+import { RecipeImage } from "~/app/recipe-page/RecipeImage.tsx";
+import { RecipeVideo } from "~/app/recipe-page/RecipeVideo.tsx";
+import { strings } from "~/app/strings.ts";
+import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
+import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
+import type { Ingredient } from "~/shared/recipe.ts";
+import { getSourceImageUrl } from "~/shared/recipeImage.ts";
 import iconButtonStyles from "~/styles/iconToggleButton.module.css";
-import type { Ingredient } from "~/types/Recipe.ts";
-import { getSourceImageUrl } from "~/utils/recipeImage.ts";
 import styles from "./index.module.css";
 
 type RecipeNavState = {

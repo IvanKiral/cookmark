@@ -1,3 +1,3 @@
-import { handleUpdateRecipe } from "~/lib/recipeEditStore.ts";
+import { handleUpdateRecipe } from "~/server/recipes/recipeEditStore.ts";
 
 export const PUT = handleUpdateRecipe;

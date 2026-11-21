@@ -3,9 +3,9 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "./app.css";
-import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt.jsx";
-import { CurrentUserProvider } from "./contexts/CurrentUserContext.jsx";
-import { MarksProvider } from "./contexts/MarksContext.jsx";
+import { MarksProvider } from "~/app/marks/MarksContext.tsx";
+import { InstallPrompt } from "~/app/pwa/InstallPrompt.tsx";
+import { CurrentUserProvider } from "~/app/user/CurrentUserContext.tsx";
 
 export default function App() {
   return (

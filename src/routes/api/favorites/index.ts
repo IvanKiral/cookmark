@@ -1,3 +1,3 @@
-import { createReadMarksHandler } from "~/lib/markHandlers.ts";
+import { createReadMarksHandler } from "~/server/marks/markHandlers.ts";
 
 export const GET = createReadMarksHandler("favorite");

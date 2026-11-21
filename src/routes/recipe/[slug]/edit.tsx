@@ -1,10 +1,10 @@
 import { A, createAsync, useLocation, useNavigate, useParams } from "@solidjs/router";
 import { type Component, Match, Show, Suspense, Switch } from "solid-js";
-import RecipeEditForm from "~/components/RecipeEditForm/RecipeEditForm.tsx";
-import { strings } from "~/constants/strings.ts";
-import { useCurrentUser } from "~/contexts/CurrentUserContext.tsx";
-import { getRecipeBySlug } from "~/lib/recipeQueries.ts";
-import { getInitialRecipeEdit } from "~/utils/recipeEdit.ts";
+import { RecipeEditForm } from "~/app/admin/RecipeEditForm.tsx";
+import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
+import { strings } from "~/app/strings.ts";
+import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
+import { getInitialRecipeEdit } from "~/shared/recipeEdit.ts";
 import styles from "./edit.module.css";
 import pageStyles from "./index.module.css";
 

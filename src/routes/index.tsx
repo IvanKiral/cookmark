@@ -1,38 +1,33 @@
 import { createAsync, useSearchParams } from "@solidjs/router";
 import Fuse from "fuse.js";
 import { createMemo, createSignal, Show, Suspense } from "solid-js";
-import FilterDrawer from "~/components/FilterDrawer/FilterDrawer.tsx";
-import FilterPanel from "~/components/FilterPanel/FilterPanel.tsx";
-import RecipeList from "~/components/RecipeList/RecipeList.tsx";
-import SearchBar from "~/components/SearchBar/SearchBar.tsx";
-import SortDropdown from "~/components/SortDropdown/SortDropdown.tsx";
-import ViewToggle, { type ViewMode } from "~/components/ViewToggle/ViewToggle.tsx";
+import { getRecipesList } from "~/app/api/recipeQueries.ts";
+import { buildAuthorOptions, deriveAuthors } from "~/app/filters/deriveAuthors.ts";
 import {
   type DifficultyFilter,
   type DifficultyValue,
   difficultyValues,
-} from "~/constants/difficultyOptions.ts";
-import { type Mark, type MarkFilter, markValues } from "~/constants/markOptions.ts";
+} from "~/app/filters/difficultyOptions.ts";
+import { FilterDrawer } from "~/app/filters/FilterDrawer.tsx";
+import { FilterPanel } from "~/app/filters/FilterPanel.tsx";
+import { matchesTagFilter } from "~/app/filters/matchesTagFilter.ts";
 import {
   matchesRecommendedFilter,
   type RecommendedFilter,
   type RecommendedValue,
   recommendedValues,
-} from "~/constants/recommendedOptions.ts";
-import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions.ts";
-import { strings } from "~/constants/strings.ts";
-import {
-  type TagFilter,
-  type TagValue,
-  tagGroupDefinitions,
-  tagValues,
-} from "~/constants/tagOptions.ts";
-import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
-import { useMarks } from "~/contexts/MarksContext.tsx";
-import { getRecipesList } from "~/lib/recipeQueries.ts";
-import type { Recipe } from "~/types/Recipe.ts";
-import { buildAuthorOptions, deriveAuthors } from "~/utils/deriveAuthors.ts";
-import { matchesTagFilter } from "~/utils/matchesTagFilter.ts";
+} from "~/app/filters/recommendedOptions.ts";
+import { SearchBar } from "~/app/filters/SearchBar.tsx";
+import { type TimeFilter, type TimeValue, timeValues } from "~/app/filters/timeOptions.ts";
+import { useMarks } from "~/app/marks/MarksContext.tsx";
+import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
+import { SortDropdown } from "~/app/recipe-list/SortDropdown.tsx";
+import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
+import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
+import { strings } from "~/app/strings.ts";
+import { type Mark, type MarkFilter, markValues } from "~/shared/marks.ts";
+import type { Recipe } from "~/shared/recipe.ts";
+import { type TagFilter, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
 import styles from "./index.module.css";
 
 const parseArrayParam = <T extends string>(
