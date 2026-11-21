@@ -20,7 +20,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 'latest'
+        node-version: '24'
         cache: 'pnpm'
 
     - name: Install dependencies
@@ -29,11 +29,11 @@ jobs:
     - name: Run TypeScript type checking
       run: pnpm run typecheck
 
+    - name: Check the generated binding types match wrangler.jsonc
+      run: pnpm run cf:types:check
+
     - name: Run Biome check
       run: pnpm run biome:check
-
-    - name: Run Biome lint
-      run: pnpm run biome:lint
 
     - name: Build application
       run: pnpm run build

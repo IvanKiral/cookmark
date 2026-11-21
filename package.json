@@ -1,5 +1,5 @@
 {
-  "name": "recipe-book",
+  "name": "cookmark",
   "packageManager": "pnpm@12.6.0",
   "scripts": {
     "dev": "vinxi dev",
@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "typecheck": "tsc --noEmit",
-    "cf:types": "wrangler types src/server/worker-configuration.d.ts --config wrangler.jsonc --include-runtime=false"
+    "cf:types": "wrangler types src/server/worker-configuration.d.ts --config wrangler.jsonc --include-runtime=false",
+    "cf:types:check": "wrangler types src/server/worker-configuration.d.ts --config wrangler.jsonc --include-runtime=false --check"
   },
   "type": "module",
   "devDependencies": {
@@ -45,5 +46,6 @@
     "fuse.js": "^7.5.0",
     "jose": "6.2.12",
     "photoswipe": "5.4.4"
-  }
+  },
+  "private": true
 }

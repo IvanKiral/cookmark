@@ -19,7 +19,29 @@
     "rules": {
       "a11y": {
         "useSemanticElements": "off"
+      },
+      "style": {
+        "noDefaultExport": "error"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "src/routes/**",
+        "src/app.tsx",
+        "src/entry-client.tsx",
+        "src/entry-server.tsx",
+        "app.config.ts",
+        "vitest.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ]
 }
