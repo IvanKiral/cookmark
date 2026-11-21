@@ -1,6 +1,6 @@
 // @vitest-environment node
 import type { APIEvent } from "@solidjs/start/server";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { recipeVerdictValues } from "~/constants/recipeVerdicts.ts";
 import { createTestD1, readMigration, type TestD1 } from "~/lib/testD1.ts";
 import {
@@ -93,16 +93,11 @@ describe("recipe verdict endpoint", () => {
     db.raw.exec(
       `INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', '${role}', 'x')`,
     );
-    vi.stubGlobal("__env__", { RECIPES: db });
+    vi.stubGlobal("__env__", { RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
     return db;
   };
 
-  beforeEach(() => {
-    vi.stubEnv("DEV", true);
-  });
-
   afterEach(() => {
-    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
@@ -141,8 +136,7 @@ describe("recipe verdict endpoint", () => {
   });
 
   it("rejects requests without an identity", async () => {
-    createDbWithRole("admin");
-    vi.stubEnv("DEV", false);
+    vi.stubGlobal("__env__", { RECIPES: createDbWithRole("admin") });
     expect((await handleClearRecipeVerdict(createEvent("soup"))).status).toBe(401);
   });
 });

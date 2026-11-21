@@ -1,18 +1,4 @@
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  run: () => Promise<unknown>;
-  first: <T>() => Promise<T | null>;
-};
-
-export type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-};
-
-// The users table lives in the recipes database.
-type UsersEnv = {
-  RECIPES?: D1Database;
-};
-
+import { getEnv } from "~/server/env.ts";
 export type Role = "admin" | "viewer";
 
 export type User = {
@@ -20,8 +6,8 @@ export type User = {
   role: Role;
 };
 
-export const getUsersDb = (): D1Database | undefined =>
-  (globalThis as unknown as { __env__?: UsersEnv }).__env__?.RECIPES;
+// The users table lives in the recipes database.
+export const getUsersDb = (): D1Database | undefined => getEnv().RECIPES;
 
 export const normalizeEmail = (email: string): string => email.trim().toLowerCase();
 

@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cf:types": "wrangler types src/server/worker-configuration.d.ts --config wrangler.jsonc --include-runtime=false"
   },
   "type": "module",
   "devDependencies": {
@@ -35,7 +36,8 @@
     "vite-plugin-pwa": "^1.3.0",
     "vite-plugin-solid": "^2.11.14",
     "vitest": "^5.0.1",
-    "workbox-window": "^7.4.1"
+    "workbox-window": "^7.4.1",
+    "wrangler": "4.158.0"
   },
   "dependencies": {
     "@ark-ui/solid": "^5.39.2",

@@ -1,38 +1,23 @@
 import { createRemoteJWKSet, type JWTVerifyGetKey, jwtVerify } from "jose";
+import { getEnv } from "~/server/env.ts";
 
 // Identity from Cloudflare Access. The signed application token is verified
 // against the team's public keys, so a request that reaches the Worker without
 // passing through Access (or with a forged token) has no identity.
-
-type AccessEnv = {
-  // e.g. https://<team-name>.cloudflareaccess.com
-  ACCESS_TEAM_DOMAIN?: string;
-  // Application Audience (AUD) Tag of the Access application.
-  ACCESS_AUD?: string;
-  // Set only by `pnpm local:preview` (wrangler dev). See getLocalUserEmail.
-  LOCAL_USER_EMAIL?: string;
-};
 
 export type AccessConfig = {
   teamDomain: string;
   audience: string;
 };
 
-// `vinxi dev` has no Access in front of it. import.meta.env.DEV is replaced
-// with false in production builds, so this never applies to a deployed Worker.
-const DEV_USER_EMAIL = "dev@localhost";
-
 const LOCAL_HOSTNAMES = new Set(["localhost", "127.0.0.1"]);
 
-const getEnv = (): AccessEnv | undefined =>
-  (globalThis as unknown as { __env__?: AccessEnv }).__env__;
-
-// Lets the production build run under `wrangler dev` as a signed-in user
-// without Access. Honoured only for requests to localhost: in production the
+// Lets `pnpm dev` and `pnpm local:preview` run as a signed-in user without
+// Access. Honoured only for requests to localhost: in production the
 // Worker is reachable solely through its custom domain, so it never applies
 // there even if the variable were set by mistake.
 const getLocalUserEmail = (request: Request): string | undefined => {
-  const email = getEnv()?.LOCAL_USER_EMAIL;
+  const email = getEnv().LOCAL_USER_EMAIL;
   if (!email) {
     return undefined;
   }
@@ -41,8 +26,8 @@ const getLocalUserEmail = (request: Request): string | undefined => {
 
 const getAccessConfig = (): AccessConfig | undefined => {
   const env = getEnv();
-  const teamDomain = env?.ACCESS_TEAM_DOMAIN;
-  const audience = env?.ACCESS_AUD;
+  const teamDomain = env.ACCESS_TEAM_DOMAIN;
+  const audience = env.ACCESS_AUD;
   if (!(teamDomain && audience)) {
     return undefined;
   }
@@ -84,7 +69,7 @@ export const verifyAccessToken = async (
 export const getUserEmail = async (request: Request): Promise<string | undefined> => {
   const token = request.headers.get("cf-access-jwt-assertion");
   if (!token) {
-    return import.meta.env.DEV ? DEV_USER_EMAIL : getLocalUserEmail(request);
+    return getLocalUserEmail(request);
   }
   const config = getAccessConfig();
   if (!config) {

@@ -80,37 +80,10 @@ export default defineConfig({
     // A Cloudflare Worker with Static Assets: it serves the client assets and
     // renders pages and API routes on demand.
     preset: "cloudflare_module",
-    // Merged into the wrangler config nitro generates at .output/server.
-    // The ASSETS binding and `main` are added automatically by the preset.
+    // Generates .output/server/wrangler.json for `wrangler deploy` from
+    // wrangler.jsonc plus the build output (entry point and static assets).
     cloudflare: {
-      // Generate .output/server/wrangler.json (+ deploy redirect) and enable
-      // nodejs_compat so `wrangler deploy` works from the project root.
       deployConfig: true,
-      wrangler: {
-        name: "cookmark",
-        compatibility_date: "2025-07-15",
-        // Per-user data (favourites, roles) trusts the Access JWT, so the app
-        // must only be reachable through the Access-fronted custom domain — not
-        // workers.dev.
-        // The JWT is verified with two Worker secrets (set via `wrangler secret
-        // put`, which survive deploys unlike `vars`): ACCESS_TEAM_DOMAIN
-        // (https://<team-name>.cloudflareaccess.com) and ACCESS_AUD (the Access
-        // application's AUD tag). Without them every request is unauthenticated.
-        workers_dev: false,
-        // Serve the app from the Access-protected custom domain.
-        routes: [{ pattern: "cookmark.kiralivan.eu", custom_domain: true }],
-        // Private bucket holding recipe videos (videos/<slug>.mp4), thumbnails
-        // (thumbnails/<slug>.jpg) and image recipe sources (recipe-images/<slug>.<ext>).
-        r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
-        d1_databases: [
-          // Recipes plus users and their per-user recipe marks (favourites).
-          {
-            binding: "RECIPES",
-            database_name: "cookmark-recipes",
-            database_id: "05f0777c-5a1b-43d9-a148-6ee5ea95d42d",
-          },
-        ],
-      },
     },
   },
 });

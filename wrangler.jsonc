@@ -1,0 +1,26 @@
+// Read by `pnpm build` (merged into .output/server/wrangler.json, which
+// `wrangler deploy` uses), by `pnpm dev` for local bindings, and by the
+// migration and type generation commands.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cookmark",
+  "compatibility_date": "2025-07-15",
+  // Per-user data trusts the Cloudflare Access JWT, so the Worker must only be
+  // reachable through the Access-protected custom domain, never workers.dev.
+  // The JWT is checked with the ACCESS_TEAM_DOMAIN and ACCESS_AUD secrets (set
+  // with `wrangler secret put`). Without them every request is signed out.
+  "workers_dev": false,
+  "routes": [{ "pattern": "cookmark.kiralivan.eu", "custom_domain": true }],
+  // Private bucket with videos/<slug>.mp4, thumbnails/<slug>.jpg and
+  // recipe-images/<slug>.<ext>.
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "cookmark" }],
+  // Recipes, users, per-user recipe marks and recipe revisions.
+  "d1_databases": [
+    {
+      "binding": "RECIPES",
+      "database_name": "cookmark-recipes",
+      "database_id": "05f0777c-5a1b-43d9-a148-6ee5ea95d42d",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

@@ -12,7 +12,7 @@
       "!.claude",
       "!data",
       "!public",
-      "!bundle-report.html"
+      "!src/server/worker-configuration.d.ts"
     ]
   },
   "linter": {

@@ -1,27 +1,14 @@
 import type { APIEvent } from "@solidjs/start/server";
 import type { RecipeFlag } from "~/constants/recipeFlags.ts";
 import { requireRole } from "~/lib/requireRole.ts";
-
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  run: () => Promise<{ meta: { changes: number } }>;
-};
-
-type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-};
-
-type RecipeFlagEnv = {
-  RECIPES?: D1Database;
-};
+import { getEnv } from "~/server/env.ts";
 
 // Column names can't be bound as parameters, so they only ever come from here.
 const flagColumns: Record<RecipeFlag, string> = {
   "should-delete": "should_delete",
 };
 
-const getRecipeFlagDb = (): D1Database | undefined =>
-  (globalThis as unknown as { __env__?: RecipeFlagEnv }).__env__?.RECIPES;
+const getRecipeFlagDb = (): D1Database | undefined => getEnv().RECIPES;
 
 // A plain UPDATE of the one column, so the recipe data itself is never touched.
 // Returns false when no recipe has this slug.

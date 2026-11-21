@@ -1,12 +1,7 @@
 import type { RecipeVerdict } from "~/constants/recipeVerdicts.ts";
+import { getEnv } from "~/server/env.ts";
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
 import { transformRecipeData } from "~/utils/loadRecipes.ts";
-
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  all: <T>() => Promise<{ results: ReadonlyArray<T> }>;
-  first: <T>() => Promise<T | null>;
-};
 
 type RecipeRow = {
   slug: string;
@@ -14,21 +9,6 @@ type RecipeRow = {
   verdict: RecipeVerdict | null;
   should_delete: number;
 };
-
-type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-};
-
-type R2Bucket = {
-  head: (key: string) => Promise<unknown | null>;
-};
-
-type SourceEnv = {
-  RECIPES?: D1Database;
-  MEDIA?: R2Bucket;
-};
-
-const getEnv = (): SourceEnv => (globalThis as unknown as { __env__?: SourceEnv }).__env__ ?? {};
 
 // The flag columns win over anything in the source JSON.
 const toRecipeData = (row: Omit<RecipeRow, "slug">): RecipeData => ({

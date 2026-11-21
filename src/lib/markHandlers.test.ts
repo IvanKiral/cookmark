@@ -1,6 +1,6 @@
 // @vitest-environment node
 import type { APIEvent } from "@solidjs/start/server";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTestD1, type TestD1 } from "~/lib/testD1.ts";
 import {
   createAddMarkHandler,
@@ -23,18 +23,13 @@ describe("mark handlers", () => {
       "0004_user_recipe_marks_to_try.sql",
     ]);
 
-  beforeEach(() => {
-    vi.stubEnv("DEV", true);
-  });
-
   afterEach(() => {
-    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
   it("adds, lists and removes marks, creating the user on first add", async () => {
     const testDb = db();
-    vi.stubGlobal("__env__", { RECIPES: testDb });
+    vi.stubGlobal("__env__", { RECIPES: testDb, LOCAL_USER_EMAIL: "dev@localhost" });
 
     expect((await createAddMarkHandler("to-try")(createEvent("soup"))).status).toBe(204);
     expect(testDb.raw.prepare("SELECT email, role FROM users").all()).toEqual([
@@ -50,7 +45,6 @@ describe("mark handlers", () => {
   });
 
   it("returns 401 without an identity", async () => {
-    vi.stubEnv("DEV", false);
     vi.stubGlobal("__env__", { RECIPES: db() });
     expect((await createReadMarksHandler("favorite")(createEvent())).status).toBe(401);
     expect((await createAddMarkHandler("favorite")(createEvent("soup"))).status).toBe(401);

@@ -1,24 +1,9 @@
 import type { Mark } from "~/constants/markOptions.ts";
 import { normalizeEmail } from "~/lib/userStore.ts";
-
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  run: () => Promise<unknown>;
-  first: <T>() => Promise<T | null>;
-  all: <T>() => Promise<{ results: ReadonlyArray<T> }>;
-};
-
-export type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-};
+import { getEnv } from "~/server/env.ts";
 
 // Per-user recipe marks live in the recipes database, next to users.
-type MarksEnv = {
-  RECIPES?: D1Database;
-};
-
-export const getMarksDb = (): D1Database | undefined =>
-  (globalThis as unknown as { __env__?: MarksEnv }).__env__?.RECIPES;
+export const getMarksDb = (): D1Database | undefined => getEnv().RECIPES;
 
 export const readMarkedSlugs = async (
   db: D1Database,

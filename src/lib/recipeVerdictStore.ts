@@ -1,22 +1,9 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { isRecipeVerdict, type RecipeVerdict } from "~/constants/recipeVerdicts.ts";
 import { requireRole } from "~/lib/requireRole.ts";
+import { getEnv } from "~/server/env.ts";
 
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  run: () => Promise<{ meta: { changes: number } }>;
-};
-
-type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-};
-
-type RecipeVerdictEnv = {
-  RECIPES?: D1Database;
-};
-
-const getRecipeVerdictDb = (): D1Database | undefined =>
-  (globalThis as unknown as { __env__?: RecipeVerdictEnv }).__env__?.RECIPES;
+const getRecipeVerdictDb = (): D1Database | undefined => getEnv().RECIPES;
 
 // A plain UPDATE of the one column, so the recipe data itself is never touched.
 // Setting a verdict replaces the previous one; null clears it. Returns false

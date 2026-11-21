@@ -6,9 +6,7 @@ const getContentType = (file: string): string =>
   file.endsWith(".png") ? "image/png" : "image/jpeg";
 
 // Source photos of image recipes live in the same R2 bucket as
-// recipe-images/<slug>.<ext>. `pnpm dev` has no R2 binding, so it reads the
-// gitignored ./recipe-images folder instead. import.meta.env.DEV is replaced
-// at build time, which drops the local reader from the Worker bundle.
+// recipe-images/<slug>.<ext>.
 export const GET = async (event: APIEvent): Promise<Response> => {
   const file = event.params.file;
   if (!RECIPE_IMAGE_FILENAME_PATTERN.test(file)) {
@@ -17,13 +15,6 @@ export const GET = async (event: APIEvent): Promise<Response> => {
 
   const bucket = getMediaBucket();
   if (!bucket) {
-    if (import.meta.env.DEV) {
-      const { readLocalRecipeImage } = await import("~/lib/localRecipeImage.ts");
-      const body = await readLocalRecipeImage(file);
-      return body
-        ? new Response(body, { status: 200, headers: { "content-type": getContentType(file) } })
-        : new Response("Not found", { status: 404 });
-    }
     return new Response("Media storage unavailable", { status: 500 });
   }
 

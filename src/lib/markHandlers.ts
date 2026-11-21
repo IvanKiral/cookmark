@@ -1,13 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server";
 import type { Mark } from "~/constants/markOptions.ts";
 import { getUserEmail } from "~/lib/access.ts";
-import {
-  addMark,
-  type D1Database,
-  getMarksDb,
-  readMarkedSlugs,
-  removeMark,
-} from "~/lib/userMarksStore.ts";
+import { addMark, getMarksDb, readMarkedSlugs, removeMark } from "~/lib/userMarksStore.ts";
 import { getOrCreateUser } from "~/lib/userStore.ts";
 
 type MarkRequest = {

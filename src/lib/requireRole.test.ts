@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTestD1 } from "~/lib/testD1.ts";
 import { hasRole, requireRole } from "./requireRole.ts";
 
@@ -15,33 +15,31 @@ describe("hasRole", () => {
   });
 });
 
-// Requests carry no Access token, so with DEV stubbed on the user is the dev email.
+// Requests carry no Access token, so the user is LOCAL_USER_EMAIL (localhost only).
 describe("requireRole", () => {
   const request = new Request("http://localhost/");
 
-  beforeEach(() => {
-    vi.stubEnv("DEV", true);
-  });
-
   afterEach(() => {
-    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
   it("returns 401 when there is no identity", async () => {
-    vi.stubEnv("DEV", false);
+    vi.stubGlobal("__env__", {});
     const check = await requireRole(request, "viewer");
     expect(check.isAllowed ? undefined : check.response.status).toBe(401);
   });
 
   it("returns 500 when the database binding is missing", async () => {
-    vi.stubGlobal("__env__", {});
+    vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "dev@localhost" });
     const check = await requireRole(request, "viewer");
     expect(check.isAllowed ? undefined : check.response.status).toBe(500);
   });
 
   it("returns 403 for a viewer on an admin action", async () => {
-    vi.stubGlobal("__env__", { RECIPES: createTestD1(["0002_users.sql"]) });
+    vi.stubGlobal("__env__", {
+      RECIPES: createTestD1(["0002_users.sql"]),
+      LOCAL_USER_EMAIL: "dev@localhost",
+    });
     const check = await requireRole(request, "admin");
     expect(check.isAllowed ? undefined : check.response.status).toBe(403);
   });
@@ -51,7 +49,7 @@ describe("requireRole", () => {
     db.raw.exec(
       "INSERT INTO users (email, role, created_at) VALUES ('dev@localhost', 'admin', 'x')",
     );
-    vi.stubGlobal("__env__", { RECIPES: db });
+    vi.stubGlobal("__env__", { RECIPES: db, LOCAL_USER_EMAIL: "dev@localhost" });
     const check = await requireRole(request, "admin");
     expect(check.isAllowed ? check.user : undefined).toEqual({
       email: "dev@localhost",

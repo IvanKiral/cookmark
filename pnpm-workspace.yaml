@@ -1,6 +1,7 @@
 allowBuilds:
   "@parcel/watcher": true
   esbuild: true
+  workerd: true
 
 # vinxi pins h3 to exactly 1.15.3, which has path traversal and request smuggling advisories
 overrides:

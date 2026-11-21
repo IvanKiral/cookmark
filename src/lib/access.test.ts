@@ -61,17 +61,11 @@ describe("verifyAccessToken", () => {
 
 describe("getUserEmail", () => {
   afterEach(() => {
-    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
-  it("uses the dev email when running without Access in development", async () => {
-    vi.stubEnv("DEV", true);
-    expect(await getUserEmail(new Request("http://localhost/"))).toBe("dev@localhost");
-  });
-
-  it("has no identity without a token in production", async () => {
-    vi.stubEnv("DEV", false);
+  it("has no identity without a token or LOCAL_USER_EMAIL", async () => {
+    vi.stubGlobal("__env__", {});
     expect(await getUserEmail(new Request("http://localhost/"))).toBeUndefined();
   });
 
@@ -85,14 +79,12 @@ describe("getUserEmail", () => {
   });
 
   it("uses LOCAL_USER_EMAIL for requests to localhost without a token", async () => {
-    vi.stubEnv("DEV", false);
     vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
     expect(await getUserEmail(new Request("http://localhost:8787/api/me"))).toBe("admin@localhost");
     expect(await getUserEmail(new Request("http://127.0.0.1:8787/api/me"))).toBe("admin@localhost");
   });
 
   it("ignores LOCAL_USER_EMAIL on any other hostname", async () => {
-    vi.stubEnv("DEV", false);
     vi.stubGlobal("__env__", { LOCAL_USER_EMAIL: "admin@localhost" });
     expect(await getUserEmail(new Request("https://cookmark.kiralivan.eu/api/me"))).toBeUndefined();
   });

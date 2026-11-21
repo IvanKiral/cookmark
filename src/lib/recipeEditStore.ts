@@ -1,25 +1,10 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { requireRole } from "~/lib/requireRole.ts";
+import { getEnv } from "~/server/env.ts";
 import type { RecipeData } from "~/types/Recipe.ts";
 import { applyRecipeEdit, parseRecipeEdit, type RecipeEdit } from "~/utils/recipeEdit.ts";
 
-type D1PreparedStatement = {
-  bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
-  first: <T>() => Promise<T | null>;
-  run: () => Promise<unknown>;
-};
-
-type D1Database = {
-  prepare: (query: string) => D1PreparedStatement;
-  batch: (statements: ReadonlyArray<D1PreparedStatement>) => Promise<unknown>;
-};
-
-type RecipeEditEnv = {
-  RECIPES?: D1Database;
-};
-
-const getRecipeEditDb = (): D1Database | undefined =>
-  (globalThis as unknown as { __env__?: RecipeEditEnv }).__env__?.RECIPES;
+const getRecipeEditDb = (): D1Database | undefined => getEnv().RECIPES;
 
 // Saves the current JSON to recipe_revisions and writes the edited JSON in one
 // D1 batch, which is a single transaction. The UPDATE leaves the flag columns

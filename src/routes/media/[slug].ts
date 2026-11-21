@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server";
-import { getMediaBucket, type R2Metadata } from "~/lib/mediaBucket.ts";
+import { getMediaBucket } from "~/lib/mediaBucket.ts";
 
-const buildBaseHeaders = (meta: R2Metadata): Headers => {
+const buildBaseHeaders = (meta: R2Object): Headers => {
   const headers = new Headers();
   meta.writeHttpMetadata(headers);
   headers.set("accept-ranges", "bytes");
