@@ -1,9 +1,9 @@
 import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
 import { type Mark, markValues } from "./markOptions.ts";
 import { recipeVerdictLabels } from "./recipeVerdicts.ts";
-import { type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
+import { NO_VERDICT, type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
 import { strings } from "./strings.ts";
-import { type TagValue, tagValues } from "./tagOptions.ts";
+import { type TagGroupKey, type TagValue, tagGroupDefinitions, tagValues } from "./tagOptions.ts";
 import { type TimeValue, timeValues } from "./timeOptions.ts";
 
 const difficultyLabels: Record<DifficultyValue, string> = {
@@ -23,7 +23,10 @@ const markLabels: Record<Mark, string> = {
   "to-try": strings.marks.toTry,
 };
 
-const recommendedLabels: Record<RecommendedValue, string> = recipeVerdictLabels;
+const recommendedLabels: Record<RecommendedValue, string> = {
+  ...recipeVerdictLabels,
+  [NO_VERDICT]: strings.verdicts.noVerdict,
+};
 
 const tagLabels: Record<TagValue, string> = {
   Chicken: strings.tags.chicken,
@@ -76,25 +79,15 @@ export const tagOptions = tagValues.map((value) => ({
 const buildTagOptions = (values: ReadonlyArray<TagValue>) =>
   values.map((value) => ({ value, label: tagLabels[value] }));
 
-export const tagGroups = [
-  {
-    label: strings.filters.meal,
-    options: buildTagOptions(["Breakfast", "Lunch", "Dinner", "Snack"]),
-  },
-  {
-    label: strings.filters.protein,
-    options: buildTagOptions(["Chicken", "Pork", "Beef", "Fish", "Eggs", "Legumes"]),
-  },
-  {
-    label: strings.filters.type,
-    options: buildTagOptions(["Soup", "Dessert", "Cake", "Meal-prep"]),
-  },
-  {
-    label: strings.filters.method,
-    options: buildTagOptions(["Air-fryer", "Slowcooker"]),
-  },
-  {
-    label: strings.filters.diet,
-    options: buildTagOptions(["Vegan", "Vegetarian", "Lactose-free", "Low-Sugar"]),
-  },
-] as const;
+const tagGroupLabels: Record<TagGroupKey, string> = {
+  meal: strings.filters.meal,
+  protein: strings.filters.protein,
+  type: strings.filters.type,
+  method: strings.filters.method,
+  diet: strings.filters.diet,
+};
+
+export const tagGroups = tagGroupDefinitions.map((group) => ({
+  label: tagGroupLabels[group.key],
+  options: buildTagOptions(group.values),
+}));

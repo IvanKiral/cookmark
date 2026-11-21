@@ -76,9 +76,9 @@ describe("<FilterPanel />", () => {
     expect(counts).toMatchObject({ Meal: "2", Protein: "1", Time: "1", Diet: undefined });
   });
 
-  it("shows options as chips in the drawer layout, still grouped by section", () => {
+  it("shows options as chips, still grouped by section", () => {
     const onTagChange = vi.fn();
-    const { container } = renderPanel({ layout: "chips", tagFilter: ["Beef"], onTagChange });
+    const { container } = renderPanel({ tagFilter: ["Beef"], onTagChange });
 
     expect(readSections(container).map((section) => section.title)).toContain("Meal");
     const beef = screen.getByRole("checkbox", { name: "Beef" });
@@ -92,25 +92,24 @@ describe("<FilterPanel />", () => {
     expect(onTagChange).toHaveBeenCalledWith(["Beef", "Dinner"]);
   });
 
-  it("keeps authors as a list that scrolls on its own only in the sidebar", () => {
-    const { container: sidebar } = renderPanel();
-    const author = (root: HTMLElement) =>
-      screen.getAllByRole("checkbox", { name: "@ana" }).find((box) => root.contains(box));
-    expect(author(sidebar)?.closest("label")?.parentElement?.className).toMatch(/scrollableGroup/);
+  it("keeps chips compact in the sidebar and touch sized in the drawer", () => {
+    const chipClass = () =>
+      screen.getByRole("checkbox", { name: "Pork" }).closest("label")?.className;
+
+    renderPanel();
+    expect(chipClass()).toMatch(/chipCompact/);
     cleanup();
 
-    const { container: drawer } = renderPanel({ layout: "chips" });
-    expect(author(drawer)?.closest("label")?.parentElement?.className).not.toMatch(
-      /scrollableGroup/,
-    );
+    renderPanel({ variant: "drawer" });
+    expect(chipClass()).not.toMatch(/chipCompact/);
   });
 
-  it("shows the first five authors in the drawer and expands to all", () => {
+  it("shows the first five authors and expands to all", () => {
     const authorOptions = Array.from({ length: 8 }, (_, i) => ({
       value: `cook${i + 1}`,
       label: `@cook${i + 1}`,
     }));
-    renderPanel({ layout: "chips", authorOptions, authorFilter: ["cook7"] });
+    renderPanel({ variant: "drawer", authorOptions, authorFilter: ["cook7"] });
 
     const authorBoxes = () => screen.getAllByRole("checkbox", { name: /^@cook/ });
     // The selected author always shows, first, plus the next four.
@@ -133,7 +132,7 @@ describe("<FilterPanel />", () => {
       value: `cook${i + 1}`,
       label: `@cook${i + 1}`,
     }));
-    renderPanel({ layout: "chips", authorOptions });
+    renderPanel({ authorOptions });
 
     fireEvent.input(screen.getByRole("searchbox"), { target: { value: "cook" } });
 

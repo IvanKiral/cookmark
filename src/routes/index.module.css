@@ -259,6 +259,16 @@
     grid-row: 1 / span 2;
     position: sticky;
     top: var(--space-8);
+    /* Scrolls on its own so every section stays reachable while it sticks.
+       The inline padding, offset by the margin, keeps focus rings and row
+       hover backgrounds from being clipped by the overflow. */
+    max-height: calc(100dvh - 2 * var(--space-8));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-inline: var(--space-2);
+    margin-inline: calc(-1 * var(--space-2));
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-300) transparent;
   }
 
   .controls {

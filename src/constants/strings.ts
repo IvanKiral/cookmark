@@ -110,6 +110,7 @@ export const strings = {
     chefApproved: "Chef approved",
     chefOk: "Chef's ok",
     chefFlop: "Chef's flop",
+    noVerdict: "No verdict",
     menuLabel: (name: string, verdict: string) => `Chef's verdict for ${name}: ${verdict}`,
     none: "none",
     clear: "Clear verdict",

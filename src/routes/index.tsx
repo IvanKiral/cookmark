@@ -14,18 +14,25 @@ import {
 } from "~/constants/difficultyOptions.ts";
 import { type Mark, type MarkFilter, markValues } from "~/constants/markOptions.ts";
 import {
+  matchesRecommendedFilter,
   type RecommendedFilter,
   type RecommendedValue,
   recommendedValues,
 } from "~/constants/recommendedOptions.ts";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/constants/sortOptions.ts";
 import { strings } from "~/constants/strings.ts";
-import { type TagFilter, type TagValue, tagValues } from "~/constants/tagOptions.ts";
+import {
+  type TagFilter,
+  type TagValue,
+  tagGroupDefinitions,
+  tagValues,
+} from "~/constants/tagOptions.ts";
 import { type TimeFilter, type TimeValue, timeValues } from "~/constants/timeOptions.ts";
 import { useMarks } from "~/contexts/MarksContext.tsx";
 import { getRecipesList } from "~/lib/recipeQueries.ts";
 import type { Recipe } from "~/types/Recipe.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/utils/deriveAuthors.ts";
+import { matchesTagFilter } from "~/utils/matchesTagFilter.ts";
 import styles from "./index.module.css";
 
 const parseArrayParam = <T extends string>(
@@ -180,7 +187,7 @@ const Home = () => {
           }
         });
       })
-      .filter((recipe) => tags.length === 0 || tags.some((tag) => recipe.tags.includes(tag)))
+      .filter((recipe) => matchesTagFilter(recipe.tags, tags, tagGroupDefinitions))
       .filter(
         (recipe) =>
           authors.length === 0 || (recipe.author !== undefined && authors.includes(recipe.author)),
@@ -190,11 +197,7 @@ const Home = () => {
           markFilter().length === 0 ||
           markFilter().some((mark) => marks.isMarked(mark, recipe.url_slug)),
       )
-      .filter(
-        (recipe) =>
-          recommendedFilter().length === 0 ||
-          (recipe.verdict !== undefined && recommendedFilter().includes(recipe.verdict)),
-      )
+      .filter((recipe) => matchesRecommendedFilter(recipe.verdict, recommendedFilter()))
       .sort(getSortComparator(sort));
   });
 

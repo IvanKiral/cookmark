@@ -74,27 +74,6 @@
   gap: 0;
 }
 
-.scrollableGroup {
-  max-height: 240px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-neutral-300) transparent;
-}
-
-.scrollableGroup::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollableGroup::-webkit-scrollbar-thumb {
-  background-color: var(--color-neutral-300);
-  border-radius: 3px;
-}
-
-.scrollableGroup::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 /* 16px text keeps iPhone Safari from zooming in when the field is focused. */
 .searchInput {
   width: 100%;
@@ -187,7 +166,7 @@
   color: var(--color-neutral-900);
 }
 
-/* Drawer layout: options as wrapping chips, 44px tall for touch. */
+/* Options as wrapping chips, 44px tall for touch in the drawer. */
 .chipGroup {
   display: flex;
   flex-wrap: wrap;
@@ -209,7 +188,21 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.chipSelected {
+/* Sidebar chips: mouse targets, so they can be smaller and fit more per row. */
+.chipCompact {
+  min-height: 2rem;
+  padding: 0 var(--space-3);
+}
+
+@media (hover: hover) {
+  .chip:hover {
+    border-color: var(--color-neutral-500);
+    color: var(--color-neutral-900);
+  }
+}
+
+.chipSelected,
+.chipSelected:hover {
   border-color: var(--color-neutral-900);
   background-color: var(--color-neutral-900);
   color: white;

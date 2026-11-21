@@ -62,7 +62,7 @@ const FilterDrawer: Component<FilterDrawerProps> = (props) => {
 
           <div class={styles.sections}>
             <FilterPanel
-              layout="chips"
+              variant="drawer"
               difficultyFilter={props.difficultyFilter}
               timeFilter={props.timeFilter}
               tagFilter={props.tagFilter}
