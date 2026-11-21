@@ -1,111 +1,75 @@
-# Cookmark 🍳
+# Cookmark
 
-A modern, responsive recipe book web application built with SolidJS/SolidStart.
+A private recipe book. Recipes are written to the database by owl-sight; Cookmark shows them, lets you search and filter them, and keeps everyone's favourites and To try list. Admins can edit recipes, give a chef's verdict and mark recipes to delete.
 
-<p align="center">
-  <img src="./images/cookmark.gif" alt="A GIF showcasing the Cookmark app" width="100%" />
-</p>
+It runs as a Cloudflare Worker (SolidStart) on cookmark.kiralivan.eu, behind Cloudflare Access. Recipes and users live in the D1 database `cookmark-recipes`, and videos, thumbnails and recipe photos in the R2 bucket `cookmark`.
 
-## ✨ Features
+## Local development
 
-- **Fuzzy Search** - Find recipes quickly with intelligent search across titles, ingredients, and tags
-- **Advanced Filtering** - Filter by difficulty level, cooking time, and tags
-- **Static Site Generation** - Optimized for deployment on GitHub Pages
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js 22+ and pnpm 12+ installed on your system (version pinned in `package.json` `packageManager`)
-
-### Development
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/cookmark.git
-cd cookmark
-```
-
-2. Install dependencies:
-```bash
-pnpm install --frozen-lockfile
-```
-
-3. Start the development server:
-```bash
-pnpm dev
-```
-
-4. Open your browser and navigate to `http://localhost:3000/cookmark`
-
-### Local testing with the Cloudflare runtime
-
-`pnpm dev` has no database, so favourites, To try, roles and chef verdicts do not work there. To test them locally, run the production build in Cloudflare's local runtime (`wrangler dev`) against local D1 databases. You need `wrangler` installed and, for `--from-remote`, logged in.
+You need Node 24 and pnpm (the version is pinned in `package.json`).
 
 ```bash
-pnpm local:setup                 # fresh local databases: all migrations, recipes from ./data, admin@localhost as admin
-pnpm local:setup --from-remote   # same, but copies the live recipes (read-only)
-pnpm local:preview               # build and serve http://localhost:8787 signed in as admin@localhost
-LOCAL_USER_EMAIL=someone@localhost pnpm local:preview   # sign in as someone else (a new email is a viewer)
+pnpm install
+pnpm local:setup   # local database: migrations, 10 sample recipes from seed/recipes, admin@localhost as admin
+pnpm dev           # http://localhost:3000, signed in as admin@localhost
 ```
 
-`local:setup` wipes all local D1 data each time. `local:preview` rebuilds on every start, so restart it after code changes. The local sign-in replaces Cloudflare Access and only works on `localhost`.
+- `LOCAL_USER_EMAIL=someone@localhost pnpm dev` signs you in as someone else. A new email is a viewer.
+- `pnpm local:setup --from-remote` copies the live recipes instead of the samples. It only reads from production and needs `wrangler login`.
+- `pnpm local:setup` wipes all local data (users, favourites, edits) every time.
+- The local R2 bucket is empty, so thumbnails, videos and recipe photos do not show locally.
+- `pnpm local:preview` builds the real Worker and runs it on http://localhost:8787. Use it for a last check before deploying.
 
-### Undoing a recipe edit
+Before committing, run `pnpm test`, `pnpm typecheck` and `pnpm biome:check:fix`. CI runs the same checks and a build.
 
-Every admin edit saves the recipe as it was before into `recipe_revisions`. To restore the version before the latest edit of a recipe (replace `<slug>` in both places; use `--local` instead of `--remote` for the local database):
+## Deploying
 
-```bash
-wrangler d1 execute cookmark-recipes --remote --config .output/server/wrangler.json --command \
-  "UPDATE recipes SET data = (SELECT data FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC LIMIT 1) WHERE slug = '<slug>' AND EXISTS (SELECT 1 FROM recipe_revisions WHERE slug = '<slug>')"
-```
-
-List a recipe's history with `SELECT id, edited_by, edited_at FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC`. The undo itself is not recorded as a revision.
-
-### Building for Production
-
-Build the static site for GitHub Pages deployment:
+Deploys are manual:
 
 ```bash
 pnpm build
+pnpm exec wrangler deploy
 ```
 
-The built files will be in the `.output` directory, ready for deployment.
+The Worker reads two secrets, set once with `wrangler secret put`: `ACCESS_TEAM_DOMAIN` (`https://<team>.cloudflareaccess.com`) and `ACCESS_AUD` (the Access application's AUD tag). Without them nobody is signed in.
 
-## 📦 Use as Template
+Worker settings live in `wrangler.jsonc`. After changing its bindings, run `pnpm cf:types` to regenerate `src/server/worker-configuration.d.ts`.
 
-Want to create your own recipe book? Use degit to scaffold a new project from this template:
+## Database changes
+
+Migrations in `migrations/` are applied by wrangler, which records them in the `d1_migrations` table. To add one, create the next numbered file and apply it:
 
 ```bash
-pnpm dlx degit yourusername/cookmark my-recipe-book
-cd my-recipe-book
-pnpm install
+pnpm exec wrangler d1 migrations apply cookmark-recipes --local --config wrangler.jsonc --persist-to .wrangler/state
+pnpm exec wrangler d1 migrations apply cookmark-recipes --remote --config wrangler.jsonc
 ```
 
-## 📝 Adding Recipes
+Always pass `--config wrangler.jsonc`: after a build, wrangler otherwise picks up the generated config in `.output/server`.
 
-Recipes are stored in `src/data/recipes/` as TypeScript files. Each recipe follows a structured format:
+Never write to `recipes` with `INSERT OR REPLACE`. It deletes the row, which resets the verdict and the To delete mark. Use `UPDATE`.
 
-```typescript
-export const myRecipe: Recipe = {
-  slug: "my-recipe",
-  difficulty: "easy",
-  prepTime: 15,
-  cookTime: 30,
-  servings: 4,
-  tags: ["vegetarian", "quick"],
-  // Additional fields defined per locale
-}
+New users are viewers. To make someone an admin:
+
+```bash
+pnpm exec wrangler d1 execute cookmark-recipes --remote --config wrangler.jsonc --command \
+  "UPDATE users SET role = 'admin' WHERE email = '<email>'"
 ```
 
-## 🚢 Deployment
+## Undoing a recipe edit
 
-This project is designed to be deployed as a static site on GitHub Pages. Check [deploy script](./.github/workflows//deploy.yml) to see how it can be deployed.
+Every admin edit stores the previous version of the recipe in `recipe_revisions`. To restore the version before the latest edit (replace `<slug>` in all three places):
 
-## 🤝 Contributing
+```bash
+pnpm exec wrangler d1 execute cookmark-recipes --remote --config wrangler.jsonc --command \
+  "UPDATE recipes SET data = (SELECT data FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC LIMIT 1) WHERE slug = '<slug>' AND EXISTS (SELECT 1 FROM recipe_revisions WHERE slug = '<slug>')"
+```
 
-Contributions are welcome! Feel free to submit issues and pull requests.
+`SELECT id, edited_by, edited_at FROM recipe_revisions WHERE slug = '<slug>' ORDER BY id DESC` lists a recipe's history. The undo itself is not recorded.
 
-## 📄 License
+## Code layout
 
-MIT License - feel free to use this project for your own recipe collection!
+- `src/routes`: pages and API endpoints. They only wire things together.
+- `src/server`: code that runs only in the Worker (D1, R2, Access). Nothing in `src/app` imports it.
+- `src/app`: the UI, one folder per feature. `src/app/api` is the only place that talks to the server.
+- `src/shared`: types and rules used by both sides, such as recipe types, tags and edit validation.
+- `seed/recipes`: the sample recipes for `pnpm local:setup`.

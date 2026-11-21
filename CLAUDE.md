@@ -4,53 +4,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Cookmark is a recipe book web application built with SolidJS/SolidStart. It features internationalization (English/Slovak), fuzzy search, advanced filtering, and mobile-responsive design. The app is deployed as a static site to GitHub Pages.
+Cookmark is a private recipe book built with SolidStart and deployed manually as a Cloudflare Worker behind Cloudflare Access. Recipes live in the D1 database `cookmark-recipes` (written by owl-sight), media in the R2 bucket `cookmark`. See README.md for setup, deploys and database changes.
 
-## Essential Commands
+## Commands
 
-### Development
 ```bash
-pnpm dev          # Start dev server (http://localhost:3000)
-pnpm dev:sk       # Start dev server with Slovak locale
-pnpm build        # Build for production (all locales)
-pnpm local:setup  # Recreate local D1 databases (migrations, recipes, admin@localhost)
-pnpm local:preview # Build and serve via wrangler dev on :8787, signed in as admin@localhost
+pnpm local:setup     # Recreate the local D1 database: migrations, seed/recipes, admin@localhost
+pnpm dev             # Dev server on :3000 with local D1/R2, signed in as LOCAL_USER_EMAIL (default admin@localhost)
+pnpm local:preview   # Build and run the real Worker on :8787
+pnpm build           # Production build (.output)
+pnpm test            # Vitest
+pnpm typecheck
+pnpm biome:check:fix
+pnpm cf:types        # Regenerate src/server/worker-configuration.d.ts after changing wrangler.jsonc
 ```
 
-### Testing & Quality
-```bash
-pnpm test         # Run all tests
-pnpm test:ui      # Run tests with UI
-pnpm test:watch   # Run tests in watch mode
-pnpm lint         # Run Biome linter/formatter
-pnpm lint:fix     # Auto-fix linting issues
-pnpm typecheck    # Run TypeScript type checking
-```
+Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build wrangler otherwise uses the generated `.output/server/wrangler.json`.
 
-## Architecture
+## Structure
 
-### Key Patterns
+- `src/routes`: SolidStart pages (default exports) and API endpoints. Keep them thin: API files only re-export a handler from `src/server`.
+- `src/server`: Worker-only code (D1 stores and handlers, R2 media, Access auth). Read bindings with `getEnv()` from `src/server/env.ts`. `src/app` must never import from here.
+- `src/app/<feature>`: UI grouped by feature (recipe-list, filters, recipe-page, marks, verdicts, admin, user, pwa) plus `ui/` for generic pieces. Each feature has its own `strings.ts`.
+- `src/app/api`: the only bridge to the server: `"use server"` queries and fetch wrappers for `/api/*`.
+- `src/shared`: types and logic used by both sides (recipe types, tags, verdicts, edit validation). It must not import from `app` or `server`, and returns error codes instead of UI text.
+- `migrations/`: D1 migrations, applied with `wrangler d1 migrations apply`.
+- `seed/recipes`: sample recipes for local setup.
 
-1. **Internationalization**: Uses custom i18n system with type-safe translations
-   - Translations in `src/lib/i18n/translations/`
-   - Locale detection and switching via `LocaleProvider`
-   - Build-time locale separation for optimized bundles
+## Conventions
 
-2. **Search & Filtering**: 
-   - Fuzzy search using Fuse.js with weighted fields
-   - Multi-criteria filtering (difficulty, time, tags)
-   - Reactive filtering with SolidJS signals
-
-3. **Component Architecture**:
-   - Functional components with TypeScript
-   - CSS Modules for scoped styling
-   - Comprehensive test coverage with Vitest
-
-## Testing Approach
-
-- Unit tests for utilities and business logic
-- Component tests using SolidJS Testing Library
-- Test files co-located with components (`.test.tsx`)
+- Named exports only. Default exports are allowed only where the framework needs them (route pages, `app.tsx`, entry files, tool configs); Biome enforces this.
+- Imports: `./` for files in the same folder, `~/` for everything else, never `../`. Always use the real `.ts`/`.tsx` extension.
+- All UI text goes in the feature's `strings.ts` so the app can be translated later.
+- `RecipeSummary` is the slim list shape, `Recipe` the full recipe.
+- Tests are co-located (`*.test.ts(x)`). Server store tests run real SQL against the migrations via `src/server/testing/testD1.ts`.
 
 ### Core Principles
 - **Prioritize readability over performance** - Focus on clean, easy-to-understand code
