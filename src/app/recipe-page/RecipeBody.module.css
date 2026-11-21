@@ -1,0 +1,116 @@
+.content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+}
+
+@media (min-width: 1024px) {
+  .content {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-16);
+  }
+}
+
+.sectionTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--space-8) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-neutral-900);
+  display: inline-block;
+}
+
+.ingredientsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ingredientItem {
+  padding: var(--space-3) var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
+  border-bottom: 1px solid var(--color-neutral-100);
+  font-size: var(--text-md);
+  color: var(--color-neutral-800);
+  line-height: 1.5;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s;
+}
+
+.ingredientItem:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.ingredientItem:last-child {
+  border-bottom: none;
+}
+
+.instructionGroup {
+  margin-bottom: var(--space-12);
+}
+
+.instructionGroup:last-child {
+  margin-bottom: 0;
+}
+
+.instructionGroupTitle {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--color-neutral-500);
+  margin: 0 0 var(--space-6) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.instructionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.instructionItem {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-100);
+  border: 1px solid var(--color-neutral-200);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-neutral-700);
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.instructionItem:hover .stepNumber {
+  border-color: var(--color-neutral-500);
+  color: var(--color-neutral-500);
+}
+
+.stepContent {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.stepText {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--color-neutral-800);
+}

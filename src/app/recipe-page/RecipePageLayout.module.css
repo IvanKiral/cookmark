@@ -1,0 +1,82 @@
+.page {
+  min-height: 100vh;
+  background-color: white;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  border-bottom: 1px solid var(--color-neutral-200);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.navInner {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.logo {
+  font-family: var(--font-family-display);
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-900);
+  text-decoration: none;
+}
+
+.navLeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  border-radius: var(--radius-full);
+  color: var(--color-neutral-500);
+  text-decoration: none;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.closeButton {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  margin-left: calc(-1 * var(--space-2));
+}
+
+.navButton:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.main {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .main {
+    padding: var(--space-16) var(--space-6);
+  }
+}

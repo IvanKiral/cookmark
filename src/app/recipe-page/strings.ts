@@ -13,6 +13,7 @@ export const recipePageStrings = {
   notFound: "Recipe not found",
   backToList: "Back to recipes",
   notAvailable: "N/A",
+  unknownDifficulty: "UNKNOWN",
   minutes: (minutes: number) => `${minutes} min`,
   servingsCount: (servings: number) => `${servings} servings`,
 } as const;
