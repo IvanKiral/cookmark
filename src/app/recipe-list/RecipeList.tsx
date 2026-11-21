@@ -1,15 +1,16 @@
 import { type Component, createMemo, For, Show } from "solid-js";
+import { formatMinutes } from "~/app/recipe-page/recipeFormat.ts";
 import { strings } from "~/app/strings.ts";
 import { createMediaQuery } from "~/app/ui/createMediaQuery.ts";
 import { Pagination } from "~/app/ui/Pagination.tsx";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { RecipeCard } from "./RecipeCard.tsx";
 import styles from "./RecipeList.module.css";
 import { RecipeListItem } from "./RecipeListItem.tsx";
 import type { ViewMode } from "./ViewToggle.tsx";
 
 type RecipeListProps = {
-  recipes: ReadonlyArray<Recipe>;
+  recipes: ReadonlyArray<RecipeSummary>;
   currentPage: number;
   viewMode: ViewMode;
   onPageChange: (details: { page: number }) => void;
@@ -77,7 +78,7 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
                   urlSlug={recipe.url_slug}
                   name={recipe.name}
                   difficulty={recipe.difficulty}
-                  time={recipe.time}
+                  time={formatMinutes(recipe.total_time)}
                   verdict={recipe.verdict}
                 />
               )}
@@ -93,7 +94,7 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
                 name={recipe.name}
                 imageUrl={recipe.image_url}
                 difficulty={recipe.difficulty}
-                time={recipe.time}
+                time={formatMinutes(recipe.total_time)}
                 verdict={recipe.verdict}
               />
             )}

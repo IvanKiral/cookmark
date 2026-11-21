@@ -1,15 +1,13 @@
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { SearchBar } from "./SearchBar.tsx";
 
-const mockRecipes: Recipe[] = [
+const mockRecipes: RecipeSummary[] = [
   {
-    id: "1",
     url_slug: "lemon_herb_chicken",
     name: "Lemon Herb Chicken",
     difficulty: "Medium",
-    time: "35 min",
     total_time: 35,
     tags: ["chicken", "herbs"],
     ingredients: [],
@@ -18,11 +16,9 @@ const mockRecipes: Recipe[] = [
     created_at: "2024-01-01T00:00:00.000Z",
   },
   {
-    id: "2",
     url_slug: "quinoa_salad",
     name: "Quinoa Salad",
     difficulty: "Easy",
-    time: "20 min",
     total_time: 20,
     tags: ["quinoa", "salad"],
     ingredients: [],
@@ -31,11 +27,9 @@ const mockRecipes: Recipe[] = [
     created_at: "2024-01-02T00:00:00.000Z",
   },
   {
-    id: "3",
     url_slug: "chicken_caesar_salad",
     name: "Chicken Caesar Salad",
     difficulty: "Easy",
-    time: "15 min",
     total_time: 15,
     tags: ["chicken", "salad"],
     ingredients: [],

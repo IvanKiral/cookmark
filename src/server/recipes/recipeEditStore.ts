@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { requireRole } from "~/server/auth/requireRole.ts";
 import { getEnv } from "~/server/env.ts";
-import type { RecipeData } from "~/shared/recipe.ts";
+import type { Recipe } from "~/shared/recipe.ts";
 import { applyRecipeEdit, parseRecipeEdit, type RecipeEdit } from "~/shared/recipeEdit.ts";
 
 const getRecipeEditDb = (): D1Database | undefined => getEnv().RECIPES;
@@ -23,7 +23,7 @@ export const updateRecipe = async (
   if (!row) {
     return false;
   }
-  const edited = applyRecipeEdit(JSON.parse(row.data) as RecipeData, edit);
+  const edited = applyRecipeEdit(JSON.parse(row.data) as Recipe, edit);
   await db.batch([
     db
       .prepare(

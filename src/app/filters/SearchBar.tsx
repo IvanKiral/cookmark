@@ -1,9 +1,9 @@
 import { strings } from "~/app/strings.ts";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import styles from "./SearchBar.module.css";
 
 type SearchBarProps = {
-  recipes: Recipe[];
+  recipes: RecipeSummary[];
   searchQuery: string;
   onSearchChange: (query: string) => void;
 };

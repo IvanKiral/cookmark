@@ -1,14 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { buildAuthorOptions, deriveAuthors } from "./deriveAuthors.ts";
 
-const makeRecipe = (author?: string): Recipe => ({
-  id: "1",
+const makeRecipe = (author?: string): RecipeSummary => ({
   url_slug: "slug",
   name: "Recipe",
   description: "",
   difficulty: "Easy",
-  time: "10 min",
   total_time: 10,
   tags: [],
   ingredients: [],

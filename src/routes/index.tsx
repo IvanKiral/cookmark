@@ -26,7 +26,7 @@ import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sort
 import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
 import { strings } from "~/app/strings.ts";
 import { type Mark, type MarkFilter, markValues } from "~/shared/marks.ts";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { type TagFilter, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
 import styles from "./index.module.css";
 
@@ -119,29 +119,29 @@ const Home = () => {
   const getSortComparator = (sortBy: SortValue) => {
     switch (sortBy) {
       case "date-desc":
-        return (a: Recipe, b: Recipe) => b.created_at.localeCompare(a.created_at);
+        return (a: RecipeSummary, b: RecipeSummary) => b.created_at.localeCompare(a.created_at);
       case "date-asc":
-        return (a: Recipe, b: Recipe) => a.created_at.localeCompare(b.created_at);
+        return (a: RecipeSummary, b: RecipeSummary) => a.created_at.localeCompare(b.created_at);
       case "name-asc":
-        return (a: Recipe, b: Recipe) => a.name.localeCompare(b.name);
+        return (a: RecipeSummary, b: RecipeSummary) => a.name.localeCompare(b.name);
       case "name-desc":
-        return (a: Recipe, b: Recipe) => b.name.localeCompare(a.name);
+        return (a: RecipeSummary, b: RecipeSummary) => b.name.localeCompare(a.name);
       case "time-asc":
-        return (a: Recipe, b: Recipe) => a.total_time - b.total_time;
+        return (a: RecipeSummary, b: RecipeSummary) => a.total_time - b.total_time;
       case "time-desc":
-        return (a: Recipe, b: Recipe) => b.total_time - a.total_time;
+        return (a: RecipeSummary, b: RecipeSummary) => b.total_time - a.total_time;
       case "difficulty-easy": {
         const difficultyOrder = { Easy: 0, Medium: 1, Hard: 2, Unknown: 3 };
-        return (a: Recipe, b: Recipe) =>
+        return (a: RecipeSummary, b: RecipeSummary) =>
           difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
       }
       case "difficulty-hard": {
         const difficultyOrderReverse = { Hard: 0, Medium: 1, Easy: 2, Unknown: 3 };
-        return (a: Recipe, b: Recipe) =>
+        return (a: RecipeSummary, b: RecipeSummary) =>
           difficultyOrderReverse[a.difficulty] - difficultyOrderReverse[b.difficulty];
       }
       default:
-        return (a: Recipe, b: Recipe) => b.created_at.localeCompare(a.created_at);
+        return (a: RecipeSummary, b: RecipeSummary) => b.created_at.localeCompare(a.created_at);
     }
   };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { RecipeData } from "./recipe.ts";
+import type { Recipe } from "./recipe.ts";
 import { applyRecipeEdit, getInitialRecipeEdit, parseRecipeEdit } from "./recipeEdit.ts";
 
 const validBody = {
@@ -17,7 +17,7 @@ const validBody = {
   instructions: [{ name: "Main", steps: [" Boil ", "Serve"] }],
 };
 
-const recipe: RecipeData = {
+const recipe: Recipe = {
   title: "Old soup",
   description: "Old",
   prep_time: 5,
@@ -173,9 +173,9 @@ describe("getInitialRecipeEdit lists", () => {
       ...recipe,
       ingredients: [
         { name: "Oregano", amount: 0.5, unit: null },
-        { name: "Salt" } as unknown as RecipeData["ingredients"][number],
+        { name: "Salt" } as unknown as Recipe["ingredients"][number],
       ],
-      instructions: null as unknown as RecipeData["instructions"],
+      instructions: null as unknown as Recipe["instructions"],
     });
     expect(edit.ingredients).toEqual([
       { name: "Oregano", amount: "0.5", unit: "" },

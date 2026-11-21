@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import type { JSX } from "solid-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { RecipeList } from "./RecipeList.tsx";
 
 vi.mock("@solidjs/router", () => ({
@@ -25,13 +25,11 @@ vi.mock("~/app/marks/MarksContext.tsx", () => ({
 // jsdom has no matchMedia; the card page size depends on the wide-grid query.
 const media = { isWide: false };
 
-const createCardRecipes = (count: number): ReadonlyArray<Recipe> =>
+const createCardRecipes = (count: number): ReadonlyArray<RecipeSummary> =>
   Array.from({ length: count }, (_, i) => ({
-    id: `${i + 1}`,
     url_slug: `recipe_${i + 1}`,
     name: `Recipe ${i + 1}`,
     difficulty: "Easy",
-    time: "30 min",
     total_time: 30,
     tags: ["test"],
     ingredients: [],
@@ -93,12 +91,10 @@ describe("<RecipeList />", () => {
   };
 
   it("renders first page of recipes with pagination", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 20 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -120,12 +116,10 @@ describe("<RecipeList />", () => {
   });
 
   it("calls onPageChange when next is clicked", async () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 20 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -151,12 +145,10 @@ describe("<RecipeList />", () => {
   });
 
   it("renders correct page when currentPage prop changes", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 20 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -181,12 +173,10 @@ describe("<RecipeList />", () => {
   });
 
   it("does not show pagination for 15 or fewer recipes", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 15 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 15 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -203,12 +193,10 @@ describe("<RecipeList />", () => {
   });
 
   it("renders different recipes when recipe list changes", () => {
-    const mockRecipes1: ReadonlyArray<Recipe> = Array.from({ length: 3 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes1: ReadonlyArray<RecipeSummary> = Array.from({ length: 3 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -233,12 +221,10 @@ describe("<RecipeList />", () => {
     unmount();
     cleanup();
 
-    const mockRecipes2: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 10}`,
+    const mockRecipes2: ReadonlyArray<RecipeSummary> = Array.from({ length: 20 }, (_, i) => ({
       url_slug: `new_recipe_${i + 10}`,
       name: `New Recipe ${i + 10}`,
       difficulty: "Medium",
-      time: "45 min",
       total_time: 45,
       tags: ["new"],
       ingredients: [],
@@ -262,12 +248,10 @@ describe("<RecipeList />", () => {
   });
 
   it("renders recipe thumbnails and hides column header in card view", () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 3 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 3 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],
@@ -312,12 +296,10 @@ describe("<RecipeList />", () => {
   });
 
   it("scrolls to top when page changes", async () => {
-    const mockRecipes: ReadonlyArray<Recipe> = Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 1}`,
+    const mockRecipes: ReadonlyArray<RecipeSummary> = Array.from({ length: 20 }, (_, i) => ({
       url_slug: `recipe_${i + 1}`,
       name: `Recipe ${i + 1}`,
       difficulty: "Easy",
-      time: "30 min",
       total_time: 30,
       tags: ["test"],
       ingredients: [],

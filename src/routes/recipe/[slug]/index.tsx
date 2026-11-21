@@ -6,6 +6,7 @@ import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
 import { RecipeImage } from "~/app/recipe-page/RecipeImage.tsx";
 import { RecipeVideo } from "~/app/recipe-page/RecipeVideo.tsx";
+import { formatMinutes } from "~/app/recipe-page/recipeFormat.ts";
 import { strings } from "~/app/strings.ts";
 import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
@@ -27,13 +28,6 @@ const RecipePage: Component = () => {
   const backHref = (): string => {
     const state = location.state as RecipeNavState | null;
     return state?.fromSearch ? `/${state.fromSearch}` : "/";
-  };
-
-  const formatTime = (time: number | null): string => {
-    if (!time) {
-      return "N/A";
-    }
-    return `${time} min`;
   };
 
   const formatServings = (servings: number | null): string => {
@@ -158,12 +152,12 @@ const RecipePage: Component = () => {
                   <Show when={recipeData().prep_time}>
                     <div class={styles.metaItem}>
                       <span class={styles.metaLabel}>{strings.recipe.prep}</span>
-                      <span class={styles.metaValue}>{formatTime(recipeData().prep_time)}</span>
+                      <span class={styles.metaValue}>{formatMinutes(recipeData().prep_time)}</span>
                     </div>
                   </Show>
                   <div class={styles.metaItem}>
                     <span class={styles.metaLabel}>{strings.recipe.total}</span>
-                    <span class={styles.metaValue}>{formatTime(recipeData().total_time)}</span>
+                    <span class={styles.metaValue}>{formatMinutes(recipeData().total_time)}</span>
                   </div>
                   <div class={styles.metaItem}>
                     <span class={styles.metaLabel}>{strings.recipe.servings}</span>

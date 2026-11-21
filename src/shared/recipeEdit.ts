@@ -1,5 +1,5 @@
 import { strings } from "~/app/strings.ts";
-import type { Ingredient, InstructionSection, RecipeData } from "./recipe.ts";
+import type { Ingredient, InstructionSection, Recipe } from "./recipe.ts";
 import { type TagValue, tagValues } from "./tags.ts";
 
 // The recipe fields an admin can edit. Shared by the edit form (instant
@@ -212,7 +212,7 @@ export const parseRecipeEdit = (input: unknown): RecipeEditResult => {
 
 // Only the edited fields change; source, video, author, servings, difficulty
 // and dates are kept as they are.
-export const applyRecipeEdit = (data: RecipeData, edit: RecipeEdit): RecipeData => ({
+export const applyRecipeEdit = (data: Recipe, edit: RecipeEdit): Recipe => ({
   ...data,
   title: edit.title,
   description: edit.description,
@@ -228,7 +228,7 @@ export const applyRecipeEdit = (data: RecipeData, edit: RecipeEdit): RecipeData 
 // cook when either is known. Amounts become text for the input (2 -> "2").
 // Tags outside the known list are dropped (none exist in production as of
 // the 0007 migration). Older recipe JSON may omit fields, hence the ?? fallbacks.
-export const getInitialRecipeEdit = (data: RecipeData): RecipeEdit => {
+export const getInitialRecipeEdit = (data: Recipe): RecipeEdit => {
   const prepTime = data.prep_time ?? null;
   const cookTime = data.cook_time ?? null;
   const hasPartTimes = prepTime !== null || cookTime !== null;

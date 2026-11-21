@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { RecipeData } from "./recipe.ts";
+import type { Recipe } from "./recipe.ts";
 import {
   getRecipeImageUrl,
   getSourceImageUrl,
   RECIPE_IMAGE_FILENAME_PATTERN,
 } from "./recipeImage.ts";
 
-const baseRecipe: RecipeData = {
+const baseRecipe: Recipe = {
   title: "Recipe",
   description: "",
   prep_time: null,
@@ -21,7 +21,7 @@ const baseRecipe: RecipeData = {
   source_url: "https://example.com/recipe",
 };
 
-const imageRecipe: RecipeData = {
+const imageRecipe: Recipe = {
   ...baseRecipe,
   source_url: undefined,
   source_type: "image",

@@ -1,15 +1,15 @@
 import { query, revalidate } from "@solidjs/router";
-import type { Recipe, RecipeData } from "~/shared/recipe.ts";
+import type { Recipe, RecipeSummary } from "~/shared/recipe.ts";
 
 // The server modules are imported inside the "use server" functions, so none
 // of their code (D1 access, the dev-only wrangler setup) reaches the client.
-export const getRecipesList = query(async (): Promise<Recipe[]> => {
+export const getRecipesList = query(async (): Promise<RecipeSummary[]> => {
   "use server";
   const { loadRecipesFromSource } = await import("~/server/recipes/recipeSource.ts");
   return loadRecipesFromSource();
 }, "recipes-list");
 
-export const getRecipeBySlug = query(async (slug: string): Promise<RecipeData | undefined> => {
+export const getRecipeBySlug = query(async (slug: string): Promise<Recipe | undefined> => {
   "use server";
   const { loadRecipeDataFromSource } = await import("~/server/recipes/recipeSource.ts");
   return loadRecipeDataFromSource(slug);

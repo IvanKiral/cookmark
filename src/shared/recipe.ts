@@ -28,7 +28,9 @@ export type RecipeSourceFile = {
   mime_type: "image/jpeg" | "image/png" | "application/pdf";
 };
 
-export type RecipeData = {
+// A full recipe: the JSON stored in recipes.data (written by owl-sight) plus
+// the columns the app keeps next to it.
+export type Recipe = {
   title: string;
   description: string;
   prep_time: number | null;
@@ -52,13 +54,13 @@ export type RecipeData = {
   should_delete?: boolean;
 };
 
-export type Recipe = {
-  id: string;
+// What the recipe list needs of every recipe, derived from Recipe on the
+// server so the home page does not load full recipes.
+export type RecipeSummary = {
   url_slug: string;
   name: string;
   description: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
-  time: string;
   total_time: number;
   tags: ReadonlyArray<string>;
   ingredients: ReadonlyArray<string>;

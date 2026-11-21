@@ -1,11 +1,11 @@
-import type { Recipe } from "~/shared/recipe.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 
 export type AuthorOption = {
   value: string;
   label: string;
 };
 
-export const deriveAuthors = (recipes: ReadonlyArray<Recipe>): ReadonlyArray<string> => {
+export const deriveAuthors = (recipes: ReadonlyArray<RecipeSummary>): ReadonlyArray<string> => {
   const unique = new Set<string>();
   for (const recipe of recipes) {
     if (recipe.author) {
@@ -15,5 +15,7 @@ export const deriveAuthors = (recipes: ReadonlyArray<Recipe>): ReadonlyArray<str
   return [...unique].sort((a, b) => a.localeCompare(b));
 };
 
-export const buildAuthorOptions = (recipes: ReadonlyArray<Recipe>): ReadonlyArray<AuthorOption> =>
+export const buildAuthorOptions = (
+  recipes: ReadonlyArray<RecipeSummary>,
+): ReadonlyArray<AuthorOption> =>
   deriveAuthors(recipes).map((author) => ({ value: author, label: `@${author}` }));
