@@ -1,24 +1,7 @@
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
 import { getRecipeImageUrl } from "~/utils/recipeImage.ts";
 
-// Injected at build time (see app.config.ts) with the slugs that have a video.
-declare const __VIDEO_SLUGS__: ReadonlyArray<string>;
-
-const videoSlugs = new Set<string>(__VIDEO_SLUGS__);
-
 const FALLBACK_CREATED_AT = "1970-01-01T00:00:00.000Z";
-
-// Local bundle of recipes, used as a fallback when the R2 binding is absent
-// (e.g. `pnpm dev` and static prerender builds).
-const recipeModules = import.meta.glob<RecipeData>("../../data/*.json", {
-  eager: true,
-  import: "default",
-});
-
-const extractSlugFromPath = (filePath: string): string => {
-  const filename = filePath.split("/").pop() || "";
-  return filename.replace(".json", "");
-};
 
 const capitalizeFirstLetter = (str: string | null): string => {
   if (!str) {
@@ -42,15 +25,3 @@ export const transformRecipeData = (data: RecipeData, slug: string, index: numbe
   created_at: data.created_at || FALLBACK_CREATED_AT,
   verdict: data.verdict,
 });
-
-export const bundleRecipes = (): Recipe[] =>
-  Object.entries(recipeModules).map(([path, data], index) =>
-    transformRecipeData(data, extractSlugFromPath(path), index),
-  );
-
-export const bundleRecipeData = (slug: string): RecipeData | undefined => {
-  const entry = Object.entries(recipeModules).find(([path]) => extractSlugFromPath(path) === slug);
-  return entry?.[1];
-};
-
-export const bundleHasVideo = (slug: string): boolean => videoSlugs.has(slug);

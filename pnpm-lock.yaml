@@ -218,9 +218,6 @@ importers:
       jsdom:
         specifier: ^25.0.1
         version: 25.0.1(supports-color@10.2.2)
-      rollup-plugin-visualizer:
-        specifier: ^7.1.1
-        version: 7.1.1(rollup@4.63.4)
       solid-js:
         specifier: ^1.9.15
         version: 1.9.15

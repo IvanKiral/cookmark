@@ -1,13 +1,7 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTestD1, type TestD1 } from "~/lib/testD1.ts";
-
-// Normally injected at build time by app.config.ts; loadRecipes reads it on import.
-vi.hoisted(() => {
-  (globalThis as unknown as { __VIDEO_SLUGS__: ReadonlyArray<string> }).__VIDEO_SLUGS__ = [];
-});
-
-const { loadRecipeDataFromSource, loadRecipesFromSource } = await import("./recipeSource.ts");
+import { loadRecipeDataFromSource, loadRecipesFromSource } from "./recipeSource.ts";
 
 const recipeJson = (title: string): string =>
   JSON.stringify({

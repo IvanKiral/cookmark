@@ -1,11 +1,6 @@
 import type { RecipeVerdict } from "~/constants/recipeVerdicts.ts";
 import type { Recipe, RecipeData } from "~/types/Recipe.ts";
-import {
-  bundleHasVideo,
-  bundleRecipeData,
-  bundleRecipes,
-  transformRecipeData,
-} from "~/utils/loadRecipes.ts";
+import { transformRecipeData } from "~/utils/loadRecipes.ts";
 
 type D1PreparedStatement = {
   bind: (...values: ReadonlyArray<unknown>) => D1PreparedStatement;
@@ -35,8 +30,6 @@ type SourceEnv = {
 
 const getEnv = (): SourceEnv => (globalThis as unknown as { __env__?: SourceEnv }).__env__ ?? {};
 
-// D1 reads can throw (e.g. missing table in an unseeded local dev DB), so any
-// failure falls back to the bundled recipes rather than crashing the render.
 // The flag columns win over anything in the source JSON.
 const toRecipeData = (row: Omit<RecipeRow, "slug">): RecipeData => ({
   ...(JSON.parse(row.data) as RecipeData),
@@ -44,47 +37,37 @@ const toRecipeData = (row: Omit<RecipeRow, "slug">): RecipeData => ({
   should_delete: row.should_delete === 1,
 });
 
-const readRecipesFromDb = async (db: D1Database): Promise<Recipe[] | undefined> => {
-  try {
-    const { results } = await db
-      .prepare("SELECT slug, data, verdict, should_delete FROM recipes")
-      .all<RecipeRow>();
-    if (results.length === 0) {
-      return undefined;
-    }
-    return results.map((row, index) => transformRecipeData(toRecipeData(row), row.slug, index));
-  } catch {
-    return undefined;
+const getRecipesDb = (): D1Database => {
+  const db = getEnv().RECIPES;
+  if (!db) {
+    throw new Error("The RECIPES database binding is missing");
   }
-};
-
-const readRecipeFromDb = async (db: D1Database, slug: string): Promise<RecipeData | undefined> => {
-  try {
-    const row = await db
-      .prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = ?")
-      .bind(slug)
-      .first<Omit<RecipeRow, "slug">>();
-    return row ? toRecipeData(row) : undefined;
-  } catch {
-    return undefined;
-  }
+  return db;
 };
 
 export const loadRecipesFromSource = async (): Promise<Recipe[]> => {
-  const db = getEnv().RECIPES;
-  const fromDb = db ? await readRecipesFromDb(db) : undefined;
-  return fromDb ?? bundleRecipes();
+  const { results } = await getRecipesDb()
+    .prepare("SELECT slug, data, verdict, should_delete FROM recipes")
+    .all<RecipeRow>();
+  return results.map((row, index) => transformRecipeData(toRecipeData(row), row.slug, index));
+};
+
+const hasVideo = async (slug: string): Promise<boolean> => {
+  const media = getEnv().MEDIA;
+  if (!media) {
+    return false;
+  }
+  return (await media.head(`videos/${slug}.mp4`)) !== null;
 };
 
 export const loadRecipeDataFromSource = async (slug: string): Promise<RecipeData | undefined> => {
-  const env = getEnv();
-  const fromDb = env.RECIPES ? await readRecipeFromDb(env.RECIPES, slug) : undefined;
-  const data = fromDb ?? bundleRecipeData(slug);
-  if (!data) {
+  const row = await getRecipesDb()
+    .prepare("SELECT data, verdict, should_delete FROM recipes WHERE slug = ?")
+    .bind(slug)
+    .first<Omit<RecipeRow, "slug">>();
+  if (!row) {
     return undefined;
   }
-  const hasVideo = env.MEDIA
-    ? (await env.MEDIA.head(`videos/${slug}.mp4`)) !== null
-    : bundleHasVideo(slug);
-  return hasVideo ? { ...data, video_url: `/media/${slug}` } : data;
+  const data = toRecipeData(row);
+  return (await hasVideo(slug)) ? { ...data, video_url: `/media/${slug}` } : data;
 };

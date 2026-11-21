@@ -8,13 +8,8 @@ import { CurrentUserProvider } from "./contexts/CurrentUserContext.jsx";
 import { MarksProvider } from "./contexts/MarksContext.jsx";
 
 export default function App() {
-  const base = import.meta.env.VITE_BASE_URL ?? "/";
-  // Router base must not have a trailing slash; "/" collapses to "" (root).
-  const routerBase = base.endsWith("/") ? base.slice(0, -1) : base;
-
   return (
     <Router
-      base={routerBase}
       root={(props) => (
         <MetaProvider>
           <Title>Cookmark</Title>
@@ -34,11 +29,11 @@ export default function App() {
               <Suspense>{props.children}</Suspense>
             </MarksProvider>
           </CurrentUserProvider>
-          <Link rel="icon" href={`${base}favicon.ico`} />
-          <Link rel="icon" type="image/png" href={`${base}favicon-96x96.png`} sizes="96x96" />
-          <Link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-          <Link rel="apple-touch-icon" sizes="180x180" href={`${base}apple-touch-icon.png`} />
-          <Link rel="manifest" href={`${base}site.webmanifest`} />
+          <Link rel="icon" href="/favicon.ico" />
+          <Link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+          <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <Link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+          <Link rel="manifest" href="/site.webmanifest" />
         </MetaProvider>
       )}
     >

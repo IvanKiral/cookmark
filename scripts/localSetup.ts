@@ -28,7 +28,6 @@ const migrationsByDatabase: Record<string, ReadonlyArray<string>> = {
     "0007_recipe_revisions.sql",
     "0008_recipes_verdict.sql",
   ],
-  "cookmark-recipe-inbox": ["0001_recipe_inbox.sql"],
 };
 
 const isFromRemote = process.argv.includes("--from-remote");

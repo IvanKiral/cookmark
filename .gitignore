@@ -26,12 +26,10 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
-bundle-report.html
+*.log
 
-# local media source (uploaded to R2, not committed)
-videos/
-/recipe-images/
-
-# local recipe data (sourced from the data branch / R2, not committed)
+# Local copies of production data (recipes, media), never committed
 data/
 data.local-backup/
+videos/
+/recipe-images/

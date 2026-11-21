@@ -1,32 +1,9 @@
 import { defineConfig } from "@solidjs/start/config";
-import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
-import { getPrerenderRoutes } from "./scripts/getPrerenderRoutes.ts";
-import { getVideoSlugs } from "./scripts/getVideoSlugs.ts";
-
-// Single source of truth for the deploy base path (trailing slash included).
-// GitHub Pages (project site) sets it to "/cookmark/"; Cloudflare Pages (root) uses "/".
-const basePath = process.env.VITE_BASE_URL ?? "/";
-
-// The static GitHub Pages build prerenders every recipe from the local bundle.
-// Cloudflare serves recipes dynamically from R2, so it renders on demand.
-const isStaticBuild = process.env.SERVER_PRESET === "github-pages";
-
-// Baked into the bundle so recipe pages know which slugs have a video to stream.
-const videoSlugs = getVideoSlugs();
 
 export default defineConfig({
   vite: {
-    define: {
-      __VIDEO_SLUGS__: JSON.stringify(videoSlugs),
-    },
     plugins: [
-      visualizer({
-        filename: "bundle-report.html",
-        template: "treemap",
-        gzipSize: true,
-        brotliSize: true,
-      }) as unknown as import("vite").PluginOption,
       VitePWA({
         registerType: "autoUpdate",
         devOptions: {
@@ -69,18 +46,18 @@ export default defineConfig({
           theme_color: "#ffffff",
           background_color: "#ffffff",
           display: "standalone",
-          scope: basePath,
-          start_url: basePath,
+          scope: "/",
+          start_url: "/",
           categories: ["food", "lifestyle"],
           icons: [
             {
-              src: `${basePath}web-app-manifest-192x192.png`,
+              src: "/web-app-manifest-192x192.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "maskable any",
             },
             {
-              src: `${basePath}web-app-manifest-512x512.png`,
+              src: "/web-app-manifest-512x512.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable any",
@@ -91,8 +68,8 @@ export default defineConfig({
               name: "Search Recipes",
               short_name: "Search",
               description: "Search for recipes",
-              url: basePath,
-              icons: [{ src: `${basePath}favicon-96x96.png`, sizes: "96x96" }],
+              url: "/",
+              icons: [{ src: "/favicon-96x96.png", sizes: "96x96" }],
             },
           ],
         },
@@ -100,24 +77,9 @@ export default defineConfig({
     ],
   },
   server: {
-    // Default target is a Cloudflare Worker with Static Assets: it serves the
-    // prerendered site for free and runs dynamic routes (e.g. media streamed
-    // from R2). GitHub Pages builds pass SERVER_PRESET=github-pages for a pure
-    // static site (no server runtime).
-    preset: process.env.SERVER_PRESET ?? "cloudflare_module",
-    // A literal "/" here makes the server-function mount resolve to "//_server"
-    // (a protocol-relative URL), so only set baseURL for a real sub-path.
-    baseURL: basePath === "/" ? undefined : basePath,
-    prerender: {
-      routes: isStaticBuild ? (getPrerenderRoutes(basePath) as string[]) : [],
-    },
-    // Runtime-only routes (R2 streaming, per-user favourites) — never prerender.
-    routeRules: {
-      "/media/**": { prerender: false },
-      "/thumbnails/**": { prerender: false },
-      "/recipe-images/**": { prerender: false },
-      "/api/**": { prerender: false },
-    },
+    // A Cloudflare Worker with Static Assets: it serves the client assets and
+    // renders pages and API routes on demand.
+    preset: "cloudflare_module",
     // Merged into the wrangler config nitro generates at .output/server.
     // The ASSETS binding and `main` are added automatically by the preset.
     cloudflare: {
@@ -141,11 +103,6 @@ export default defineConfig({
         // (thumbnails/<slug>.jpg) and image recipe sources (recipe-images/<slug>.<ext>).
         r2_buckets: [{ binding: "MEDIA", bucket_name: "cookmark" }],
         d1_databases: [
-          {
-            binding: "RECIPE_INBOX",
-            database_name: "cookmark-recipe-inbox",
-            database_id: "aa058d7c-4a35-4b14-9d67-5e799eff98ba",
-          },
           // Recipes plus users and their per-user recipe marks (favourites).
           {
             binding: "RECIPES",
