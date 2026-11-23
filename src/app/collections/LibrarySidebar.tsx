@@ -14,8 +14,11 @@ type LibrarySidebarProps = {
   onSelectPlace: (place: Place) => void;
   // The "+" next to the Collections heading.
   headingAction?: JSX.Element;
-  // Replaces a collection's row, e.g. while it is renamed.
-  renderCollection?: (collection: Collection, row: JSX.Element) => JSX.Element;
+  // Double-click on a collection.
+  onRenameCollection?: (collection: Collection) => void;
+  // Shown instead of the row of the collection being renamed.
+  renamingId?: string;
+  renderRename?: (collection: Collection) => JSX.Element;
   // Below the list, e.g. the inline create input.
   footer?: JSX.Element;
 };
@@ -81,20 +84,23 @@ export const LibrarySidebar: Component<LibrarySidebarProps> = (props) => {
         <For each={props.collections}>
           {(collection) => {
             const place: Place = { kind: "collection", id: collection.id };
-            const row = (
-              <SidebarItem
-                place={place}
-                icon={collectionIcon(collection)}
-                label={collection.name}
-                count={props.countOf(place)}
-                isCurrent={isSamePlace(props.place, place)}
-                title={collectionStrings.header.doubleClickToRename}
-                onSelect={() => props.onSelectPlace(place)}
-              />
-            );
             return (
-              <Show when={props.renderCollection} fallback={row}>
-                {(render) => render()(collection, row)}
+              <Show
+                when={props.renamingId === collection.id && props.renderRename}
+                fallback={
+                  <SidebarItem
+                    place={place}
+                    icon={collectionIcon(collection)}
+                    label={collection.name}
+                    count={props.countOf(place)}
+                    isCurrent={isSamePlace(props.place, place)}
+                    title={collectionStrings.header.doubleClickToRename}
+                    onSelect={() => props.onSelectPlace(place)}
+                    onDoubleClick={() => props.onRenameCollection?.(collection)}
+                  />
+                }
+              >
+                {(renderRename) => renderRename()(collection)}
               </Show>
             );
           }}

@@ -301,7 +301,10 @@
     display: none;
   }
 
-  .placeTitle,
+  .placeTitle {
+    display: flex;
+  }
+
   .activeFilters {
     display: block;
   }
@@ -309,4 +312,60 @@
   .filterPanel {
     display: flex;
   }
+}
+
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .phoneOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: inline;
+  }
+}
+
+.placeTitle {
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.placeTitleText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.placeNameInput {
+  font-family: var(--font-family-display);
+  font-size: 28px;
+}
+
+.placeActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sidebarAdd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+}
+
+.sidebarAdd:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
 }

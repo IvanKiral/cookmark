@@ -11,6 +11,8 @@ type ConfirmDialogProps = {
   description: string;
   confirmLabel: string;
   cancelLabel?: string;
+  // A red confirm button, for deletions.
+  isDestructive?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -47,7 +49,7 @@ export const ConfirmDialog: Component<ConfirmDialogProps> = (props) => {
               </button>
               <button
                 type="button"
-                class={`${buttonStyles.button} ${buttonStyles.primary}`}
+                class={`${buttonStyles.button} ${props.isDestructive ? buttonStyles.danger : buttonStyles.primary}`}
                 onClick={() => props.onConfirm()}
               >
                 {props.confirmLabel}

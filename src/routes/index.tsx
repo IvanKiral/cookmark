@@ -1,10 +1,18 @@
+import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, Loading, Show } from "solid-js";
 import { getRecipesList } from "~/app/api/recipeQueries.ts";
 import { CollectionChips } from "~/app/collections/CollectionChips.tsx";
+import { CollectionHeaderCard } from "~/app/collections/CollectionHeaderCard.tsx";
+import { CollectionMenu } from "~/app/collections/CollectionMenu.tsx";
+import { CollectionMenuSheet } from "~/app/collections/CollectionMenuSheet.tsx";
 import { useCollections } from "~/app/collections/CollectionsContext.tsx";
 import { CollectionsSheet } from "~/app/collections/CollectionsSheet.tsx";
 import { sortByPin } from "~/app/collections/collectionIcons.ts";
+import { createCollectionActions } from "~/app/collections/createCollectionActions.ts";
+import { InlineNameInput } from "~/app/collections/InlineNameInput.tsx";
 import { LibrarySidebar } from "~/app/collections/LibrarySidebar.tsx";
+import { NewCollectionSheet } from "~/app/collections/NewCollectionSheet.tsx";
+import { PlaceEmptyState } from "~/app/collections/PlaceEmptyState.tsx";
 import {
   describeSmartFilters,
   findPlaceCollection,
@@ -27,11 +35,19 @@ import { useRecipeListParams } from "~/app/filters/useRecipeListParams.ts";
 import { useMarks } from "~/app/marks/MarksContext.tsx";
 import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import { SortDropdown } from "~/app/recipe-list/SortDropdown.tsx";
+import {
+  DEFAULT_SORT,
+  type ListSort,
+  sortOptions,
+  YOUR_ORDER,
+  yourOrderOption,
+} from "~/app/recipe-list/sortOptions.ts";
 import { sortRecipes } from "~/app/recipe-list/sortRecipes.ts";
 import { recipeListStrings } from "~/app/recipe-list/strings.ts";
 import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
 import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import buttonStyles from "~/app/ui/button.module.css";
+import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { createMediaQuery } from "~/app/ui/createMediaQuery.ts";
 import type { Collection } from "~/shared/collections.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
@@ -51,6 +67,11 @@ const Home = () => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = createSignal(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = createSignal(false);
   const [isCollectionsSheetOpen, setIsCollectionsSheetOpen] = createSignal(false);
+  const [isNewCollectionOpen, setIsNewCollectionOpen] = createSignal(false);
+  const [isCollectionMenuOpen, setIsCollectionMenuOpen] = createSignal(false);
+  const [isCreatingInSidebar, setIsCreatingInSidebar] = createSignal(false);
+  const [sidebarCreateError, setSidebarCreateError] = createSignal<string | undefined>(undefined);
+  const collectionActions = createCollectionActions({ openFresh: params.openPlaceFresh });
   // View mode is intentionally ephemeral: every page load starts in card view.
   const [viewMode, setViewMode] = createSignal<ViewMode>("card");
 
@@ -63,13 +84,64 @@ const Home = () => {
   const countOfCollection = (collection: Collection): number =>
     countOf({ kind: "collection", id: collection.id });
 
+  const isManualPlace = (): boolean => placeCollection()?.kind === "manual";
+
+  // Inside a manual collection no sort param means "Your order"; elsewhere the usual default.
+  const sort = createMemo(
+    (): ListSort => params.sortParam() ?? (isManualPlace() ? YOUR_ORDER : DEFAULT_SORT),
+  );
+  const defaultSort = (): ListSort => (isManualPlace() ? YOUR_ORDER : DEFAULT_SORT);
+  const listSortOptions = () => (isManualPlace() ? [yourOrderOption, ...sortOptions] : sortOptions);
+
+  const setSort = (next: ListSort): void => {
+    if (next === YOUR_ORDER) {
+      params.setSortParam(undefined);
+      return;
+    }
+    // Inside a manual collection every other choice is written, even the usual default.
+    params.setSortParam(!isManualPlace() && next === DEFAULT_SORT ? undefined : next);
+  };
+
   const search = createMemo(() => createRecipeSearch(recipes()));
+  const placeRecipes = createMemo(() => recipesOf(place()));
 
   const filteredRecipes = createMemo(() => {
     const matching = new Set(search()(params.searchQuery()).map((recipe) => recipe.url_slug));
-    const inPlace = recipesOf(place()).filter((recipe) => matching.has(recipe.url_slug));
-    return sortRecipes(filterRecipes(inPlace, params.filters()), params.sort());
+    const inPlace = placeRecipes().filter((recipe) => matching.has(recipe.url_slug));
+    const filtered = filterRecipes(inPlace, params.filters());
+    const currentSort = sort();
+    return currentSort === YOUR_ORDER ? filtered : sortRecipes(filtered, currentSort);
   });
+
+  const pinnedCount = (): number =>
+    collections().filter((collection) => collection.pinPosition !== null).length;
+
+  const isRenamingPlace = (): boolean => {
+    const collection = placeCollection();
+    return collection !== undefined && collectionActions.isRenaming(collection, "title");
+  };
+
+  const createFromSheet = async (name: string): Promise<string | undefined> => {
+    const error = await collectionActions.create(name);
+    if (!error) {
+      setIsNewCollectionOpen(false);
+    }
+    return error;
+  };
+
+  const createFromSidebar = async (name: string): Promise<boolean> => {
+    const error = await collectionActions.create(name);
+    setSidebarCreateError(error);
+    if (!error) {
+      setIsCreatingInSidebar(false);
+    }
+    return !error;
+  };
+
+  const cancelSidebarCreate = (): void => {
+    setIsCreatingInSidebar(false);
+    setSidebarCreateError(undefined);
+  };
 
   const activeFilterCount = createMemo(() => countActiveFilters(params.filters()));
 
@@ -123,7 +195,10 @@ const Home = () => {
     return placeCollection()?.name ?? "";
   };
 
-  const placeSubtitle = (): string => {
+  const placeSubtitle = (): string =>
+    isRenamingPlace() ? collectionStrings.header.renameHint : placeMeta();
+
+  const placeMeta = (): string => {
     const count = filteredRecipes().length;
     const collection = placeCollection();
     if (collection?.kind === "manual") {
@@ -136,6 +211,40 @@ const Home = () => {
       );
     }
     return collectionStrings.recipeCount(count);
+  };
+
+  // The dashed card of an empty collection or a smart filter that matches
+  // nothing; filters hiding every recipe get the usual no-results state instead.
+  const placeEmptyState = (): JSX.Element | undefined => {
+    const collection = placeCollection();
+    if (!collection || placeRecipes().length > 0) {
+      return undefined;
+    }
+    if (collection.kind === "manual") {
+      return (
+        <PlaceEmptyState
+          icon="collections_bookmark"
+          title={collectionStrings.empty.title}
+          body={
+            <>
+              <span class={styles.phoneOnly}>{collectionStrings.empty.phoneBody}</span>
+              <span class={styles.desktopOnly}>{collectionStrings.empty.desktopBody}</span>
+            </>
+          }
+        />
+      );
+    }
+    return (
+      <PlaceEmptyState
+        icon="tune"
+        title={collectionStrings.empty.smartTitle}
+        body={
+          collection.filters
+            ? collectionStrings.empty.smartBody(describeSmartFilters(collection.filters))
+            : collectionStrings.empty.smartNoFilters
+        }
+      />
+    );
   };
 
   return (
@@ -154,6 +263,50 @@ const Home = () => {
               collections={collections()}
               countOf={countOf}
               onSelectPlace={selectPlace}
+              headingAction={
+                <button
+                  type="button"
+                  class={styles.sidebarAdd}
+                  aria-label={collectionStrings.create.newCollectionButton}
+                  onClick={() => setIsCreatingInSidebar(true)}
+                >
+                  <span class="material-symbols-outlined" aria-hidden="true">
+                    add
+                  </span>
+                </button>
+              }
+              onRenameCollection={(collection) =>
+                collectionActions.startRename(collection, "sidebar")
+              }
+              renamingId={
+                collections().find((collection) =>
+                  collectionActions.isRenaming(collection, "sidebar"),
+                )?.id
+              }
+              renderRename={(collection) => (
+                <InlineNameInput
+                  initialValue={collection.name}
+                  label={collectionStrings.header.renameSidebar(collection.name)}
+                  icon={collection.kind === "smart" ? "tune" : "collections_bookmark"}
+                  error={collectionActions.renameError()}
+                  onCommit={(name) => collectionActions.commitRename(collection, name)}
+                  onCancel={collectionActions.cancelRename}
+                />
+              )}
+              footer={
+                <Show when={isCreatingInSidebar()}>
+                  <InlineNameInput
+                    initialValue=""
+                    label={collectionStrings.create.inlineLabel}
+                    placeholder={collectionStrings.create.inlinePlaceholder}
+                    icon="collections_bookmark"
+                    hint={collectionStrings.create.inlineHint}
+                    error={sidebarCreateError()}
+                    onCommit={createFromSidebar}
+                    onCancel={cancelSidebarCreate}
+                  />
+                </Show>
+              }
             />
           </div>
           <div class={styles.controls}>
@@ -193,7 +346,15 @@ const Home = () => {
                 {filterStrings.drawer.clearAll}
               </button>
             </Show>
-            <SortDropdown value={params.sort()} onSortChange={params.setSort} />
+            <SortDropdown
+              value={sort()}
+              options={listSortOptions()}
+              defaultValue={defaultSort()}
+              defaultLabel={
+                isManualPlace() ? collectionStrings.sort.yourOrder : recipeListStrings.sort.label
+              }
+              onSortChange={setSort}
+            />
             <ViewToggle value={viewMode()} onChange={setViewMode} />
           </div>
           <div class={styles.mainContent}>
@@ -234,19 +395,68 @@ const Home = () => {
                 />
               </div>
             </Show>
+            <Show when={placeCollection()}>
+              {(collection) => (
+                <div class={styles.phoneOnly}>
+                  <CollectionHeaderCard
+                    collection={collection()}
+                    meta={placeMeta()}
+                    isRenaming={isRenamingPlace()}
+                    renameError={collectionActions.renameError()}
+                    onRenameCommit={(name) => collectionActions.commitRename(collection(), name)}
+                    onRenameCancel={collectionActions.cancelRename}
+                    onOpenMenu={() => setIsCollectionMenuOpen(true)}
+                  />
+                </div>
+              )}
+            </Show>
             <div class={styles.placeTitle}>
-              <h2 class={styles.placeName}>{placeTitle()}</h2>
-              <p class={styles.placeSubtitle}>{placeSubtitle()}</p>
+              <div class={styles.placeTitleText}>
+                <Show
+                  when={isRenamingPlace() && placeCollection()}
+                  fallback={<h2 class={styles.placeName}>{placeTitle()}</h2>}
+                >
+                  {(collection) => (
+                    <InlineNameInput
+                      class={styles.placeNameInput}
+                      initialValue={collection().name}
+                      label={collectionStrings.header.renameLabel}
+                      error={collectionActions.renameError()}
+                      onCommit={(name) => collectionActions.commitRename(collection(), name)}
+                      onCancel={collectionActions.cancelRename}
+                    />
+                  )}
+                </Show>
+                <p class={styles.placeSubtitle}>{placeSubtitle()}</p>
+              </div>
+              <Show when={placeCollection()}>
+                {(collection) => (
+                  <div class={styles.placeActions}>
+                    <CollectionMenu
+                      collection={collection()}
+                      onRename={() => collectionActions.startRename(collection(), "title")}
+                      onDelete={() => collectionActions.requestDelete(collection())}
+                    />
+                  </div>
+                )}
+              </Show>
             </div>
-            <Loading>
-              <RecipeList
-                recipes={filteredRecipes()}
-                currentPage={params.page()}
-                viewMode={viewMode()}
-                onPageChange={(details) => params.setPage(details.page)}
-                onResetAll={params.resetAll}
-              />
-            </Loading>
+            <Show
+              when={placeEmptyState()}
+              fallback={
+                <Loading>
+                  <RecipeList
+                    recipes={filteredRecipes()}
+                    currentPage={params.page()}
+                    viewMode={viewMode()}
+                    onPageChange={(details) => params.setPage(details.page)}
+                    onResetAll={params.resetAll}
+                  />
+                </Loading>
+              }
+            >
+              {(state) => state()}
+            </Show>
           </div>
         </div>
       </div>
@@ -267,8 +477,42 @@ const Home = () => {
         countOf={countOfCollection}
         onOpenCollection={openCollection}
         onTogglePin={togglePin}
-        onNewCollection={() => setIsCollectionsSheetOpen(false)}
+        onNewCollection={() => {
+          setIsCollectionsSheetOpen(false);
+          setIsNewCollectionOpen(true);
+        }}
         onNewSmartFilter={openNewSmartFilter}
+      />
+      <NewCollectionSheet
+        isOpen={isNewCollectionOpen()}
+        onOpenChange={setIsNewCollectionOpen}
+        onCreate={createFromSheet}
+      />
+      <Show when={placeCollection()}>
+        {(collection) => (
+          <CollectionMenuSheet
+            isOpen={isCollectionMenuOpen()}
+            onOpenChange={setIsCollectionMenuOpen}
+            collection={collection()}
+            pinnedCount={pinnedCount()}
+            onRename={() => collectionActions.startRename(collection(), "title")}
+            onTogglePin={() => collectionActions.togglePin(collection())}
+            onDelete={() => collectionActions.requestDelete(collection())}
+          />
+        )}
+      </Show>
+      <ConfirmDialog
+        isOpen={collectionActions.deleting() !== undefined}
+        title={collectionStrings.remove.title(collectionActions.deleting()?.name ?? "")}
+        description={
+          collectionActions.deleting()?.kind === "smart"
+            ? collectionStrings.remove.smartBody
+            : collectionStrings.remove.collectionBody
+        }
+        confirmLabel={collectionStrings.remove.confirm}
+        isDestructive
+        onConfirm={() => collectionActions.confirmDelete()}
+        onCancel={collectionActions.cancelDelete}
       />
     </main>
   );

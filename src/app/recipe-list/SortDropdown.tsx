@@ -1,12 +1,16 @@
-import { createSignal, onSettled } from "solid-js";
+import { createSignal, For, onSettled } from "solid-js";
 import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import styles from "./SortDropdown.module.css";
-import { DEFAULT_SORT, type SortValue } from "./sortOptions.ts";
+import type { ListSort, SortOption } from "./sortOptions.ts";
 import { recipeListStrings } from "./strings.ts";
 
 type SortDropdownProps = {
-  value: SortValue;
-  onSortChange: (value: SortValue) => void;
+  value: ListSort;
+  options: ReadonlyArray<SortOption>;
+  // The sort used when none is chosen; the button then reads `defaultLabel`.
+  defaultValue: ListSort;
+  defaultLabel: string;
+  onSortChange: (value: ListSort) => void;
 };
 
 export const SortDropdown = (props: SortDropdownProps) => {
@@ -38,73 +42,26 @@ export const SortDropdown = (props: SortDropdownProps) => {
     };
   });
 
-  const sortOptions = [
-    {
-      value: "date-desc",
-      label: recipeListStrings.sort.dateDesc,
-      shortLabel: recipeListStrings.sort.shortDateDesc,
-    },
-    {
-      value: "date-asc",
-      label: recipeListStrings.sort.dateAsc,
-      shortLabel: recipeListStrings.sort.shortDateAsc,
-    },
-    {
-      value: "name-asc",
-      label: recipeListStrings.sort.nameAsc,
-      shortLabel: recipeListStrings.sort.shortNameAsc,
-    },
-    {
-      value: "name-desc",
-      label: recipeListStrings.sort.nameDesc,
-      shortLabel: recipeListStrings.sort.shortNameDesc,
-    },
-    {
-      value: "time-asc",
-      label: recipeListStrings.sort.timeAsc,
-      shortLabel: recipeListStrings.sort.shortTimeAsc,
-    },
-    {
-      value: "time-desc",
-      label: recipeListStrings.sort.timeDesc,
-      shortLabel: recipeListStrings.sort.shortTimeDesc,
-    },
-    {
-      value: "difficulty-easy",
-      label: recipeListStrings.sort.difficultyEasy,
-      shortLabel: recipeListStrings.sort.shortDifficultyEasy,
-    },
-    {
-      value: "difficulty-hard",
-      label: recipeListStrings.sort.difficultyHard,
-      shortLabel: recipeListStrings.sort.shortDifficultyHard,
-    },
-  ] as const;
-
   const buttonLabel = () => {
-    if (props.value === DEFAULT_SORT) {
-      return recipeListStrings.sort.label;
+    if (props.value === props.defaultValue) {
+      return props.defaultLabel;
     }
-    const activeOption = sortOptions.find((option) => option.value === props.value);
+    const activeOption = props.options.find((option) => option.value === props.value);
     return activeOption
       ? recipeListStrings.sort.activeLabel(activeOption.shortLabel)
-      : recipeListStrings.sort.label;
+      : props.defaultLabel;
   };
 
-  const handleOptionClick = (value: SortValue) => {
+  const handleOptionClick = (value: ListSort) => {
     props.onSortChange(value);
     setIsOpen(false);
-  };
-
-  const handleToggle = () => {
-    setIsOpen(!isOpen());
   };
 
   return (
     <div class={styles.dropdown} ref={dropdownRef}>
       <button
         type="button"
-        onClick={handleToggle}
+        onClick={() => setIsOpen(!isOpen())}
         class={styles.dropdownButton}
         aria-haspopup="true"
         aria-expanded={ariaBoolean(isOpen())}
@@ -119,15 +76,17 @@ export const SortDropdown = (props: SortDropdownProps) => {
 
       {isOpen() && (
         <div class={styles.dropdownMenu}>
-          {sortOptions.map((option) => (
-            <button
-              type="button"
-              class={`${styles.dropdownItem} ${option.value === props.value ? styles.dropdownItemActive : ""}`}
-              onClick={() => handleOptionClick(option.value as SortValue)}
-            >
-              {option.label}
-            </button>
-          ))}
+          <For each={props.options}>
+            {(option) => (
+              <button
+                type="button"
+                class={`${styles.dropdownItem} ${option.value === props.value ? styles.dropdownItemActive : ""}`}
+                onClick={() => handleOptionClick(option.value)}
+              >
+                {option.label}
+              </button>
+            )}
+          </For>
         </div>
       )}
     </div>

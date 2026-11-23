@@ -1,6 +1,6 @@
 import { useSearchParams } from "@solidjs/router";
 import { type Accessor, createMemo } from "solid-js";
-import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
+import { type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
 import { difficultyValues, recommendedValues, timeValues } from "~/shared/filters.ts";
 import { tagValues } from "~/shared/tags.ts";
 import { type RecipeFilterKey, type RecipeFilters, recipeFilterKeys } from "./recipeFilters.ts";
@@ -16,14 +16,15 @@ export type RecipeListParams = {
   placeParam: Accessor<string | undefined>;
   filters: Accessor<RecipeFilters>;
   searchQuery: Accessor<string>;
-  sort: Accessor<SortValue>;
+  // undefined when the URL has none; the default depends on the place.
+  sortParam: Accessor<SortValue | undefined>;
   page: Accessor<number>;
   setFilter: <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]) => void;
   clearFilters: () => void;
   // Clears the search as well as the filters.
   resetAll: () => void;
   setSearchQuery: (query: string) => void;
-  setSort: (sort: SortValue) => void;
+  setSortParam: (sort: SortValue | undefined) => void;
   setPage: (page: number) => void;
   // Keeps search and filters; undefined opens All.
   setPlace: (param: string | undefined) => void;
@@ -55,9 +56,9 @@ export const useRecipeListParams = (
 
   const placeParam = createMemo(() => parseStringParam(searchParams.in) || undefined);
 
-  const sort = createMemo((): SortValue => {
+  const sortParam = createMemo((): SortValue | undefined => {
     const value = parseStringParam(searchParams.sort);
-    return sortValues.find((sortValue) => sortValue === value) ?? DEFAULT_SORT;
+    return sortValues.find((sortValue) => sortValue === value);
   });
 
   const page = createMemo(() => parsePageParam(searchParams.page));
@@ -71,13 +72,13 @@ export const useRecipeListParams = (
     placeParam,
     filters,
     searchQuery,
-    sort,
+    sortParam,
     page,
     setFilter: (key, values) => update({ [key]: serializeArrayParam(values) }),
     clearFilters: () => update(clearedFilters),
     resetAll: () => update({ ...clearedFilters, q: undefined }),
     setSearchQuery: (query) => update({ q: query || undefined }),
-    setSort: (nextSort) => update({ sort: nextSort === DEFAULT_SORT ? undefined : nextSort }),
+    setSortParam: (nextSort) => update({ sort: nextSort }),
     setPlace: (param) => update({ in: param }),
     openPlaceFresh: (param) => update({ ...clearedFilters, q: undefined, in: param }),
     setPage: (nextPage) => setSearchParams({ page: nextPage === 1 ? undefined : String(nextPage) }),

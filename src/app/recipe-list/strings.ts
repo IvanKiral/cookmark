@@ -12,6 +12,7 @@ export const recipeListStrings = {
   listView: "List view",
   sort: {
     label: "Sort by",
+    yourOrder: "Your order",
     activeLabel: (sort: string) => `Sort: ${sort}`,
     dateDesc: "Date (newest first)",
     dateAsc: "Date (oldest first)",
