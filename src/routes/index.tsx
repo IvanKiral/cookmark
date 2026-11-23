@@ -8,6 +8,7 @@ import { CollectionMenuSheet } from "~/app/collections/CollectionMenuSheet.tsx";
 import { useCollections } from "~/app/collections/CollectionsContext.tsx";
 import { CollectionsSheet } from "~/app/collections/CollectionsSheet.tsx";
 import { sortByPin } from "~/app/collections/collectionIcons.ts";
+import { describeNameError, getNameError } from "~/app/collections/collectionNames.ts";
 import { createCollectionActions } from "~/app/collections/createCollectionActions.ts";
 import { createSelection } from "~/app/collections/createSelection.ts";
 import { InlineNameInput } from "~/app/collections/InlineNameInput.tsx";
@@ -23,13 +24,20 @@ import {
   recipesInPlace,
   serializePlace,
 } from "~/app/collections/places.ts";
+import { SaveSmartFilterDialog } from "~/app/collections/SaveSmartFilterDialog.tsx";
 import { collectionStrings } from "~/app/collections/strings.ts";
 import { ActiveFilterChips } from "~/app/filters/ActiveFilterChips.tsx";
 import { withoutFilterValue } from "~/app/filters/activeFilters.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/app/filters/deriveAuthors.ts";
 import { FilterDrawer } from "~/app/filters/FilterDrawer.tsx";
 import { FilterPanel } from "~/app/filters/FilterPanel.tsx";
-import { countActiveFilters, filterRecipes } from "~/app/filters/recipeFilters.ts";
+import {
+  countActiveFilters,
+  emptyFilters,
+  filterRecipes,
+  type RecipeFilterKey,
+  type RecipeFilters,
+} from "~/app/filters/recipeFilters.ts";
 import { createRecipeSearch } from "~/app/filters/recipeSearch.ts";
 import { SearchBar } from "~/app/filters/SearchBar.tsx";
 import { filterStrings } from "~/app/filters/strings.ts";
@@ -51,7 +59,9 @@ import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import buttonStyles from "~/app/ui/button.module.css";
 import { ConfirmDialog } from "~/app/ui/ConfirmDialog.tsx";
 import { createMediaQuery } from "~/app/ui/createMediaQuery.ts";
+import { showToast } from "~/app/ui/Toast.tsx";
 import type { Collection } from "~/shared/collections.ts";
+import { MAX_PINS } from "~/shared/collections.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import styles from "./index.module.css";
 
@@ -131,7 +141,27 @@ const Home = () => {
   const search = createMemo(() => createRecipeSearch(recipes()));
   const placeRecipes = createMemo(() => recipesOf(place()));
 
+  // Editing a smart filter works on a draft; the URL filters stay as they are.
+  const [editing, setEditing] = createSignal<
+    { collectionId: string; draft: RecipeFilters } | undefined
+  >(undefined);
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = createSignal(false);
+  const editingCollection = createMemo(() => {
+    const current = editing();
+    return current
+      ? collections().find((collection) => collection.id === current.collectionId)
+      : undefined;
+  });
+  const draftMatches = createMemo(() => {
+    const current = editing();
+    return current ? filterRecipes(recipes(), current.draft) : [];
+  });
+
   const filteredRecipes = createMemo(() => {
+    // Desktop previews what the edited smart filter would hold.
+    if (editing() && isDesktop()) {
+      return sortRecipes(draftMatches(), DEFAULT_SORT);
+    }
     const matching = new Set(search()(params.searchQuery()).map((recipe) => recipe.url_slug));
     const base = pickCollection() ? pickableRecipes() : placeRecipes();
     const inPlace = base.filter((recipe) => matching.has(recipe.url_slug));
@@ -229,7 +259,77 @@ const Home = () => {
     });
   };
 
+  const startEditFilter = (collection: Collection): void => {
+    setEditing({ collectionId: collection.id, draft: collection.filters ?? emptyFilters });
+    if (isDesktop()) {
+      setIsFilterPanelOpen(true);
+      return;
+    }
+    setIsFilterDrawerOpen(true);
+  };
+
+  const endEditFilter = (): void => {
+    setEditing(undefined);
+    setIsFilterPanelOpen(false);
+    setIsFilterDrawerOpen(false);
+  };
+
+  const setDraftFilter = <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]): void => {
+    const current = editing();
+    if (current) {
+      setEditing({ ...current, draft: { ...current.draft, [key]: values } });
+    }
+  };
+
+  const canUpdateFilter = (): boolean => {
+    const current = editing();
+    return current !== undefined && countActiveFilters(current.draft) > 0;
+  };
+
+  const updateFilter = async (): Promise<void> => {
+    const current = editing();
+    const collection = editingCollection();
+    if (!(current && collection && canUpdateFilter())) {
+      return;
+    }
+    endEditFilter();
+    const isSaved = await collectionsContext.update(collection.id, {
+      name: collection.name,
+      filters: current.draft,
+      isPinned: collection.pinPosition !== null,
+    });
+    if (isSaved) {
+      showToast(collectionStrings.smart.updated(collection.name));
+    }
+  };
+
+  const saveSmartFilter = async (name: string, isPinned: boolean): Promise<string | undefined> => {
+    const error = getNameError(name, collections());
+    if (error) {
+      return error;
+    }
+    const result = await collectionsContext.create({
+      name: name.trim(),
+      kind: "smart",
+      filters: params.filters(),
+      isPinned,
+    });
+    if (!result.isOk) {
+      return describeNameError(result.error, name);
+    }
+    setIsSaveDialogOpen(false);
+    setIsFilterDrawerOpen(false);
+    setIsFilterPanelOpen(false);
+    params.openPlaceFresh(result.collection.id);
+    showToast(collectionStrings.smart.saved(result.collection.name));
+    return undefined;
+  };
+
   const handleFiltersClick = (): void => {
+    if (editing()) {
+      endEditFilter();
+      return;
+    }
     if (isDesktop()) {
       setIsFilterPanelOpen(!isFilterPanelOpen());
       return;
@@ -285,7 +385,8 @@ const Home = () => {
   // nothing; filters hiding every recipe get the usual no-results state instead.
   const placeEmptyState = (): JSX.Element | undefined => {
     const collection = placeCollection();
-    if (!collection || placeRecipes().length > 0 || pickCollection()) {
+    const isPreviewing = editing() !== undefined && isDesktop();
+    if (!collection || placeRecipes().length > 0 || pickCollection() || isPreviewing) {
       return undefined;
     }
     if (collection.kind === "manual") {
@@ -322,6 +423,18 @@ const Home = () => {
           collection.filters
             ? collectionStrings.empty.smartBody(describeSmartFilters(collection.filters))
             : collectionStrings.empty.smartNoFilters
+        }
+        action={
+          <button
+            type="button"
+            class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
+            onClick={() => startEditFilter(collection)}
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              tune
+            </span>
+            {collectionStrings.header.editFilter}
+          </button>
         }
       />
     );
@@ -460,13 +573,47 @@ const Home = () => {
             </Show>
             <Show when={isFilterPanelOpen()}>
               <section class={styles.filterPanel} aria-label={filterStrings.drawer.title}>
+                <Show when={editing() && editingCollection()}>
+                  {(collection) => (
+                    <p class={styles.editBanner}>
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        tune
+                      </span>
+                      {collectionStrings.smart.editingBanner(collection().name)}
+                    </p>
+                  )}
+                </Show>
                 <FilterPanel
                   variant="toolbar"
-                  filters={params.filters()}
+                  filters={editing()?.draft ?? params.filters()}
                   authorOptions={authorOptions()}
-                  onFilterChange={params.setFilter}
+                  onFilterChange={editing() ? setDraftFilter : params.setFilter}
                 />
-                <div class={styles.filterPanelFooter}>
+                <Show when={editing()}>
+                  <div class={styles.filterPanelFooter}>
+                    <span class={styles.previewCount}>
+                      {collectionStrings.smart.preview(draftMatches().length)}
+                    </span>
+                    <button
+                      type="button"
+                      class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                      onClick={endEditFilter}
+                    >
+                      {collectionStrings.smart.cancel}
+                    </button>
+                    <button
+                      type="button"
+                      class={`${buttonStyles.button} ${buttonStyles.primary}`}
+                      disabled={!canUpdateFilter()}
+                      onClick={updateFilter}
+                    >
+                      {collectionStrings.smart.update}
+                    </button>
+                  </div>
+                </Show>
+                <div
+                  class={[styles.filterPanelFooter, { [styles.hidden]: editing() !== undefined }]}
+                >
                   <button
                     type="button"
                     class={`${buttonStyles.button} ${buttonStyles.secondary}`}
@@ -492,6 +639,18 @@ const Home = () => {
                     params.setFilter(key, withoutFilterValue(params.filters(), key, value))
                   }
                   onClearAll={params.clearFilters}
+                  trailing={
+                    <button
+                      type="button"
+                      class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
+                      onClick={() => setIsSaveDialogOpen(true)}
+                    >
+                      <span class="material-symbols-outlined" aria-hidden="true">
+                        collections_bookmark
+                      </span>
+                      {collectionStrings.smart.saveButton}
+                    </button>
+                  }
                 />
               </div>
             </Show>
@@ -507,18 +666,29 @@ const Home = () => {
                     onRenameCancel={collectionActions.cancelRename}
                     onOpenMenu={() => setIsCollectionMenuOpen(true)}
                     actions={
-                      <Show when={canReorder()}>
-                        <button
-                          type="button"
-                          class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
-                          onClick={() => setIsReordering(true)}
-                        >
-                          <span class="material-symbols-outlined" aria-hidden="true">
-                            reorder
-                          </span>
-                          {collectionStrings.header.reorder}
-                        </button>
-                      </Show>
+                      <>
+                        <Show when={collection().kind === "smart"}>
+                          <button
+                            type="button"
+                            class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                            onClick={() => startEditFilter(collection())}
+                          >
+                            {collectionStrings.header.editFilter}
+                          </button>
+                        </Show>
+                        <Show when={canReorder()}>
+                          <button
+                            type="button"
+                            class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
+                            onClick={() => setIsReordering(true)}
+                          >
+                            <span class="material-symbols-outlined" aria-hidden="true">
+                              reorder
+                            </span>
+                            {collectionStrings.header.reorder}
+                          </button>
+                        </Show>
+                      </>
                     }
                   />
                 </div>
@@ -571,6 +741,15 @@ const Home = () => {
                           reorder
                         </span>
                         {collectionStrings.header.reorder}
+                      </button>
+                    </Show>
+                    <Show when={collection().kind === "smart"}>
+                      <button
+                        type="button"
+                        class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                        onClick={() => startEditFilter(collection())}
+                      >
+                        {collectionStrings.header.editFilter}
                       </button>
                     </Show>
                     <Show when={collection().kind === "manual"}>
@@ -641,12 +820,38 @@ const Home = () => {
       </Show>
       <FilterDrawer
         open={isFilterDrawerOpen()}
-        onOpenChange={setIsFilterDrawerOpen}
-        filters={params.filters()}
+        onOpenChange={(isOpen) => {
+          if (!isOpen && editing()) {
+            endEditFilter();
+            return;
+          }
+          setIsFilterDrawerOpen(isOpen);
+        }}
+        filters={editing()?.draft ?? params.filters()}
         authorOptions={authorOptions()}
-        onFilterChange={params.setFilter}
+        onFilterChange={editing() ? setDraftFilter : params.setFilter}
         onClearAll={params.clearFilters}
         resultCount={filteredRecipes().length}
+        onSaveSmartFilter={() => setIsSaveDialogOpen(true)}
+        edit={
+          editing() && editingCollection()
+            ? {
+                name: editingCollection()?.name ?? "",
+                matchCount: draftMatches().length,
+                canUpdate: canUpdateFilter(),
+                onCancel: endEditFilter,
+                onUpdate: updateFilter,
+              }
+            : undefined
+        }
+      />
+      <SaveSmartFilterDialog
+        isOpen={isSaveDialogOpen()}
+        onOpenChange={setIsSaveDialogOpen}
+        filters={params.filters()}
+        isPinShown={!isDesktop()}
+        isPinsFull={pinnedCount() >= MAX_PINS}
+        onSave={saveSmartFilter}
       />
       <CollectionsSheet
         isOpen={isCollectionsSheetOpen()}
@@ -674,6 +879,7 @@ const Home = () => {
             collection={collection()}
             pinnedCount={pinnedCount()}
             onAddRecipes={() => startPicking(collection())}
+            onEditFilter={() => startEditFilter(collection())}
             onRename={() => collectionActions.startRename(collection(), "title")}
             onTogglePin={() => collectionActions.togglePin(collection())}
             onDelete={() => collectionActions.requestDelete(collection())}

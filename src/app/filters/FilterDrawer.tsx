@@ -1,5 +1,6 @@
 import { Drawer } from "@kobalte/core/drawer";
-import { type Component, createEffect } from "solid-js";
+import { type Component, createEffect, Show } from "solid-js";
+import { collectionStrings } from "~/app/collections/strings.ts";
 import buttonStyles from "~/app/ui/button.module.css";
 import { createReturnFocus } from "~/app/ui/createReturnFocus.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
@@ -17,6 +18,18 @@ type FilterDrawerProps = {
   onClearAll: () => void;
   // Recipes matching the current search and filters, shown on the close button.
   resultCount: number;
+  // Shown in the footer once a filter is active.
+  onSaveSmartFilter?: () => void;
+  // Editing a smart filter: the drawer works on a draft and its footer offers Cancel and Update.
+  edit?: FilterDrawerEdit;
+};
+
+export type FilterDrawerEdit = {
+  name: string;
+  matchCount: number;
+  canUpdate: boolean;
+  onCancel: () => void;
+  onUpdate: () => void;
 };
 
 export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
@@ -53,7 +66,18 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
         <Drawer.Overlay class={styles.overlay} onClick={() => props.onOpenChange(false)} />
         <Drawer.Content class={styles.content}>
           <div class={styles.header}>
-            <Drawer.Title class={styles.title}>{filterStrings.drawer.title}</Drawer.Title>
+            <div>
+              <Drawer.Title class={styles.title}>
+                {props.edit
+                  ? collectionStrings.smart.editTitle(props.edit.name)
+                  : filterStrings.drawer.title}
+              </Drawer.Title>
+              <Show when={props.edit}>
+                <Drawer.Description class={styles.subtitle}>
+                  {collectionStrings.smart.editSubtitle}
+                </Drawer.Description>
+              </Show>
+            </div>
             <Drawer.CloseButton
               ref={closeButtonRef}
               class={styles.closeButton}
@@ -74,24 +98,62 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
 
           {/* Always visible, so the result count updates while filtering and
               there's an obvious way back to the recipes. */}
-          <div class={styles.footer}>
-            {hasAnyFilter() && (
+          <Show
+            when={!props.edit}
+            fallback={
+              <div class={`${styles.footer} ${styles.editFooter}`}>
+                <span class={styles.matchCount}>
+                  {collectionStrings.smart.matchNow(props.edit?.matchCount ?? 0)}
+                </span>
+                <div class={styles.footerButtons}>
+                  <button
+                    type="button"
+                    class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                    onClick={() => props.edit?.onCancel()}
+                  >
+                    {collectionStrings.smart.cancel}
+                  </button>
+                  <button
+                    type="button"
+                    class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
+                    disabled={!props.edit?.canUpdate}
+                    onClick={() => props.edit?.onUpdate()}
+                  >
+                    {collectionStrings.smart.update}
+                  </button>
+                </div>
+              </div>
+            }
+          >
+            <Show when={hasAnyFilter() && props.onSaveSmartFilter}>
+              {(onSave) => (
+                <button type="button" class={styles.saveButton} onClick={() => onSave()()}>
+                  <span class="material-symbols-outlined" aria-hidden="true">
+                    collections_bookmark
+                  </span>
+                  {collectionStrings.smart.saveButton}
+                </button>
+              )}
+            </Show>
+            <div class={styles.footer}>
+              {hasAnyFilter() && (
+                <button
+                  type="button"
+                  class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                  onClick={props.onClearAll}
+                >
+                  {filterStrings.drawer.clearAll}
+                </button>
+              )}
               <button
                 type="button"
-                class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                onClick={props.onClearAll}
+                class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
+                onClick={() => props.onOpenChange(false)}
               >
-                {filterStrings.drawer.clearAll}
+                {filterStrings.drawer.showResults(props.resultCount)}
               </button>
-            )}
-            <button
-              type="button"
-              class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
-              onClick={() => props.onOpenChange(false)}
-            >
-              {filterStrings.drawer.showResults(props.resultCount)}
-            </button>
-          </div>
+            </div>
+          </Show>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer>

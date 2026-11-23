@@ -416,3 +416,30 @@
     padding-bottom: var(--space-8);
   }
 }
+
+.hidden {
+  display: none;
+}
+
+.editBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+}
+
+.editBanner :global(.material-symbols-outlined) {
+  font-size: 18px;
+}
+
+.previewCount {
+  margin-right: auto;
+  align-self: center;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-600);
+}

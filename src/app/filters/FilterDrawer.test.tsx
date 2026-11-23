@@ -81,4 +81,45 @@ describe("<FilterDrawer />", () => {
 
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
+
+  it("offers Save as smart filter only once a filter is active", () => {
+    const onSaveSmartFilter = vi.fn();
+    renderDrawer({ onSaveSmartFilter });
+    expect(screen.queryByRole("button", { name: /Save as smart filter/ })).not.toBeInTheDocument();
+    cleanup();
+    renderDrawer({ onSaveSmartFilter, filters: { ...emptyFilters, tag: ["Soup"] } });
+    fireEvent.click(screen.getByRole("button", { name: /Save as smart filter/ }));
+    expect(onSaveSmartFilter).toHaveBeenCalled();
+  });
+
+  it("edits a smart filter with Cancel and Update instead of the usual footer", () => {
+    const onCancel = vi.fn();
+    const onUpdate = vi.fn();
+    renderDrawer({
+      filters: { ...emptyFilters, tag: ["Soup"] },
+      onSaveSmartFilter: vi.fn(),
+      edit: { name: "Soups", matchCount: 3, canUpdate: true, onCancel, onUpdate },
+    });
+    expect(screen.getByText("Edit “Soups”")).toBeInTheDocument();
+    expect(screen.getByText("3 recipes match right now")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Save as smart filter/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Show 12 recipes/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Update" }));
+    expect(onUpdate).toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it("cannot update an empty smart filter", () => {
+    renderDrawer({
+      edit: {
+        name: "Soups",
+        matchCount: 0,
+        canUpdate: false,
+        onCancel: vi.fn(),
+        onUpdate: vi.fn(),
+      },
+    });
+    expect(screen.getByRole("button", { name: "Update" })).toBeDisabled();
+  });
 });
