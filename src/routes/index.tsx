@@ -1,5 +1,5 @@
 import type { JSX } from "@solidjs/web";
-import { createEffect, createMemo, createSignal, Loading, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, Loading, lazy, Show } from "solid-js";
 import { getRecipesList } from "~/app/api/recipeQueries.ts";
 import { CollectionChips } from "~/app/collections/CollectionChips.tsx";
 import { CollectionHeaderCard } from "~/app/collections/CollectionHeaderCard.tsx";
@@ -56,6 +56,14 @@ import type { RecipeSummary } from "~/shared/recipe.ts";
 import styles from "./index.module.css";
 
 const DESKTOP_QUERY = "(min-width: 1024px)";
+
+// Loaded only when reordering starts, so dnd-kit stays out of the list's bundle.
+const CollectionReorderView = lazy(() => import("~/app/collections/CollectionReorderView.tsx"), {
+  export: "CollectionReorderView",
+});
+const ReorderGrid = lazy(() => import("~/app/collections/ReorderGrid.tsx"), {
+  export: "ReorderGrid",
+});
 
 const Home = () => {
   const recipes = createMemo(() => getRecipesList());
@@ -172,8 +180,22 @@ const Home = () => {
 
   const selectPlace = (next: Place): void => {
     selection.stop();
+    setIsReordering(false);
     params.setPlace(serializePlace(next));
   };
+
+  const [isReorderingRaw, setIsReordering] = createSignal(false);
+
+  // Only a manual collection with more than one recipe, no filters or search,
+  // in its own order.
+  const canReorder = (): boolean =>
+    isManualPlace() &&
+    !isSelecting() &&
+    activeFilterCount() === 0 &&
+    params.searchQuery() === "" &&
+    sort() === YOUR_ORDER &&
+    placeRecipes().length > 1;
+  const isReordering = (): boolean => isReorderingRaw() && canReorder();
 
   const startPicking = (collection: Collection): void => {
     selection.start({ kind: "pick", collectionId: collection.id });
@@ -484,6 +506,20 @@ const Home = () => {
                     onRenameCommit={(name) => collectionActions.commitRename(collection(), name)}
                     onRenameCancel={collectionActions.cancelRename}
                     onOpenMenu={() => setIsCollectionMenuOpen(true)}
+                    actions={
+                      <Show when={canReorder()}>
+                        <button
+                          type="button"
+                          class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
+                          onClick={() => setIsReordering(true)}
+                        >
+                          <span class="material-symbols-outlined" aria-hidden="true">
+                            reorder
+                          </span>
+                          {collectionStrings.header.reorder}
+                        </button>
+                      </Show>
+                    }
                   />
                 </div>
               )}
@@ -492,7 +528,11 @@ const Home = () => {
               <div class={styles.placeTitleText}>
                 <Show
                   when={isRenamingPlace() && placeCollection()}
-                  fallback={<h2 class={styles.placeName}>{placeTitle()}</h2>}
+                  fallback={
+                    <h2 class={styles.placeName}>
+                      {isReordering() ? collectionStrings.reorder.desktopHint : placeTitle()}
+                    </h2>
+                  }
                 >
                   {(collection) => (
                     <InlineNameInput
@@ -507,9 +547,32 @@ const Home = () => {
                 </Show>
                 <p class={styles.placeSubtitle}>{placeSubtitle()}</p>
               </div>
-              <Show when={!pickCollection() && placeCollection()}>
+              <Show when={isReordering()}>
+                <div class={styles.placeActions}>
+                  <button
+                    type="button"
+                    class={`${buttonStyles.button} ${buttonStyles.primary}`}
+                    onClick={() => setIsReordering(false)}
+                  >
+                    {collectionStrings.reorder.done}
+                  </button>
+                </div>
+              </Show>
+              <Show when={!(isReordering() || pickCollection()) && placeCollection()}>
                 {(collection) => (
                   <div class={styles.placeActions}>
+                    <Show when={canReorder()}>
+                      <button
+                        type="button"
+                        class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
+                        onClick={() => setIsReordering(true)}
+                      >
+                        <span class="material-symbols-outlined" aria-hidden="true">
+                          reorder
+                        </span>
+                        {collectionStrings.header.reorder}
+                      </button>
+                    </Show>
                     <Show when={collection().kind === "manual"}>
                       <button
                         type="button"
@@ -531,21 +594,32 @@ const Home = () => {
             <Show
               when={placeEmptyState()}
               fallback={
-                <Loading>
-                  <RecipeList
-                    recipes={filteredRecipes()}
-                    currentPage={params.page()}
-                    viewMode={viewMode()}
-                    onPageChange={(details) => params.setPage(details.page)}
-                    onResetAll={params.resetAll}
-                    selection={
-                      isSelecting()
-                        ? { isSelected: selection.isSelected, onToggle: selection.toggle }
-                        : undefined
-                    }
-                    onLongPress={(slug) => selection.start({ kind: "select" }, slug)}
-                  />
-                </Loading>
+                <Show
+                  when={isDesktop() && isReordering() && placeCollection()}
+                  fallback={
+                    <Loading>
+                      <RecipeList
+                        recipes={filteredRecipes()}
+                        currentPage={params.page()}
+                        viewMode={viewMode()}
+                        onPageChange={(details) => params.setPage(details.page)}
+                        onResetAll={params.resetAll}
+                        selection={
+                          isSelecting()
+                            ? { isSelected: selection.isSelected, onToggle: selection.toggle }
+                            : undefined
+                        }
+                        onLongPress={(slug) => selection.start({ kind: "select" }, slug)}
+                      />
+                    </Loading>
+                  }
+                >
+                  {(collection) => (
+                    <Loading>
+                      <ReorderGrid collection={collection()} library={recipes()} />
+                    </Loading>
+                  )}
+                </Show>
               }
             >
               {(state) => state()}
@@ -554,6 +628,17 @@ const Home = () => {
         </div>
       </div>
 
+      <Show when={!isDesktop() && isReordering() && placeCollection()}>
+        {(collection) => (
+          <Loading>
+            <CollectionReorderView
+              collection={collection()}
+              library={recipes()}
+              onDone={() => setIsReordering(false)}
+            />
+          </Loading>
+        )}
+      </Show>
       <FilterDrawer
         open={isFilterDrawerOpen()}
         onOpenChange={setIsFilterDrawerOpen}

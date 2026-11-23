@@ -41,6 +41,8 @@
     "wrangler": "4.165.0"
   },
   "dependencies": {
+    "@dnd-kit/dom": "0.5.3",
+    "@dnd-kit/helpers": "0.5.3",
     "@kobalte/core": "2.0.0-alpha.5",
     "fuse.js": "^7.5.0",
     "jose": "6.2.12",

@@ -1,0 +1,71 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  display: flex;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-neutral-900);
+  outline-offset: 2px;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--color-neutral-100);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background: rgb(255 255 255 / 92%);
+  color: var(--color-neutral-700);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3);
+}
+
+.name {
+  font-family: var(--font-family-display);
+  font-size: var(--text-md);
+}
+
+.meta {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+}
+
+/* A thumbnail that failed to load leaves the grey well. */
+.broken {
+  visibility: hidden;
+}
