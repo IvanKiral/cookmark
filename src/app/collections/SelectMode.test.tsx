@@ -4,7 +4,7 @@ import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import type { Collection } from "~/shared/collections.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { CollectionsProvider, useCollections } from "./CollectionsContext.tsx";
-import { createSelection, type SelectMode } from "./createSelection.ts";
+import { createSelection, createSelectModeSignal, type SelectMode } from "./createSelection.ts";
 import { ListSelection } from "./ListSelection.tsx";
 
 vi.mock("@solidjs/router", () => ({
@@ -50,7 +50,10 @@ const fetchMock = vi.fn((url: string, init?: RequestInit) =>
 const renderSelectMode = (options: { place?: Collection; mode?: SelectMode } = {}) => {
   const Harness = () => {
     const collectionsContext = useCollections();
-    const selection = createSelection(() => recipes, options.mode ?? { kind: "select" });
+    const selection = createSelection(
+      () => recipes,
+      createSelectModeSignal(options.mode ?? { kind: "select" }),
+    );
     return (
       <>
         <ListSelection
@@ -61,6 +64,7 @@ const renderSelectMode = (options: { place?: Collection; mode?: SelectMode } = {
               : undefined
           }
           viewCount={recipes.length}
+          librarySlugs={new Set(recipes.map((recipe) => recipe.url_slug))}
         />
         <RecipeList
           recipes={recipes}

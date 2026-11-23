@@ -10,7 +10,7 @@ import { CollectionsSheet } from "~/app/collections/CollectionsSheet.tsx";
 import { sortByPin } from "~/app/collections/collectionIcons.ts";
 import { describeNameError, getNameError } from "~/app/collections/collectionNames.ts";
 import { createCollectionActions } from "~/app/collections/createCollectionActions.ts";
-import { createSelection } from "~/app/collections/createSelection.ts";
+import { createSelection, createSelectModeSignal } from "~/app/collections/createSelection.ts";
 import { InlineNameInput } from "~/app/collections/InlineNameInput.tsx";
 import { LibrarySidebar } from "~/app/collections/LibrarySidebar.tsx";
 import { ListSelection } from "~/app/collections/ListSelection.tsx";
@@ -91,7 +91,10 @@ const Home = () => {
   const [isCollectionMenuOpen, setIsCollectionMenuOpen] = createSignal(false);
   const [isCreatingInSidebar, setIsCreatingInSidebar] = createSignal(false);
   const [sidebarCreateError, setSidebarCreateError] = createSignal<string | undefined>(undefined);
-  const collectionActions = createCollectionActions({ openFresh: params.openPlaceFresh });
+  // Defined below: every place change also leaves select mode and reorder.
+  const collectionActions = createCollectionActions({
+    openFresh: (param) => openPlaceFresh(param),
+  });
   // View mode is intentionally ephemeral: every page load starts in card view.
   const [viewMode, setViewMode] = createSignal<ViewMode>("card");
 
@@ -104,12 +107,12 @@ const Home = () => {
   const countOfCollection = (collection: Collection): number =>
     countOf({ kind: "collection", id: collection.id });
 
-  const selection = createSelection(() => filteredRecipes());
-  const isSelecting = (): boolean => selection.mode() !== undefined;
+  const selectMode = createSelectModeSignal();
+  const isSelecting = (): boolean => selectMode[0]() !== undefined;
 
   // Pick mode: the library recipes not yet in the collection being filled.
   const pickCollection = createMemo((): Collection | undefined => {
-    const mode = selection.mode();
+    const mode = selectMode[0]();
     return mode?.kind === "pick"
       ? collections().find((collection) => collection.id === mode.collectionId)
       : undefined;
@@ -139,6 +142,7 @@ const Home = () => {
   };
 
   const search = createMemo(() => createRecipeSearch(recipes()));
+  const librarySlugs = createMemo(() => new Set(recipes().map((recipe) => recipe.url_slug)));
   const placeRecipes = createMemo(() => recipesOf(place()));
 
   // Editing a smart filter works on a draft; the URL filters stay as they are.
@@ -169,6 +173,8 @@ const Home = () => {
     const currentSort = sort();
     return currentSort === YOUR_ORDER ? filtered : sortRecipes(filtered, currentSort);
   });
+
+  const selection = createSelection(() => filteredRecipes(), selectMode);
 
   const pinnedCount = (): number =>
     collections().filter((collection) => collection.pinPosition !== null).length;
@@ -208,13 +214,24 @@ const Home = () => {
     return collection && collection.pinPosition === null ? collection : undefined;
   });
 
-  const selectPlace = (next: Place): void => {
+  const leaveModes = (): void => {
     selection.stop();
     setIsReordering(false);
+  };
+
+  const selectPlace = (next: Place): void => {
+    leaveModes();
     params.setPlace(serializePlace(next));
   };
 
-  const [isReorderingRaw, setIsReordering] = createSignal(false);
+  // Opens a place with no filters or search (a new collection or smart filter,
+  // or All after a delete).
+  const openPlaceFresh = (param: string | undefined): void => {
+    leaveModes();
+    params.openPlaceFresh(param);
+  };
+
+  const [isReorderOn, setIsReordering] = createSignal(false);
 
   // Only a manual collection with more than one recipe, no filters or search,
   // in its own order.
@@ -225,7 +242,15 @@ const Home = () => {
     params.searchQuery() === "" &&
     sort() === YOUR_ORDER &&
     placeRecipes().length > 1;
-  const isReordering = (): boolean => isReorderingRaw() && canReorder();
+
+  const isReordering = (): boolean => isReorderOn() && canReorder();
+
+  // Reorder ends as soon as it is no longer possible, so it never reopens by itself.
+  createEffect(canReorder, (isPossible) => {
+    if (!isPossible) {
+      setIsReordering(false);
+    }
+  });
 
   const startPicking = (collection: Collection): void => {
     selection.start({ kind: "pick", collectionId: collection.id });
@@ -320,7 +345,7 @@ const Home = () => {
     setIsSaveDialogOpen(false);
     setIsFilterDrawerOpen(false);
     setIsFilterPanelOpen(false);
-    params.openPlaceFresh(result.collection.id);
+    openPlaceFresh(result.collection.id);
     showToast(collectionStrings.smart.saved(result.collection.name));
     return undefined;
   };
@@ -568,6 +593,7 @@ const Home = () => {
                   selection={selection}
                   placeCollection={placeCollection()}
                   viewCount={filteredRecipes().length}
+                  librarySlugs={librarySlugs()}
                 />
               </div>
             </Show>

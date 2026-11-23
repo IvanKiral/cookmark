@@ -113,18 +113,24 @@ export const CollectionsProvider: ParentComponent = (props) => {
     reload();
   });
 
-  // Ends the optimistic change: on success the saved list takes it over, on
-  // failure the optimistic value falls back on its own.
-  const finish = async (result: CollectionSaveResult | CollectionWriteResult): Promise<boolean> => {
-    if (result.isOk) {
+  // Ends optimistic changes: on success the saved list takes them over, on
+  // failure the optimistic values fall back on their own. One toast for any
+  // number of failures, and a reload when another tab changed something.
+  const finishAll = async (
+    results: ReadonlyArray<CollectionSaveResult | CollectionWriteResult>,
+  ): Promise<boolean> => {
+    if (results.every((result) => result.isOk)) {
       return true;
     }
     showToast(collectionStrings.errors.couldNotSave);
-    if (shouldReload(result)) {
+    if (results.some(shouldReload)) {
       await reload();
     }
     return false;
   };
+
+  const finish = (result: CollectionSaveResult | CollectionWriteResult): Promise<boolean> =>
+    finishAll([result]);
 
   const create = async (input: NewCollectionInput): Promise<CollectionWriteResult> => {
     const result = await createCollection(input);
@@ -194,10 +200,7 @@ export const CollectionsProvider: ParentComponent = (props) => {
     slugs: ReadonlyArray<string>,
   ): Promise<ReadonlyArray<string>> => {
     const results = await Promise.all(ids.map((id) => saveAdd(id, slugs)));
-    const failed = results.find((result) => !result.isOk);
-    if (failed) {
-      await finish(failed);
-    }
+    await finishAll(results);
     return ids.filter((_, index) => results[index]?.isOk);
   };
 

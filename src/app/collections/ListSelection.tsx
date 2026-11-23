@@ -16,6 +16,7 @@ type ListSelectionProps = {
   placeCollection: Collection | undefined;
   // Number of recipes in the current view, for Select all.
   viewCount: number;
+  librarySlugs: ReadonlySet<string>;
 };
 
 const strings = collectionStrings.select;
@@ -158,7 +159,7 @@ export const ListSelection: Component<ListSelectionProps> = (props) => {
         isOpen={isAddSheetOpen()}
         onOpenChange={setIsAddSheetOpen}
         collections={addTargets()}
-        countOf={(collection) => collection.slugs.length}
+        librarySlugs={props.librarySlugs}
         onCreate={handleCreate}
         onAdd={handleAdd}
       />

@@ -1,5 +1,6 @@
-import { type Accessor, createMemo } from "solid-js";
+import { type Accessor, createMemo, createSignal, onSettled } from "solid-js";
 import type { Collection } from "~/shared/collections.ts";
+import type { RecipeSummary } from "~/shared/recipe.ts";
 import { useCollections } from "./CollectionsContext.tsx";
 import { describeNameError, getNameError } from "./collectionNames.ts";
 import { collectionStrings } from "./strings.ts";
@@ -14,11 +15,25 @@ export type RecipeCollections = {
   create: (name: string) => Promise<string | undefined>;
   // "In Soups, For guests" or "Not in any collection".
   summary: Accessor<string>;
+  // For the counts; undefined until the library has loaded.
+  librarySlugs: Accessor<ReadonlySet<string> | undefined>;
 };
 
 // The collections of the recipe page's recipe, for the More menu.
-export const createRecipeCollections = (slug: Accessor<string>): RecipeCollections => {
+export const createRecipeCollections = (
+  slug: Accessor<string>,
+  loadLibrary: () => Promise<ReadonlyArray<RecipeSummary>>,
+): RecipeCollections => {
   const collectionsContext = useCollections();
+  const [librarySlugs, setLibrarySlugs] = createSignal<ReadonlySet<string> | undefined>(undefined);
+
+  // The recipe page does not render the library, so it is fetched once on the
+  // client, without holding up the page; counts use every stored recipe until then.
+  onSettled(() => {
+    loadLibrary()
+      .then((recipes) => setLibrarySlugs(new Set(recipes.map((recipe) => recipe.url_slug))))
+      .catch(() => undefined);
+  });
 
   const manual = createMemo(() =>
     collectionsContext.collections().filter((collection) => collection.kind === "manual"),
@@ -56,5 +71,5 @@ export const createRecipeCollections = (slug: Accessor<string>): RecipeCollectio
       : collectionStrings.addTo.notInAny;
   };
 
-  return { manual, isIn, toggle, create, summary };
+  return { manual, isIn, toggle, create, summary, librarySlugs };
 };

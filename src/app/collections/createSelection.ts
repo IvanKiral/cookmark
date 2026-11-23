@@ -1,4 +1,4 @@
-import { type Accessor, createSignal } from "solid-js";
+import { type Accessor, createEffect, createSignal, type Signal } from "solid-js";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 
 // "select" picks from the current view; "pick" adds library recipes to one collection.
@@ -18,11 +18,15 @@ export type Selection = {
   stop: () => void;
 };
 
+// The mode signal comes from the caller, because the view usually depends on it
+// (pick mode shows other recipes) and must exist before the selection does.
+export const createSelectModeSignal = (initialMode?: SelectMode): Signal<SelectMode | undefined> =>
+  createSignal<SelectMode | undefined>(initialMode);
+
 export const createSelection = (
   view: Accessor<ReadonlyArray<RecipeSummary>>,
-  initialMode?: SelectMode,
+  [mode, setMode]: Signal<SelectMode | undefined>,
 ): Selection => {
-  const [mode, setMode] = createSignal<SelectMode | undefined>(initialMode);
   const [chosen, setChosen] = createSignal<ReadonlySet<string>>(new Set());
 
   // Plain functions, not memos: the view depends on the mode, so it is read lazily.
@@ -30,6 +34,19 @@ export const createSelection = (
     view()
       .map((recipe) => recipe.url_slug)
       .filter((slug) => chosen().has(slug));
+
+  // Recipes that leave the view (search or filters changed) are unselected for
+  // good, so they do not come back selected when the view widens again.
+  createEffect(
+    () => view().map((recipe) => recipe.url_slug),
+    (slugs) => {
+      const inView = new Set(slugs);
+      const current = chosen();
+      if ([...current].some((slug) => !inView.has(slug))) {
+        setChosen(new Set([...current].filter((slug) => inView.has(slug))));
+      }
+    },
+  );
 
   const isInView = (slug: string): boolean => view().some((recipe) => recipe.url_slug === slug);
 

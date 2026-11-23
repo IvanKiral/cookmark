@@ -10,7 +10,7 @@ type AddSelectionSheetProps = {
   onOpenChange: (isOpen: boolean) => void;
   // Manual collections to offer, alphabetical (the open collection left out).
   collections: ReadonlyArray<Collection>;
-  countOf: (collection: Collection) => number;
+  librarySlugs: ReadonlySet<string> | undefined;
   // Resolves with the new collection, or an error message.
   onCreate: (name: string) => Promise<Collection | string>;
   onAdd: (collectionIds: ReadonlyArray<string>) => void;
@@ -75,7 +75,7 @@ export const AddSelectionSheet: Component<AddSelectionSheetProps> = (props) => {
         collections={props.collections}
         isChecked={(collection) => checked().has(collection.id)}
         onToggle={toggle}
-        countOf={props.countOf}
+        librarySlugs={props.librarySlugs}
         onCreate={handleCreate}
       />
     </BottomSheet>

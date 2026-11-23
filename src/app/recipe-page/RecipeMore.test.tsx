@@ -71,7 +71,10 @@ const renderNav = (options: HarnessOptions = {}) => {
     const [verdict, setVerdict] = createSignal(options.verdict);
     const [isShouldDelete, setIsShouldDelete] = createSignal(options.isShouldDelete ?? false);
     const [openSheet, setOpenSheet] = createSignal<RecipeSheet>(undefined);
-    const recipeCollections = createRecipeCollections(() => "soup");
+    const recipeCollections = createRecipeCollections(
+      () => "soup",
+      async () => [],
+    );
     const admin = createRecipeAdminActions({
       slug: () => "soup",
       name: () => "Soup",

@@ -55,7 +55,7 @@ export const AddToCollectionSheet: Component<AddToCollectionSheetProps> = (props
       collections={props.recipeCollections.manual()}
       isChecked={props.recipeCollections.isIn}
       onToggle={props.recipeCollections.toggle}
-      countOf={(collection) => collection.slugs.length}
+      librarySlugs={props.recipeCollections.librarySlugs()}
       onCreate={props.recipeCollections.create}
     />
   </BottomSheet>

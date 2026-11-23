@@ -2,7 +2,7 @@ import { useLocation, useParams } from "@solidjs/router";
 import { type Component, createMemo, createSignal, Loading, Match, Show, Switch } from "solid-js";
 import { AdminConfirmDialog } from "~/app/admin/AdminConfirmDialog.tsx";
 import { createRecipeAdminActions } from "~/app/admin/createRecipeAdminActions.ts";
-import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
+import { getRecipeBySlug, getRecipesList } from "~/app/api/recipeQueries.ts";
 import { createRecipeCollections } from "~/app/collections/createRecipeCollections.ts";
 import { createRecipeScale } from "~/app/recipe-page/createRecipeScale.ts";
 import { RecipeBadges } from "~/app/recipe-page/RecipeBadges.tsx";
@@ -37,7 +37,7 @@ const RecipePage: Component = () => {
     verdict: () => recipe()?.verdict,
     isShouldDelete: () => recipe()?.should_delete ?? false,
   });
-  const recipeCollections = createRecipeCollections(() => params.slug);
+  const recipeCollections = createRecipeCollections(() => params.slug, getRecipesList);
   const [openSheet, setOpenSheet] = createSignal<RecipeSheet>(undefined);
 
   // Back to the list with the search and filters it had.

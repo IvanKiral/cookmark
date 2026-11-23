@@ -9,12 +9,22 @@ type CollectionCheckListProps = {
   collections: ReadonlyArray<Collection>;
   isChecked: (collection: Collection) => boolean;
   onToggle: (collection: Collection) => void;
-  countOf: (collection: Collection) => number;
+  // Slugs of the library; counts leave out recipes that left it. Until it is
+  // known, every stored recipe counts.
+  librarySlugs: ReadonlySet<string> | undefined;
   // Resolves with an error message, or undefined once created (and checked).
   onCreate: (name: string) => Promise<string | undefined>;
 };
 
 const strings = collectionStrings.addTo;
+
+const countInLibrary = (
+  collection: Collection,
+  librarySlugs: ReadonlySet<string> | undefined,
+): number =>
+  librarySlugs
+    ? collection.slugs.filter((slug) => librarySlugs.has(slug)).length
+    : collection.slugs.length;
 
 // Manual collections as checkboxes, an inline "New collection" and the note
 // on smart filters, which pick their own recipes.
@@ -49,7 +59,7 @@ export const CollectionCheckList: Component<CollectionCheckListProps> = (props) 
             />
             <span class={styles.name}>{collection.name}</span>
             <span class={styles.count}>
-              {collectionStrings.recipeCount(props.countOf(collection))}
+              {collectionStrings.recipeCount(countInLibrary(collection, props.librarySlugs))}
             </span>
           </label>
         )}
