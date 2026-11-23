@@ -26,7 +26,7 @@ Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build 
 - `src/app.tsx` (root), `src/Document.tsx` (HTML shell), `src/router.ts`, `src/middleware.ts` (dispatches API routes), `src/clientSetup.ts` (service worker): start-mode entry points.
 - `src/routes`: file-based pages (default exports) and API endpoints (uppercase method exports). Keep them thin: API files only re-export a handler from `src/server`.
 - `src/server`: Worker-only code (D1 stores and handlers, R2 media, Access auth). Read bindings with `getEnv()` from `src/server/env.ts` (backed by `cloudflare:workers`; tests set them with `setTestEnv`). `src/app` must never import from here.
-- `src/app/<feature>`: UI grouped by feature (recipe-list, filters, recipe-page, marks, verdicts, admin, user, pwa) plus `ui/` for generic pieces. Each feature has its own `strings.ts`.
+- `src/app/<feature>`: UI grouped by feature (recipe-list, filters, recipe-page, marks, verdicts, admin, user, pwa, collections, list-page) plus `ui/` for generic pieces. Each feature has its own `strings.ts`; list-page only puts the other features together and has none.
 - `src/app/api`: the only bridge to the server: `"use server"` queries and fetch wrappers for `/api/*`.
 - `src/shared`: types and logic used by both sides (recipe types, tags, verdicts, edit validation). It must not import from `app` or `server`, and returns error codes instead of UI text.
 - `migrations/`: D1 migrations, applied with `wrangler d1 migrations apply`.
@@ -36,6 +36,7 @@ Wrangler commands against D1 must pass `--config wrangler.jsonc`; after a build 
 
 - Named exports only. Default exports are allowed only where the framework needs them (route pages, `app.tsx`, entry files, tool configs); Biome enforces this.
 - Imports: `./` for files in the same folder, `~/` for everything else, never `../`. Always use the real `.ts`/`.tsx` extension.
+- Pages in `src/routes` stay small: they put the feature components together. The logic belongs in the feature folders under `src/app`.
 - All UI text goes in the feature's `strings.ts` so the app can be translated later.
 - `RecipeSummary` is the slim list shape, `Recipe` the full recipe.
 - Solid 2: links are plain `<a>` (router state via `toLinkState`), ARIA state attributes take `ariaBoolean(...)`, mutations are `action`s with `createOptimistic` for pending and optimistic UI, and signal writes apply on the next microtask (component tests flush after every `fireEvent`, see `src/testing/setupTests.ts`).
