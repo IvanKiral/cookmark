@@ -85,12 +85,14 @@
   color: var(--color-neutral-800);
 }
 
-.desktopOnly {
+.desktopOnly,
+.metaItem.desktopOnly {
   display: none;
 }
 
 @media (min-width: 1024px) {
-  .desktopOnly {
+  .desktopOnly,
+  .metaItem.desktopOnly {
     display: flex;
   }
 

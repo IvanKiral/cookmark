@@ -1,52 +1,68 @@
-import { useLocation } from "@solidjs/router";
+import type { JSX } from "@solidjs/web";
 import { type Component, Show } from "solid-js";
-import { RecipeFlagToggle } from "~/app/admin/RecipeFlagToggle.tsx";
-import { RecipeVerdictToggle } from "~/app/admin/RecipeVerdictToggle.tsx";
-import { adminStrings } from "~/app/admin/strings.ts";
+import type { RecipeAdminActions } from "~/app/admin/createRecipeAdminActions.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
 import iconButtonStyles from "~/app/ui/iconToggleButton.module.css";
-import { toLinkState } from "~/app/ui/linkState.ts";
-import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
 import type { Recipe } from "~/shared/recipe.ts";
+import styles from "./RecipeMore.module.css";
+import { RecipeMoreMenu } from "./RecipeMoreMenu.tsx";
+import { RecipeMoreSheet } from "./RecipeMoreSheet.tsx";
+import { recipePageStrings } from "./strings.ts";
 
 type RecipeNavActionsProps = {
   slug: string;
   recipe: Recipe;
+  isAdmin: boolean;
+  isDesktop: boolean;
+  isMoreShown: boolean;
+  admin: RecipeAdminActions;
+  isSheetOpen: boolean;
+  onSheetOpenChange: (isOpen: boolean) => void;
+  // "Add to collection": a sheet row on phone, a dropdown item on desktop.
+  sheetCollectionsRow?: JSX.Element;
+  menuCollectionsItem?: JSX.Element;
 };
 
-// The admin controls render nothing for viewers; everyone gets the marks.
-export const RecipeNavActions: Component<RecipeNavActionsProps> = (props) => {
-  const location = useLocation();
-  const { isAdmin } = useCurrentUser();
-
-  return (
-    <>
-      <Show when={isAdmin()}>
-        {/* biome-ignore lint/a11y/useAnchorContent: the aria-label names the link, the icon is decorative */}
-        <a
-          href={`/recipe/${props.slug}/edit`}
-          state={toLinkState(location.state)}
-          class={iconButtonStyles.button}
-          aria-label={adminStrings.edit.edit(props.recipe.title)}
-        >
-          <span class="material-symbols-outlined" aria-hidden="true">
-            edit
-          </span>
-        </a>
+// Favourite, To try and More; the admin actions live in More.
+export const RecipeNavActions: Component<RecipeNavActionsProps> = (props) => (
+  <>
+    <MarkButton mark="favorite" slug={props.slug} name={props.recipe.title} />
+    <MarkButton mark="to-try" slug={props.slug} name={props.recipe.title} />
+    <Show when={props.isMoreShown}>
+      <Show
+        when={props.isDesktop}
+        fallback={
+          <>
+            <button
+              type="button"
+              class={`${iconButtonStyles.button} ${styles.moreButton}`}
+              aria-label={recipePageStrings.more.label}
+              aria-haspopup="dialog"
+              onClick={() => props.onSheetOpenChange(true)}
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">
+                more_vert
+              </span>
+            </button>
+            <RecipeMoreSheet
+              isOpen={props.isSheetOpen}
+              onOpenChange={props.onSheetOpenChange}
+              slug={props.slug}
+              title={props.recipe.title}
+              isAdmin={props.isAdmin}
+              admin={props.admin}
+              collectionsRow={props.sheetCollectionsRow}
+            />
+          </>
+        }
+      >
+        <RecipeMoreMenu
+          slug={props.slug}
+          isAdmin={props.isAdmin}
+          admin={props.admin}
+          items={props.menuCollectionsItem}
+        />
       </Show>
-      <RecipeVerdictToggle
-        slug={props.slug}
-        name={props.recipe.title}
-        verdict={props.recipe.verdict}
-      />
-      <RecipeFlagToggle
-        flag="should-delete"
-        slug={props.slug}
-        name={props.recipe.title}
-        isSet={props.recipe.should_delete ?? false}
-      />
-      <MarkButton mark="favorite" slug={props.slug} name={props.recipe.title} />
-      <MarkButton mark="to-try" slug={props.slug} name={props.recipe.title} />
-    </>
-  );
-};
+    </Show>
+  </>
+);

@@ -1,7 +1,5 @@
 import type { JSX } from "@solidjs/web";
 import { type Component, For, Show } from "solid-js";
-import { useCurrentUser } from "~/app/user/CurrentUserContext.tsx";
-import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { Recipe } from "~/shared/recipe.ts";
 import type { RecipeScale } from "./createRecipeScale.ts";
 import styles from "./RecipeHeader.module.css";
@@ -13,6 +11,8 @@ import { recipePageStrings } from "./strings.ts";
 type RecipeHeaderProps = {
   recipe: Recipe;
   scale: RecipeScale;
+  // The verdict and To delete badges, owned by the route (they show unsaved admin changes).
+  badges?: JSX.Element;
 };
 
 const difficultyClasses: Record<NonNullable<Recipe["difficulty"]>, string> = {
@@ -32,9 +32,16 @@ const MetaItem: Component<{ label: string; value: string | undefined; class?: st
   </Show>
 );
 
+const SourceLink: Component<{ href: string }> = (props) => (
+  <a href={props.href} target="_blank" rel="noopener noreferrer" class={styles.sourceLink}>
+    {recipePageStrings.viewSource}
+    <span class="material-symbols-outlined" aria-hidden="true">
+      open_in_new
+    </span>
+  </a>
+);
+
 export const RecipeHeader: Component<RecipeHeaderProps> = (props) => {
-  const { isAdmin } = useCurrentUser();
-  const isShouldDeleteShown = (): boolean => isAdmin() && (props.recipe.should_delete ?? false);
   // The recipe JSON is not validated, so any other value gets the unknown style.
   const difficultyClass = (): string => {
     const difficulty = props.recipe.difficulty;
@@ -44,27 +51,11 @@ export const RecipeHeader: Component<RecipeHeaderProps> = (props) => {
     return difficultyClasses[difficulty] ?? styles.difficultyUnknown;
   };
 
-  const sourceLink = (sourceUrl: string): JSX.Element => (
-    <a href={sourceUrl} target="_blank" rel="noopener noreferrer" class={styles.sourceLink}>
-      {recipePageStrings.viewSource}
-      <span class="material-symbols-outlined" aria-hidden="true">
-        open_in_new
-      </span>
-    </a>
-  );
-
   return (
     <header class={styles.header}>
       <div class={styles.headerTop}>
-        <Show when={props.recipe.verdict || isShouldDeleteShown()}>
-          <div class={styles.badges}>
-            <Show when={props.recipe.verdict}>
-              {(verdict) => <RecipeFlagBadge kind={verdict()} />}
-            </Show>
-            <Show when={isShouldDeleteShown()}>
-              <RecipeFlagBadge kind="should-delete" />
-            </Show>
-          </div>
+        <Show when={props.badges}>
+          <div class={styles.badges}>{props.badges}</div>
         </Show>
         <h1 class={styles.title}>{props.recipe.title}</h1>
         <p class={styles.description}>{props.recipe.description}</p>
@@ -114,7 +105,11 @@ export const RecipeHeader: Component<RecipeHeaderProps> = (props) => {
             </div>
           </Show>
           <Show when={props.recipe.source_url}>
-            {(sourceUrl) => <span class={styles.desktopOnly}>{sourceLink(sourceUrl())}</span>}
+            {(sourceUrl) => (
+              <span class={styles.desktopOnly}>
+                <SourceLink href={sourceUrl()} />
+              </span>
+            )}
           </Show>
         </div>
       </Show>
@@ -128,7 +123,9 @@ export const RecipeHeader: Component<RecipeHeaderProps> = (props) => {
               </span>
             )}
           </Show>
-          <Show when={props.recipe.source_url}>{(sourceUrl) => sourceLink(sourceUrl())}</Show>
+          <Show when={props.recipe.source_url}>
+            {(sourceUrl) => <SourceLink href={sourceUrl()} />}
+          </Show>
         </div>
       </Show>
     </header>

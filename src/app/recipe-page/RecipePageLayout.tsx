@@ -9,6 +9,8 @@ type RecipePageLayoutProps = {
   // Router state passed along with the close link (e.g. the list's search).
   closeState?: unknown;
   closeLabel: string;
+  // Material Symbols name of the close link's icon.
+  closeIcon?: string;
   isLogoShown: boolean;
   actions?: JSX.Element;
   mainClass?: string;
@@ -20,13 +22,16 @@ export const RecipePageLayout: ParentComponent<RecipePageLayoutProps> = (props) 
     <nav class={styles.nav}>
       <div class={styles.navInner}>
         <div class={styles.navLeading}>
+          {/* biome-ignore lint/a11y/useAnchorContent: the aria-label names the link, the icon is decorative */}
           <a
             href={props.closeHref}
             state={toLinkState(props.closeState)}
             class={`${styles.navButton} ${styles.closeButton}`}
             aria-label={props.closeLabel}
           >
-            <span class="material-symbols-outlined">close</span>
+            <span class="material-symbols-outlined" aria-hidden="true">
+              {props.closeIcon ?? "close"}
+            </span>
           </a>
           <Show when={props.isLogoShown}>
             <a href="/" class={styles.logo}>

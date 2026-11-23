@@ -1,0 +1,264 @@
+/* Phone More sheet */
+.sectionLabel {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+}
+
+.divider {
+  height: 1px;
+  margin: var(--space-2) 0 var(--space-4);
+  background: var(--color-neutral-200);
+}
+
+.verdictGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.verdictOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  text-align: left;
+  cursor: pointer;
+}
+
+.verdictSelected {
+  border: 1.5px solid var(--color-neutral-900);
+  background: var(--color-neutral-50);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.verdictOption:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.verdictLabel {
+  flex: 1;
+}
+
+.check {
+  font-size: 18px;
+}
+
+.filledIcon {
+  font-size: 22px;
+  font-variation-settings: "FILL" 1;
+}
+
+.chefKiss {
+  color: var(--color-chef-kiss);
+}
+
+.chefApproved {
+  color: var(--color-chef-approved);
+}
+
+.chefOk {
+  color: var(--color-chef-ok);
+}
+
+.chefFlop {
+  color: var(--color-chef-flop);
+}
+
+.clearVerdict {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: var(--space-1);
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-500);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.row > :global(.material-symbols-outlined):first-child {
+  color: var(--color-neutral-600);
+}
+
+.row:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.rowLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rowSubtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  font-size: 20px;
+  color: var(--color-neutral-400);
+}
+
+.danger,
+.danger > :global(.material-symbols-outlined):first-child {
+  color: var(--color-should-delete);
+}
+
+/* Desktop More dropdown */
+.moreButton {
+  width: 44px;
+  height: 44px;
+  color: var(--color-neutral-700);
+}
+
+.menu {
+  z-index: 60;
+  width: 260px;
+  padding: 6px;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-family-base);
+  outline: none;
+}
+
+.menuLabel {
+  display: block;
+  padding: 6px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-900);
+  cursor: pointer;
+  outline: none;
+}
+
+.menuItem > :global(.material-symbols-outlined):first-child {
+  font-size: 20px;
+  color: var(--color-neutral-500);
+}
+
+.menuItem[data-highlighted] {
+  background: var(--color-neutral-100);
+}
+
+.menuItem[data-disabled] {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.menuItem > .filledIcon:first-child {
+  font-size: 20px;
+}
+
+.menuItem > .chefKiss:first-child {
+  color: var(--color-chef-kiss);
+}
+
+.menuItem > .chefApproved:first-child {
+  color: var(--color-chef-approved);
+}
+
+.menuItem > .chefOk:first-child {
+  color: var(--color-chef-ok);
+}
+
+.menuItem > .chefFlop:first-child {
+  color: var(--color-chef-flop);
+}
+
+.menuItem.danger > :global(.material-symbols-outlined):first-child {
+  color: var(--color-should-delete);
+}
+
+.menuCheck {
+  display: inline-flex;
+}
+
+.menuCheck :global(.material-symbols-outlined) {
+  font-size: 18px;
+}
+
+.menuSeparator {
+  height: 1px;
+  margin: 6px 4px;
+  border: none;
+  background: var(--color-neutral-200);
+}
+
+/* Phone verdict badge that opens the sheet */
+.badgeButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 0;
+  margin: -9px 0 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.badgeChevron {
+  font-size: 16px;
+  margin-left: 2px;
+}

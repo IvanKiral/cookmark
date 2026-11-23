@@ -18,6 +18,17 @@ export const recipePageStrings = {
   hours: (hours: number) => `${hours} h`,
   hoursMinutes: (hours: number, minutes: number) => `${hours} h ${minutes} min`,
   serves: "Serves",
+  more: {
+    label: "More actions",
+    kicker: "Recipe",
+    close: "Close",
+    adminOnly: "Admin only",
+    chefsVerdict: "Chef's verdict",
+    editRecipe: "Edit recipe",
+    markToDelete: "Mark to delete",
+    removeDeleteMark: "Remove the To delete mark",
+    changeVerdict: (verdict: string) => `Chef's verdict: ${verdict}. Change verdict`,
+  },
   scale: {
     phoneHint: "Tap any amount to change it, the rest adjusts.",
     desktopHint: "Click any amount to change it, the rest adjusts.",
