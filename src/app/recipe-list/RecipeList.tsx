@@ -15,6 +15,13 @@ type RecipeListProps = {
   viewMode: ViewMode;
   onPageChange: (details: { page: number }) => void;
   onResetAll?: () => void;
+  // Select mode: cards become toggles and pages holding selected recipes get a dot.
+  selection?: {
+    isSelected: (slug: string) => boolean;
+    onToggle: (slug: string) => void;
+  };
+  // Touch only: holding a card or row.
+  onLongPress?: (slug: string) => void;
 };
 
 const ITEMS_PER_PAGE_LIST = 15;
@@ -41,6 +48,30 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
     const end = start + itemsPerPage();
     return props.recipes.slice(start, end);
   });
+
+  const markedPages = createMemo((): ReadonlySet<number> | undefined => {
+    const selection = props.selection;
+    if (!selection) {
+      return undefined;
+    }
+    return new Set(
+      props.recipes.flatMap((recipe, index) =>
+        selection.isSelected(recipe.url_slug) ? [Math.floor(index / itemsPerPage()) + 1] : [],
+      ),
+    );
+  });
+
+  const selectionOf = (slug: string) => {
+    const selection = props.selection;
+    return selection
+      ? { isSelected: selection.isSelected(slug), onToggle: () => selection.onToggle(slug) }
+      : undefined;
+  };
+
+  const longPressOf = (slug: string) => {
+    const onLongPress = props.onLongPress;
+    return onLongPress && !props.selection ? () => onLongPress(slug) : undefined;
+  };
 
   const handlePageChange = (details: { page: number }) => {
     props.onPageChange(details);
@@ -80,6 +111,8 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
                   difficulty={recipe.difficulty}
                   time={formatMinutes(recipe.total_time)}
                   verdict={recipe.verdict}
+                  selection={selectionOf(recipe.url_slug)}
+                  onLongPress={longPressOf(recipe.url_slug)}
                 />
               )}
             </For>
@@ -96,6 +129,8 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
                 difficulty={recipe.difficulty}
                 time={formatMinutes(recipe.total_time)}
                 verdict={recipe.verdict}
+                selection={selectionOf(recipe.url_slug)}
+                onLongPress={longPressOf(recipe.url_slug)}
               />
             )}
           </For>
@@ -106,6 +141,7 @@ export const RecipeList: Component<RecipeListProps> = (props) => {
         pageSize={itemsPerPage()}
         page={props.currentPage}
         onPageChange={handlePageChange}
+        markedPages={markedPages()}
       />
     </div>
   );

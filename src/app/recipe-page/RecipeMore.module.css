@@ -262,3 +262,11 @@
   font-size: 16px;
   margin-left: 2px;
 }
+
+.tallItem {
+  min-height: 48px;
+}
+
+.moreAnchor {
+  display: inline-flex;
+}

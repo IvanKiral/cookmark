@@ -122,3 +122,19 @@
     font-size: var(--text-base);
   }
 }
+
+.marked {
+  position: relative;
+}
+
+.marked::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  transform: translateX(-50%);
+}

@@ -1,9 +1,9 @@
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
 import { useLocation, useNavigate } from "@solidjs/router";
-import type { JSX } from "@solidjs/web";
 import { type Component, For, Show } from "solid-js";
 import type { RecipeAdminActions } from "~/app/admin/createRecipeAdminActions.ts";
 import { adminStrings } from "~/app/admin/strings.ts";
+import { collectionStrings } from "~/app/collections/strings.ts";
 import iconButtonStyles from "~/app/ui/iconToggleButton.module.css";
 import { recipeVerdictIcons, recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import { isRecipeVerdict, recipeVerdictValues } from "~/shared/verdicts.ts";
@@ -15,8 +15,10 @@ type RecipeMoreMenuProps = {
   slug: string;
   isAdmin: boolean;
   admin: RecipeAdminActions;
-  // Menu items for everyone, above the admin section ("Add to collection").
-  items?: JSX.Element;
+  // "In Soups, For guests" under "Add to collection", which everyone gets.
+  collectionsSummary: string;
+  // Called once the menu has closed, so the popover it opens keeps the focus.
+  onAddToCollection: () => void;
 };
 
 const strings = recipePageStrings.more;
@@ -26,6 +28,7 @@ const strings = recipePageStrings.more;
 export const RecipeMoreMenu: Component<RecipeMoreMenuProps> = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
+  let isAddToCollectionChosen = false;
 
   return (
     <DropdownMenu placement="bottom-end" gutter={6}>
@@ -38,12 +41,35 @@ export const RecipeMoreMenu: Component<RecipeMoreMenuProps> = (props) => {
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content class={styles.menu}>
-          {props.items}
+        <DropdownMenu.Content
+          class={styles.menu}
+          onCloseAutoFocus={(event) => {
+            if (isAddToCollectionChosen) {
+              event.preventDefault();
+              isAddToCollectionChosen = false;
+              props.onAddToCollection();
+            }
+          }}
+        >
+          <DropdownMenu.Item
+            class={`${styles.menuItem} ${styles.tallItem}`}
+            onSelect={() => {
+              isAddToCollectionChosen = true;
+            }}
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              collections_bookmark
+            </span>
+            <span class={styles.rowText}>
+              <span>{collectionStrings.addTo.rowTitle}</span>
+              <span class={styles.rowSubtitle}>{props.collectionsSummary}</span>
+            </span>
+            <span class={`material-symbols-outlined ${styles.chevron}`} aria-hidden="true">
+              chevron_right
+            </span>
+          </DropdownMenu.Item>
           <Show when={props.isAdmin}>
-            <Show when={props.items}>
-              <DropdownMenu.Separator class={styles.menuSeparator} />
-            </Show>
+            <DropdownMenu.Separator class={styles.menuSeparator} />
             <DropdownMenu.Group>
               <DropdownMenu.GroupLabel class={styles.menuLabel}>
                 {strings.adminOnly}

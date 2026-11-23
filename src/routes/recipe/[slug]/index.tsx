@@ -3,12 +3,13 @@ import { type Component, createMemo, createSignal, Loading, Match, Show, Switch 
 import { AdminConfirmDialog } from "~/app/admin/AdminConfirmDialog.tsx";
 import { createRecipeAdminActions } from "~/app/admin/createRecipeAdminActions.ts";
 import { getRecipeBySlug } from "~/app/api/recipeQueries.ts";
+import { createRecipeCollections } from "~/app/collections/createRecipeCollections.ts";
 import { createRecipeScale } from "~/app/recipe-page/createRecipeScale.ts";
 import { RecipeBadges } from "~/app/recipe-page/RecipeBadges.tsx";
 import { RecipeBody } from "~/app/recipe-page/RecipeBody.tsx";
 import { RecipeHeader } from "~/app/recipe-page/RecipeHeader.tsx";
 import { RecipeImage } from "~/app/recipe-page/RecipeImage.tsx";
-import { RecipeNavActions } from "~/app/recipe-page/RecipeNavActions.tsx";
+import { RecipeNavActions, type RecipeSheet } from "~/app/recipe-page/RecipeNavActions.tsx";
 import { RecipePageLayout } from "~/app/recipe-page/RecipePageLayout.tsx";
 import { RecipeVideo } from "~/app/recipe-page/RecipeVideo.tsx";
 import { recipePageStrings } from "~/app/recipe-page/strings.ts";
@@ -36,7 +37,8 @@ const RecipePage: Component = () => {
     verdict: () => recipe()?.verdict,
     isShouldDelete: () => recipe()?.should_delete ?? false,
   });
-  const [isSheetOpen, setIsSheetOpen] = createSignal(false);
+  const recipeCollections = createRecipeCollections(() => params.slug);
+  const [openSheet, setOpenSheet] = createSignal<RecipeSheet>(undefined);
 
   // Back to the list with the search and filters it had.
   const backHref = (): string => {
@@ -70,10 +72,10 @@ const RecipePage: Component = () => {
                 recipe={recipeData()}
                 isAdmin={isAdmin()}
                 isDesktop={isDesktop()}
-                isMoreShown={isAdmin()}
                 admin={admin}
-                isSheetOpen={isSheetOpen()}
-                onSheetOpenChange={setIsSheetOpen}
+                recipeCollections={recipeCollections}
+                openSheet={openSheet()}
+                onOpenSheetChange={setOpenSheet}
               />
             }
           >
@@ -86,7 +88,7 @@ const RecipePage: Component = () => {
                     verdict={admin.verdict()}
                     isShouldDeleteShown={isShouldDeleteShown()}
                     onVerdictClick={
-                      isAdmin() && !isDesktop() ? () => setIsSheetOpen(true) : undefined
+                      isAdmin() && !isDesktop() ? () => setOpenSheet("more") : undefined
                     }
                   />
                 ) : undefined

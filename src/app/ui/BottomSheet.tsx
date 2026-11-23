@@ -26,7 +26,7 @@ export const BottomSheet: ParentComponent<BottomSheetProps> = (props) => {
     <Dialog open={props.isOpen} onOpenChange={props.onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay class={styles.overlay} />
-        <Dialog.Content class={styles.sheet}>
+        <Dialog.Content class={styles.sheet} role="dialog">
           <div class={styles.handle} aria-hidden="true" />
           <div class={styles.header}>
             <Show when={props.leading}>{props.leading}</Show>

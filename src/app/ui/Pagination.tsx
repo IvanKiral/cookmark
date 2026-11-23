@@ -10,6 +10,8 @@ type PaginationProps = {
   page?: number;
   onPageChange?: (details: { page: number }) => void;
   class?: string;
+  // Pages that get a dot, e.g. those holding selected recipes.
+  markedPages?: ReadonlySet<number>;
 };
 
 export const Pagination: Component<PaginationProps> = (props) => {
@@ -29,7 +31,7 @@ export const Pagination: Component<PaginationProps> = (props) => {
         itemComponent={(itemProps) => (
           <KobaltePagination.Item
             page={itemProps.page}
-            class={styles.pageItem}
+            class={[styles.pageItem, { [styles.marked]: props.markedPages?.has(itemProps.page) }]}
             aria-label={uiStrings.pagination.goToPage(itemProps.page)}
           >
             {itemProps.page}

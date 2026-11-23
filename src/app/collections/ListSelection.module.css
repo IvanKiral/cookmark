@@ -1,0 +1,16 @@
+/* On the dark desktop bar the primary action turns light. */
+@media (min-width: 1024px) {
+  .primaryAction {
+    border-color: white;
+    background: white;
+    color: var(--color-neutral-900);
+  }
+
+  .primaryAction:hover:not(:disabled) {
+    background: var(--color-neutral-200);
+  }
+
+  .action:disabled {
+    opacity: 0.45;
+  }
+}

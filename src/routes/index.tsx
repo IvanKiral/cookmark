@@ -1,5 +1,5 @@
 import type { JSX } from "@solidjs/web";
-import { createMemo, createSignal, Loading, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, Loading, Show } from "solid-js";
 import { getRecipesList } from "~/app/api/recipeQueries.ts";
 import { CollectionChips } from "~/app/collections/CollectionChips.tsx";
 import { CollectionHeaderCard } from "~/app/collections/CollectionHeaderCard.tsx";
@@ -9,8 +9,10 @@ import { useCollections } from "~/app/collections/CollectionsContext.tsx";
 import { CollectionsSheet } from "~/app/collections/CollectionsSheet.tsx";
 import { sortByPin } from "~/app/collections/collectionIcons.ts";
 import { createCollectionActions } from "~/app/collections/createCollectionActions.ts";
+import { createSelection } from "~/app/collections/createSelection.ts";
 import { InlineNameInput } from "~/app/collections/InlineNameInput.tsx";
 import { LibrarySidebar } from "~/app/collections/LibrarySidebar.tsx";
+import { ListSelection } from "~/app/collections/ListSelection.tsx";
 import { NewCollectionSheet } from "~/app/collections/NewCollectionSheet.tsx";
 import { PlaceEmptyState } from "~/app/collections/PlaceEmptyState.tsx";
 import {
@@ -84,7 +86,23 @@ const Home = () => {
   const countOfCollection = (collection: Collection): number =>
     countOf({ kind: "collection", id: collection.id });
 
-  const isManualPlace = (): boolean => placeCollection()?.kind === "manual";
+  const selection = createSelection(() => filteredRecipes());
+  const isSelecting = (): boolean => selection.mode() !== undefined;
+
+  // Pick mode: the library recipes not yet in the collection being filled.
+  const pickCollection = createMemo((): Collection | undefined => {
+    const mode = selection.mode();
+    return mode?.kind === "pick"
+      ? collections().find((collection) => collection.id === mode.collectionId)
+      : undefined;
+  });
+  const pickableRecipes = createMemo((): ReadonlyArray<RecipeSummary> => {
+    const picking = pickCollection();
+    return picking ? recipes().filter((recipe) => !picking.slugs.includes(recipe.url_slug)) : [];
+  });
+
+  const isManualPlace = (): boolean =>
+    placeCollection()?.kind === "manual" && pickCollection() === undefined;
 
   // Inside a manual collection no sort param means "Your order"; elsewhere the usual default.
   const sort = createMemo(
@@ -107,7 +125,8 @@ const Home = () => {
 
   const filteredRecipes = createMemo(() => {
     const matching = new Set(search()(params.searchQuery()).map((recipe) => recipe.url_slug));
-    const inPlace = placeRecipes().filter((recipe) => matching.has(recipe.url_slug));
+    const base = pickCollection() ? pickableRecipes() : placeRecipes();
+    const inPlace = base.filter((recipe) => matching.has(recipe.url_slug));
     const filtered = filterRecipes(inPlace, params.filters());
     const currentSort = sort();
     return currentSort === YOUR_ORDER ? filtered : sortRecipes(filtered, currentSort);
@@ -152,8 +171,27 @@ const Home = () => {
   });
 
   const selectPlace = (next: Place): void => {
+    selection.stop();
     params.setPlace(serializePlace(next));
   };
+
+  const startPicking = (collection: Collection): void => {
+    selection.start({ kind: "pick", collectionId: collection.id });
+  };
+
+  // Desktop: Esc leaves select mode (dialogs handle their own Esc first).
+  createEffect(isSelecting, (isOn) => {
+    if (!isOn) {
+      return;
+    }
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape" && !event.defaultPrevented && isDesktop()) {
+        selection.stop();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  });
 
   const openCollection = (collection: Collection): void => {
     setIsCollectionsSheetOpen(false);
@@ -183,6 +221,10 @@ const Home = () => {
   };
 
   const placeTitle = (): string => {
+    const picking = pickCollection();
+    if (picking) {
+      return collectionStrings.select.pickTitle(picking.name);
+    }
     const current = place();
     if (current.kind === "all") {
       return collectionStrings.places.allRecipes;
@@ -195,8 +237,12 @@ const Home = () => {
     return placeCollection()?.name ?? "";
   };
 
-  const placeSubtitle = (): string =>
-    isRenamingPlace() ? collectionStrings.header.renameHint : placeMeta();
+  const placeSubtitle = (): string => {
+    if (pickCollection()) {
+      return collectionStrings.select.pickSubtitle(pickableRecipes().length);
+    }
+    return isRenamingPlace() ? collectionStrings.header.renameHint : placeMeta();
+  };
 
   const placeMeta = (): string => {
     const count = filteredRecipes().length;
@@ -217,7 +263,7 @@ const Home = () => {
   // nothing; filters hiding every recipe get the usual no-results state instead.
   const placeEmptyState = (): JSX.Element | undefined => {
     const collection = placeCollection();
-    if (!collection || placeRecipes().length > 0) {
+    if (!collection || placeRecipes().length > 0 || pickCollection()) {
       return undefined;
     }
     if (collection.kind === "manual") {
@@ -230,6 +276,18 @@ const Home = () => {
               <span class={styles.phoneOnly}>{collectionStrings.empty.phoneBody}</span>
               <span class={styles.desktopOnly}>{collectionStrings.empty.desktopBody}</span>
             </>
+          }
+          action={
+            <button
+              type="button"
+              class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.iconButton}`}
+              onClick={() => startPicking(collection)}
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">
+                add
+              </span>
+              {collectionStrings.empty.addRecipes}
+            </button>
           }
         />
       );
@@ -248,7 +306,7 @@ const Home = () => {
   };
 
   return (
-    <main class={styles.main}>
+    <main class={[styles.main, { [styles.selecting]: isSelecting() }]}>
       <header class={styles.header}>
         <div class={styles.headerContent}>
           <h1 class={styles.title}>{recipeListStrings.title}</h1>
@@ -355,9 +413,29 @@ const Home = () => {
               }
               onSortChange={setSort}
             />
+            <button
+              type="button"
+              class={`${styles.filtersButton} ${styles.selectButton}`}
+              aria-label={collectionStrings.select.enter}
+              onClick={() => selection.start({ kind: "select" })}
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">
+                checklist
+              </span>
+              <span class={styles.selectLabel}>{collectionStrings.select.enterShort}</span>
+            </button>
             <ViewToggle value={viewMode()} onChange={setViewMode} />
           </div>
           <div class={styles.mainContent}>
+            <Show when={isSelecting()}>
+              <div class={styles.selectionBar}>
+                <ListSelection
+                  selection={selection}
+                  placeCollection={placeCollection()}
+                  viewCount={filteredRecipes().length}
+                />
+              </div>
+            </Show>
             <Show when={isFilterPanelOpen()}>
               <section class={styles.filterPanel} aria-label={filterStrings.drawer.title}>
                 <FilterPanel
@@ -429,9 +507,18 @@ const Home = () => {
                 </Show>
                 <p class={styles.placeSubtitle}>{placeSubtitle()}</p>
               </div>
-              <Show when={placeCollection()}>
+              <Show when={!pickCollection() && placeCollection()}>
                 {(collection) => (
                   <div class={styles.placeActions}>
+                    <Show when={collection().kind === "manual"}>
+                      <button
+                        type="button"
+                        class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                        onClick={() => startPicking(collection())}
+                      >
+                        {collectionStrings.header.addRecipes}
+                      </button>
+                    </Show>
                     <CollectionMenu
                       collection={collection()}
                       onRename={() => collectionActions.startRename(collection(), "title")}
@@ -451,6 +538,12 @@ const Home = () => {
                     viewMode={viewMode()}
                     onPageChange={(details) => params.setPage(details.page)}
                     onResetAll={params.resetAll}
+                    selection={
+                      isSelecting()
+                        ? { isSelected: selection.isSelected, onToggle: selection.toggle }
+                        : undefined
+                    }
+                    onLongPress={(slug) => selection.start({ kind: "select" }, slug)}
                   />
                 </Loading>
               }
@@ -495,6 +588,7 @@ const Home = () => {
             onOpenChange={setIsCollectionMenuOpen}
             collection={collection()}
             pinnedCount={pinnedCount()}
+            onAddRecipes={() => startPicking(collection())}
             onRename={() => collectionActions.startRename(collection(), "title")}
             onTogglePin={() => collectionActions.togglePin(collection())}
             onDelete={() => collectionActions.requestDelete(collection())}

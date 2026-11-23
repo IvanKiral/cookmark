@@ -112,3 +112,30 @@
     font-size: var(--text-xs);
   }
 }
+
+.pressable {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.selectable {
+  border: none;
+  border-bottom: 1px solid var(--color-neutral-100);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.selected {
+  background-color: var(--color-neutral-100);
+}
+
+/* The circle sits in the title, so it needs no absolute position here. */
+.title .check {
+  position: static;
+  margin-right: var(--space-2);
+  vertical-align: middle;
+  font-size: 22px;
+}

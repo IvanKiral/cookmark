@@ -228,9 +228,10 @@
     gap: var(--space-3);
   }
 
+  /* Filters, Sort, Select and the view toggle share one 366px row at 390px. */
   .controls {
     flex-wrap: wrap;
-    gap: var(--space-3) var(--space-2);
+    gap: var(--space-3) 6px;
   }
 
   .searchWrapper {
@@ -246,7 +247,8 @@
   }
 
   .filtersButton {
-    padding: 0 var(--space-3);
+    gap: 6px;
+    padding: 0 10px;
   }
 
   .controls > :last-child {
@@ -368,4 +370,49 @@
 .sidebarAdd:hover {
   background: var(--color-neutral-100);
   color: var(--color-neutral-900);
+}
+
+.selectButton {
+  justify-content: center;
+  min-width: var(--control-height);
+  padding: 0;
+}
+
+.selectLabel {
+  display: none;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconButton :global(.material-symbols-outlined) {
+  font-size: 18px;
+}
+
+/* Phone: room for the fixed actions bar. */
+.selecting .container {
+  padding-bottom: 96px;
+}
+
+@media (min-width: 1024px) {
+  .selectButton {
+    gap: 6px;
+    padding: 0 var(--space-4);
+  }
+
+  .selectLabel {
+    display: inline;
+  }
+
+  /* The dark selection bar replaces the toolbar. */
+  .selecting .controls {
+    display: none;
+  }
+
+  .selecting .container {
+    padding-bottom: var(--space-8);
+  }
 }
