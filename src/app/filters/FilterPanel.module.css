@@ -240,3 +240,20 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
+
+/* Desktop toolbar panel: every group open, side by side. */
+.gridPanel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-5) var(--space-8);
+}
+
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gridSection .sectionBody {
+  padding-bottom: 0;
+}

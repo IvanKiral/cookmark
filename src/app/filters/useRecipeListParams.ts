@@ -2,7 +2,6 @@ import { useSearchParams } from "@solidjs/router";
 import { type Accessor, createMemo } from "solid-js";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
 import { difficultyValues, recommendedValues, timeValues } from "~/shared/filters.ts";
-import { markValues } from "~/shared/marks.ts";
 import { tagValues } from "~/shared/tags.ts";
 import { type RecipeFilterKey, type RecipeFilters, recipeFilterKeys } from "./recipeFilters.ts";
 import {
@@ -13,6 +12,8 @@ import {
 } from "./searchParams.ts";
 
 export type RecipeListParams = {
+  // The raw ?in= value: favorites, to-try or a collection id (see places.ts).
+  placeParam: Accessor<string | undefined>;
   filters: Accessor<RecipeFilters>;
   searchQuery: Accessor<string>;
   sort: Accessor<SortValue>;
@@ -24,6 +25,10 @@ export type RecipeListParams = {
   setSearchQuery: (query: string) => void;
   setSort: (sort: SortValue) => void;
   setPage: (page: number) => void;
+  // Keeps search and filters; undefined opens All.
+  setPlace: (param: string | undefined) => void;
+  // Opens a place with no filters or search, e.g. a collection just created.
+  openPlaceFresh: (param: string | undefined) => void;
 };
 
 const clearedFilters = Object.fromEntries(recipeFilterKeys.map((key) => [key, undefined]));
@@ -42,12 +47,13 @@ export const useRecipeListParams = (
       time: parseArrayParam(searchParams.time, timeValues),
       tag: parseArrayParam(searchParams.tag, tagValues),
       author: parseArrayParam(searchParams.author, authorValues()),
-      mark: parseArrayParam(searchParams.mark, markValues),
       recommended: parseArrayParam(searchParams.recommended, recommendedValues),
     }),
   );
 
   const searchQuery = createMemo(() => parseStringParam(searchParams.q));
+
+  const placeParam = createMemo(() => parseStringParam(searchParams.in) || undefined);
 
   const sort = createMemo((): SortValue => {
     const value = parseStringParam(searchParams.sort);
@@ -62,6 +68,7 @@ export const useRecipeListParams = (
   };
 
   return {
+    placeParam,
     filters,
     searchQuery,
     sort,
@@ -71,6 +78,8 @@ export const useRecipeListParams = (
     resetAll: () => update({ ...clearedFilters, q: undefined }),
     setSearchQuery: (query) => update({ q: query || undefined }),
     setSort: (nextSort) => update({ sort: nextSort === DEFAULT_SORT ? undefined : nextSort }),
+    setPlace: (param) => update({ in: param }),
+    openPlaceFresh: (param) => update({ ...clearedFilters, q: undefined, in: param }),
     setPage: (nextPage) => setSearchParams({ page: nextPage === 1 ? undefined : String(nextPage) }),
   };
 };

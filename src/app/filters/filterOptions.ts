@@ -1,4 +1,3 @@
-import { markStrings } from "~/app/marks/strings.ts";
 import { verdictStrings } from "~/app/verdicts/strings.ts";
 import { recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import {
@@ -10,7 +9,6 @@ import {
   type TimeValue,
   timeValues,
 } from "~/shared/filters.ts";
-import { type Mark, markValues } from "~/shared/marks.ts";
 import { type TagGroupKey, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
 import { filterStrings } from "./strings.ts";
 
@@ -24,11 +22,6 @@ const timeLabels: Record<TimeValue, string> = {
   under30: filterStrings.under30,
   under60: filterStrings.under60,
   over60: filterStrings.over60,
-};
-
-const markLabels: Record<Mark, string> = {
-  favorite: markStrings.favorites,
-  "to-try": markStrings.toTry,
 };
 
 const recommendedLabels: Record<RecommendedValue, string> = {
@@ -67,11 +60,6 @@ export const difficultyOptions = difficultyValues.map((value) => ({
 export const timeOptions = timeValues.map((value) => ({
   value,
   label: timeLabels[value],
-}));
-
-export const markOptions = markValues.map((value) => ({
-  value,
-  label: markLabels[value],
 }));
 
 export const recommendedOptions = recommendedValues.map((value) => ({

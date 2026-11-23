@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import type { Mark } from "~/shared/marks.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { countActiveFilters, emptyFilters, filterRecipes } from "./recipeFilters.ts";
 
@@ -27,43 +26,37 @@ const stew = recipe({
 const cake = recipe({ url_slug: "cake", difficulty: "Hard", total_time: 45, tags: ["Cake"] });
 const recipes = [soup, stew, cake];
 
-const isNeverMarked = (_mark: Mark, _slug: string): boolean => false;
 const slugs = (list: ReadonlyArray<RecipeSummary>): ReadonlyArray<string> =>
   list.map((item) => item.url_slug);
 
 describe("filterRecipes", () => {
   it("keeps every recipe without filters", () => {
-    expect(slugs(filterRecipes(recipes, emptyFilters, isNeverMarked))).toEqual([
-      "soup",
-      "stew",
-      "cake",
-    ]);
+    expect(slugs(filterRecipes(recipes, emptyFilters))).toEqual(["soup", "stew", "cake"]);
   });
 
   it("combines values of one filter as a union", () => {
     const filters = { ...emptyFilters, difficulty: ["Easy", "Hard"] as const };
-    expect(slugs(filterRecipes(recipes, filters, isNeverMarked))).toEqual(["soup", "cake"]);
+    expect(slugs(filterRecipes(recipes, filters))).toEqual(["soup", "cake"]);
   });
 
   it("combines different filters as an intersection", () => {
     const filters = { ...emptyFilters, time: ["under60"] as const, difficulty: ["Hard"] as const };
-    expect(slugs(filterRecipes(recipes, filters, isNeverMarked))).toEqual(["cake"]);
+    expect(slugs(filterRecipes(recipes, filters))).toEqual(["cake"]);
   });
 
   it("matches time ranges on the total time", () => {
     const byTime = (time: "under30" | "under60" | "over60") =>
-      slugs(filterRecipes(recipes, { ...emptyFilters, time: [time] }, isNeverMarked));
+      slugs(filterRecipes(recipes, { ...emptyFilters, time: [time] }));
     expect(byTime("under30")).toEqual(["soup"]);
     expect(byTime("under60")).toEqual(["soup", "cake"]);
     expect(byTime("over60")).toEqual(["stew"]);
   });
 
-  it("filters by tag, author, mark and verdict", () => {
-    const filter = (overrides: object, isMarked = isNeverMarked) =>
-      slugs(filterRecipes(recipes, { ...emptyFilters, ...overrides }, isMarked));
+  it("filters by tag, author and verdict", () => {
+    const filter = (overrides: object) =>
+      slugs(filterRecipes(recipes, { ...emptyFilters, ...overrides }));
     expect(filter({ tag: ["Beef"] })).toEqual(["stew"]);
     expect(filter({ author: ["ana"] })).toEqual(["soup"]);
-    expect(filter({ mark: ["favorite"] }, (_, slug) => slug === "cake")).toEqual(["cake"]);
     expect(filter({ recommended: ["chef-kiss"] })).toEqual(["stew"]);
   });
 });
@@ -71,7 +64,7 @@ describe("filterRecipes", () => {
 describe("countActiveFilters", () => {
   it("counts every selected value", () => {
     expect(countActiveFilters(emptyFilters)).toBe(0);
-    expect(countActiveFilters({ ...emptyFilters, tag: ["Soup", "Beef"], mark: ["to-try"] })).toBe(
+    expect(countActiveFilters({ ...emptyFilters, tag: ["Soup", "Beef"], time: ["under30"] })).toBe(
       3,
     );
   });

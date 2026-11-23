@@ -4,19 +4,18 @@ import type {
   TimeFilter,
   TimeValue,
 } from "~/shared/filters.ts";
-import type { Mark, MarkFilter } from "~/shared/marks.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { type TagFilter, tagGroupDefinitions } from "~/shared/tags.ts";
 import { matchesTagFilter } from "./matchesTagFilter.ts";
 import { matchesRecommendedFilter } from "./recommendedOptions.ts";
 
-// Every filter the list supports. An empty selection does not filter.
+// Every filter the list supports, the same fields a smart filter stores. An
+// empty selection does not filter.
 export type RecipeFilters = {
   difficulty: DifficultyFilter;
   time: TimeFilter;
   tag: TagFilter;
   author: ReadonlyArray<string>;
-  mark: MarkFilter;
   recommended: RecommendedFilter;
 };
 
@@ -27,7 +26,6 @@ export const emptyFilters: RecipeFilters = {
   time: [],
   tag: [],
   author: [],
-  mark: [],
   recommended: [],
 };
 
@@ -36,7 +34,6 @@ export const recipeFilterKeys: ReadonlyArray<RecipeFilterKey> = [
   "time",
   "tag",
   "author",
-  "mark",
   "recommended",
 ];
 
@@ -62,7 +59,6 @@ const matchesAny = <T>(selected: ReadonlyArray<T>, matches: (value: T) => boolea
 export const filterRecipes = (
   recipes: ReadonlyArray<RecipeSummary>,
   filters: RecipeFilters,
-  isMarked: (mark: Mark, slug: string) => boolean,
 ): ReadonlyArray<RecipeSummary> =>
   recipes.filter(
     (recipe) =>
@@ -70,6 +66,5 @@ export const filterRecipes = (
       matchesAny(filters.time, (time) => matchesTime(recipe.total_time, time)) &&
       matchesTagFilter(recipe.tags, filters.tag, tagGroupDefinitions) &&
       matchesAny(filters.author, (author) => recipe.author === author) &&
-      matchesAny(filters.mark, (mark) => isMarked(mark, recipe.url_slug)) &&
       matchesRecommendedFilter(recipe.verdict, filters.recommended),
   );

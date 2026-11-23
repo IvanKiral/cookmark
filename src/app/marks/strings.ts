@@ -1,5 +1,4 @@
 export const markStrings = {
-  sectionTitle: "My recipes",
   favorites: "Favourites",
   toTry: "To try",
   addFavorite: (name: string) => `Add ${name} to favourites`,

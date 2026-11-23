@@ -1,15 +1,8 @@
 import type { JSX } from "@solidjs/web";
 import { type Component, createMemo, createSignal, For, Show } from "solid-js";
-import { markStrings } from "~/app/marks/strings.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
 import styles from "./FilterPanel.module.css";
-import {
-  difficultyOptions,
-  markOptions,
-  recommendedOptions,
-  tagGroups,
-  timeOptions,
-} from "./filterOptions.ts";
+import { difficultyOptions, recommendedOptions, tagGroups, timeOptions } from "./filterOptions.ts";
 import type { RecipeFilterKey, RecipeFilters } from "./recipeFilters.ts";
 import { filterStrings } from "./strings.ts";
 
@@ -17,9 +10,10 @@ type FilterPanelProps = {
   filters: RecipeFilters;
   authorOptions: ReadonlyArray<AuthorOption>;
   onFilterChange: <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]) => void;
-  // Both show options as chips. "drawer" (phones and tablets) makes every
-  // target 44px tall for touch; "sidebar" (desktop) keeps them compact.
-  variant?: "sidebar" | "drawer";
+  // All show options as chips. "drawer" (phones and tablets) makes every
+  // target 44px tall for touch; "sidebar" keeps them compact; "toolbar"
+  // (the desktop filters panel) lays the groups out in a grid, never collapsed.
+  variant?: "sidebar" | "drawer" | "toolbar";
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>
@@ -31,29 +25,41 @@ type FilterSectionProps<T extends string> = {
   selected: ReadonlyArray<T>;
   onToggle: (value: T) => void;
   isTouch: boolean;
+  isCollapsible: boolean;
 };
 
 type CollapsibleSectionProps = {
   title: string;
   selectedCount: number;
+  isCollapsible: boolean;
   children: JSX.Element;
 };
 
 // A native <details>, so it toggles with a click, Enter or Space and needs no
 // extra state. Every section starts expanded.
 const CollapsibleSection: Component<CollapsibleSectionProps> = (props) => (
-  <details class={styles.section} open>
-    <summary class={styles.summary}>
-      <span class={styles.sectionTitle}>{props.title}</span>
-      <Show when={props.selectedCount > 0}>
-        <span class={styles.count}>{props.selectedCount}</span>
-      </Show>
-      <span class={`material-symbols-outlined ${styles.chevron}`} aria-hidden="true">
-        expand_more
-      </span>
-    </summary>
-    <div class={styles.sectionBody}>{props.children}</div>
-  </details>
+  <Show
+    when={props.isCollapsible}
+    fallback={
+      <div class={styles.gridSection}>
+        <span class={styles.sectionTitle}>{props.title}</span>
+        <div class={styles.sectionBody}>{props.children}</div>
+      </div>
+    }
+  >
+    <details class={styles.section} open>
+      <summary class={styles.summary}>
+        <span class={styles.sectionTitle}>{props.title}</span>
+        <Show when={props.selectedCount > 0}>
+          <span class={styles.count}>{props.selectedCount}</span>
+        </Show>
+        <span class={`material-symbols-outlined ${styles.chevron}`} aria-hidden="true">
+          expand_more
+        </span>
+      </summary>
+      <div class={styles.sectionBody}>{props.children}</div>
+    </details>
+  </Show>
 );
 
 // Counts only this section's options; tag groups share one selected list.
@@ -66,6 +72,7 @@ const FilterSection = <T extends string>(props: FilterSectionProps<T>) => (
   <CollapsibleSection
     title={props.title}
     selectedCount={countSelected(props.options, props.selected)}
+    isCollapsible={props.isCollapsible}
   >
     <div class={styles.chipGroup}>
       <For each={props.options}>
@@ -101,6 +108,7 @@ type SearchableFilterSectionProps = {
   selected: ReadonlyArray<string>;
   onToggle: (value: string) => void;
   isTouch: boolean;
+  isCollapsible: boolean;
 };
 
 // The author list starts short so it doesn't dominate the panel's scroll.
@@ -147,7 +155,11 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
     query().trim() === "" && props.options.length > AUTHOR_PREVIEW_COUNT;
 
   return (
-    <CollapsibleSection title={props.title} selectedCount={props.selected.length}>
+    <CollapsibleSection
+      title={props.title}
+      selectedCount={props.selected.length}
+      isCollapsible={props.isCollapsible}
+    >
       <input
         type="search"
         class={styles.searchInput}
@@ -192,6 +204,7 @@ const SearchableFilterSection = (props: SearchableFilterSectionProps) => {
 
 export const FilterPanel: Component<FilterPanelProps> = (props) => {
   const isTouch = (): boolean => props.variant === "drawer";
+  const isCollapsible = (): boolean => props.variant !== "toolbar";
 
   const toggle =
     <K extends RecipeFilterKey>(key: K) =>
@@ -200,20 +213,14 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
     };
 
   return (
-    <div class={styles.panel}>
-      <FilterSection
-        title={markStrings.sectionTitle}
-        options={markOptions}
-        selected={props.filters.mark}
-        onToggle={toggle("mark")}
-        isTouch={isTouch()}
-      />
+    <div class={props.variant === "toolbar" ? styles.gridPanel : styles.panel}>
       <FilterSection
         title={filterStrings.recommended}
         options={recommendedOptions}
         selected={props.filters.recommended}
         onToggle={toggle("recommended")}
         isTouch={isTouch()}
+        isCollapsible={isCollapsible()}
       />
       <For each={tagGroups}>
         {(group) => (
@@ -223,6 +230,7 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
             selected={props.filters.tag}
             onToggle={toggle("tag")}
             isTouch={isTouch()}
+            isCollapsible={isCollapsible()}
           />
         )}
       </For>
@@ -232,6 +240,7 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
         selected={props.filters.time}
         onToggle={toggle("time")}
         isTouch={isTouch()}
+        isCollapsible={isCollapsible()}
       />
       <FilterSection
         title={filterStrings.difficulty}
@@ -239,6 +248,7 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
         selected={props.filters.difficulty}
         onToggle={toggle("difficulty")}
         isTouch={isTouch()}
+        isCollapsible={isCollapsible()}
       />
       <Show when={props.authorOptions.length > 0}>
         <SearchableFilterSection
@@ -249,6 +259,7 @@ export const FilterPanel: Component<FilterPanelProps> = (props) => {
           selected={props.filters.author}
           onToggle={toggle("author")}
           isTouch={isTouch()}
+          isCollapsible={isCollapsible()}
         />
       </Show>
     </div>
