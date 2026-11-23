@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@solidjs/testing-library";
+import { createSignal } from "solid-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import type { Collection } from "~/shared/collections.ts";
@@ -190,5 +191,48 @@ describe("select mode", () => {
         jsonBody(["recipe-5"]),
       ),
     );
+  });
+
+  it("disables Select all when the view is empty", () => {
+    render(() => (
+      <CollectionsProvider>
+        <ListSelection
+          selection={createSelection(() => [], createSelectModeSignal({ kind: "select" }))}
+          placeCollection={undefined}
+          viewCount={0}
+          librarySlugs={new Set()}
+        />
+      </CollectionsProvider>
+    ));
+    expect(screen.getByRole("button", { name: "Select all" })).toBeDisabled();
+  });
+
+  it("unselects recipes that leave the view, and they stay unselected when they return", async () => {
+    const holder: { setView?: (next: ReadonlyArray<RecipeSummary>) => void } = {};
+    const Harness = () => {
+      const [view, setView] = createSignal<ReadonlyArray<RecipeSummary>>(recipes);
+      holder.setView = setView;
+      const selection = createSelection(view, createSelectModeSignal({ kind: "select" }));
+      return (
+        <ListSelection
+          selection={selection}
+          placeCollection={undefined}
+          viewCount={view().length}
+          librarySlugs={new Set()}
+        />
+      );
+    };
+    render(() => (
+      <CollectionsProvider>
+        <Harness />
+      </CollectionsProvider>
+    ));
+    fireEvent.click(screen.getByRole("button", { name: "Select all" }));
+    expect(screen.getByText("14 selected")).toBeInTheDocument();
+
+    holder.setView?.(recipes.slice(0, 2));
+    await waitFor(() => expect(screen.getByText("2 selected")).toBeInTheDocument());
+    holder.setView?.(recipes);
+    await waitFor(() => expect(screen.getByText("2 selected")).toBeInTheDocument());
   });
 });
