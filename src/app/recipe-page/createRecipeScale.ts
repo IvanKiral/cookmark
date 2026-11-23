@@ -20,8 +20,9 @@ export type RecipeScale = {
   // undefined for text and missing amounts, which never scale.
   ingredientAmount: (index: number) => number | undefined;
   servings: Accessor<number | undefined>;
-  // Anchors on the target at its shown value, so the factor carries over.
+  // Opens an edit of the target; the scale only changes once a value is typed.
   start: (target: ScaleTarget) => void;
+  // Anchors the scale on the edited target at the typed value.
   change: (value: number) => void;
   // Restores the anchor from before the current edit.
   cancel: () => void;
@@ -39,6 +40,7 @@ export const createRecipeScale = (
 ): RecipeScale => {
   const [anchor, setAnchor] = createSignal<ScaleAnchor | undefined>(undefined);
   const [previousAnchor, setPreviousAnchor] = createSignal<ScaleAnchor | undefined>(undefined);
+  const [editingTarget, setEditingTarget] = createSignal<ScaleTarget | undefined>(undefined);
 
   const currentAnchor = createMemo((): ScaleAnchor | undefined => {
     const value = anchor();
@@ -90,9 +92,6 @@ export const createRecipeScale = (
     return Math.max(1, Math.round(original * factor()));
   });
 
-  const shownValueOf = (target: ScaleTarget): number =>
-    (target === "servings" ? servings() : ingredientAmount(target)) ?? 0;
-
   return {
     factor,
     isScaled: () => factor() !== 1,
@@ -102,12 +101,12 @@ export const createRecipeScale = (
     servings,
     start: (target) => {
       setPreviousAnchor(currentAnchor());
-      setAnchor({ slug: slug(), target, value: shownValueOf(target) });
+      setEditingTarget(target);
     },
     change: (value) => {
-      const current = currentAnchor();
-      if (current) {
-        setAnchor({ ...current, value });
+      const target = editingTarget();
+      if (target !== undefined) {
+        setAnchor({ slug: slug(), target, value });
       }
     },
     cancel: () => setAnchor(previousAnchor()),

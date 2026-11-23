@@ -148,4 +148,29 @@ describe("ingredient scaling", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(screen.queryByText(/any amount/)).not.toBeInTheDocument();
   });
+
+  it("keeps the scale when an amount or the servings is opened and closed without typing", () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("button", { name: "Change number of servings, now 4" }));
+    const servings = screen.getByRole("textbox", { name: "Number of servings" });
+    typeAmount(servings, "3");
+    fireEvent.blur(servings);
+    expect(screen.getByText(/Scaled to/)).toHaveTextContent("Scaled to 3 servings (×0.75)");
+
+    fireEvent.click(amountButton("egg"));
+    fireEvent.blur(screen.getByRole("textbox", { name: "Amount of egg" }));
+    expect(screen.getByText(/Scaled to/)).toHaveTextContent("Scaled to 3 servings (×0.75)");
+  });
+
+  it("does not move other amounts when the servings are opened after scaling an ingredient", () => {
+    renderPage();
+    fireEvent.click(amountButton("minced beef"));
+    const beef = screen.getByRole("textbox", { name: "Amount of minced beef" });
+    typeAmount(beef, "400");
+    fireEvent.blur(beef);
+    fireEvent.click(screen.getByRole("button", { name: /Change number of servings/ }));
+    fireEvent.blur(screen.getByRole("textbox", { name: "Number of servings" }));
+    expect(amountButton("minced beef")).toHaveTextContent("400 g");
+    expect(screen.getByText(/Scaled to/)).toHaveTextContent("Scaled to 400 g minced beef (×1.6)");
+  });
 });
