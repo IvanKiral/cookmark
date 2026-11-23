@@ -10,10 +10,10 @@ type FilterPanelProps = {
   filters: RecipeFilters;
   authorOptions: ReadonlyArray<AuthorOption>;
   onFilterChange: <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]) => void;
-  // All show options as chips. "drawer" (phones and tablets) makes every
-  // target 44px tall for touch; "sidebar" keeps them compact; "toolbar"
-  // (the desktop filters panel) lays the groups out in a grid, never collapsed.
-  variant?: "sidebar" | "drawer" | "toolbar";
+  // Both show options as chips. "drawer" (phones and tablets) makes every
+  // target 44px tall for touch; "toolbar" (the desktop filters panel) keeps
+  // them compact and lays the groups out in a grid, never collapsed.
+  variant: "drawer" | "toolbar";
 };
 
 const toggleValue = <T extends string>(current: ReadonlyArray<T>, value: T): T[] =>

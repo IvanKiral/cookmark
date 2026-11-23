@@ -1,0 +1,28 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: white;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  cursor: pointer;
+}
+
+.button :global(.material-symbols-outlined) {
+  font-size: 18px;
+}
+
+/* In the phone drawer it is a text button above the footer. */
+@media (max-width: 1023px) {
+  .button {
+    margin: var(--space-3) var(--space-4) 0;
+    border: none;
+  }
+}

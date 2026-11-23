@@ -1,6 +1,5 @@
 import type { JSX } from "@solidjs/web";
 import { type Component, For } from "solid-js";
-import { collectionStrings } from "~/app/collections/strings.ts";
 import styles from "./ActiveFilterChips.module.css";
 import { listActiveFilters } from "./activeFilters.ts";
 import type { RecipeFilterKey, RecipeFilters } from "./recipeFilters.ts";
@@ -22,7 +21,7 @@ export const ActiveFilterChips: Component<ActiveFilterChipsProps> = (props) => (
         <button
           type="button"
           class={styles.chip}
-          aria-label={collectionStrings.smart.removeFilter(filter.label)}
+          aria-label={filterStrings.removeFilter(filter.label)}
           onClick={() => props.onRemove(filter.key, filter.value)}
         >
           <span>{filter.label}</span>

@@ -1,3 +1,5 @@
+import { MAX_PINS } from "~/shared/collections.ts";
+
 const recipeCount = (count: number): string => (count === 1 ? "1 recipe" : `${count} recipes`);
 
 export const collectionStrings = {
@@ -19,7 +21,7 @@ export const collectionStrings = {
     close: "Close",
     search: "Search collections...",
     searchLabel: "Search collections",
-    pinnedCount: (count: number) => `${count} of 3 pinned to the top bar`,
+    pinnedCount: (count: number) => `${count} of ${MAX_PINS} pinned to the top bar`,
     pinsFull: "Top bar is full, unpin another first",
     smartMeta: (count: number) => `Smart filter, ${recipeCount(count)}`,
     pin: (name: string) => `Pin ${name}`,
@@ -72,7 +74,7 @@ export const collectionStrings = {
     rename: "Rename",
     pin: "Pin to top bar",
     unpin: "Unpin from top bar",
-    pinnedCount: (count: number) => `${count} of 3 pinned`,
+    pinnedCount: (count: number) => `${count} of ${MAX_PINS} pinned`,
     staysUnder: "It stays under Collections",
     pinsFull: "Top bar is full, unpin another first",
     deleteCollection: "Delete collection",
@@ -126,7 +128,6 @@ export const collectionStrings = {
     selected: (count: number) => `${count} selected`,
     selectAll: "Select all",
     selectNone: "Select none",
-    selectRecipe: (name: string) => `Select ${name}`,
     inCollection: (name: string) => `In ${name}. Remove them, or add them to another collection.`,
     picking: (name: string) => `Adding to ${name}. Recipes already in it are hidden.`,
     remove: "Remove",
@@ -166,6 +167,5 @@ export const collectionStrings = {
       `Editing ${name}. New recipes that match are added on their own.`,
     update: "Update",
     updated: (name: string) => `Updated ${name}`,
-    removeFilter: (label: string) => `Remove filter ${label}`,
   },
 } as const;

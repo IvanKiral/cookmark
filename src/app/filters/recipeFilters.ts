@@ -1,23 +1,13 @@
-import type {
-  DifficultyFilter,
-  RecommendedFilter,
-  TimeFilter,
-  TimeValue,
-} from "~/shared/filters.ts";
+import type { SmartFilters } from "~/shared/collections.ts";
+import type { TimeValue } from "~/shared/filters.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
-import { type TagFilter, tagGroupDefinitions } from "~/shared/tags.ts";
+import { tagGroupDefinitions } from "~/shared/tags.ts";
 import { matchesTagFilter } from "./matchesTagFilter.ts";
 import { matchesRecommendedFilter } from "./recommendedOptions.ts";
 
 // Every filter the list supports, the same fields a smart filter stores. An
 // empty selection does not filter.
-export type RecipeFilters = {
-  difficulty: DifficultyFilter;
-  time: TimeFilter;
-  tag: TagFilter;
-  author: ReadonlyArray<string>;
-  recommended: RecommendedFilter;
-};
+export type RecipeFilters = SmartFilters;
 
 export type RecipeFilterKey = keyof RecipeFilters;
 

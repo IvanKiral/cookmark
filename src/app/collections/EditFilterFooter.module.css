@@ -1,0 +1,40 @@
+/* Phone drawer: the count above full-width buttons. */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.count {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-600);
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.update {
+  flex: 1;
+}
+
+/* Desktop panel: one row, the count on the left. */
+@media (min-width: 1024px) {
+  .footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: var(--space-4) 0 0;
+  }
+
+  .count {
+    margin-right: auto;
+  }
+
+  .update {
+    flex: 0 0 auto;
+  }
+}

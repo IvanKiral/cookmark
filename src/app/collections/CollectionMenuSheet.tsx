@@ -9,10 +9,10 @@ type CollectionMenuSheetProps = {
   onOpenChange: (isOpen: boolean) => void;
   collection: Collection;
   pinnedCount: number;
-  // Manual collections only; absent until select mode exists.
-  onAddRecipes?: () => void;
+  // Manual collections only.
+  onAddRecipes: () => void;
   // Smart filters only.
-  onEditFilter?: () => void;
+  onEditFilter: () => void;
   onRename: () => void;
   onTogglePin: () => void;
   onDelete: () => void;
@@ -74,15 +74,13 @@ export const CollectionMenuSheet: Component<CollectionMenuSheetProps> = (props) 
       title={props.collection.name}
       closeLabel={collectionStrings.sheet.close}
     >
-      <Show when={!isSmart() && props.onAddRecipes}>
-        {(onAddRecipes) => (
-          <MenuRow icon="add" label={strings.addRecipes} onSelect={run(onAddRecipes())} />
-        )}
-      </Show>
-      <Show when={isSmart() && props.onEditFilter}>
-        {(onEditFilter) => (
-          <MenuRow icon="tune" label={strings.editFilter} onSelect={run(onEditFilter())} />
-        )}
+      <Show
+        when={isSmart()}
+        fallback={
+          <MenuRow icon="add" label={strings.addRecipes} onSelect={run(props.onAddRecipes)} />
+        }
+      >
+        <MenuRow icon="tune" label={strings.editFilter} onSelect={run(props.onEditFilter)} />
       </Show>
       <MenuRow icon="edit" label={strings.rename} onSelect={run(props.onRename)} />
       <MenuRow

@@ -1,20 +1,14 @@
-import { useLocation } from "@solidjs/router";
 import type { JSX } from "@solidjs/web";
 import { type Component, createSignal, onSettled, Show } from "solid-js";
-import { collectionStrings } from "~/app/collections/strings.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
-import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
-import { createLongPress } from "~/app/ui/createLongPress.ts";
-import { toLinkState } from "~/app/ui/linkState.ts";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { RecipeVerdict } from "~/shared/verdicts.ts";
 import styles from "./RecipeCard.module.css";
-
-// Select mode: the card is a toggle button instead of a link.
-export type RecipeSelection = {
-  isSelected: boolean;
-  onToggle: () => void;
-};
+import {
+  type RecipeSelection,
+  SelectableRecipeLink,
+  SelectCheck,
+} from "./SelectableRecipeLink.tsx";
 
 type RecipeCardProps = {
   urlSlug: string;
@@ -28,19 +22,8 @@ type RecipeCardProps = {
   onLongPress?: () => void;
 };
 
-export const SelectCheck: Component<{ isSelected: boolean; class?: string }> = (props) => (
-  <span
-    class={`material-symbols-outlined ${styles.check} ${props.isSelected ? styles.checkOn : ""} ${props.class ?? ""}`}
-    aria-hidden="true"
-  >
-    {props.isSelected ? "check_circle" : "radio_button_unchecked"}
-  </span>
-);
-
 export const RecipeCard: Component<RecipeCardProps> = (props) => {
-  const location = useLocation();
   const [hasImageError, setHasImageError] = createSignal(false);
-  const longPress = createLongPress(() => props.onLongPress?.());
   let imageRef: HTMLImageElement | undefined;
 
   // The image is server-rendered, so a 404 can fire its error event before the
@@ -108,30 +91,14 @@ export const RecipeCard: Component<RecipeCardProps> = (props) => {
   );
 
   return (
-    <Show
-      when={props.selection}
-      fallback={
-        <a
-          href={`/recipe/${props.urlSlug}`}
-          state={toLinkState({ fromSearch: location.search })}
-          class={[styles.card, { [styles.pressable]: props.onLongPress !== undefined }]}
-          {...(props.onLongPress ? longPress : {})}
-        >
-          {content()}
-        </a>
-      }
-    >
-      {(selection) => (
-        <button
-          type="button"
-          class={[styles.card, styles.selectable, { [styles.selected]: selection().isSelected }]}
-          aria-pressed={ariaBoolean(selection().isSelected)}
-          aria-label={collectionStrings.select.selectRecipe(props.name)}
-          onClick={() => selection().onToggle()}
-        >
-          {content()}
-        </button>
-      )}
-    </Show>
+    <SelectableRecipeLink
+      urlSlug={props.urlSlug}
+      name={props.name}
+      class={styles.card}
+      selectedClass={styles.selected}
+      selection={props.selection}
+      onLongPress={props.onLongPress}
+      content={content}
+    />
   );
 };

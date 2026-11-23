@@ -1,4 +1,5 @@
 import { type Component, createSignal, Show } from "solid-js";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import { BottomSheet } from "~/app/ui/BottomSheet.tsx";
 import buttonStyles from "~/app/ui/button.module.css";
 import styles from "./NewCollectionSheet.module.css";
@@ -64,7 +65,7 @@ export const NewCollectionSheet: Component<NewCollectionSheetProps> = (props) =>
           class={[styles.input, { [styles.invalid]: error() !== undefined }]}
           placeholder={strings.placeholder}
           value={name()}
-          aria-invalid={error() ? "true" : undefined}
+          aria-invalid={ariaBoolean(error() !== undefined)}
           aria-describedby={error() ? "new-collection-error" : undefined}
           enterkeyhint="done"
           onInput={(event) => {

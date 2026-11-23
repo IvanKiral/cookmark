@@ -26,7 +26,6 @@ type LibrarySidebarProps = {
 const strings = collectionStrings.places;
 
 type ItemProps = {
-  place: Place;
   icon: string;
   label: string;
   count: number;
@@ -36,7 +35,7 @@ type ItemProps = {
   onDoubleClick?: () => void;
 };
 
-export const SidebarItem: Component<ItemProps> = (props) => (
+const SidebarItem: Component<ItemProps> = (props) => (
   <button
     type="button"
     class={[styles.item, { [styles.current]: props.isCurrent }]}
@@ -58,7 +57,6 @@ export const SidebarItem: Component<ItemProps> = (props) => (
 export const LibrarySidebar: Component<LibrarySidebarProps> = (props) => {
   const libraryItem = (place: Place, icon: string, label: string): JSX.Element => (
     <SidebarItem
-      place={place}
       icon={icon}
       label={label}
       count={props.countOf(place)}
@@ -89,7 +87,6 @@ export const LibrarySidebar: Component<LibrarySidebarProps> = (props) => {
                 when={props.renamingId === collection.id && props.renderRename}
                 fallback={
                   <SidebarItem
-                    place={place}
                     icon={collectionIcon(collection)}
                     label={collection.name}
                     count={props.countOf(place)}

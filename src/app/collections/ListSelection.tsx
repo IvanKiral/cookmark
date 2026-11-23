@@ -4,7 +4,7 @@ import { showToast } from "~/app/ui/Toast.tsx";
 import type { Collection } from "~/shared/collections.ts";
 import { AddSelectionSheet } from "./AddSelectionSheet.tsx";
 import { useCollections } from "./CollectionsContext.tsx";
-import { describeNameError, getNameError } from "./collectionNames.ts";
+import { createNamedCollection } from "./collectionNames.ts";
 import type { Selection } from "./createSelection.ts";
 import styles from "./ListSelection.module.css";
 import { SelectionBar } from "./SelectionBar.tsx";
@@ -52,14 +52,8 @@ export const ListSelection: Component<ListSelectionProps> = (props) => {
     return manual ? strings.inCollection(manual.name) : undefined;
   };
 
-  const handleCreate = async (name: string): Promise<Collection | string> => {
-    const error = getNameError(name, collectionsContext.collections());
-    if (error) {
-      return error;
-    }
-    const result = await collectionsContext.create({ name: name.trim(), kind: "manual" });
-    return result.isOk ? result.collection : describeNameError(result.error, name);
-  };
+  const handleCreate = (name: string): Promise<Collection | string> =>
+    createNamedCollection(collectionsContext, { name, kind: "manual" });
 
   const handleAdd = async (ids: ReadonlyArray<string>): Promise<void> => {
     const slugs = props.selection.selectedSlugs();

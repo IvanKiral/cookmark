@@ -1,6 +1,6 @@
 import { Drawer } from "@kobalte/core/drawer";
+import type { JSX } from "@solidjs/web";
 import { type Component, createEffect, Show } from "solid-js";
-import { collectionStrings } from "~/app/collections/strings.ts";
 import buttonStyles from "~/app/ui/button.module.css";
 import { createReturnFocus } from "~/app/ui/createReturnFocus.ts";
 import type { AuthorOption } from "./deriveAuthors.ts";
@@ -18,18 +18,13 @@ type FilterDrawerProps = {
   onClearAll: () => void;
   // Recipes matching the current search and filters, shown on the close button.
   resultCount: number;
-  // Shown in the footer once a filter is active.
-  onSaveSmartFilter?: () => void;
-  // Editing a smart filter: the drawer works on a draft and its footer offers Cancel and Update.
-  edit?: FilterDrawerEdit;
-};
-
-export type FilterDrawerEdit = {
-  name: string;
-  matchCount: number;
-  canUpdate: boolean;
-  onCancel: () => void;
-  onUpdate: () => void;
+  // Slots for callers that reuse the drawer, e.g. to edit a saved filter.
+  title?: string;
+  subtitle?: string;
+  // Above the footer, e.g. "Save as smart filter".
+  footerAction?: JSX.Element;
+  // Replaces the footer (Clear all and Show n recipes).
+  footer?: JSX.Element;
 };
 
 export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
@@ -68,14 +63,10 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
           <div class={styles.header}>
             <div>
               <Drawer.Title class={styles.title}>
-                {props.edit
-                  ? collectionStrings.smart.editTitle(props.edit.name)
-                  : filterStrings.drawer.title}
+                {props.title ?? filterStrings.drawer.title}
               </Drawer.Title>
-              <Show when={props.edit}>
-                <Drawer.Description class={styles.subtitle}>
-                  {collectionStrings.smart.editSubtitle}
-                </Drawer.Description>
+              <Show when={props.subtitle}>
+                <Drawer.Description class={styles.subtitle}>{props.subtitle}</Drawer.Description>
               </Show>
             </div>
             <Drawer.CloseButton
@@ -98,43 +89,8 @@ export const FilterDrawer: Component<FilterDrawerProps> = (props) => {
 
           {/* Always visible, so the result count updates while filtering and
               there's an obvious way back to the recipes. */}
-          <Show
-            when={!props.edit}
-            fallback={
-              <div class={`${styles.footer} ${styles.editFooter}`}>
-                <span class={styles.matchCount}>
-                  {collectionStrings.smart.matchNow(props.edit?.matchCount ?? 0)}
-                </span>
-                <div class={styles.footerButtons}>
-                  <button
-                    type="button"
-                    class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                    onClick={() => props.edit?.onCancel()}
-                  >
-                    {collectionStrings.smart.cancel}
-                  </button>
-                  <button
-                    type="button"
-                    class={`${buttonStyles.button} ${buttonStyles.primary} ${styles.showButton}`}
-                    disabled={!props.edit?.canUpdate}
-                    onClick={() => props.edit?.onUpdate()}
-                  >
-                    {collectionStrings.smart.update}
-                  </button>
-                </div>
-              </div>
-            }
-          >
-            <Show when={hasAnyFilter() && props.onSaveSmartFilter}>
-              {(onSave) => (
-                <button type="button" class={styles.saveButton} onClick={() => onSave()()}>
-                  <span class="material-symbols-outlined" aria-hidden="true">
-                    collections_bookmark
-                  </span>
-                  {collectionStrings.smart.saveButton}
-                </button>
-              )}
-            </Show>
+          <Show when={!props.footer} fallback={props.footer}>
+            {props.footerAction}
             <div class={styles.footer}>
               {hasAnyFilter() && (
                 <button

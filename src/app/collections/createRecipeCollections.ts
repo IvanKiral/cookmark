@@ -2,7 +2,7 @@ import { type Accessor, createMemo, createSignal, onSettled } from "solid-js";
 import type { Collection } from "~/shared/collections.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { useCollections } from "./CollectionsContext.tsx";
-import { describeNameError, getNameError } from "./collectionNames.ts";
+import { createNamedCollection } from "./collectionNames.ts";
 import { collectionStrings } from "./strings.ts";
 
 export type RecipeCollections = {
@@ -50,16 +50,12 @@ export const createRecipeCollections = (
   };
 
   const create = async (name: string): Promise<string | undefined> => {
-    const error = getNameError(name, collectionsContext.collections());
-    if (error) {
-      return error;
-    }
-    const result = await collectionsContext.create({
-      name: name.trim(),
+    const created = await createNamedCollection(collectionsContext, {
+      name,
       kind: "manual",
       slugs: [slug()],
     });
-    return result.isOk ? undefined : describeNameError(result.error, name);
+    return typeof created === "string" ? created : undefined;
   };
 
   const summary = (): string => {

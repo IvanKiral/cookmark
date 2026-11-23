@@ -27,10 +27,9 @@ import { collectionStrings } from "./strings.ts";
 
 type Collections = ReadonlyArray<Collection>;
 
-type CollectionsContextValue = {
+export type CollectionsContextValue = {
   // What the UI shows: the saved collections plus changes still being saved.
   collections: Accessor<Collections>;
-  isLoaded: Accessor<boolean>;
   reload: () => Promise<void>;
   // Not optimistic: resolves once the server has created it.
   create: (input: NewCollectionInput) => Promise<CollectionWriteResult>;
@@ -96,7 +95,6 @@ const shouldReload = (result: CollectionSaveResult | CollectionWriteResult): boo
 export const CollectionsProvider: ParentComponent = (props) => {
   // What the server has saved.
   const [savedCollections, setSavedCollections] = createSignal<Collections>([]);
-  const [isLoaded, setIsLoaded] = createSignal(false);
   const [collections, setCollections] = createOptimistic(() => savedCollections());
 
   const reload = async (): Promise<void> => {
@@ -105,7 +103,6 @@ export const CollectionsProvider: ParentComponent = (props) => {
     if (loaded) {
       setSavedCollections(sortByName(loaded));
     }
-    setIsLoaded(true);
   };
 
   // Runs on the client after hydration, because collections are per-user data.
@@ -206,7 +203,6 @@ export const CollectionsProvider: ParentComponent = (props) => {
 
   const value: CollectionsContextValue = {
     collections,
-    isLoaded,
     reload,
     create,
     update: async (id, input) => finish(await saveUpdate(id, input)),

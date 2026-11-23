@@ -9,6 +9,7 @@ export const recipeListStrings = {
   time: "Time",
   viewLabel: "Recipe view",
   cardView: "Card view",
+  selectRecipe: (name: string) => `Select ${name}`,
   listView: "List view",
   sort: {
     label: "Sort by",

@@ -2,6 +2,7 @@ import { Dialog } from "@kobalte/core/dialog";
 import { type Component, createEffect, createSignal, For, Show } from "solid-js";
 import { listActiveFilters } from "~/app/filters/activeFilters.ts";
 import type { RecipeFilters } from "~/app/filters/recipeFilters.ts";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import buttonStyles from "~/app/ui/button.module.css";
 import { createReturnFocus } from "~/app/ui/createReturnFocus.ts";
 import { MAX_COLLECTION_NAME_LENGTH } from "~/shared/collections.ts";
@@ -75,7 +76,7 @@ export const SaveSmartFilterDialog: Component<SaveSmartFilterDialogProps> = (pro
                 type="text"
                 class={[styles.input, { [styles.invalid]: error() !== undefined }]}
                 value={name()}
-                aria-invalid={error() ? "true" : undefined}
+                aria-invalid={ariaBoolean(error() !== undefined)}
                 aria-describedby={error() ? "smart-filter-error" : undefined}
                 onInput={(event) => {
                   setName(event.currentTarget.value);

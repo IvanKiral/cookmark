@@ -1,6 +1,6 @@
 export const filterStrings = {
   searchPlaceholder: "Search recipes...",
-  panelLabel: "Recipe filters",
+  removeFilter: (label: string) => `Remove filter ${label}`,
   closeDrawer: "Close filters",
   difficulty: "Difficulty",
   time: "Time",

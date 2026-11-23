@@ -1,15 +1,14 @@
-import { useLocation } from "@solidjs/router";
 import type { JSX } from "@solidjs/web";
 import { type Component, Show } from "solid-js";
-import { collectionStrings } from "~/app/collections/strings.ts";
 import { MarkButton } from "~/app/marks/MarkButton.tsx";
-import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
-import { createLongPress } from "~/app/ui/createLongPress.ts";
-import { toLinkState } from "~/app/ui/linkState.ts";
 import { RecipeFlagBadge } from "~/app/verdicts/RecipeFlagBadge.tsx";
 import type { RecipeVerdict } from "~/shared/verdicts.ts";
-import { type RecipeSelection, SelectCheck } from "./RecipeCard.tsx";
 import styles from "./RecipeListItem.module.css";
+import {
+  type RecipeSelection,
+  SelectableRecipeLink,
+  SelectCheck,
+} from "./SelectableRecipeLink.tsx";
 
 type RecipeListItemProps = {
   urlSlug: string;
@@ -23,9 +22,6 @@ type RecipeListItemProps = {
 };
 
 export const RecipeListItem: Component<RecipeListItemProps> = (props) => {
-  const location = useLocation();
-  const longPress = createLongPress(() => props.onLongPress?.());
-
   const content = (): JSX.Element => (
     <>
       <h3 class={styles.title}>
@@ -55,34 +51,14 @@ export const RecipeListItem: Component<RecipeListItemProps> = (props) => {
   );
 
   return (
-    <Show
-      when={props.selection}
-      fallback={
-        <a
-          href={`/recipe/${props.urlSlug}`}
-          state={toLinkState({ fromSearch: location.search })}
-          class={[styles.listItem, { [styles.pressable]: props.onLongPress !== undefined }]}
-          {...(props.onLongPress ? longPress : {})}
-        >
-          {content()}
-        </a>
-      }
-    >
-      {(selection) => (
-        <button
-          type="button"
-          class={[
-            styles.listItem,
-            styles.selectable,
-            { [styles.selected]: selection().isSelected },
-          ]}
-          aria-pressed={ariaBoolean(selection().isSelected)}
-          aria-label={collectionStrings.select.selectRecipe(props.name)}
-          onClick={() => selection().onToggle()}
-        >
-          {content()}
-        </button>
-      )}
-    </Show>
+    <SelectableRecipeLink
+      urlSlug={props.urlSlug}
+      name={props.name}
+      class={styles.listItem}
+      selectedClass={styles.selected}
+      selection={props.selection}
+      onLongPress={props.onLongPress}
+      content={content}
+    />
   );
 };

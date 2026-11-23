@@ -1,5 +1,6 @@
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
 import type { Component } from "solid-js";
+import { createAfterMenuClose } from "~/app/ui/createAfterMenuClose.ts";
 import type { Collection } from "~/shared/collections.ts";
 import styles from "./CollectionMenu.module.css";
 import { collectionStrings } from "./strings.ts";
@@ -12,10 +13,8 @@ type CollectionMenuProps = {
 
 // Desktop "⋯" next to the collection title.
 export const CollectionMenu: Component<CollectionMenuProps> = (props) => {
-  // Rename starts once the menu has closed: it moves focus into the title
-  // input, which the menu would otherwise take back to its trigger (and the
-  // blur would save the unchanged name at once).
-  let isRenameChosen = false;
+  // Rename starts once the menu has closed, so the title input keeps the focus.
+  const afterClose = createAfterMenuClose();
 
   return (
     <DropdownMenu placement="bottom-end" gutter={6}>
@@ -28,21 +27,10 @@ export const CollectionMenu: Component<CollectionMenuProps> = (props) => {
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          class={styles.menu}
-          onCloseAutoFocus={(event) => {
-            if (isRenameChosen) {
-              event.preventDefault();
-              isRenameChosen = false;
-              props.onRename();
-            }
-          }}
-        >
+        <DropdownMenu.Content class={styles.menu} onCloseAutoFocus={afterClose.onCloseAutoFocus}>
           <DropdownMenu.Item
             class={styles.menuItem}
-            onSelect={() => {
-              isRenameChosen = true;
-            }}
+            onSelect={() => afterClose.schedule(props.onRename)}
           >
             <span class="material-symbols-outlined" aria-hidden="true">
               edit

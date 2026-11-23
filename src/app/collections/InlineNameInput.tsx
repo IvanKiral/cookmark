@@ -1,4 +1,5 @@
 import { type Component, createSignal, onSettled, Show } from "solid-js";
+import { ariaBoolean } from "~/app/ui/ariaBoolean.ts";
 import styles from "./InlineNameInput.module.css";
 
 type InlineNameInputProps = {
@@ -79,7 +80,7 @@ export const InlineNameInput: Component<InlineNameInputProps> = (props) => {
           value={value()}
           placeholder={props.placeholder}
           aria-label={props.label}
-          aria-invalid={props.error ? "true" : undefined}
+          aria-invalid={ariaBoolean(props.error !== undefined)}
           enterkeyhint="done"
           onInput={(event) => setValue(event.currentTarget.value)}
           onKeyDown={handleKeyDown}

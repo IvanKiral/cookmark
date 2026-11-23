@@ -7,14 +7,18 @@ import { CollectionMenu } from "~/app/collections/CollectionMenu.tsx";
 import { CollectionMenuSheet } from "~/app/collections/CollectionMenuSheet.tsx";
 import { useCollections } from "~/app/collections/CollectionsContext.tsx";
 import { CollectionsSheet } from "~/app/collections/CollectionsSheet.tsx";
+import { canReorderPlace } from "~/app/collections/canReorder.ts";
 import { sortByPin } from "~/app/collections/collectionIcons.ts";
-import { describeNameError, getNameError } from "~/app/collections/collectionNames.ts";
+import { createNamedCollection } from "~/app/collections/collectionNames.ts";
 import { createCollectionActions } from "~/app/collections/createCollectionActions.ts";
 import { createSelection, createSelectModeSignal } from "~/app/collections/createSelection.ts";
+import { createSmartFilterEdit } from "~/app/collections/createSmartFilterEdit.ts";
+import { EditFilterFooter } from "~/app/collections/EditFilterFooter.tsx";
 import { InlineNameInput } from "~/app/collections/InlineNameInput.tsx";
 import { LibrarySidebar } from "~/app/collections/LibrarySidebar.tsx";
 import { ListSelection } from "~/app/collections/ListSelection.tsx";
 import { NewCollectionSheet } from "~/app/collections/NewCollectionSheet.tsx";
+import { PlaceActions } from "~/app/collections/PlaceActions.tsx";
 import { PlaceEmptyState } from "~/app/collections/PlaceEmptyState.tsx";
 import {
   describeSmartFilters,
@@ -24,6 +28,7 @@ import {
   recipesInPlace,
   serializePlace,
 } from "~/app/collections/places.ts";
+import { SaveSmartFilterButton } from "~/app/collections/SaveSmartFilterButton.tsx";
 import { SaveSmartFilterDialog } from "~/app/collections/SaveSmartFilterDialog.tsx";
 import { collectionStrings } from "~/app/collections/strings.ts";
 import { ActiveFilterChips } from "~/app/filters/ActiveFilterChips.tsx";
@@ -31,27 +36,21 @@ import { withoutFilterValue } from "~/app/filters/activeFilters.ts";
 import { buildAuthorOptions, deriveAuthors } from "~/app/filters/deriveAuthors.ts";
 import { FilterDrawer } from "~/app/filters/FilterDrawer.tsx";
 import { FilterPanel } from "~/app/filters/FilterPanel.tsx";
-import {
-  countActiveFilters,
-  emptyFilters,
-  filterRecipes,
-  type RecipeFilterKey,
-  type RecipeFilters,
-} from "~/app/filters/recipeFilters.ts";
+import { countActiveFilters, filterRecipes } from "~/app/filters/recipeFilters.ts";
 import { createRecipeSearch } from "~/app/filters/recipeSearch.ts";
 import { SearchBar } from "~/app/filters/SearchBar.tsx";
 import { filterStrings } from "~/app/filters/strings.ts";
 import { useRecipeListParams } from "~/app/filters/useRecipeListParams.ts";
 import { useMarks } from "~/app/marks/MarksContext.tsx";
+import {
+  defaultListSort,
+  listSortOptions,
+  resolveListSort,
+  sortParamFor,
+} from "~/app/recipe-list/listSort.ts";
 import { RecipeList } from "~/app/recipe-list/RecipeList.tsx";
 import { SortDropdown } from "~/app/recipe-list/SortDropdown.tsx";
-import {
-  DEFAULT_SORT,
-  type ListSort,
-  sortOptions,
-  YOUR_ORDER,
-  yourOrderOption,
-} from "~/app/recipe-list/sortOptions.ts";
+import { DEFAULT_SORT, type ListSort, YOUR_ORDER } from "~/app/recipe-list/sortOptions.ts";
 import { sortRecipes } from "~/app/recipe-list/sortRecipes.ts";
 import { recipeListStrings } from "~/app/recipe-list/strings.ts";
 import { type ViewMode, ViewToggle } from "~/app/recipe-list/ViewToggle.tsx";
@@ -126,45 +125,25 @@ const Home = () => {
     placeCollection()?.kind === "manual" && pickCollection() === undefined;
 
   // Inside a manual collection no sort param means "Your order"; elsewhere the usual default.
-  const sort = createMemo(
-    (): ListSort => params.sortParam() ?? (isManualPlace() ? YOUR_ORDER : DEFAULT_SORT),
-  );
-  const defaultSort = (): ListSort => (isManualPlace() ? YOUR_ORDER : DEFAULT_SORT);
-  const listSortOptions = () => (isManualPlace() ? [yourOrderOption, ...sortOptions] : sortOptions);
-
+  const sort = createMemo((): ListSort => resolveListSort(params.sortParam(), isManualPlace()));
   const setSort = (next: ListSort): void => {
-    if (next === YOUR_ORDER) {
-      params.setSortParam(undefined);
-      return;
-    }
-    // Inside a manual collection every other choice is written, even the usual default.
-    params.setSortParam(!isManualPlace() && next === DEFAULT_SORT ? undefined : next);
+    params.setSortParam(sortParamFor(next, isManualPlace()));
   };
 
   const search = createMemo(() => createRecipeSearch(recipes()));
   const librarySlugs = createMemo(() => new Set(recipes().map((recipe) => recipe.url_slug)));
   const placeRecipes = createMemo(() => recipesOf(place()));
 
-  // Editing a smart filter works on a draft; the URL filters stay as they are.
-  const [editing, setEditing] = createSignal<
-    { collectionId: string; draft: RecipeFilters } | undefined
-  >(undefined);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = createSignal(false);
-  const editingCollection = createMemo(() => {
-    const current = editing();
-    return current
-      ? collections().find((collection) => collection.id === current.collectionId)
-      : undefined;
-  });
-  const draftMatches = createMemo(() => {
-    const current = editing();
-    return current ? filterRecipes(recipes(), current.draft) : [];
+  const filterEdit = createSmartFilterEdit(recipes, () => {
+    setIsFilterPanelOpen(false);
+    setIsFilterDrawerOpen(false);
   });
 
   const filteredRecipes = createMemo(() => {
     // Desktop previews what the edited smart filter would hold.
-    if (editing() && isDesktop()) {
-      return sortRecipes(draftMatches(), DEFAULT_SORT);
+    if (filterEdit.draft() && isDesktop()) {
+      return sortRecipes(filterEdit.matches(), DEFAULT_SORT);
     }
     const matching = new Set(search()(params.searchQuery()).map((recipe) => recipe.url_slug));
     const base = pickCollection() ? pickableRecipes() : placeRecipes();
@@ -236,12 +215,14 @@ const Home = () => {
   // Only a manual collection with more than one recipe, no filters or search,
   // in its own order.
   const canReorder = (): boolean =>
-    isManualPlace() &&
-    !isSelecting() &&
-    activeFilterCount() === 0 &&
-    params.searchQuery() === "" &&
-    sort() === YOUR_ORDER &&
-    placeRecipes().length > 1;
+    canReorderPlace({
+      isManualCollection: isManualPlace(),
+      isSelecting: isSelecting(),
+      activeFilterCount: activeFilterCount(),
+      searchQuery: params.searchQuery(),
+      sort: sort(),
+      recipeCount: placeRecipes().length,
+    });
 
   const isReordering = (): boolean => isReorderOn() && canReorder();
 
@@ -276,16 +257,16 @@ const Home = () => {
   };
 
   const togglePin = (collection: Collection): void => {
-    const isPinned = collection.pinPosition === null;
+    const shouldPin = collection.pinPosition === null;
     collectionsContext.update(collection.id, {
       name: collection.name,
       filters: collection.filters,
-      isPinned,
+      isPinned: shouldPin,
     });
   };
 
   const startEditFilter = (collection: Collection): void => {
-    setEditing({ collectionId: collection.id, draft: collection.filters ?? emptyFilters });
+    filterEdit.start(collection);
     if (isDesktop()) {
       setIsFilterPanelOpen(true);
       return;
@@ -293,66 +274,27 @@ const Home = () => {
     setIsFilterDrawerOpen(true);
   };
 
-  const endEditFilter = (): void => {
-    setEditing(undefined);
-    setIsFilterPanelOpen(false);
-    setIsFilterDrawerOpen(false);
-  };
-
-  const setDraftFilter = <K extends RecipeFilterKey>(key: K, values: RecipeFilters[K]): void => {
-    const current = editing();
-    if (current) {
-      setEditing({ ...current, draft: { ...current.draft, [key]: values } });
-    }
-  };
-
-  const canUpdateFilter = (): boolean => {
-    const current = editing();
-    return current !== undefined && countActiveFilters(current.draft) > 0;
-  };
-
-  const updateFilter = async (): Promise<void> => {
-    const current = editing();
-    const collection = editingCollection();
-    if (!(current && collection && canUpdateFilter())) {
-      return;
-    }
-    endEditFilter();
-    const isSaved = await collectionsContext.update(collection.id, {
-      name: collection.name,
-      filters: current.draft,
-      isPinned: collection.pinPosition !== null,
-    });
-    if (isSaved) {
-      showToast(collectionStrings.smart.updated(collection.name));
-    }
-  };
-
   const saveSmartFilter = async (name: string, isPinned: boolean): Promise<string | undefined> => {
-    const error = getNameError(name, collections());
-    if (error) {
-      return error;
-    }
-    const result = await collectionsContext.create({
-      name: name.trim(),
+    const created = await createNamedCollection(collectionsContext, {
+      name,
       kind: "smart",
       filters: params.filters(),
       isPinned,
     });
-    if (!result.isOk) {
-      return describeNameError(result.error, name);
+    if (typeof created === "string") {
+      return created;
     }
     setIsSaveDialogOpen(false);
     setIsFilterDrawerOpen(false);
     setIsFilterPanelOpen(false);
-    openPlaceFresh(result.collection.id);
-    showToast(collectionStrings.smart.saved(result.collection.name));
+    openPlaceFresh(created.id);
+    showToast(collectionStrings.smart.saved(created.name));
     return undefined;
   };
 
   const handleFiltersClick = (): void => {
-    if (editing()) {
-      endEditFilter();
+    if (filterEdit.draft()) {
+      filterEdit.end();
       return;
     }
     if (isDesktop()) {
@@ -410,7 +352,7 @@ const Home = () => {
   // nothing; filters hiding every recipe get the usual no-results state instead.
   const placeEmptyState = (): JSX.Element | undefined => {
     const collection = placeCollection();
-    const isPreviewing = editing() !== undefined && isDesktop();
+    const isPreviewing = filterEdit.draft() !== undefined && isDesktop();
     if (!collection || placeRecipes().length > 0 || pickCollection() || isPreviewing) {
       return undefined;
     }
@@ -496,11 +438,7 @@ const Home = () => {
               onRenameCollection={(collection) =>
                 collectionActions.startRename(collection, "sidebar")
               }
-              renamingId={
-                collections().find((collection) =>
-                  collectionActions.isRenaming(collection, "sidebar"),
-                )?.id
-              }
+              renamingId={collectionActions.renamingIdOn("sidebar")}
               renderRename={(collection) => (
                 <InlineNameInput
                   initialValue={collection.name}
@@ -566,8 +504,8 @@ const Home = () => {
             </Show>
             <SortDropdown
               value={sort()}
-              options={listSortOptions()}
-              defaultValue={defaultSort()}
+              options={listSortOptions(isManualPlace())}
+              defaultValue={defaultListSort(isManualPlace())}
               defaultLabel={
                 isManualPlace() ? collectionStrings.sort.yourOrder : recipeListStrings.sort.label
               }
@@ -599,7 +537,7 @@ const Home = () => {
             </Show>
             <Show when={isFilterPanelOpen()}>
               <section class={styles.filterPanel} aria-label={filterStrings.drawer.title}>
-                <Show when={editing() && editingCollection()}>
+                <Show when={filterEdit.collection()}>
                   {(collection) => (
                     <p class={styles.editBanner}>
                       <span class="material-symbols-outlined" aria-hidden="true">
@@ -611,50 +549,38 @@ const Home = () => {
                 </Show>
                 <FilterPanel
                   variant="toolbar"
-                  filters={editing()?.draft ?? params.filters()}
+                  filters={filterEdit.draft() ?? params.filters()}
                   authorOptions={authorOptions()}
-                  onFilterChange={editing() ? setDraftFilter : params.setFilter}
+                  onFilterChange={filterEdit.draft() ? filterEdit.setDraft : params.setFilter}
                 />
-                <Show when={editing()}>
-                  <div class={styles.filterPanelFooter}>
-                    <span class={styles.previewCount}>
-                      {collectionStrings.smart.preview(draftMatches().length)}
-                    </span>
-                    <button
-                      type="button"
-                      class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                      onClick={endEditFilter}
-                    >
-                      {collectionStrings.smart.cancel}
-                    </button>
-                    <button
-                      type="button"
-                      class={`${buttonStyles.button} ${buttonStyles.primary}`}
-                      disabled={!canUpdateFilter()}
-                      onClick={updateFilter}
-                    >
-                      {collectionStrings.smart.update}
-                    </button>
-                  </div>
-                </Show>
-                <div
-                  class={[styles.filterPanelFooter, { [styles.hidden]: editing() !== undefined }]}
+                <Show
+                  when={filterEdit.draft()}
+                  fallback={
+                    <div class={styles.filterPanelFooter}>
+                      <button
+                        type="button"
+                        class={`${buttonStyles.button} ${buttonStyles.secondary}`}
+                        onClick={params.clearFilters}
+                      >
+                        {filterStrings.drawer.clearAll}
+                      </button>
+                      <button
+                        type="button"
+                        class={`${buttonStyles.button} ${buttonStyles.primary}`}
+                        onClick={() => setIsFilterPanelOpen(false)}
+                      >
+                        {filterStrings.drawer.showResults(filteredRecipes().length)}
+                      </button>
+                    </div>
+                  }
                 >
-                  <button
-                    type="button"
-                    class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                    onClick={params.clearFilters}
-                  >
-                    {filterStrings.drawer.clearAll}
-                  </button>
-                  <button
-                    type="button"
-                    class={`${buttonStyles.button} ${buttonStyles.primary}`}
-                    onClick={() => setIsFilterPanelOpen(false)}
-                  >
-                    {filterStrings.drawer.showResults(filteredRecipes().length)}
-                  </button>
-                </div>
+                  <EditFilterFooter
+                    countLabel={collectionStrings.smart.preview(filterEdit.matches().length)}
+                    canUpdate={filterEdit.canUpdate()}
+                    onCancel={filterEdit.end}
+                    onUpdate={filterEdit.update}
+                  />
+                </Show>
               </section>
             </Show>
             <Show when={!isFilterPanelOpen() && activeFilterCount() > 0}>
@@ -665,18 +591,7 @@ const Home = () => {
                     params.setFilter(key, withoutFilterValue(params.filters(), key, value))
                   }
                   onClearAll={params.clearFilters}
-                  trailing={
-                    <button
-                      type="button"
-                      class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
-                      onClick={() => setIsSaveDialogOpen(true)}
-                    >
-                      <span class="material-symbols-outlined" aria-hidden="true">
-                        collections_bookmark
-                      </span>
-                      {collectionStrings.smart.saveButton}
-                    </button>
-                  }
+                  trailing={<SaveSmartFilterButton onClick={() => setIsSaveDialogOpen(true)} />}
                 />
               </div>
             </Show>
@@ -692,29 +607,12 @@ const Home = () => {
                     onRenameCancel={collectionActions.cancelRename}
                     onOpenMenu={() => setIsCollectionMenuOpen(true)}
                     actions={
-                      <>
-                        <Show when={collection().kind === "smart"}>
-                          <button
-                            type="button"
-                            class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                            onClick={() => startEditFilter(collection())}
-                          >
-                            {collectionStrings.header.editFilter}
-                          </button>
-                        </Show>
-                        <Show when={canReorder()}>
-                          <button
-                            type="button"
-                            class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
-                            onClick={() => setIsReordering(true)}
-                          >
-                            <span class="material-symbols-outlined" aria-hidden="true">
-                              reorder
-                            </span>
-                            {collectionStrings.header.reorder}
-                          </button>
-                        </Show>
-                      </>
+                      <PlaceActions
+                        collection={collection()}
+                        canReorder={canReorder()}
+                        onReorder={() => setIsReordering(true)}
+                        onEditFilter={() => startEditFilter(collection())}
+                      />
                     }
                   />
                 </div>
@@ -756,43 +654,20 @@ const Home = () => {
               </Show>
               <Show when={!(isReordering() || pickCollection()) && placeCollection()}>
                 {(collection) => (
-                  <div class={styles.placeActions}>
-                    <Show when={canReorder()}>
-                      <button
-                        type="button"
-                        class={`${buttonStyles.button} ${buttonStyles.secondary} ${styles.iconButton}`}
-                        onClick={() => setIsReordering(true)}
-                      >
-                        <span class="material-symbols-outlined" aria-hidden="true">
-                          reorder
-                        </span>
-                        {collectionStrings.header.reorder}
-                      </button>
-                    </Show>
-                    <Show when={collection().kind === "smart"}>
-                      <button
-                        type="button"
-                        class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                        onClick={() => startEditFilter(collection())}
-                      >
-                        {collectionStrings.header.editFilter}
-                      </button>
-                    </Show>
-                    <Show when={collection().kind === "manual"}>
-                      <button
-                        type="button"
-                        class={`${buttonStyles.button} ${buttonStyles.secondary}`}
-                        onClick={() => startPicking(collection())}
-                      >
-                        {collectionStrings.header.addRecipes}
-                      </button>
-                    </Show>
-                    <CollectionMenu
-                      collection={collection()}
-                      onRename={() => collectionActions.startRename(collection(), "title")}
-                      onDelete={() => collectionActions.requestDelete(collection())}
-                    />
-                  </div>
+                  <PlaceActions
+                    collection={collection()}
+                    canReorder={canReorder()}
+                    onReorder={() => setIsReordering(true)}
+                    onEditFilter={() => startEditFilter(collection())}
+                    onAddRecipes={() => startPicking(collection())}
+                    menu={
+                      <CollectionMenu
+                        collection={collection()}
+                        onRename={() => collectionActions.startRename(collection(), "title")}
+                        onDelete={() => collectionActions.requestDelete(collection())}
+                      />
+                    }
+                  />
                 )}
               </Show>
             </div>
@@ -847,28 +722,37 @@ const Home = () => {
       <FilterDrawer
         open={isFilterDrawerOpen()}
         onOpenChange={(isOpen) => {
-          if (!isOpen && editing()) {
-            endEditFilter();
+          if (!isOpen && filterEdit.draft()) {
+            filterEdit.end();
             return;
           }
           setIsFilterDrawerOpen(isOpen);
         }}
-        filters={editing()?.draft ?? params.filters()}
+        filters={filterEdit.draft() ?? params.filters()}
         authorOptions={authorOptions()}
-        onFilterChange={editing() ? setDraftFilter : params.setFilter}
+        onFilterChange={filterEdit.draft() ? filterEdit.setDraft : params.setFilter}
         onClearAll={params.clearFilters}
         resultCount={filteredRecipes().length}
-        onSaveSmartFilter={() => setIsSaveDialogOpen(true)}
-        edit={
-          editing() && editingCollection()
-            ? {
-                name: editingCollection()?.name ?? "",
-                matchCount: draftMatches().length,
-                canUpdate: canUpdateFilter(),
-                onCancel: endEditFilter,
-                onUpdate: updateFilter,
-              }
+        title={
+          filterEdit.collection()
+            ? collectionStrings.smart.editTitle(filterEdit.collection()?.name ?? "")
             : undefined
+        }
+        subtitle={filterEdit.collection() ? collectionStrings.smart.editSubtitle : undefined}
+        footerAction={
+          <Show when={activeFilterCount() > 0}>
+            <SaveSmartFilterButton onClick={() => setIsSaveDialogOpen(true)} />
+          </Show>
+        }
+        footer={
+          filterEdit.draft() ? (
+            <EditFilterFooter
+              countLabel={collectionStrings.smart.matchNow(filterEdit.matches().length)}
+              canUpdate={filterEdit.canUpdate()}
+              onCancel={filterEdit.end}
+              onUpdate={filterEdit.update}
+            />
+          ) : undefined
         }
       />
       <SaveSmartFilterDialog

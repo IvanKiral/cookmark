@@ -2,7 +2,7 @@ import { type Accessor, createSignal } from "solid-js";
 import { showToast } from "~/app/ui/Toast.tsx";
 import type { Collection } from "~/shared/collections.ts";
 import { useCollections } from "./CollectionsContext.tsx";
-import { describeNameError, getNameError } from "./collectionNames.ts";
+import { createNamedCollection, getNameError } from "./collectionNames.ts";
 import { collectionStrings } from "./strings.ts";
 
 type CollectionActionsOptions = {
@@ -17,7 +17,8 @@ export type CollectionActions = {
   // Resolves with an error message, or undefined once created and opened.
   create: (name: string) => Promise<string | undefined>;
   isRenaming: (collection: Collection, surface: RenameSurface) => boolean;
-  renamingId: Accessor<string | undefined>;
+  // The collection being renamed on that surface.
+  renamingIdOn: (surface: RenameSurface) => string | undefined;
   renameError: Accessor<string | undefined>;
   startRename: (collection: Collection, surface: RenameSurface) => void;
   // Resolves true when the input can close (an invalid name keeps it open).
@@ -41,16 +42,12 @@ export const createCollectionActions = (options: CollectionActionsOptions): Coll
   const [deleting, setDeleting] = createSignal<Collection | undefined>(undefined);
 
   const create = async (name: string): Promise<string | undefined> => {
-    const error = getNameError(name, collectionsContext.collections());
-    if (error) {
-      return error;
+    const created = await createNamedCollection(collectionsContext, { name, kind: "manual" });
+    if (typeof created === "string") {
+      return created;
     }
-    const result = await collectionsContext.create({ name: name.trim(), kind: "manual" });
-    if (!result.isOk) {
-      return describeNameError(result.error, name);
-    }
-    options.openFresh(result.collection.id);
-    showToast(collectionStrings.create.created(result.collection.name));
+    options.openFresh(created.id);
+    showToast(collectionStrings.create.created(created.name));
     return undefined;
   };
 
@@ -79,15 +76,15 @@ export const createCollectionActions = (options: CollectionActionsOptions): Coll
   };
 
   const togglePin = async (collection: Collection): Promise<void> => {
-    const isPinned = collection.pinPosition === null;
+    const shouldPin = collection.pinPosition === null;
     const isSaved = await collectionsContext.update(collection.id, {
       name: collection.name,
       filters: collection.filters,
-      isPinned,
+      isPinned: shouldPin,
     });
     if (isSaved) {
       showToast(
-        isPinned
+        shouldPin
           ? collectionStrings.menu.pinned(collection.name)
           : collectionStrings.menu.unpinned(collection.name),
       );
@@ -115,7 +112,7 @@ export const createCollectionActions = (options: CollectionActionsOptions): Coll
     create,
     isRenaming: (collection, surface) =>
       renaming()?.id === collection.id && renaming()?.surface === surface,
-    renamingId: () => renaming()?.id,
+    renamingIdOn: (surface) => (renaming()?.surface === surface ? renaming()?.id : undefined),
     renameError,
     startRename: (collection, surface) => {
       setRenameError(undefined);

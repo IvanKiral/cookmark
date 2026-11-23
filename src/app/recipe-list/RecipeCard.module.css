@@ -139,40 +139,12 @@
   font-weight: 400;
 }
 
-/* Long press must not start a text selection or the iOS link preview. */
-.pressable {
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
-.selectable {
-  padding: 0;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
 .selected {
   border-color: var(--color-neutral-900);
   box-shadow: 0 0 0 2px var(--color-neutral-900);
 }
 
-.check {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 90%);
-  color: var(--color-neutral-500);
-  font-size: 26px;
-}
-
-.checkOn {
-  color: var(--color-neutral-900);
-  font-variation-settings: "FILL" 1;
+/* The card as a select toggle (a button) keeps the link's look. */
+button.card {
+  padding: 0;
 }

@@ -4,6 +4,7 @@ import { type Component, For, Show } from "solid-js";
 import type { RecipeAdminActions } from "~/app/admin/createRecipeAdminActions.ts";
 import { adminStrings } from "~/app/admin/strings.ts";
 import { collectionStrings } from "~/app/collections/strings.ts";
+import { createAfterMenuClose } from "~/app/ui/createAfterMenuClose.ts";
 import iconButtonStyles from "~/app/ui/iconToggleButton.module.css";
 import { recipeVerdictIcons, recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
 import { isRecipeVerdict, recipeVerdictValues } from "~/shared/verdicts.ts";
@@ -28,7 +29,8 @@ const strings = recipePageStrings.more;
 export const RecipeMoreMenu: Component<RecipeMoreMenuProps> = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
-  let isAddToCollectionChosen = false;
+  // The popover opens once the menu has closed, so it keeps the focus.
+  const afterClose = createAfterMenuClose();
 
   return (
     <DropdownMenu placement="bottom-end" gutter={6}>
@@ -41,21 +43,10 @@ export const RecipeMoreMenu: Component<RecipeMoreMenuProps> = (props) => {
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          class={styles.menu}
-          onCloseAutoFocus={(event) => {
-            if (isAddToCollectionChosen) {
-              event.preventDefault();
-              isAddToCollectionChosen = false;
-              props.onAddToCollection();
-            }
-          }}
-        >
+        <DropdownMenu.Content class={styles.menu} onCloseAutoFocus={afterClose.onCloseAutoFocus}>
           <DropdownMenu.Item
             class={`${styles.menuItem} ${styles.tallItem}`}
-            onSelect={() => {
-              isAddToCollectionChosen = true;
-            }}
+            onSelect={() => afterClose.schedule(props.onAddToCollection)}
           >
             <span class="material-symbols-outlined" aria-hidden="true">
               collections_bookmark

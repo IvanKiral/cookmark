@@ -417,10 +417,6 @@
   }
 }
 
-.hidden {
-  display: none;
-}
-
 .editBanner {
   display: flex;
   align-items: center;
@@ -435,11 +431,4 @@
 
 .editBanner :global(.material-symbols-outlined) {
   font-size: 18px;
-}
-
-.previewCount {
-  margin-right: auto;
-  align-self: center;
-  font-size: var(--text-sm);
-  color: var(--color-neutral-600);
 }

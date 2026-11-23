@@ -113,19 +113,11 @@
   }
 }
 
-.pressable {
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
-.selectable {
+/* The row as a select toggle (a button) keeps the link's look. */
+button.listItem {
   border: none;
   border-bottom: 1px solid var(--color-neutral-100);
   background: transparent;
-  font: inherit;
-  text-align: left;
-  -webkit-touch-callout: none;
-  user-select: none;
 }
 
 .selected {

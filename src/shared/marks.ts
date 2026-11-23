@@ -2,4 +2,3 @@
 export const markValues = ["favorite", "to-try"] as const;
 
 export type Mark = (typeof markValues)[number];
-export type MarkFilter = ReadonlyArray<Mark>;

@@ -10,6 +10,7 @@ const renderPanel = (
 ) =>
   render(() => (
     <FilterPanel
+      variant="drawer"
       authorOptions={[{ value: "ana", label: "@ana" }]}
       onFilterChange={vi.fn()}
       {...overrides}
@@ -85,11 +86,11 @@ describe("<FilterPanel />", () => {
     expect(onFilterChange).toHaveBeenCalledWith("tag", ["Beef", "Dinner"]);
   });
 
-  it("keeps chips compact in the sidebar and touch sized in the drawer", () => {
+  it("keeps chips compact in the toolbar and touch sized in the drawer", () => {
     const chipClass = () =>
       screen.getByRole("checkbox", { name: "Pork" }).closest("label")?.className;
 
-    renderPanel();
+    renderPanel({ variant: "toolbar" });
     expect(chipClass()).toMatch(/chipCompact/);
     cleanup();
 

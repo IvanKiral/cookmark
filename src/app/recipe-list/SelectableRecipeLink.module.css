@@ -1,0 +1,31 @@
+/* Long press must not start a text selection or the iOS link preview. */
+.pressable {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.selectable {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.check {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 90%);
+  color: var(--color-neutral-500);
+  font-size: 26px;
+}
+
+.checkOn {
+  color: var(--color-neutral-900);
+  font-variation-settings: "FILL" 1;
+}
