@@ -11,7 +11,7 @@ type RecipeCardProps = {
   name: string;
   imageUrl: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
-  time: string;
+  time?: string;
   verdict?: RecipeVerdict;
 };
 
@@ -71,7 +71,9 @@ export const RecipeCard: Component<RecipeCardProps> = (props) => {
           <span class={styles.difficulty} data-level={props.difficulty}>
             {props.difficulty}
           </span>
-          <span class={styles.time}>{props.time}</span>
+          <Show when={props.time}>
+            <span class={styles.time}>{props.time}</span>
+          </Show>
         </div>
       </div>
     </a>

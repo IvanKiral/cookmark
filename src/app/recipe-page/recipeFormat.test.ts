@@ -1,21 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { formatIngredient, formatMinutes, formatServings } from "./recipeFormat.ts";
+import { formatIngredient, formatMinutes } from "./recipeFormat.ts";
 
 describe("formatMinutes", () => {
-  it("shows minutes", () => {
+  it("shows minutes under an hour", () => {
     expect(formatMinutes(45)).toBe("45 min");
+    expect(formatMinutes(1)).toBe("1 min");
   });
 
-  it("shows N/A for unknown or zero minutes", () => {
-    expect(formatMinutes(null)).toBe("N/A");
-    expect(formatMinutes(0)).toBe("N/A");
+  it("shows hours and minutes from an hour", () => {
+    expect(formatMinutes(70)).toBe("1 h 10 min");
+    expect(formatMinutes(60)).toBe("1 h");
+    expect(formatMinutes(120)).toBe("2 h");
+    expect(formatMinutes(600)).toBe("10 h");
   });
-});
 
-describe("formatServings", () => {
-  it("shows servings or N/A", () => {
-    expect(formatServings(4)).toBe("4 servings");
-    expect(formatServings(null)).toBe("N/A");
+  it("returns undefined for unknown or zero minutes", () => {
+    expect(formatMinutes(null)).toBeUndefined();
+    expect(formatMinutes(0)).toBeUndefined();
   });
 });
 

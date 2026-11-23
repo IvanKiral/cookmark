@@ -10,7 +10,7 @@ type RecipeListItemProps = {
   urlSlug: string;
   name: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Unknown";
-  time: string;
+  time?: string;
   verdict?: RecipeVerdict;
 };
 
@@ -36,7 +36,7 @@ export const RecipeListItem: Component<RecipeListItemProps> = (props) => {
       <span class={styles.difficulty} data-level={props.difficulty}>
         {props.difficulty}
       </span>
-      <span class={styles.time}>{props.time}</span>
+      <span class={styles.time}>{props.time ?? ""}</span>
       <div class={styles.marks}>
         <MarkButton mark="favorite" slug={props.urlSlug} name={props.name} />
         <MarkButton mark="to-try" slug={props.urlSlug} name={props.name} />

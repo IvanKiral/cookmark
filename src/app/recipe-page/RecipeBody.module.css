@@ -28,23 +28,123 @@
   margin: 0;
 }
 
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ingredients .sectionTitle {
+  align-self: flex-start;
+  margin-bottom: var(--space-1);
+}
+
+/* Phone: the amount pill on the left, the name right-aligned. */
 .ingredientItem {
-  padding: var(--space-3) var(--space-2);
-  margin: 0 calc(-1 * var(--space-2));
-  border-bottom: 1px solid var(--color-neutral-100);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 52px;
   font-size: var(--text-md);
   color: var(--color-neutral-800);
   line-height: 1.5;
-  border-radius: var(--radius-sm);
-  transition: background-color 0.15s;
 }
 
-.ingredientItem:hover {
-  background-color: var(--color-neutral-100);
+.ingredientName {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
 }
 
-.ingredientItem:last-child {
-  border-bottom: none;
+.scaleBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+}
+
+.scaleIcon {
+  font-size: 20px;
+  color: var(--color-neutral-600);
+}
+
+.scaleText {
+  flex: 1;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--color-neutral-700);
+}
+
+.scaleText strong {
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.scaleReset {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.scaleHint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-neutral-500);
+}
+
+.scaleHint kbd {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  padding: 1px 5px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: 4px;
+}
+
+.desktopOnly {
+  display: none;
+}
+
+/* Desktop: amount then name, with row dividers. */
+@media (min-width: 1024px) {
+  .phoneOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
+
+  .scaleReset {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+
+  .ingredientItem {
+    align-items: baseline;
+    gap: var(--space-4);
+    min-height: 40px;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-neutral-100);
+  }
+
+  .ingredientItem:last-child {
+    border-bottom: none;
+  }
+
+  .ingredientName {
+    flex: 0 1 auto;
+    text-align: left;
+  }
 }
 
 .instructionGroup {
