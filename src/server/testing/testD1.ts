@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync, type SQLInputValue } from "node:sqlite";
 
@@ -12,13 +12,21 @@ type TestD1Statement = {
 export type TestD1 = {
   prepare: (query: string) => TestD1Statement;
   batch: (
-    statements: ReadonlyArray<{ run: () => Promise<unknown> }>,
-  ) => Promise<ReadonlyArray<unknown>>;
+    statements: ReadonlyArray<{ run: () => Promise<{ meta: { changes: number } }> }>,
+  ) => Promise<ReadonlyArray<{ meta: { changes: number } }>>;
   raw: DatabaseSync;
 };
 
+const MIGRATIONS_DIR = path.resolve(__dirname, "../../../migrations");
+
 export const readMigration = (file: string): string =>
-  readFileSync(path.resolve(__dirname, "../../../migrations", file), "utf8");
+  readFileSync(path.resolve(MIGRATIONS_DIR, file), "utf8");
+
+// Every migration file, in the order wrangler applies them.
+export const listMigrations = (): ReadonlyArray<string> =>
+  readdirSync(MIGRATIONS_DIR)
+    .filter((file) => file.endsWith(".sql"))
+    .sort();
 
 // Test-only D1 stand-in backed by an in-memory SQLite database, so store
 // functions run their real SQL against the real migrations (applied in order).
@@ -43,10 +51,12 @@ export const createTestD1 = (migrationFiles: ReadonlyArray<string>): TestD1 => {
   });
 
   // Like D1, a batch runs as one transaction: any failure rolls back every statement.
-  const batch = async (statements: ReadonlyArray<{ run: () => Promise<unknown> }>) => {
+  const batch = async (
+    statements: ReadonlyArray<{ run: () => Promise<{ meta: { changes: number } }> }>,
+  ) => {
     raw.exec("BEGIN");
     try {
-      const results: unknown[] = [];
+      const results: Array<{ meta: { changes: number } }> = [];
       for (const statement of statements) {
         results.push(await statement.run());
       }

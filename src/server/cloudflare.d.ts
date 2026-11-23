@@ -10,10 +10,12 @@ declare global {
     all: <T>() => Promise<{ results: ReadonlyArray<T> }>;
   };
 
-  // A batch runs its statements as one transaction.
+  // A batch runs its statements as one transaction and returns one result per statement.
   type D1Database = {
     prepare: (query: string) => D1PreparedStatement;
-    batch: (statements: ReadonlyArray<D1PreparedStatement>) => Promise<unknown>;
+    batch: (
+      statements: ReadonlyArray<D1PreparedStatement>,
+    ) => Promise<ReadonlyArray<{ meta: { changes: number } }>>;
   };
 
   type R2Object = {

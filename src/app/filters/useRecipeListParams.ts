@@ -1,18 +1,16 @@
 import { useSearchParams } from "@solidjs/router";
 import { type Accessor, createMemo } from "solid-js";
 import { DEFAULT_SORT, type SortValue, sortValues } from "~/app/recipe-list/sortOptions.ts";
+import { difficultyValues, recommendedValues, timeValues } from "~/shared/filters.ts";
 import { markValues } from "~/shared/marks.ts";
 import { tagValues } from "~/shared/tags.ts";
-import { difficultyValues } from "./difficultyOptions.ts";
 import { type RecipeFilterKey, type RecipeFilters, recipeFilterKeys } from "./recipeFilters.ts";
-import { recommendedValues } from "./recommendedOptions.ts";
 import {
   parseArrayParam,
   parsePageParam,
   parseStringParam,
   serializeArrayParam,
 } from "./searchParams.ts";
-import { timeValues } from "./timeOptions.ts";
 
 export type RecipeListParams = {
   filters: Accessor<RecipeFilters>;

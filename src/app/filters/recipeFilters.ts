@@ -1,10 +1,14 @@
+import type {
+  DifficultyFilter,
+  RecommendedFilter,
+  TimeFilter,
+  TimeValue,
+} from "~/shared/filters.ts";
 import type { Mark, MarkFilter } from "~/shared/marks.ts";
 import type { RecipeSummary } from "~/shared/recipe.ts";
 import { type TagFilter, tagGroupDefinitions } from "~/shared/tags.ts";
-import type { DifficultyFilter } from "./difficultyOptions.ts";
 import { matchesTagFilter } from "./matchesTagFilter.ts";
-import { matchesRecommendedFilter, type RecommendedFilter } from "./recommendedOptions.ts";
-import type { TimeFilter, TimeValue } from "./timeOptions.ts";
+import { matchesRecommendedFilter } from "./recommendedOptions.ts";
 
 // Every filter the list supports. An empty selection does not filter.
 export type RecipeFilters = {

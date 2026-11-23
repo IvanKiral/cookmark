@@ -1,12 +1,18 @@
 import { markStrings } from "~/app/marks/strings.ts";
 import { verdictStrings } from "~/app/verdicts/strings.ts";
 import { recipeVerdictLabels } from "~/app/verdicts/verdictDisplay.ts";
+import {
+  type DifficultyValue,
+  difficultyValues,
+  NO_VERDICT,
+  type RecommendedValue,
+  recommendedValues,
+  type TimeValue,
+  timeValues,
+} from "~/shared/filters.ts";
 import { type Mark, markValues } from "~/shared/marks.ts";
 import { type TagGroupKey, type TagValue, tagGroupDefinitions, tagValues } from "~/shared/tags.ts";
-import { type DifficultyValue, difficultyValues } from "./difficultyOptions.ts";
-import { NO_VERDICT, type RecommendedValue, recommendedValues } from "./recommendedOptions.ts";
 import { filterStrings } from "./strings.ts";
-import { type TimeValue, timeValues } from "./timeOptions.ts";
 
 const difficultyLabels: Record<DifficultyValue, string> = {
   Easy: filterStrings.easy,

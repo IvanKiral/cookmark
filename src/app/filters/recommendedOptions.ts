@@ -1,15 +1,5 @@
-import { type RecipeVerdict, recipeVerdictValues } from "~/shared/verdicts.ts";
-
-// Filter-only value for recipes the admins have not given a verdict yet. It is
-// never stored on a recipe.
-export const NO_VERDICT = "no-verdict";
-
-// The Recommended filter offers every admin verdict (as opposed to per-user marks)
-// plus the recipes without one.
-export const recommendedValues = [...recipeVerdictValues, NO_VERDICT] as const;
-
-export type RecommendedValue = (typeof recommendedValues)[number];
-export type RecommendedFilter = ReadonlyArray<RecommendedValue>;
+import { NO_VERDICT, type RecommendedFilter } from "~/shared/filters.ts";
+import type { RecipeVerdict } from "~/shared/verdicts.ts";
 
 export const matchesRecommendedFilter = (
   verdict: RecipeVerdict | undefined,

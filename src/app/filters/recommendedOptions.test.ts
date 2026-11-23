@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { matchesRecommendedFilter, NO_VERDICT } from "./recommendedOptions.ts";
+import { NO_VERDICT } from "~/shared/filters.ts";
+import { matchesRecommendedFilter } from "./recommendedOptions.ts";
 
 describe("matchesRecommendedFilter", () => {
   it("matches every recipe when nothing is selected", () => {
